@@ -1,0 +1,54 @@
+{
+  "name": "diplodochelper",
+  "displayName": "diplodoc-helper",
+  "description": "",
+  "version": "0.1.37",
+  "engines": {
+    "vscode": "^1.116.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:diplodoc-helper.createSection",
+    "onCommand:diplodoc-helper.generateContexts"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "diplodoc-helper.createSection",
+        "title": "Создать подраздел"
+      },
+      {
+        "command": "diplodoc-helper.generateContexts",
+        "title": "Создать контексты"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "diplodoc.menu",
+        "label": "Diplodoc"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "submenu": "diplodoc.menu",
+          "when": "explorerResourceIsFolder",
+          "group": "7_diplodoc_group@1"
+        }
+      ],
+      "diplodoc.menu": [
+        {
+          "command": "diplodoc-helper.createSection",
+          "group": "1_main@1"
+        },
+        {
+          "command": "diplodoc-helper.generateContexts",
+          "group": "1_main@2"
+        }
+      ]
+    }
+  }
+}
