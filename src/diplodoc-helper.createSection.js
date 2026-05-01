@@ -4,17 +4,23 @@ const fs = require('fs');
 const path = require('path');
 
 // --- ШАБЛОНЫ (Константы) ---
-const TEMPLATE_INDEX_MD = (title) => `---\ntitle: ${title}\n---\n# ${title}\n`;
-const TEMPLATE_INDEX_YAML = (title) => `title: ${title}\ndescription: Описывает ${title}\nmeta:\n  title: ${title}\n  noIndex: true\n`;
-const TEMPLATE_TOC_YAML = (title) => `title: ${title}\nhref: index.yaml\n`;
+const TEMPLATE_INDEX_MD = (/** @type {string} */ title) => `---\ntitle: ${title}\n---\n# ${title}\n`;
+const TEMPLATE_INDEX_YAML = (/** @type {string} */ title) => `title: ${title}\ndescription: Описывает ${title}\nmeta:\n  title: ${title}\n  noIndex: true\n`;
+const TEMPLATE_TOC_YAML = (/** @type {string} */ title) => `title: ${title}\nhref: index.yaml\n`;
 
 // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+/**
+ * @param {string} name
+ */
 function isValidName(name) {
     if (!name || name.trim().length === 0) return false;
     if (name.length > 255) return false;
     return true;
 }
 
+/**
+ * @param {string} folderPath
+ */
 function canCreateFolder(folderPath) {
     if (fs.existsSync(folderPath)) {
         vscode.window.showErrorMessage(`Ошибка: Путь уже существует: ${folderPath}`);
@@ -29,21 +35,38 @@ function canCreateFolder(folderPath) {
     }
 }
 
+/**
+ * @param {string} folderPath
+ * @param {string} title
+ */
 function createIndexMd(folderPath, title) {
     const filePath = path.join(folderPath, 'index.md');
     fs.writeFileSync(filePath, TEMPLATE_INDEX_MD(title), 'utf8');
 }
 
+/**
+ * @param {string} folderPath
+ * @param {string} title
+ */
 function createIndexYaml(folderPath, title) {
     const filePath = path.join(folderPath, 'index.yaml');
     fs.writeFileSync(filePath, TEMPLATE_INDEX_YAML(title), 'utf8');
 }
 
+/**
+ * @param {string} folderPath
+ * @param {string} title
+ */
 function createTocYaml(folderPath, title) {
     const filePath = path.join(folderPath, 'toc.yaml');
     fs.writeFileSync(filePath, TEMPLATE_TOC_YAML(title), 'utf8');
 }
 
+/**
+ * @param {string} parentDir
+ * @param {string} sectionTitle
+ * @param {string} folderName
+ */
 function patchParentToc(parentDir, sectionTitle, folderName) {
     const tocPath = path.join(parentDir, 'toc.yaml');
     if (!fs.existsSync(tocPath)) {
@@ -60,11 +83,23 @@ function patchParentToc(parentDir, sectionTitle, folderName) {
     fs.writeFileSync(tocPath, content, 'utf8');
 }
 
+const { isDiplodocSection, isLanguageRoot } = require('./diplodoc-helper.utils');
+
 // --- ОСНОВНАЯ ФУНКЦИЯ (экспортируемый обработчик) ---
+/**
+ * @param {{ fsPath: any; }} uri
+ */
 async function createSection(uri) {
     if (!uri) return;
 
     const targetDir = uri.fsPath;
+
+    // Проверяем, что создаем раздел либо внутри другого раздела, либо в корне языка
+    if (!isDiplodocSection(targetDir) && !isLanguageRoot(targetDir)) {
+        vscode.window.showErrorMessage("Раздел можно создать только внутри другого раздела или в корне папки языка.");
+        return;
+    }
+
     const rawName = await vscode.window.showInputBox({
         prompt: "Введите название подраздела (до 255 симв.)",
         placeHolder: "Например: Справочник Номенклатуры",
@@ -84,6 +119,7 @@ async function createSection(uri) {
         patchParentToc(targetDir, rawName, folderName);
         vscode.window.showInformationMessage(`Раздел "${rawName}" успешно создан!`);
     } catch (err) {
+        if (err instanceof Error)
         vscode.window.showErrorMessage(`Критическая ошибка: ${err.message}`);
     }
 }

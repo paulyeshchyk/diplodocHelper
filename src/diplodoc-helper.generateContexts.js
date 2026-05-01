@@ -140,93 +140,140 @@ function writeTermFiles(outputDir, sortedTerms, contextMap) {
  * Создает навигационный index.md с группировкой по буквам
  * @param {string} outputDir
  * @param {string[]} sortedTerms
- * @param {{ [x: string]: ContextData | { rank: any; }; }} contextMap
+ * @param {Object.<string, ContextData>} contextMap
  * @param {string} lang
  * @param {string} title
  */
 function writeIndexMd(outputDir, sortedTerms, contextMap, lang, title) {
-  const suffix = lang === "ru" ? "ст." : "docs";
-  let content = `---\ntitle: ${title}\n---\n\n`;
-  let currentLetter = "";
+    const suffix = lang === "ru" ? "ст." : "docs";
+    
+    // 1. Метаданные: убираем лишние переводы строк в начале
+    let content = `---\ntitle: ${title}\n---\n`; 
 
-  for (const term of sortedTerms) {
-    const firstLetter = term.charAt(0).toUpperCase();
-    if (firstLetter !== currentLetter) {
-      content += `\n## ${firstLetter}\n`;
-      currentLetter = firstLetter;
+    let currentLetter = "";
+
+    for (const term of sortedTerms) {
+        const firstLetter = term.charAt(0).toUpperCase();
+        const slug = slugify(term);
+        const count = contextMap[term].rank;
+
+        if (firstLetter !== currentLetter) {
+            // 2. Добавляем пустую строку перед новым блоком буквы (если это не самая первая буква)
+            if (currentLetter !== "") {
+                content += "\n";
+            }
+            content += `\n## ${firstLetter}\n`;
+            currentLetter = firstLetter;
+        }
+
+        // 3. Формируем строку списка без лишних отступов внутри группы
+        content += `* [${term}](${slug}.md) (${count} ${suffix})\n`;
     }
-    const slug = slugify(term);
-    content += `* [${term}](${slug}.md) (${contextMap[term].rank} ${suffix})\n`;
-  }
-  fs.writeFileSync(path.join(outputDir, "index.md"), content, "utf8");
+
+    fs.writeFileSync(path.join(outputDir, "index.md"), content.trim() + "\n", "utf8");
 }
 
+const {
+  isDiplodocSection,
+  isLanguageRoot,
+} = require("./diplodoc-helper.utils");
+
 /**
- * Основная точка входа генерации
+ * Основная точка входа генерации для конкретного языка
  * @param {string} lang
  * @param {string} langDir
  * @param {ContextMap} contextMap
+ * @returns {boolean} - true если файлы успешно созданы
  */
 function generateFilesForLang(lang, langDir, contextMap) {
-  const outputDir = path.join(langDir, "contexts");
-  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+    try {
+        // Если контекстов не найдено, не создаем пустой раздел
+        if (Object.keys(contextMap).length === 0) return false;
 
-  const sortedTerms = Object.keys(contextMap).sort((a, b) =>
-    a.localeCompare(b, undefined, { sensitivity: "base" }),
-  );
+        const outputDir = path.join(langDir, "contexts");
+        if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
-  const title = lang === "ru" ? "Контексты" : "Contexts";
+        const sortedTerms = Object.keys(contextMap).sort((a, b) =>
+            a.localeCompare(b, undefined, { sensitivity: "base" }),
+        );
 
-  writeTermFiles(outputDir, sortedTerms, contextMap);
-  writeIndexMd(outputDir, sortedTerms, contextMap, lang, title);
+        const title = lang === "ru" ? "Контексты" : "Contexts";
 
-  // Краткая генерация YAML файлов
-  const tocItems = sortedTerms
-    .map((t) => `  - name: ${t}\n    href: ${slugify(t)}.md`)
-    .join("\n");
-  fs.writeFileSync(
-    path.join(outputDir, "toc.yaml"),
-    `title: ${title}\nhref: index.md\nitems:\n${tocItems}`,
-    "utf8",
-  );
+        writeTermFiles(outputDir, sortedTerms, contextMap);
+        writeIndexMd(outputDir, sortedTerms, contextMap, lang, title);
 
-  const linksYaml = sortedTerms
-    .map(
-      (t) =>
-        `- title: ${t}\n  description: "Rank: ${contextMap[t].rank}"\n  href: ${slugify(t)}.md`,
-    )
-    .join("\n");
-  fs.writeFileSync(
-    path.join(outputDir, "index.yaml"),
-    `title: ${title}\nlinks:\n${linksYaml}`,
-    "utf8",
-  );
+        // Генерация YAML
+        const slugifiedItems = sortedTerms.map(t => ({ term: t, slug: slugify(t) }));
+        
+        const tocItems = slugifiedItems.map(i => `  - name: ${i.term}\n    href: ${i.slug}.md`).join("\n");
+        fs.writeFileSync(path.join(outputDir, 'toc.yaml'), `title: ${title}\nhref: index.md\nitems:\n${tocItems}`, "utf8");
+
+        const linksYaml = slugifiedItems.map(i => `- title: ${i.term}\n  description: "Rank: ${contextMap[i.term].rank}"\n  href: ${i.slug}.md`).join("\n");
+        fs.writeFileSync(path.join(outputDir, 'index.yaml'), `title: ${title}\nlinks:\n${linksYaml}`, "utf8");
+
+        return true;
+    } catch (err) {
+        console.error(`Error generating files for ${lang}:`, err);
+        return false;
+    }
 }
 
 /**
  * Команда VS Code
  */
 async function generateContexts() {
-  const workspaceFolders = vscode.workspace.workspaceFolders;
-  if (!workspaceFolders) return;
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders) return;
 
-  const projectRoot = workspaceFolders[0].uri.fsPath;
-  const DOCS_ROOT = path.join(projectRoot, "docs");
-  const LANGUAGES = ["ru", "en"];
+    const projectRoot = workspaceFolders[0].uri.fsPath;
+    const DOCS_ROOT = path.join(projectRoot, "docs");
+    const LANGUAGES = ["ru", "en"];
 
-  try {
-    for (const lang of LANGUAGES) {
-      const langDir = path.join(DOCS_ROOT, lang);
-      if (fs.existsSync(langDir)) {
-        const contextMap = collectContextsForLang(langDir);
-        generateFilesForLang(lang, langDir, contextMap);
-      }
+    // Массивы для отслеживания статуса
+    const successLangs = [];
+    const failedLangs = [];
+
+    try {
+        for (const lang of LANGUAGES) {
+            const langDir = path.join(DOCS_ROOT, lang);
+            
+            // Используем вашу утилиту для проверки, что это корень языка
+            if (fs.existsSync(langDir) && isLanguageRoot(langDir)) {
+                const contextMap = collectContextsForLang(langDir);
+                const isGenerated = generateFilesForLang(lang, langDir, contextMap);
+                
+                if (isGenerated) {
+                    successLangs.push(lang);
+                } else {
+                    failedLangs.push(lang);
+                }
+            } else {
+                // Если папки языка нет физически, считаем это пропуском/ошибкой
+                failedLangs.push(lang);
+            }
+        }
+
+        // --- Логика вывода сообщений ---
+
+        if (successLangs.length === LANGUAGES.length) {
+            // Все успешно
+            vscode.window.showInformationMessage("✅ Контексты успешно обновлены для всех языков!");
+        } else if (successLangs.length > 0) {
+            // Частичный успех
+            vscode.window.showWarningMessage(
+                `⚠️ Контексты обновлены для: ${successLangs.join(', ')}. Пропущены или не найдены: ${failedLangs.join(', ')}`
+            );
+        } else {
+            // Ничего не создано
+            vscode.window.showErrorMessage(
+                "❌ Не удалось создать контексты. Проверьте наличие тегов 'context:' в метаданных .md файлов."
+            );
+        }
+
+    } catch (err) {
+        if (err instanceof Error)
+            vscode.window.showErrorMessage(`Критическая ошибка: ${err.message}`);
     }
-    vscode.window.showInformationMessage("Контексты обновлены!");
-  } catch (err) {
-    if (err instanceof Error)
-        vscode.window.showErrorMessage(`Ошибка: ${err.message}`);
-  }
 }
 
 module.exports = { generateContexts };
