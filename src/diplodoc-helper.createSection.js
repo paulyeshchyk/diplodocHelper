@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 // --- ШАБЛОНЫ (Константы) ---
-const TEMPLATE_INDEX_MD = (/** @type {string} */ title) => `---\ntitle: ${title}\n---\n# ${title}\n`;
+const TEMPLATE_INDEX_MD = (/** @type {string} */ title) => `---\ntitle: ${title}\n---\n`;
 const TEMPLATE_INDEX_YAML = (/** @type {string} */ title) => `title: ${title}\ndescription: Описывает ${title}\nmeta:\n  title: ${title}\n  noIndex: true\n`;
 const TEMPLATE_TOC_YAML = (/** @type {string} */ title) => `title: ${title}\nhref: index.yaml\n`;
 
@@ -107,7 +107,7 @@ async function createSection(uri) {
     });
     if (!rawName) return;
 
-    const folderName = rawName.replace(/\s+/g, '');
+    const folderName = rawName.replace(/\W/g, '');
     const newFolderPath = path.join(targetDir, folderName);
     if (!canCreateFolder(newFolderPath)) return;
 

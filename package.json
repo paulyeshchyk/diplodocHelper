@@ -2,7 +2,7 @@
   "name": "diplodochelper",
   "displayName": "diplodoc-helper",
   "description": "",
-  "version": "0.2.7",
+  "version": "0.2.10",
   "engines": {
     "vscode": "^1.116.0"
   },
