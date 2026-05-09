@@ -2,7 +2,7 @@
   "name": "diplodochelper",
   "displayName": "diplodoc-helper",
   "description": "",
-  "version": "0.2.10",
+  "version": "0.3.4",
   "engines": {
     "vscode": "^1.116.0"
   },
@@ -12,7 +12,8 @@
   "activationEvents": [
     "onCommand:diplodoc-helper.createSection",
     "onCommand:diplodoc-helper.deleteSection",
-    "onCommand:diplodoc-helper.generateContexts"
+    "onCommand:diplodoc-helper.generateContexts",
+    "onCommand:diplodoc-helper.runGeneration"
   ],
   "main": "./src/extension.js",
   "contributes": {
@@ -28,6 +29,10 @@
       {
         "command": "diplodoc-helper.generateContexts",
         "title": "Создать контексты"
+      },
+      {
+        "command": "diplodoc-helper.runGeneration",
+        "title": "Генерация карты навигации для форм клиента"
       }
     ],
     "submenus": [
@@ -59,8 +64,16 @@
           "command": "diplodoc-helper.generateContexts",
           "when": "explorerResourceIsFolder",
           "group": "1_main@3"
+        },
+        {
+          "command": "diplodoc-helper.runGeneration",
+          "when": "explorerResourceIsFolder",
+          "group": "1_main@4"
         }
       ]
     }
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
   }
 }

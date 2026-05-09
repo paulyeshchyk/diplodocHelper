@@ -1,3 +1,4 @@
+// diplodoc-helper.deleteSection.js
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
