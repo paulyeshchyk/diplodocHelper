@@ -3,29 +3,28 @@
   "publisher": "paulyestchick",
   "displayName": "diplodoc-helper",
   "description": "",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "engines": {
     "vscode": "^1.116.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:diplodoc-helper.createSection",
-    "onCommand:diplodoc-helper.deleteSection",
-    "onCommand:diplodoc-helper.generateContexts",
-    "onCommand:diplodoc-helper.runGeneration"
-  ],
+  "activationEvents": [],
   "main": "./src/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "diplodoc-helper.createSection",
-        "title": "Создать подраздел"
+        "title": "Создать рубрику"
       },
       {
         "command": "diplodoc-helper.deleteSection",
-        "title": "Удалить раздел"
+        "title": "Удалить рубрику"
+      },
+      {
+        "command": "diplodoc-helper.reindex",
+        "title": "Переиндексировать всё"
       }
     ],
     "submenus": [
@@ -52,6 +51,11 @@
           "command": "diplodoc-helper.deleteSection",
           "when": "explorerResourceIsFolder",
           "group": "1_main@2"
+        },
+        {
+          "command": "diplodoc-helper.reindex",
+          "when": "explorerResourceIsFolder",
+          "group": "1_main1@1"
         }
       ]
     }

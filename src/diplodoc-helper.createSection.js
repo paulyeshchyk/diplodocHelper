@@ -2,33 +2,56 @@
 const vscode = require("vscode");
 const fs = require("fs");
 const path = require("path");
+const { calculateNextIndex } = require("./diplodoc-helper.indexer");
 
 // --- ШАБЛОНЫ (Константы) ---
+/**
+ * @param {string} sectionLabel
+ * @param {string} sectionIndex
+ * @param {string} title
+ */
+function TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title) {
+  var leftPart =
+    sectionIndex.trim().length == 0
+      ? `${sectionLabel}`
+      : `${sectionLabel} ${sectionIndex.trim()}`;
+
+  return `${leftPart}. ${title}`;
+}
+
 const TEMPLATE_INDEX_MD = (
   /** @type {string} */ title,
   /** @type {string} */ sectionType,
   /** @type {string} */ sectionLabel,
+  /** @type {string} */ sectionIndex,
 ) =>
-  `---\ntitle: ${sectionLabel}.${title}\ntype: ${sectionType}\npureTitle: ${title}\n---\n`;
+  `---\ntitle: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title)}\ntype: ${sectionType}\npureTitle: ${title}\nindex: ${sectionIndex}\n---\n`;
 
-const TEMPLATE_INDEX_YAML = (
-  /** @type {string} */ title,
-  /** @type {string} */ sectionType,
-  /** @type {string} */ sectionLabel,
-) =>
-  `title: ${sectionLabel}.${title}\ndescription: Описывает ${sectionLabel}.${title}\nmeta:\n  title: ${sectionLabel}.${title}\n  type: ${sectionType}\n  noIndex: true\n`;
+/**
+ * @param {string} title
+ * @param {string} sectionType
+ * @param {string} sectionLabel
+ * @param {string} sectionIndex
+ */
+function TEMPLATE_INDEX_YAML(title, sectionType, sectionLabel, sectionIndex) {
+  const finalTitle = TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title);
+  return `title: ${finalTitle}\ndescription: Описывает ${finalTitle}\nmeta:\n  title: ${finalTitle}\n  type: ${sectionType}\n  noIndex: true\n`;
+}
 
 const TEMPLATE_TOC_YAML = (
   /** @type {string} */ title,
   /** @type {string} */ sectionLabel,
-) => `title: ${sectionLabel}.${title}\nhref: index.yaml\n`;
+  /** @type {string} */ sectionIndex,
+) =>
+  `title: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title)}\nhref: index.yaml\n`;
 
 const TEMPLATE_PARENT_TOC_YAML = (
   /** @type {string} */ name,
   /** @type {string} */ sectionLabel,
   /** @type {string} */ folderName,
+  /** @type {string} */ sectionIndex,
 ) =>
-  `  - name: ${sectionLabel}.${name}\n    href: ${folderName}/index.md\n    include:\n      path: ${folderName}/toc.yaml\n      mode: link\n`;
+  `  - name: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, name)}\n    href: ${folderName}/index.md\n    include:\n      path: ${folderName}/toc.yaml\n      mode: link\n`;
 
 // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
 
@@ -116,12 +139,19 @@ function TEMPLATE_FOLDER_NAME(sectionType, sectionName) {
  * @param {string} title
  * @param {string} sectionType
  * @param {string} sectionLabel
+ * @param {string} sectionIndex
  */
-function createIndexMd(folderPath, title, sectionType, sectionLabel) {
+function createIndexMd(
+  folderPath,
+  title,
+  sectionType,
+  sectionLabel,
+  sectionIndex,
+) {
   const filePath = path.join(folderPath, "index.md");
   fs.writeFileSync(
     filePath,
-    TEMPLATE_INDEX_MD(title, sectionType, sectionLabel),
+    TEMPLATE_INDEX_MD(title, sectionType, sectionLabel, sectionIndex),
     "utf8",
   );
 }
@@ -131,12 +161,19 @@ function createIndexMd(folderPath, title, sectionType, sectionLabel) {
  * @param {string} title
  * @param {string} sectionType
  * @param {string} sectionLabel
+ * @param {string} sectionIndex
  */
-function createIndexYaml(folderPath, title, sectionType, sectionLabel) {
+function createIndexYaml(
+  folderPath,
+  title,
+  sectionType,
+  sectionLabel,
+  sectionIndex,
+) {
   const filePath = path.join(folderPath, "index.yaml");
   fs.writeFileSync(
     filePath,
-    TEMPLATE_INDEX_YAML(title, sectionType, sectionLabel),
+    TEMPLATE_INDEX_YAML(title, sectionType, sectionLabel, sectionIndex),
     "utf8",
   );
 }
@@ -145,19 +182,31 @@ function createIndexYaml(folderPath, title, sectionType, sectionLabel) {
  * @param {string} folderPath
  * @param {string} title
  * @param {string} sectionLabel
+ * @param {string} sectionIndex
  */
-function createTocYaml(folderPath, title, sectionLabel) {
+function createTocYaml(folderPath, title, sectionLabel, sectionIndex) {
   const filePath = path.join(folderPath, "toc.yaml");
-  fs.writeFileSync(filePath, TEMPLATE_TOC_YAML(title, sectionLabel), "utf8");
+  fs.writeFileSync(
+    filePath,
+    TEMPLATE_TOC_YAML(title, sectionLabel, sectionIndex),
+    "utf8",
+  );
 }
 
 /**
  * @param {string} parentDir
  * @param {string} sectionTitle
- * @param {string} folderName
  * @param {string} sectionType
+ * @param {string} folderName
+ * @param {string} sectionIndex
  */
-function patchParentToc(parentDir, sectionTitle, sectionType, folderName) {
+function patchParentToc(
+  parentDir,
+  sectionTitle,
+  sectionType,
+  folderName,
+  sectionIndex,
+) {
   const tocPath = path.join(parentDir, "toc.yaml");
   if (!fs.existsSync(tocPath)) {
     console.warn(`Родительский toc.yaml не найден в ${parentDir}`);
@@ -168,6 +217,7 @@ function patchParentToc(parentDir, sectionTitle, sectionType, folderName) {
     sectionTitle,
     sectionType,
     folderName,
+    sectionIndex,
   );
   if (!content.includes("items:")) {
     content = content.trimEnd() + "\nitems:\n" + newItemEntry;
@@ -205,7 +255,12 @@ async function createSection(uri) {
   const sectionName = await ShowSectionNameSelector();
   if (!sectionName) return;
 
-  const folderName = TEMPLATE_FOLDER_NAME(sectionType, sectionName);
+  const sectionIndex = calculateNextIndex(targetDir);
+
+  const folderName = TEMPLATE_FOLDER_NAME(
+    sectionType,
+    sectionName
+  );
 
   const newFolderPath = path.join(targetDir, folderName);
 
@@ -219,6 +274,7 @@ async function createSection(uri) {
       sectionName,
       sectionType.name,
       sectionType.label,
+      sectionIndex,
     );
 
     createIndexYaml(
@@ -226,9 +282,18 @@ async function createSection(uri) {
       sectionName,
       sectionType.name,
       sectionType.label,
+      sectionIndex,
     );
-    createTocYaml(newFolderPath, sectionName, sectionType.label);
-    patchParentToc(targetDir, sectionName, sectionType.label, folderName);
+
+    createTocYaml(newFolderPath, sectionName, sectionType.label, sectionIndex);
+
+    patchParentToc(
+      targetDir,
+      sectionName,
+      sectionType.label,
+      folderName,
+      sectionIndex,
+    );
 
     vscode.window.showInformationMessage(
       `Раздел "${sectionName}" (${sectionType.label}) создан!`,
