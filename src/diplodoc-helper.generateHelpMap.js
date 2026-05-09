@@ -2,6 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
 
+
+
+// Проверка наличия vscode
 /**
  * @typedef {Object} HelpEntry
  * @property {string} url - Относительный путь к файлу без расширения
@@ -9,21 +12,20 @@ const matter = require("gray-matter");
  * @property {string} hint - Подсказка из метаданных
  * @property {string} context - Значение тега helptag
  * @property {string} lang - Языковой код (ru, en и т.д.)
- */
-
-/**
  * @typedef {Object} GenerationResults
  * @property {HelpEntry[]} success - Успешно обработанные записи
  * @property {string[]} failed - Пути к файлам, вызвавшим ошибку
+ * @type {{ workspace: any; window: any; version?: string; Position?: typeof import("vscode").Position; Range?: typeof import("vscode").Range; Selection?: typeof import("vscode").Selection; TextEditorSelectionChangeKind?: typeof import("vscode").TextEditorSelectionChangeKind; TextEditorCursorStyle?: typeof import("vscode").TextEditorCursorStyle; TextEditorLineNumbersStyle?: typeof import("vscode").TextEditorLineNumbersStyle; TextEditorRevealType?: typeof import("vscode").TextEditorRevealType; OverviewRulerLane?: typeof import("vscode").OverviewRulerLane; DecorationRangeBehavior?: typeof import("vscode").DecorationRangeBehavior; ThemeColor?: typeof import("vscode").ThemeColor; ThemeIcon?: typeof import("vscode").ThemeIcon; EndOfLine?: typeof import("vscode").EndOfLine; Uri?: typeof import("vscode").Uri; CancellationTokenSource?: typeof import("vscode").CancellationTokenSource; CancellationError?: typeof import("vscode").CancellationError; Disposable?: typeof import("vscode").Disposable; EventEmitter?: typeof import("vscode").EventEmitter; QuickPickItemKind?: typeof import("vscode").QuickPickItemKind; InputBoxValidationSeverity?: typeof import("vscode").InputBoxValidationSeverity; RelativePattern?: typeof import("vscode").RelativePattern; CodeActionKind?: typeof import("vscode").CodeActionKind; CodeActionTriggerKind?: typeof import("vscode").CodeActionTriggerKind; CodeAction?: typeof import("vscode").CodeAction; CodeLens?: typeof import("vscode").CodeLens; MarkdownString?: typeof import("vscode").MarkdownString; Hover?: typeof import("vscode").Hover; EvaluatableExpression?: typeof import("vscode").EvaluatableExpression; InlineValueText?: typeof import("vscode").InlineValueText; InlineValueVariableLookup?: typeof import("vscode").InlineValueVariableLookup; InlineValueEvaluatableExpression?: typeof import("vscode").InlineValueEvaluatableExpression; DocumentHighlightKind?: typeof import("vscode").DocumentHighlightKind; DocumentHighlight?: typeof import("vscode").DocumentHighlight; SymbolKind?: typeof import("vscode").SymbolKind; SymbolTag?: typeof import("vscode").SymbolTag; SymbolInformation?: typeof import("vscode").SymbolInformation; DocumentSymbol?: typeof import("vscode").DocumentSymbol; TextEdit?: typeof import("vscode").TextEdit; SnippetTextEdit?: typeof import("vscode").SnippetTextEdit; NotebookEdit?: typeof import("vscode").NotebookEdit; WorkspaceEdit?: typeof import("vscode").WorkspaceEdit; SnippetString?: typeof import("vscode").SnippetString; SemanticTokensLegend?: typeof import("vscode").SemanticTokensLegend; SemanticTokensBuilder?: typeof import("vscode").SemanticTokensBuilder; SemanticTokens?: typeof import("vscode").SemanticTokens; SemanticTokensEdits?: typeof import("vscode").SemanticTokensEdits; SemanticTokensEdit?: typeof import("vscode").SemanticTokensEdit; ParameterInformation?: typeof import("vscode").ParameterInformation; SignatureInformation?: typeof import("vscode").SignatureInformation; SignatureHelp?: typeof import("vscode").SignatureHelp; SignatureHelpTriggerKind?: typeof import("vscode").SignatureHelpTriggerKind; CompletionItemKind?: typeof import("vscode").CompletionItemKind; CompletionItemTag?: typeof import("vscode").CompletionItemTag; CompletionItem?: typeof import("vscode").CompletionItem; CompletionList?: typeof import("vscode").CompletionList; CompletionTriggerKind?: typeof import("vscode").CompletionTriggerKind; InlineCompletionList?: typeof import("vscode").InlineCompletionList; InlineCompletionTriggerKind?: typeof import("vscode").InlineCompletionTriggerKind; InlineCompletionItem?: typeof import("vscode").InlineCompletionItem; DocumentLink?: typeof import("vscode").DocumentLink; Color?: typeof import("vscode").Color; ColorInformation?: typeof import("vscode").ColorInformation; ColorPresentation?: typeof import("vscode").ColorPresentation; InlayHintKind?: typeof import("vscode").InlayHintKind; InlayHintLabelPart?: typeof import("vscode").InlayHintLabelPart; InlayHint?: typeof import("vscode").InlayHint; FoldingRange?: typeof import("vscode").FoldingRange; FoldingRangeKind?: typeof import("vscode").FoldingRangeKind; SelectionRange?: typeof import("vscode").SelectionRange; CallHierarchyItem?: typeof import("vscode").CallHierarchyItem; CallHierarchyIncomingCall?: typeof import("vscode").CallHierarchyIncomingCall; CallHierarchyOutgoingCall?: typeof import("vscode").CallHierarchyOutgoingCall; TypeHierarchyItem?: typeof import("vscode").TypeHierarchyItem; LinkedEditingRanges?: typeof import("vscode").LinkedEditingRanges; DocumentDropOrPasteEditKind?: typeof import("vscode").DocumentDropOrPasteEditKind; DocumentDropEdit?: typeof import("vscode").DocumentDropEdit; DocumentPasteTriggerKind?: typeof import("vscode").DocumentPasteTriggerKind; DocumentPasteEdit?: typeof import("vscode").DocumentPasteEdit; IndentAction?: typeof import("vscode").IndentAction; SyntaxTokenType?: typeof import("vscode").SyntaxTokenType; ConfigurationTarget?: typeof import("vscode").ConfigurationTarget; Location?: typeof import("vscode").Location; DiagnosticSeverity?: typeof import("vscode").DiagnosticSeverity; DiagnosticRelatedInformation?: typeof import("vscode").DiagnosticRelatedInformation; DiagnosticTag?: typeof import("vscode").DiagnosticTag; Diagnostic?: typeof import("vscode").Diagnostic; LanguageStatusSeverity?: typeof import("vscode").LanguageStatusSeverity; ViewColumn?: typeof import("vscode").ViewColumn; StatusBarAlignment?: typeof import("vscode").StatusBarAlignment; TerminalLocation?: typeof import("vscode").TerminalLocation; TerminalShellExecutionCommandLineConfidence?: typeof import("vscode").TerminalShellExecutionCommandLineConfidence; TerminalLink?: typeof import("vscode").TerminalLink; TerminalProfile?: typeof import("vscode").TerminalProfile; FileDecoration?: typeof import("vscode").FileDecoration; ExtensionKind?: typeof import("vscode").ExtensionKind; ExtensionMode?: typeof import("vscode").ExtensionMode; ColorThemeKind?: typeof import("vscode").ColorThemeKind; TaskRevealKind?: typeof import("vscode").TaskRevealKind; TaskPanelKind?: typeof import("vscode").TaskPanelKind; TaskGroup?: typeof import("vscode").TaskGroup; ProcessExecution?: typeof import("vscode").ProcessExecution; ShellQuoting?: typeof import("vscode").ShellQuoting; ShellExecution?: typeof import("vscode").ShellExecution; CustomExecution?: typeof import("vscode").CustomExecution; TaskScope?: typeof import("vscode").TaskScope; Task?: typeof import("vscode").Task; tasks?: typeof import("vscode").tasks; FileType?: typeof import("vscode").FileType; FilePermission?: typeof import("vscode").FilePermission; FileSystemError?: typeof import("vscode").FileSystemError; FileChangeType?: typeof import("vscode").FileChangeType; UIKind?: typeof import("vscode").UIKind; LogLevel?: typeof import("vscode").LogLevel; env?: typeof import("vscode").env; commands?: typeof import("vscode").commands; DataTransferItem?: typeof import("vscode").DataTransferItem; DataTransfer?: typeof import("vscode").DataTransfer; TreeItem?: typeof import("vscode").TreeItem; TreeItemCollapsibleState?: typeof import("vscode").TreeItemCollapsibleState; TreeItemCheckboxState?: typeof import("vscode").TreeItemCheckboxState; TerminalExitReason?: typeof import("vscode").TerminalExitReason; EnvironmentVariableMutatorType?: typeof import("vscode").EnvironmentVariableMutatorType; ProgressLocation?: typeof import("vscode").ProgressLocation; QuickInputButtonLocation?: typeof import("vscode").QuickInputButtonLocation; QuickInputButtons?: typeof import("vscode").QuickInputButtons; TextDocumentChangeReason?: typeof import("vscode").TextDocumentChangeReason; TextDocumentSaveReason?: typeof import("vscode").TextDocumentSaveReason; languages?: typeof import("vscode").languages; NotebookEditorRevealType?: typeof import("vscode").NotebookEditorRevealType; NotebookCellKind?: typeof import("vscode").NotebookCellKind; NotebookRange?: typeof import("vscode").NotebookRange; NotebookCellOutputItem?: typeof import("vscode").NotebookCellOutputItem; NotebookCellOutput?: typeof import("vscode").NotebookCellOutput; NotebookCellData?: typeof import("vscode").NotebookCellData; NotebookData?: typeof import("vscode").NotebookData; NotebookControllerAffinity?: typeof import("vscode").NotebookControllerAffinity; NotebookCellStatusBarAlignment?: typeof import("vscode").NotebookCellStatusBarAlignment; NotebookCellStatusBarItem?: typeof import("vscode").NotebookCellStatusBarItem; notebooks?: typeof import("vscode").notebooks; scm?: typeof import("vscode").scm; DebugAdapterExecutable?: typeof import("vscode").DebugAdapterExecutable; DebugAdapterServer?: typeof import("vscode").DebugAdapterServer; DebugAdapterNamedPipeServer?: typeof import("vscode").DebugAdapterNamedPipeServer; DebugAdapterInlineImplementation?: typeof import("vscode").DebugAdapterInlineImplementation; Breakpoint?: typeof import("vscode").Breakpoint; SourceBreakpoint?: typeof import("vscode").SourceBreakpoint; FunctionBreakpoint?: typeof import("vscode").FunctionBreakpoint; DebugConsoleMode?: typeof import("vscode").DebugConsoleMode; DebugConfigurationProviderTriggerKind?: typeof import("vscode").DebugConfigurationProviderTriggerKind; DebugThread?: typeof import("vscode").DebugThread; DebugStackFrame?: typeof import("vscode").DebugStackFrame; debug?: typeof import("vscode").debug; extensions?: typeof import("vscode").extensions; CommentThreadCollapsibleState?: typeof import("vscode").CommentThreadCollapsibleState; CommentMode?: typeof import("vscode").CommentMode; CommentThreadState?: typeof import("vscode").CommentThreadState; comments?: typeof import("vscode").comments; authentication?: typeof import("vscode").authentication; l10n?: typeof import("vscode").l10n; tests?: typeof import("vscode").tests; TestRunProfileKind?: typeof import("vscode").TestRunProfileKind; TestTag?: typeof import("vscode").TestTag; TestRunRequest?: typeof import("vscode").TestRunRequest; TestMessageStackFrame?: typeof import("vscode").TestMessageStackFrame; TestMessage?: typeof import("vscode").TestMessage; TestCoverageCount?: typeof import("vscode").TestCoverageCount; FileCoverage?: typeof import("vscode").FileCoverage; StatementCoverage?: typeof import("vscode").StatementCoverage; BranchCoverage?: typeof import("vscode").BranchCoverage; DeclarationCoverage?: typeof import("vscode").DeclarationCoverage; TabInputText?: typeof import("vscode").TabInputText; TabInputTextDiff?: typeof import("vscode").TabInputTextDiff; TabInputCustom?: typeof import("vscode").TabInputCustom; TabInputWebview?: typeof import("vscode").TabInputWebview; TabInputNotebook?: typeof import("vscode").TabInputNotebook; TabInputNotebookDiff?: typeof import("vscode").TabInputNotebookDiff; TabInputTerminal?: typeof import("vscode").TabInputTerminal; TelemetryTrustedValue?: typeof import("vscode").TelemetryTrustedValue; ChatRequestTurn?: typeof import("vscode").ChatRequestTurn; ChatResponseTurn?: typeof import("vscode").ChatResponseTurn; ChatResultFeedbackKind?: typeof import("vscode").ChatResultFeedbackKind; ChatResponseMarkdownPart?: typeof import("vscode").ChatResponseMarkdownPart; ChatResponseFileTreePart?: typeof import("vscode").ChatResponseFileTreePart; ChatResponseAnchorPart?: typeof import("vscode").ChatResponseAnchorPart; ChatResponseProgressPart?: typeof import("vscode").ChatResponseProgressPart; ChatResponseReferencePart?: typeof import("vscode").ChatResponseReferencePart; ChatResponseCommandButtonPart?: typeof import("vscode").ChatResponseCommandButtonPart; chat?: typeof import("vscode").chat; LanguageModelChatMessageRole?: typeof import("vscode").LanguageModelChatMessageRole; LanguageModelChatMessage?: typeof import("vscode").LanguageModelChatMessage; LanguageModelError?: typeof import("vscode").LanguageModelError; McpStdioServerDefinition?: typeof import("vscode").McpStdioServerDefinition; McpHttpServerDefinition?: typeof import("vscode").McpHttpServerDefinition; lm?: typeof import("vscode").lm; LanguageModelChatToolMode?: typeof import("vscode").LanguageModelChatToolMode; LanguageModelToolCallPart?: typeof import("vscode").LanguageModelToolCallPart; LanguageModelToolResultPart?: typeof import("vscode").LanguageModelToolResultPart; LanguageModelTextPart?: typeof import("vscode").LanguageModelTextPart; LanguageModelPromptTsxPart?: typeof import("vscode").LanguageModelPromptTsxPart; LanguageModelToolResult?: typeof import("vscode").LanguageModelToolResult; LanguageModelDataPart?: typeof import("vscode").LanguageModelDataPart; } | null}
  */
-
-// Проверка наличия vscode
 let vscode;
 try {
     vscode = require("vscode");
 } catch (e) {
     vscode = null;
 }
+
+const defaultTitleValue = "Без заголовка";
+const defaultHintValue = "";
 
 /**
  * Собирает данные для help-карты
@@ -71,8 +73,8 @@ function collectHelpData(docsDir) {
                         /** @type {HelpEntry} */
                         const entry = {
                             url: relativePath,
-                            title: data.title || "Без заголовка",
-                            hint: data.hint || "",
+                            title: data.title || defaultTitleValue,
+                            hint: data.hint || defaultHintValue,
                             context: data.helptag,
                             lang: lang,
                         };
@@ -89,6 +91,10 @@ function collectHelpData(docsDir) {
     return { success, failed };
 }
 
+const outputFileName = "app-help-contents.json";
+const outputFolderName = "build";
+const docsFolderName = "docs";
+
 /**
  * Основная логика генерации и сохранения
  * @param {Object} options
@@ -96,7 +102,7 @@ function collectHelpData(docsDir) {
  * @param {string} options.outputDir - Куда кладем json (по умолчанию 'build')
  * @param {boolean} options.segregation - Разделять ли по языкам
  */
-function runGeneration({ docsDir, outputDir = "build", segregation = false }) {
+function runGeneration({ docsDir, outputDir = outputFolderName, segregation = false }) {
     const results = collectHelpData(docsDir);
     const absoluteOutputDir = path.isAbsolute(outputDir) 
         ? outputDir 
@@ -107,7 +113,7 @@ function runGeneration({ docsDir, outputDir = "build", segregation = false }) {
     }
 
     if (segregation) {
-        // Группируем по языкам
+        // Группируем по языкам        
         const langMap = results.success.reduce((acc, item) => {
             if (!acc[item.lang]) acc[item.lang] = [];
             acc[item.lang].push(item);
@@ -118,15 +124,15 @@ function runGeneration({ docsDir, outputDir = "build", segregation = false }) {
             const langPath = path.join(absoluteOutputDir, lang);
             if (!fs.existsSync(langPath)) fs.mkdirSync(langPath, { recursive: true });
             
-            const filePath = path.join(langPath, "app-help-contents.json");
+            const filePath = path.join(langPath, outputFileName);
             fs.writeFileSync(filePath, JSON.stringify(items, null, 2));
-            console.log(`🌐 [${lang}] Файл сохранён: ${filePath}`);
+            console.log(`[${lang}] Файл сохранён: ${filePath}`);
         }
     } else {
         // Сохраняем одним файлом
-        const outputPath = path.join(absoluteOutputDir, "app-help-contents.json");
+        const outputPath = path.join(absoluteOutputDir, outputFileName);
         fs.writeFileSync(outputPath, JSON.stringify(results.success, null, 2));
-        console.log(`📁 Общий файл сохранён: ${outputPath}`);
+        console.log(`Общий файл сохранён: ${outputPath}`);
     }
 
     return results;
@@ -150,10 +156,10 @@ async function generateHelpmaps(uri) {
 
     const options = {
         // Если вы хотите всегда сканировать /docs от корня проекта:
-        docsDir: path.join(projectRoot, "docs"),
+        docsDir: path.join(projectRoot, docsFolderName),
         // Или если хотите сканировать именно ту папку, на которой нажали ПКМ:
         // docsDir: selectedPath,
-        outputDir: path.join(projectRoot, "build"),
+        outputDir: path.join(projectRoot, outputFolderName),
         segregation: false
     };
 
@@ -161,13 +167,16 @@ async function generateHelpmaps(uri) {
         const results = runGeneration(options);
         if (results.success.length > 0) {
             vscode.window.showInformationMessage(
-                `✅ Help-карта создана (${results.success.length} эл.). Путь: ${options.outputDir}`
+                `Help-карта создана (${results.success.length} эл.). Путь: ${options.outputDir}`
             );
         } else {
-            vscode.window.showWarningMessage("⚠️ Не найдено файлов с тегом 'helptag' в " + options.docsDir);
+            vscode.window.showWarningMessage("Не найдено файлов с тегом 'helptag' в " + options.docsDir);
         }
     } catch (err) {
-        vscode.window.showErrorMessage("Ошибка при генерации: " + err.message);
+        if (err instanceof Error) 
+            vscode.window.showErrorMessage("Ошибка при генерации: " + err.message);
+        else 
+            throw err;
     }
 }
 
@@ -177,8 +186,8 @@ if (require.main === module) {
     
     // В будущем тут можно использовать библиотеку 'yargs' для парсинга --segregation
     runGeneration({
-        docsDir: path.join(projectRoot, "docs"),
-        outputDir: "build", 
+        docsDir: path.join(projectRoot, docsFolderName),
+        outputDir: outputFolderName, 
         segregation: process.argv.includes("--segregate")
     });
 } else {
