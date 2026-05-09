@@ -1,5 +1,6 @@
 {
   "files.exclude": {
-    "**\\build": "explorerExcludedFiles"
+    "**\\build": "explorerExcludedFiles",
+    "**\\node_modules": "explorerExcludedFiles"
   }
 }
