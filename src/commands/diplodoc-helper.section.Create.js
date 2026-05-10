@@ -1,26 +1,24 @@
-// diplodoc-helper.createSection.js
+// src/commands/diplodoc-helper.section.Create.js
 const vscode = require("vscode");
-
-const { calculateNextIndex } = require("./diplodoc-helper.indexer");
+const { calculateNextIndex } = require("../core/indexer");
 const {
   createIndexMd,
   createIndexYaml,
   createTocYaml,
   patchParentToc,
   createSectionFolder,
-} = require("./diplodoc-helper.utils.files");
+} = require("../utils"); // ← используем barrel
 
 const {
   ShowSectionNameSelector,
   ShowSectionTypeSelector,
-} = require("./diplodoc-helper.utils.prompts");
+} = require("../utils");
 
 const {
   isDiplodocSection,
   isLanguageRoot,
-} = require("./diplodoc-helper.utils.files");
+} = require("../utils");
 
-// --- ОСНОВНАЯ ФУНКЦИЯ (экспортируемый обработчик) ---
 /**
  * @param {{ fsPath: any; }} uri
  */
@@ -30,29 +28,23 @@ async function createSection(uri) {
 
   if (!isDiplodocSection(targetDir) && !isLanguageRoot(targetDir)) {
     vscode.window.showErrorMessage(
-      "Раздел можно создать только внутри другого раздела или в корне папки языка.",
+      "Раздел можно создать только внутри другого раздела или в корне папки языка."
     );
     return;
   }
 
-  // 1. Диалог выбора типа (Выпадающий список)
   const sectionType = await ShowSectionTypeSelector();
-  if (!sectionType) 
-    return;
+  if (!sectionType) return;
 
-  // 2. Диалог ввода имени
   const sectionName = await ShowSectionNameSelector();
-  if (!sectionName) 
-    return;
+  if (!sectionName) return;
 
   const sectionIndex = calculateNextIndex(targetDir);
 
   const folderResult = createSectionFolder(targetDir, sectionType, sectionName, sectionIndex);
-  if (!folderResult) 
-    return; // выход при ошибке или невозможности создать папку
+  if (!folderResult) return;
 
   try {
-
     createIndexMd(
       folderResult.folderPath,
       sectionName,
@@ -75,16 +67,14 @@ async function createSection(uri) {
       targetDir,
       sectionName,
       sectionType.label,
-      folderResult.folderName,
-      sectionIndex,
     );
 
     vscode.window.showInformationMessage(
-      `Раздел "${sectionName}" (${sectionType.label}) создан!`,
+      `Раздел "${sectionName}" (${sectionType.label}) создан!`
     );
   } catch (err) {
-    if (err instanceof Error)
-      vscode.window.showErrorMessage(`Критическая ошибка: ${err.message}`);
+    var msg = (err instanceof Error) ? err.message : "unknown";
+    vscode.window.showErrorMessage(`Критическая ошибка: ${msg}`);
   }
 }
 

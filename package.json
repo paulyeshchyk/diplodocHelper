@@ -3,7 +3,7 @@
   "publisher": "paulyestchick",
   "displayName": "diplodoc-helper",
   "description": "",
-  "version": "0.5.0",
+  "version": "0.5.6",
   "engines": {
     "vscode": "^1.116.0"
   },

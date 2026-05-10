@@ -1,51 +1,42 @@
 // src/extension.js
 const vscode = require("vscode");
-const { createSection } = require("./diplodoc-helper.section.Create");
-const { deleteSection } = require("./diplodoc-helper.section.Delete");
-const { renameSection } = require("./diplodoc-helper.section.Rename");
-const { generateContexts } = require("./diplodoc-helper.generateContexts");
-const { generateHelpmaps } = require("./diplodoc-helper.generateHelpMap");
 
-/**
- * @param {{ subscriptions: vscode.Disposable[]; }} context
- */
+const { createSection } = require("./commands/diplodoc-helper.section.Create");
+const { deleteSection } = require("./commands/diplodoc-helper.section.Delete");
+const { renameSection } = require("./commands/diplodoc-helper.section.Rename");
+const { generateContexts } = require("./commands/generateContexts");
+const { generateHelpmaps } = require("./commands/generateHelpmap");
+
 function activate(context) {
-  // Регистрируем команду createSection
   const createSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.createSection",
-    createSection,
+    createSection
   );
 
-  // Регистрируем команду deleteSection
   const deleteSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.deleteSection",
-    deleteSection,
+    deleteSection
   );
 
-  // Регистрируем команду renameSection
   const renameSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.renameSection",
-    renameSection,
+    renameSection
   );
 
-  // Регистрируем команду generateContexts
   const generateContextsCmd = vscode.commands.registerCommand(
     "diplodoc-helper.generateContexts",
-    generateContexts,
+    generateContexts
   );
 
-  // Регистрируем команду runGeneration (убрал лишнюю 's')
   const generateHelpmapsCmd = vscode.commands.registerCommand(
     "diplodoc-helper.runGeneration",
-    generateHelpmaps,
+    generateHelpmaps
   );
 
-  // Внутри функции activate
-  let reindexCommand = vscode.commands.registerCommand(
+  const reindexCommand = vscode.commands.registerCommand(
     "diplodoc-helper.reindex",
     async (uri) => {
       if (!uri) return;
-
       vscode.window.withProgress(
         {
           location: vscode.ProgressLocation.Notification,
@@ -53,14 +44,12 @@ function activate(context) {
           cancellable: false,
         },
         async () => {
-          const { reindexDirectory } = require("./diplodoc-helper.section.Reindex");
+          const { reindexDirectory } = require("./commands/diplodoc-helper.section.Reindex");
           reindexDirectory(uri.fsPath);
-          vscode.window.showInformationMessage(
-            "Переиндексация завершена успешно!",
-          );
-        },
+          vscode.window.showInformationMessage("Переиндексация завершена!");
+        }
       );
-    },
+    }
   );
 
   context.subscriptions.push(
@@ -69,10 +58,10 @@ function activate(context) {
     renameSectionCmd,
     generateContextsCmd,
     generateHelpmapsCmd,
-    reindexCommand,
+    reindexCommand
   );
 
-  console.log("Diplodoc Helper активирован!");
+  console.log("✅ Diplodoc Helper активирован (рефакторинг v1.1)");
 }
 
 exports.activate = activate;

@@ -1,5 +1,4 @@
-// diplodoc-helper.constants.js
-
+// src/utils/constants.js
 const FrontMatterMeta = {
   SECTIONTYPE: "sectionType",
   PURETITLE: "pureTitle",
@@ -29,12 +28,6 @@ const FrontMatterFiles = {
   INDEX_YAML: "index.yaml",
 };
 
-const FrontMatterFilesDefaultList = [
-  FrontMatterFiles.INDEX_MD,
-  FrontMatterFiles.INDEX_YAML,
-  FrontMatterFiles.TOC_YAML,
-];
-
 const FrontMatterSectionTypes = {
   PAGE: "Page",
   PART: "Part",
@@ -52,7 +45,11 @@ module.exports = {
   FrontMatterMeta,
   FrontMatterToc,
   FrontMatterFiles,
-  FrontMatterFilesDefaultList,
+  FrontMatterFilesDefaultList: [
+    FrontMatterFiles.INDEX_MD,
+    FrontMatterFiles.INDEX_YAML,
+    FrontMatterFiles.TOC_YAML,
+  ],
   FrontMatterSectionTypes,
   FrontMatterSectionTypesIndexed,
 };
