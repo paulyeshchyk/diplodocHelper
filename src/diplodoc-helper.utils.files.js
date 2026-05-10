@@ -3,7 +3,10 @@
 const fs = require("fs");
 const vscode = require("vscode");
 const path = require("path");
+const yaml = require("js-yaml");
+
 const {
+  FrontMatterMeta,
   FrontMatterFiles,
   FrontMatterFilesDefaultList,
 } = require("./diplodoc-helper.utils.constants");
@@ -205,6 +208,148 @@ function createSectionFolder(targetDir, sectionType, sectionName, sectionIndex) 
     }
 }
 
+/**
+ * Читает файл с YAML frontmatter.
+ * @param {string} filePath
+ * @returns {{ frontmatter: Record<string, any>, body: string, raw: string } | null}
+ */
+function readFileWithFrontmatter(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  const content = fs.readFileSync(filePath, "utf8");
+  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
+  const match = content.match(frontmatterRegex);
+  if (!match) return null;
+  try {
+    const frontmatter = yaml.load(match[1]);
+    return { frontmatter: frontmatter || {}, body: match[2], raw: content };
+  } catch (err) {
+    console.warn(`Ошибка парсинга YAML в ${filePath}:`, err);
+    return null;
+  }
+}
+
+/**
+ * Записывает файл с YAML frontmatter.
+ * @param {string} filePath
+ * @param {Record<string, any>} frontmatterObj
+ * @param {string} body
+ */
+function writeFileWithFrontmatter(filePath, frontmatterObj, body) {
+  const cleanObj = Object.fromEntries(
+    Object.entries(frontmatterObj).filter(([, v]) => v !== undefined && v !== null)
+  );
+  const yamlStr = yaml.dump(cleanObj, { lineWidth: 120, noRefs: true });
+  const newContent = `---\n${yamlStr}---\n${body}`;
+  fs.writeFileSync(filePath, newContent, "utf8");
+}
+
+/**
+ * Возвращает текущий sectionIndex раздела.
+ * @param {string} folderPath
+ * @returns {string}
+ */
+function readCurrentSectionIndex(folderPath) {
+  const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
+  if (!fs.existsSync(indexPath)) return "";
+  const data = readFileWithFrontmatter(indexPath);
+  if (data && data.frontmatter[FrontMatterMeta.SECTIONINDEX] !== undefined) {
+    return String(data.frontmatter[FrontMatterMeta.SECTIONINDEX]);
+  }
+  return "";
+}
+
+/**
+ * Обновляет index.md раздела новыми метаданными.
+ * @param {string} folderPath
+ * @param {string} pureTitle
+ * @param {string} sectionTypeName
+ * @param {string} sectionLabel
+ * @param {string} sectionIndex
+ */
+function updateIndexMdAdvanced(
+  folderPath,
+  pureTitle,
+  sectionTypeName,
+  sectionLabel,
+  sectionIndex
+) {
+  const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
+  if (!fs.existsSync(indexPath)) return;
+  const data = readFileWithFrontmatter(indexPath);
+  if (!data) {
+    console.warn(`Не удалось прочитать frontmatter в ${indexPath}`);
+    return;
+  }
+  const fm = data.frontmatter;
+  let composedTitle = sectionIndex && sectionIndex.trim() !== ""
+    ? `${sectionLabel} ${sectionIndex}. ${pureTitle}`
+    : pureTitle;
+  fm[FrontMatterMeta.TITLE] = composedTitle;
+  fm[FrontMatterMeta.PURETITLE] = pureTitle;
+  fm[FrontMatterMeta.SECTIONTYPE] = sectionTypeName;
+  if (sectionIndex && sectionIndex.trim() !== "") {
+    fm[FrontMatterMeta.SECTIONINDEX] = sectionIndex;
+  } else {
+    delete fm[FrontMatterMeta.SECTIONINDEX];
+  }
+  writeFileWithFrontmatter(indexPath, fm, data.body);
+}
+
+/**
+ * Обновляет index.yaml раздела новыми метаданными.
+ * @param {string} folderPath
+ * @param {string} pureTitle
+ * @param {string} sectionTypeName
+ * @param {string} sectionLabel
+ * @param {string} sectionIndex
+ */
+function updateIndexYamlAdvanced(
+  folderPath,
+  pureTitle,
+  sectionTypeName,
+  sectionLabel,
+  sectionIndex
+) {
+  const yamlPath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
+  if (!fs.existsSync(yamlPath)) return;
+  const data = readFileWithFrontmatter(yamlPath);
+  if (!data) {
+    console.warn(`Не удалось прочитать frontmatter в ${yamlPath}`);
+    return;
+  }
+  const fm = data.frontmatter;
+  let composedTitle = sectionIndex && sectionIndex.trim() !== ""
+    ? `${sectionLabel} ${sectionIndex}. ${pureTitle}`
+    : pureTitle;
+  fm[FrontMatterMeta.TITLE] = composedTitle;
+  fm[FrontMatterMeta.PURETITLE] = pureTitle;
+  fm[FrontMatterMeta.SECTIONTYPE] = sectionTypeName;
+  if (sectionIndex && sectionIndex.trim() !== "") {
+    fm[FrontMatterMeta.SECTIONINDEX] = sectionIndex;
+  } else {
+    delete fm[FrontMatterMeta.SECTIONINDEX];
+  }
+  writeFileWithFrontmatter(yamlPath, fm, data.body);
+}
+
+/**
+ * Обновляет свой заголовок в toc.yaml раздела (первый элемент items).
+ * @param {string} folderPath
+ * @param {string} composedTitle
+ */
+function updateTocYamlTitle(folderPath, composedTitle) {
+  const tocPath = path.join(folderPath, FrontMatterFiles.TOC_YAML);
+  if (!fs.existsSync(tocPath)) return;
+  let content = fs.readFileSync(tocPath, "utf8");
+  const firstItemRegex = /(items:\s*\n\s*-\s+name:\s*)([^\n]+)/;
+  const match = content.match(firstItemRegex);
+  if (match) {
+    const originalIndent = match[1];
+    const newLine = `${originalIndent}${composedTitle}`;
+    content = content.replace(firstItemRegex, newLine);
+    fs.writeFileSync(tocPath, content, "utf8");
+  }
+}
 module.exports = {
   isDiplodocSection,
   isLanguageRoot,
@@ -215,5 +360,11 @@ module.exports = {
   createIndexYaml,
   createTocYaml,
   patchParentToc,
-  createSectionFolder
+  createSectionFolder,
+  readFileWithFrontmatter,
+  writeFileWithFrontmatter,
+  readCurrentSectionIndex,
+  updateIndexMdAdvanced,
+  updateIndexYamlAdvanced,
+  updateTocYamlTitle,
 };
