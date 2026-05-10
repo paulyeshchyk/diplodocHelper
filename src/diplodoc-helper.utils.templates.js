@@ -2,7 +2,7 @@ const {
   FrontMatterMeta,
   FrontMatterToc,
   FrontMatterFiles
-} = require("./diplodoc-helper.constants");
+} = require("./diplodoc-helper.utils.constants");
 
 // --- ШАБЛОНЫ (Константы) ---
 /**
@@ -76,6 +76,18 @@ const TEMPLATE_PARENT_TOC_YAML = (
     `      ${FrontMatterToc.ITEMS_INCLUDE_MODE}: link`,
   ].join("\n");
 
+
+/**
+ * @param {{ label: any; name?: string; description?: string; }} sectionType
+ * @param {string} sectionName
+ */
+function TEMPLATE_FOLDER_NAME(sectionType, sectionName) {
+  return [
+    sectionType.label,
+    sectionName.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, ""),
+  ].join(".");
+}
+
 // --- exports ---
 
 module.exports = {
@@ -84,4 +96,5 @@ module.exports = {
   TEMPLATE_INDEX_YAML,
   TEMPLATE_TOC_YAML,
   TEMPLATE_PARENT_TOC_YAML,
+  TEMPLATE_FOLDER_NAME,
 };

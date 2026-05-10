@@ -1,7 +1,7 @@
 //diplodoc-helper.indexer.js
 const fs = require("fs");
 const path = require("path");
-const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require("./diplodoc-helper.constants");
+const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require("./diplodoc-helper.utils.constants");
 
 /**
  * Извлекает значение атрибута из Frontmatter файла index.md

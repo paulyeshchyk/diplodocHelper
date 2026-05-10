@@ -1,6 +1,16 @@
 // diplodoc-helper.section.utils.js
-const { FrontMatterSectionTypes } = require("./diplodoc-helper.constants");
+const { FrontMatterSectionTypes } = require("./diplodoc-helper.utils.constants");
 
+/**
+ * @typedef {Object} SectionTypeOption
+ * @property {string} label
+ * @property {string} name
+ * @property {string} description
+ */
+
+/**
+ * @returns {SectionTypeOption[]}
+ */
 function sectionTypes() {
   return [
     {

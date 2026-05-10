@@ -36,7 +36,7 @@ function unpatchParentToc(parentDir, folderName) {
     }
 }
 
-const { isDiplodocSection } = require('./diplodoc-helper.utils');
+const { isDiplodocSection } = require('./diplodoc-helper.utils.files');
 
 /**
  * Основная функция удаления раздела

@@ -1,8 +1,8 @@
 // src/extension.js
 const vscode = require("vscode");
-const { createSection } = require("./diplodoc-helper.createSection");
-const { deleteSection } = require("./diplodoc-helper.deleteSection");
-const { renameSection } = require("./diplodoc-helper.renameSection");
+const { createSection } = require("./diplodoc-helper.section.Create");
+const { deleteSection } = require("./diplodoc-helper.section.Delete");
+const { renameSection } = require("./diplodoc-helper.section.Rename");
 const { generateContexts } = require("./diplodoc-helper.generateContexts");
 const { generateHelpmaps } = require("./diplodoc-helper.generateHelpMap");
 
@@ -53,7 +53,7 @@ function activate(context) {
           cancellable: false,
         },
         async () => {
-          const { reindexDirectory } = require("./diplodoc-helper.reindex");
+          const { reindexDirectory } = require("./diplodoc-helper.section.Reindex");
           reindexDirectory(uri.fsPath);
           vscode.window.showInformationMessage(
             "Переиндексация завершена успешно!",

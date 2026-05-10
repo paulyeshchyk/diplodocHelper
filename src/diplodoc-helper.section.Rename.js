@@ -1,39 +1,20 @@
-// diplodoc-helper.renameSection.js – финальная версия
+const vscode = require("vscode");
+const fs = require("fs");
+const path = require("path");
+const yaml = require("js-yaml");
 
-const vscode = require('vscode');
-const fs = require('fs');
-const path = require('path');
-const yaml = require('js-yaml');
+/** @import { TocItem, TocDocument } from './diplodoc-helper.utils.types.js' */
+
+const { format } = require("./diplodoc-helper.utils.files.js");
+const { promptSection } = require("./diplodoc-helper.utils.prompts.js");
+const { indentedTocEntry } = require("./diplodoc-helper.utils.toc.js");
 
 const {
   FrontMatterMeta,
   FrontMatterFiles,
-} = require('./diplodoc-helper.constants');
-const { isDiplodocSection } = require('./diplodoc-helper.utils');
-const { sectionTypes } = require('./diplodoc-helper.section.utils');
+} = require("./diplodoc-helper.utils.constants.js");
 
-// ----------------------------------------------------------------------
-// Диалоги с пользователем
-// ----------------------------------------------------------------------
-async function promptSectionType() {
-  const types = sectionTypes();
-  const selected = await vscode.window.showQuickPick(types, {
-    placeHolder: 'Выберите новый тип рубрики',
-    canPickMany: false,
-  });
-  return selected;
-}
-
-async function promptSectionName() {
-  return await vscode.window.showInputBox({
-    prompt: 'Введите новое название раздела',
-    placeHolder: 'Например: Справочник Номенклатуры',
-    validateInput: (value) =>
-      value && value.trim().length > 0 && value.length <= 255
-        ? null
-        : 'Некорректное имя или слишком длинное',
-  });
-}
+const { isDiplodocSection } = require("./diplodoc-helper.utils.files.js");
 
 // ----------------------------------------------------------------------
 // Генерация имени папки
@@ -43,28 +24,27 @@ async function promptSectionName() {
  * @param {string} sectionName
  */
 function generateFolderName(sectionType, sectionName) {
-  const sanitized = sectionName.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, '');
+  const sanitized = sectionName.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
   return `${sectionType.label}.${sanitized}`;
 }
 
 // ----------------------------------------------------------------------
-// Работа с YAML frontmatter (чтение / запись через js-yaml)
+// Работа с YAML frontmatter
 // ----------------------------------------------------------------------
-
 /**
- * Читает файл, отделяет frontmatter (между ---) от основного содержимого,
- * парсит frontmatter в объект.
- * @param {string} filePath
- * @returns {{frontmatter: object;body: string;raw: string;}?} или null при ошибке
+ * @param {string } filePath
+ * @returns {{ frontmatter: Record<string, any>, body: string, raw: string } | null}
  */
 function readFileWithFrontmatter(filePath) {
   if (!fs.existsSync(filePath)) return null;
-  const content = fs.readFileSync(filePath, 'utf8');
+
+  const content = fs.readFileSync(filePath, "utf8");
   const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
   const match = content.match(frontmatterRegex);
   if (!match) return null;
+
   try {
-    const frontmatter = yaml.load(match[1]);
+    const frontmatter = /** @type {TocDocument} */ (yaml.load(match[1]));
     return { frontmatter: frontmatter || {}, body: match[2], raw: content };
   } catch (err) {
     console.warn(`Ошибка парсинга YAML в ${filePath}:`, err);
@@ -73,32 +53,38 @@ function readFileWithFrontmatter(filePath) {
 }
 
 /**
- * Записывает файл с обновлённым frontmatter.
- * @param {string} filePath
- * @param {object} newFrontmatter
- * @param {string} body - содержимое после frontmatter (необязательно, если не изменилось)
+ * @param {fs.PathOrFileDescriptor} filePath
+ * @param {{ [s: string]: any; } | ArrayLike<any>} frontmatterObj
+ * @param {string} body
  */
-function writeFileWithFrontmatter(filePath, newFrontmatter, body) {
-  const existing = readFileWithFrontmatter(filePath);
-  const finalBody = body !== undefined ? body : (existing ? existing.body : '');
-  const yamlStr = yaml.dump(newFrontmatter, { lineWidth: 120, noRefs: true });
-  const newContent = `---\n${yamlStr}---\n${finalBody}`;
-  fs.writeFileSync(filePath, newContent, 'utf8');
+function writeFileWithFrontmatter(filePath, frontmatterObj, body) {
+  const cleanObj = Object.fromEntries(
+    Object.entries(frontmatterObj).filter(
+      ([, v]) => v !== undefined && v !== null,
+    ),
+  );
+  const yamlStr = yaml.dump(cleanObj, { lineWidth: 120, noRefs: true });
+  const newContent = `---\n${yamlStr}---\n${body}`;
+  fs.writeFileSync(filePath, newContent, "utf8");
 }
 
 // ----------------------------------------------------------------------
 // Обновление index.md и index.yaml переименованного раздела
 // ----------------------------------------------------------------------
-
 /**
- * Обновляет index.md: pureTitle, sectionType, title, sectionIndex
  * @param {string} folderPath
  * @param {string} pureTitle
  * @param {string} sectionTypeName
  * @param {string} sectionLabel
  * @param {string} sectionIndex
  */
-function updateIndexMdAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex) {
+function updateIndexMdAdvanced(
+  folderPath,
+  pureTitle,
+  sectionTypeName,
+  sectionLabel,
+  sectionIndex,
+) {
   const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
   if (!fs.existsSync(indexPath)) return;
 
@@ -109,28 +95,39 @@ function updateIndexMdAdvanced(folderPath, pureTitle, sectionTypeName, sectionLa
   }
 
   const fm = data.frontmatter;
-  // Сохраняем старый sectionIndex, если он был, иначе используем переданный
-  const finalIndex = fm[FrontMatterMeta.SECTIONINDEX] || sectionIndex;
-  const composedTitle = `${sectionLabel} ${finalIndex}. ${pureTitle}`;
+  let composedTitle;
+  if (sectionIndex && sectionIndex.trim() !== "") {
+    composedTitle = `${sectionLabel} ${sectionIndex}. ${pureTitle}`;
+  } else {
+    composedTitle = pureTitle;
+  }
 
-  // Обновляем поля
   fm[FrontMatterMeta.TITLE] = composedTitle;
   fm[FrontMatterMeta.PURETITLE] = pureTitle;
   fm[FrontMatterMeta.SECTIONTYPE] = sectionTypeName;
-  fm[FrontMatterMeta.SECTIONINDEX] = finalIndex;
+  if (sectionIndex && sectionIndex.trim() !== "") {
+    fm[FrontMatterMeta.SECTIONINDEX] = sectionIndex;
+  } else {
+    delete fm[FrontMatterMeta.SECTIONINDEX];
+  }
 
   writeFileWithFrontmatter(indexPath, fm, data.body);
 }
 
 /**
- * Обновляет index.yaml: pureTitle, sectionType, title, sectionIndex
  * @param {string} folderPath
  * @param {string} pureTitle
  * @param {string} sectionTypeName
  * @param {string} sectionLabel
  * @param {string} sectionIndex
  */
-function updateIndexYamlAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex) {
+function updateIndexYamlAdvanced(
+  folderPath,
+  pureTitle,
+  sectionTypeName,
+  sectionLabel,
+  sectionIndex,
+) {
   const yamlPath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
   if (!fs.existsSync(yamlPath)) return;
 
@@ -141,13 +138,21 @@ function updateIndexYamlAdvanced(folderPath, pureTitle, sectionTypeName, section
   }
 
   const fm = data.frontmatter;
-  const finalIndex = fm[FrontMatterMeta.SECTIONINDEX] || sectionIndex;
-  const composedTitle = `${sectionLabel} ${finalIndex}. ${pureTitle}`;
+  let composedTitle;
+  if (sectionIndex && sectionIndex.trim() !== "") {
+    composedTitle = `${sectionLabel} ${sectionIndex}. ${pureTitle}`;
+  } else {
+    composedTitle = pureTitle;
+  }
 
   fm[FrontMatterMeta.TITLE] = composedTitle;
   fm[FrontMatterMeta.PURETITLE] = pureTitle;
   fm[FrontMatterMeta.SECTIONTYPE] = sectionTypeName;
-  fm[FrontMatterMeta.SECTIONINDEX] = finalIndex;
+  if (sectionIndex && sectionIndex.trim() !== "") {
+    fm[FrontMatterMeta.SECTIONINDEX] = sectionIndex;
+  } else {
+    delete fm[FrontMatterMeta.SECTIONINDEX];
+  }
 
   writeFileWithFrontmatter(yamlPath, fm, data.body);
 }
@@ -157,20 +162,20 @@ function updateIndexYamlAdvanced(folderPath, pureTitle, sectionTypeName, section
 // ----------------------------------------------------------------------
 /**
  * @param {string} folderPath
- * @param {string} newComposedTitle
+ * @param {string} composedTitle
  */
-function updateTocYaml(folderPath, newComposedTitle) {
+function updateTocYaml(folderPath, composedTitle) {
   const tocPath = path.join(folderPath, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) return;
 
-  let content = fs.readFileSync(tocPath, 'utf8');
+  let content = fs.readFileSync(tocPath, "utf8");
   const firstItemRegex = /(items:\s*\n\s*-\s+name:\s*)([^\n]+)/;
   const match = content.match(firstItemRegex);
   if (match) {
     const originalIndent = match[1];
-    const newLine = `${originalIndent}${newComposedTitle}`;
+    const newLine = `${originalIndent}${composedTitle}`;
     content = content.replace(firstItemRegex, newLine);
-    fs.writeFileSync(tocPath, content, 'utf8');
+    fs.writeFileSync(tocPath, content, "utf8");
   }
 }
 
@@ -181,7 +186,7 @@ function updateTocYaml(folderPath, newComposedTitle) {
  * @param {string} str
  */
 function normalizeEmptyLines(str) {
-  return str.replace(/\n\s*\n\s*\n/g, '\n\n');
+  return str.replace(/\n\s*\n\s*\n/g, "\n\n");
 }
 
 /**
@@ -192,15 +197,15 @@ function removeFromParentToc(parentDir, folderName) {
   const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) return;
 
-  let content = fs.readFileSync(tocPath, 'utf8');
+  let content = fs.readFileSync(tocPath, "utf8");
   const sectionRegex = new RegExp(
     `\\s*-\\s+name:.*\\r?\\n\\s+href:\\s+${folderName}/index\\.md(?:\\r?\\n\\s+include:\\r?\\n\\s+path:\\s+${folderName}/toc\\.yaml\\r?\\n\\s+mode:\\s+link)?`,
-    'g'
+    "g",
   );
-  let newContent = content.replace(sectionRegex, '');
+  let newContent = content.replace(sectionRegex, "");
   newContent = normalizeEmptyLines(newContent);
-  newContent = newContent.trimEnd() + '\n';
-  fs.writeFileSync(tocPath, newContent, 'utf8');
+  newContent = newContent.trimEnd() + "\n";
+  fs.writeFileSync(tocPath, newContent, "utf8");
 }
 
 /**
@@ -208,10 +213,10 @@ function removeFromParentToc(parentDir, folderName) {
  */
 function getIndentationFromParentToc(parentDir) {
   const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
-  if (!fs.existsSync(tocPath)) return '  ';
-  const content = fs.readFileSync(tocPath, 'utf8');
+  if (!fs.existsSync(tocPath)) return "  ";
+  const content = fs.readFileSync(tocPath, "utf8");
   const match = content.match(/^(\s*)-\s+name:/m);
-  return match ? match[1] : '  ';
+  return match ? match[1] : "  ";
 }
 
 /**
@@ -223,21 +228,17 @@ function addToParentToc(parentDir, composedTitle, newFolderName) {
   const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) return;
 
-  let content = fs.readFileSync(tocPath, 'utf8');
+  let content = fs.readFileSync(tocPath, "utf8");
   const indent = getIndentationFromParentToc(parentDir);
-  const newEntry = `${indent}- name: ${composedTitle}
-${indent}  href: ${newFolderName}/index.md
-${indent}  include:
-${indent}    path: ${newFolderName}/toc.yaml
-${indent}    mode: link`;
+  const newEntry = indentedTocEntry(indent, composedTitle, newFolderName);
 
-  if (!content.includes('items:')) {
-    content = content.trimEnd() + '\nitems:\n' + newEntry;
+  if (!content.includes("items:")) {
+    content = content.trimEnd() + "\nitems:\n" + newEntry;
   } else {
-    content = content.trimEnd() + '\n' + newEntry;
+    content = content.trimEnd() + "\n" + newEntry;
   }
   content = normalizeEmptyLines(content);
-  fs.writeFileSync(tocPath, content, 'utf8');
+  fs.writeFileSync(tocPath, content, "utf8");
 }
 
 // ----------------------------------------------------------------------
@@ -249,53 +250,59 @@ ${indent}    mode: link`;
  * @param {string} newFolderName
  * @param {string} composedTitle
  */
-function updateParentIndexYaml(parentDir, oldFolderName, newFolderName, composedTitle) {
+function updateParentIndexYaml(
+  parentDir,
+  oldFolderName,
+  newFolderName,
+  composedTitle,
+) {
   const indexPath = path.join(parentDir, FrontMatterFiles.INDEX_YAML);
   if (!fs.existsSync(indexPath)) return;
 
-  let content = fs.readFileSync(indexPath, 'utf8');
+  let content = fs.readFileSync(indexPath, "utf8");
   let changed = false;
 
-  // Заменяем все href вида "oldFolderName/..." на "newFolderName/..."
-  const hrefRegex = new RegExp(`(href:\\s*)${oldFolderName}/`, 'g');
+  const hrefRegex = new RegExp(`(href:\\s*)${oldFolderName}/`, "g");
   const newContentHref = content.replace(hrefRegex, `$1${newFolderName}/`);
   if (newContentHref !== content) {
     content = newContentHref;
     changed = true;
   }
 
-  // Обновляем title и href для записи, указывающей на сам раздел
   const oldSelfHref = `${oldFolderName}/index.md`;
   const newSelfHref = `${newFolderName}/index.md`;
   const selfEntryRegex = new RegExp(
     `(\\s*-\\s+title:\\s*)([^\\n]+)(\\n\\s+href:\\s+)${oldSelfHref}`,
-    'g'
+    "g",
   );
-  const newContentSelf = content.replace(selfEntryRegex, `$1${composedTitle}$3${newSelfHref}`);
+  const newContentSelf = content.replace(
+    selfEntryRegex,
+    `$1${composedTitle}$3${newSelfHref}`,
+  );
   if (newContentSelf !== content) {
     content = newContentSelf;
     changed = true;
   }
 
   if (changed) {
-    fs.writeFileSync(indexPath, content, 'utf8');
+    fs.writeFileSync(indexPath, content, "utf8");
   }
 }
 
 // ----------------------------------------------------------------------
-// Чтение текущего sectionIndex из index.md
+// Чтение текущего sectionIndex
 // ----------------------------------------------------------------------
 /**
  * @param {string} folderPath
  */
-function readSectionIndex(folderPath) {
+function readCurrentSectionIndex(folderPath) {
   const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
-  if (!fs.existsSync(indexPath)) return '1';
+  if (!fs.existsSync(indexPath)) return "";
   const data = readFileWithFrontmatter(indexPath);
-  if (data && data.frontmatter[FrontMatterMeta.SECTIONINDEX]) {
+  if (data && data.frontmatter[FrontMatterMeta.SECTIONINDEX] !== undefined) {
     return String(data.frontmatter[FrontMatterMeta.SECTIONINDEX]);
   }
-  return '1';
+  return "";
 }
 
 // ----------------------------------------------------------------------
@@ -313,18 +320,22 @@ async function renameSection(uri) {
 
   if (!isDiplodocSection(oldFolderPath)) {
     vscode.window.showErrorMessage(
-      'Переименовать можно только полноценный раздел (содержит index.md, index.yaml, toc.yaml).'
+      "Переименовать можно только полноценный раздел (содержит index.md, index.yaml, toc.yaml).",
     );
     return;
   }
 
-  const newSectionType = await promptSectionType();
-  if (!newSectionType) return;
+  const currentIndex = readCurrentSectionIndex(oldFolderPath);
 
-  const newPureTitle = await promptSectionName();
-  if (!newPureTitle) return;
+  var newSectionObject = await promptSection(currentIndex);
+  if (!newSectionObject) return;
 
-  const newFolderName = generateFolderName(newSectionType, newPureTitle);
+  const finalIndex = newSectionObject.userIndex || "";
+
+  const newFolderName = generateFolderName(
+    newSectionObject.newSectionType,
+    newSectionObject.newPureTitle,
+  );
   const newFolderPath = path.join(parentDir, newFolderName);
 
   if (fs.existsSync(newFolderPath)) {
@@ -334,46 +345,73 @@ async function renameSection(uri) {
   try {
     fs.accessSync(parentDir, fs.constants.W_OK);
   } catch {
-    vscode.window.showErrorMessage(`Нет прав на запись в родительскую директорию ${parentDir}`);
+    vscode.window.showErrorMessage(
+      `Нет прав на запись в родительскую директорию ${parentDir}`,
+    );
     return;
   }
 
-  const sectionIndex = readSectionIndex(oldFolderPath);
-  const composedTitle = `${newSectionType.label} ${sectionIndex}. ${newPureTitle}`;
+  let composedTitle;
+  if (finalIndex !== "") {
+    composedTitle = `${newSectionObject.newSectionType.label} ${finalIndex}. ${newSectionObject.newPureTitle}`;
+  } else {
+    composedTitle = newSectionObject.newPureTitle;
+  }
 
-  // 1. Удаляем старую запись из родительского toc.yaml
   removeFromParentToc(parentDir, oldFolderName);
-
-  // 2. Обновляем родительский index.yaml (href и title для самого раздела)
   updateParentIndexYaml(parentDir, oldFolderName, newFolderName, composedTitle);
 
-  // 3. Переименовываем папку
   try {
     fs.renameSync(oldFolderPath, newFolderPath);
   } catch (err) {
-    // Откат: возвращаем запись в toc.yaml
     addToParentToc(parentDir, composedTitle, oldFolderName);
-    vscode.window.showErrorMessage(`Не удалось переименовать папку: ${err.message}`);
+    const message = err instanceof Error ? err.message : String(err);
+    vscode.window.showErrorMessage(
+      `Не удалось переименовать папку: ${message}`,
+    );
     return;
   }
 
-  // 4. Обновляем внутренние файлы раздела
   try {
-    updateIndexMdAdvanced(newFolderPath, newPureTitle, newSectionType.name, newSectionType.label, sectionIndex);
-    updateIndexYamlAdvanced(newFolderPath, newPureTitle, newSectionType.name, newSectionType.label, sectionIndex);
+    updateIndexMdAdvanced(
+      newFolderPath,
+      newSectionObject.newPureTitle,
+      newSectionObject.newSectionType.name,
+      newSectionObject.newSectionType.label,
+      finalIndex,
+    );
+    updateIndexYamlAdvanced(
+      newFolderPath,
+      newSectionObject.newPureTitle,
+      newSectionObject.newSectionType.name,
+      newSectionObject.newSectionType.label,
+      finalIndex,
+    );
     updateTocYaml(newFolderPath, composedTitle);
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
     vscode.window.showWarningMessage(
-      `Раздел переименован, но не удалось обновить содержимое файлов: ${err.message}`
+      `Раздел переименован, но не удалось обновить содержимое файлов: ${message}`,
     );
   }
 
-  // 5. Добавляем новую запись в родительский toc.yaml (с составным title)
   addToParentToc(parentDir, composedTitle, newFolderName);
 
+  const indexValue = finalIndex ? `, индекс: ${finalIndex}` : "";
   vscode.window.showInformationMessage(
-    `Раздел "${oldFolderName}" переименован в "${newFolderName}" (тип: ${newSectionType.label}, индекс: ${sectionIndex})`
+      successMessage(oldFolderName, newFolderName, newSectionObject.newSectionType.label, indexValue),
   );
 }
 
 module.exports = { renameSection };
+
+/**
+ * @param {string} oldFolderName
+ * @param {string} newFolderName
+ * @param {string} label
+ * @param {string} indexValue
+ */
+function successMessage(oldFolderName, newFolderName, label, indexValue) {
+    return `Раздел "${oldFolderName}" переименован в "${newFolderName}" (тип: ${label}${indexValue})`;
+}
+

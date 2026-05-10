@@ -3,26 +3,16 @@ const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 
-const { sectionTypes } = require("./diplodoc-helper.section.utils");
+const { sectionTypes } = require("./diplodoc-helper.utils.section");
 const {
   FrontMatterMeta,
   FrontMatterFiles,
   FrontMatterSectionTypes,
   FrontMatterSectionTypesIndexed,
-} = require("./diplodoc-helper.constants");
+} = require("./diplodoc-helper.utils.constants");
 
-/**
- * @typedef {Object} TocItem
- * @property {string} name
- * @property {string} href
- * @property {string} [include]
- * @property {any} [items]
- */
+/** @import { TocItem, TocDocument } from './diplodoc-helper.utils.types.js' */
 
-/**
- * @typedef {Object} TocDocument
- * @property {TocItem[]} [items]
- */
 
 /**
  * Рекурсивная переиндексация проекта с сортировкой элементов оглавления
