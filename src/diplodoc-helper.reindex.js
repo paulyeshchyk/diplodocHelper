@@ -1,6 +1,23 @@
+// diplodoc-helper.reindex.js
 const fs = require("fs");
 const path = require("path");
-const yaml = require("js-yaml"); // Понадобится для работы с toc.yaml
+const yaml = require("js-yaml");
+
+const {  sectionTypes} = require("./diplodoc-helper.section.utils");
+const { FrontMatterMeta, FrontMatterFiles, FrontMatterSectionTypes, FrontMatterSectionTypesIndexed } = require("./diplodoc-helper.constants");
+
+/**
+ * @typedef {Object} TocItem
+ * @property {string} name
+ * @property {string} href
+ * @property {string} [include]      // если в toc.yaml есть поле include (опционально)
+ * @property {any} [items]           // для возможной вложенности
+ */
+
+/**
+ * @typedef {Object} TocDocument
+ * @property {TocItem[]} [items]
+ */
 
 /**
  * Рекурсивная переиндексация проекта
@@ -8,31 +25,33 @@ const yaml = require("js-yaml"); // Понадобится для работы �
  * @param {string} parentIndex Индекс родителя (передается по рекурсии)
  */
 function reindexDirectory(dir, parentIndex = "") {
-    const INDEXED_TYPES = ["Part", "Section", "Chapter"];
+
     const items = fs.readdirSync(dir, { withFileTypes: true });
     
     // Сначала отфильтруем только папки-разделы
     const sections = items.filter(item => {
         if (!item.isDirectory()) return false;
-        const indexPath = path.join(dir, item.name, "index.md");
+        const indexPath = path.join(dir, item.name, FrontMatterFiles.INDEX_MD);
         return fs.existsSync(indexPath);
     });
+
+    const localSectionTypes = sectionTypes();
 
     let localCounter = 0;
 
     for (const section of sections) {
         const sectionPath = path.join(dir, section.name);
-        const indexPath = path.join(sectionPath, "index.md");
+        const indexPath = path.join(sectionPath, FrontMatterFiles.INDEX_MD);
         
         let content = fs.readFileSync(indexPath, "utf8");
         
         // Извлекаем метаданные
-        const type = getMetadataValue(content, "type") || "Page";
-        const pureTitle = getMetadataValue(content, "pureTitle") || getMetadataValue(content, "title") || section.name;
-        let currentIndex = getMetadataValue(content, "index");
+        const sectionType = getMetadataValue(content, FrontMatterMeta.SECTIONTYPE) || FrontMatterSectionTypes.PAGE;
+        const pureTitle = getMetadataValue(content, FrontMatterMeta.PURETITLE) || getMetadataValue(content, FrontMatterMeta.TITLE) || section.name;
+        let currentIndex = getMetadataValue(content, FrontMatterMeta.SECTIONINDEX);
 
         // Логика индексации
-        if (INDEXED_TYPES.includes(type)) {
+        if (FrontMatterSectionTypesIndexed.includes(sectionType)) {
             // Если индекса нет — вычисляем новый
             if (!currentIndex) {
                 localCounter++;
@@ -45,12 +64,17 @@ function reindexDirectory(dir, parentIndex = "") {
             }
 
             // Формируем новый заголовок
-            const newTitle = `${currentIndex} ${pureTitle}`;
+            const localSection = localSectionTypes.find(st => st.name == sectionType);
+            const sectionLabel = localSection?.label || "";
+            
+            const newTitle = `${sectionLabel} ${currentIndex}. ${pureTitle}`;
 
+            console.log(`sectiontype:${sectionType}; sectionlabel:${sectionLabel}; newTitle:${newTitle}`);
+            
             // Обновляем файл index.md
-            content = updateMetadata(content, "index", currentIndex);
-            content = updateMetadata(content, "pureTitle", pureTitle);
-            content = updateMetadata(content, "title", newTitle);
+            content = updateMetadata(content, FrontMatterMeta.SECTIONINDEX, currentIndex);
+            content = updateMetadata(content, FrontMatterMeta.PURETITLE, pureTitle);
+            content = updateMetadata(content, FrontMatterMeta.TITLE, newTitle);
             fs.writeFileSync(indexPath, content, "utf8");
 
             // Обновляем оглавление (toc.yaml) в текущей папке (родительской для этого раздела)
@@ -62,13 +86,31 @@ function reindexDirectory(dir, parentIndex = "") {
     }
 }
 
-/** Вспомогательные функции */
+// --- Вспомогательные функции ---
 
+/** 
+ * @param {string} content
+ * @param {string} key
+ */
 function getMetadataValue(content, key) {
     const match = content.match(new RegExp(`${key}:\\s*(.*)`));
     return match ? match[1].trim().replace(/['"]/g, "") : null;
 }
 
+
+/**
+ * @param {fs.PathOrFileDescriptor} tocPath
+ * @returns {TocDocument}
+ */
+function LoadToc(tocPath) {
+    const content = fs.readFileSync(tocPath, "utf8");
+    return /** @type {TocDocument} */ (yaml.load(content));
+}
+/**
+ * @param {string} content
+ * @param {string} key
+ * @param {string} value
+ */
 function updateMetadata(content, key, value) {
     const regex = new RegExp(`${key}:.*`);
     if (regex.test(content)) {
@@ -79,16 +121,21 @@ function updateMetadata(content, key, value) {
     }
 }
 
+/**
+ * @param {string} parentDir
+ * @param {string} folderName
+ * @param {string} newName
+ */
 function updateTocName(parentDir, folderName, newName) {
-    const tocPath = path.join(parentDir, "toc.yaml");
+    const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
     if (!fs.existsSync(tocPath)) return;
 
     try {
-        let doc = yaml.load(fs.readFileSync(tocPath, "utf8"));
+        let doc = LoadToc(tocPath);
         let changed = false;
 
         if (doc && doc.items) {
-            doc.items.forEach(item => {
+            doc.items.forEach(( /** @type {TocItem} */ item) => {
                 // Проверяем, если href ведет в эту папку
                 if (item.href && (item.href === folderName || item.href.startsWith(folderName + "/"))) {
                     item.name = newName;
@@ -101,7 +148,7 @@ function updateTocName(parentDir, folderName, newName) {
             fs.writeFileSync(tocPath, yaml.dump(doc, { lineWidth: -1, noArrayIndent: true }));
         }
     } catch (e) {
-        console.error(`Ошибка при обновлении toc.yaml в ${parentDir}:`, e);
+        console.error(`Ошибка при обновлении ${FrontMatterFiles.TOC_YAML} в ${parentDir}:`, e);
     }
 }
 

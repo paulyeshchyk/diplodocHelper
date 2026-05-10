@@ -1,6 +1,7 @@
 //diplodoc-helper.indexer.js
 const fs = require("fs");
 const path = require("path");
+const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require("./diplodoc-helper.constants");
 
 /**
  * Извлекает значение атрибута из Frontmatter файла index.md
@@ -21,11 +22,10 @@ function getMetadataValue(filePath, key) {
  * @returns {string} Новый индекс (например, "1.17")
  */
 function calculateNextIndex(targetDir) {
-  const INDEXED_TYPES = ["Part", "Section", "Chapter"];
 
   // 1. Получаем индекс родителя
-  const parentIndexPath = path.join(targetDir, "index.md");
-  const parentIndex = getMetadataValue(parentIndexPath, "index") || "";
+  const parentIndexPath = path.join(targetDir, FrontMatterFiles.INDEX_MD);
+  const parentIndex = getMetadataValue(parentIndexPath, "sectionIndex") || "";
 
   // 2. Ищем все подпапки (сиблинги будущего раздела)
   const items = fs.readdirSync(targetDir, { withFileTypes: true });
@@ -33,14 +33,14 @@ function calculateNextIndex(targetDir) {
 
   for (const item of items) {
     if (item.isDirectory()) {
-      const indexPath = path.join(targetDir, item.name, "index.md");
-      const type = getMetadataValue(indexPath, "type");
-      const index = getMetadataValue(indexPath, "index");
+      const indexPath = path.join(targetDir, item.name, FrontMatterFiles.INDEX_MD);
+      const sectionType = getMetadataValue(indexPath, "sectionType");
+      const sectionIndex = getMetadataValue(indexPath, "sectionIndex");
 
       // Нас интересуют только индексируемые типы
-      if (type && INDEXED_TYPES.includes(type) && index) {
+      if (sectionType && FrontMatterSectionTypesIndexed.includes(sectionType) && sectionIndex) {
         // Извлекаем последнюю цифру индекса (после последней точки)
-        const parts = index.split(".");
+        const parts = sectionIndex.split(".");
         const lastNum = parseInt(parts[parts.length - 1], 10);
         if (!isNaN(lastNum)) {
           siblingIndices.push(lastNum);

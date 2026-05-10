@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { FrontMatterFiles, FrontMatterFilesDefaultList } = require("./diplodoc-helper.constants");
 
 /**
  * Проверяет, является ли папка полноценным разделом Diplodoc
@@ -9,8 +10,7 @@ const path = require('path');
  */
 function isDiplodocSection(folderPath) {
     if (!folderPath || !fs.existsSync(folderPath)) return false;
-    const requiredFiles = ['index.md', 'index.yaml', 'toc.yaml'];
-    return requiredFiles.every(file => fs.existsSync(path.join(folderPath, file)));
+    return FrontMatterFilesDefaultList.every(file => fs.existsSync(path.join(folderPath, file)));
 }
 
 /**
@@ -21,7 +21,7 @@ function isDiplodocSection(folderPath) {
 function isLanguageRoot(folderPath) {
     // Корень языка обычно содержит папку или файл оглавления, 
     // но не обязательно является "разделом" в плане наличия index.yaml
-    return fs.existsSync(path.join(folderPath, 'toc.yaml'));
+    return fs.existsSync(path.join(folderPath, FrontMatterFiles.TOC_YAML));
 }
 
 module.exports = {

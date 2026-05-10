@@ -3,55 +3,16 @@ const vscode = require("vscode");
 const fs = require("fs");
 const path = require("path");
 const { calculateNextIndex } = require("./diplodoc-helper.indexer");
+const { sectionTypes } = require("./diplodoc-helper.section.utils");
+const { FrontMatterFiles } = require("./diplodoc-helper.constants");
 
-// --- ШАБЛОНЫ (Константы) ---
-/**
- * @param {string} sectionLabel
- * @param {string} sectionIndex
- * @param {string} title
- */
-function TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title) {
-  var leftPart =
-    sectionIndex.trim().length == 0
-      ? `${sectionLabel}`
-      : `${sectionLabel} ${sectionIndex.trim()}`;
+const {
+  TEMPLATE_INDEX_MD,
+  TEMPLATE_INDEX_YAML,
+  TEMPLATE_TOC_YAML,
+  TEMPLATE_PARENT_TOC_YAML,
+} = require("./diplodoc-helper.templates");
 
-  return `${leftPart}. ${title}`;
-}
-
-const TEMPLATE_INDEX_MD = (
-  /** @type {string} */ title,
-  /** @type {string} */ sectionType,
-  /** @type {string} */ sectionLabel,
-  /** @type {string} */ sectionIndex,
-) =>
-  `---\ntitle: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title)}\ntype: ${sectionType}\npureTitle: ${title}\nindex: ${sectionIndex}\n---\n`;
-
-/**
- * @param {string} title
- * @param {string} sectionType
- * @param {string} sectionLabel
- * @param {string} sectionIndex
- */
-function TEMPLATE_INDEX_YAML(title, sectionType, sectionLabel, sectionIndex) {
-  const finalTitle = TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title);
-  return `title: ${finalTitle}\ndescription: Описывает ${finalTitle}\nmeta:\n  title: ${finalTitle}\n  type: ${sectionType}\n  noIndex: true\n`;
-}
-
-const TEMPLATE_TOC_YAML = (
-  /** @type {string} */ title,
-  /** @type {string} */ sectionLabel,
-  /** @type {string} */ sectionIndex,
-) =>
-  `title: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title)}\nhref: index.yaml\n`;
-
-const TEMPLATE_PARENT_TOC_YAML = (
-  /** @type {string} */ name,
-  /** @type {string} */ sectionLabel,
-  /** @type {string} */ folderName,
-  /** @type {string} */ sectionIndex,
-) =>
-  `  - name: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, name)}\n    href: ${folderName}/index.md\n    include:\n      path: ${folderName}/toc.yaml\n      mode: link\n`;
 
 // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
 
@@ -65,28 +26,9 @@ async function ShowSectionNameSelector() {
 }
 
 async function ShowSectionTypeSelector() {
-  const sectionTypes = [
-    {
-      label: "Часть",
-      name: "Part",
-      description:
-        "Структурная единица руководства, представляющая собой наиболее крупную ступень его деления",
-    },
-    {
-      label: "Раздел",
-      name: "Section",
-      description:
-        "Крупная рубрика, являющаяся одной из высших ступеней деления основного текста",
-    },
-    {
-      label: "Глава",
-      name: "Chapter",
-      description: "Крупная рубрика, имеющая самостоятельный заголовок",
-    },
-    { label: "Статья", name: "Page", description: "" },
-  ];
+  const localSectionTypes = sectionTypes();
 
-  const sectionType = await vscode.window.showQuickPick(sectionTypes, {
+  const sectionType = await vscode.window.showQuickPick(localSectionTypes, {
     placeHolder: "Выберите тип создаваемого раздела",
     canPickMany: false,
   });
@@ -148,7 +90,7 @@ function createIndexMd(
   sectionLabel,
   sectionIndex,
 ) {
-  const filePath = path.join(folderPath, "index.md");
+  const filePath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
   fs.writeFileSync(
     filePath,
     TEMPLATE_INDEX_MD(title, sectionType, sectionLabel, sectionIndex),
@@ -170,7 +112,7 @@ function createIndexYaml(
   sectionLabel,
   sectionIndex,
 ) {
-  const filePath = path.join(folderPath, "index.yaml");
+  const filePath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
   fs.writeFileSync(
     filePath,
     TEMPLATE_INDEX_YAML(title, sectionType, sectionLabel, sectionIndex),
@@ -185,7 +127,7 @@ function createIndexYaml(
  * @param {string} sectionIndex
  */
 function createTocYaml(folderPath, title, sectionLabel, sectionIndex) {
-  const filePath = path.join(folderPath, "toc.yaml");
+  const filePath = path.join(folderPath, FrontMatterFiles.TOC_YAML);
   fs.writeFileSync(
     filePath,
     TEMPLATE_TOC_YAML(title, sectionLabel, sectionIndex),
@@ -207,9 +149,9 @@ function patchParentToc(
   folderName,
   sectionIndex,
 ) {
-  const tocPath = path.join(parentDir, "toc.yaml");
+  const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) {
-    console.warn(`Родительский toc.yaml не найден в ${parentDir}`);
+    console.warn(`Родительский ${FrontMatterFiles.TOC_YAML} не найден в ${parentDir}`);
     return;
   }
   let content = fs.readFileSync(tocPath, "utf8");
@@ -304,4 +246,4 @@ async function createSection(uri) {
   }
 }
 
-module.exports = { createSection };
+module.exports = { createSection, sectionTypes };
