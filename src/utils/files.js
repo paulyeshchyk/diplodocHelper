@@ -196,24 +196,42 @@ function updateIndexMdAdvanced(folderPath, pureTitle, sectionTypeName, sectionLa
  * @param {any} sectionLabel
  * @param {any} sectionIndex
  */
-function updateIndexYamlAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex) {
+function updateIndexYamlAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex = "") {
   const yamlPath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
   if (!fs.existsSync(yamlPath)) return;
 
-  const content = fs.readFileSync(yamlPath, "utf8");
-  let { data, content: body } = parse(content);
+  let content = fs.readFileSync(yamlPath, "utf8");
 
-  const composedTitle = sectionIndex
+  const composedTitle = sectionIndex && sectionIndex.trim() !== ""
     ? `${sectionLabel} ${sectionIndex}. ${pureTitle}`
     : pureTitle;
 
-  data.title = composedTitle;
-  data.pureTitle = pureTitle;
-  data.sectionType = sectionTypeName;
-  if (sectionIndex) data.sectionIndex = sectionIndex;
-  else delete data.sectionIndex;
+  // Простая замена по ключам
+  content = content.replace(
+    /^title:.*/m,
+    `title: ${composedTitle}`
+  );
 
-  fs.writeFileSync(yamlPath, stringify(data, body), "utf8");
+  content = content.replace(
+    /^pureTitle:.*/m,
+    `pureTitle: ${pureTitle}`
+  );
+
+  content = content.replace(
+    /^sectionType:.*/m,
+    `sectionType: ${sectionTypeName}`
+  );
+
+  if (sectionIndex && sectionIndex.trim() !== "") {
+    content = content.replace(
+      /^sectionIndex:.*/m,
+      `sectionIndex: ${sectionIndex}`
+    );
+  } else {
+    content = content.replace(/^sectionIndex:.*\r?\n?/m, "");
+  }
+
+  fs.writeFileSync(yamlPath, content, "utf8");
 }
 
 /**
@@ -239,24 +257,18 @@ function updateTocYamlTitle(folderPath, composedTitle) {
  * @param {any} sectionLabel
  * @param {string} sectionIndex
  */
-function updateSectionMetadata(
-  folderPath,
-  pureTitle,
-  sectionTypeName,
-  sectionLabel,
-  sectionIndex
-) {
+function updateSectionMetadata(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex = "") {
   const composedTitle = sectionIndex && sectionIndex.trim() !== ""
     ? `${sectionLabel} ${sectionIndex}. ${pureTitle}`
     : pureTitle;
 
-  // Обновляем index.md
+  // index.md — используем gray-matter (это frontmatter)
   updateIndexMdAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex);
 
-  // Обновляем index.yaml
+  // index.yaml — обычный YAML, gray-matter здесь не нужен!
   updateIndexYamlAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex);
 
-  // Обновляем заголовок в своём toc.yaml
+  // toc.yaml своего раздела
   updateTocYamlTitle(folderPath, composedTitle);
 }
 

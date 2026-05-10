@@ -12,17 +12,17 @@ const {
   sortTocItems 
 } = require("../utils");
 
-/**
- * Рекурсивная переиндексация проекта
- * @param {string} dir
- */
+
 function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKind = "nonIndexedBottom") {
+  console.log(`🔄 Переиндексация: ${path.relative(process.cwd(), dir) || '.'}`);
+
   const items = fs.readdirSync(dir, { withFileTypes: true });
 
   const sections = items.filter(item => 
-    item.isDirectory() && 
-    fs.existsSync(path.join(dir, item.name, FrontMatterFiles.INDEX_MD))
+    item.isDirectory() && fs.existsSync(path.join(dir, item.name, FrontMatterFiles.INDEX_MD))
   );
+
+  if (sections.length === 0) return;
 
   const localSectionTypes = sectionTypes();
   let localCounter = 0;
@@ -34,7 +34,7 @@ function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKi
     try {
       tocDoc = loadTocFromFile(tocPath);
     } catch (e) {
-      console.error(`Ошибка загрузки toc.yaml в ${dir}:`, e);
+      console.error(`❌ Ошибка загрузки toc.yaml: ${dir}`);
     }
   }
 
@@ -48,20 +48,20 @@ function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKi
       tocDoc
     });
 
-    localCounter = result.localCounter; // ← важно!
-    
+    localCounter = result.localCounter;
     reindexDirectory(result.sectionPath, result.currentIndex || parentIndex, sortOrder, sortKind);
   }
 
-  // Сортируем toc текущей директории после обработки всех детей
-  if (tocDoc && sortOrder !== "none") {
-    sortTocItems(tocDoc, dir, sortOrder, sortKind);
-    saveTocToFile(tocPath, tocDoc);
-  }
+  // Сортировка после обработки детей
+if (tocDoc && sortOrder !== "none") {
+  console.log(`   📊 Сортируем toc.yaml (${sections.length} элементов)`);
+  sortTocItems(dir, sortOrder, sortKind);        // ← передаём dir, а не tocDoc
+  console.log(`   ✅ toc.yaml отсортирован`);
+}
 }
 
 /**
- * Обрабатывает один раздел (обновляет index.md + index.yaml)
+ * Обрабатывает один раздел (index.md + index.yaml)
  */
 function reindexSingleSection({ dir, sectionName, localCounter, parentIndex, localSectionTypes, tocDoc }) {
   const sectionPath = path.join(dir, sectionName);
@@ -76,44 +76,45 @@ function reindexSingleSection({ dir, sectionName, localCounter, parentIndex, loc
 
   let sectionType = metadata.sectionType || "Page";
   let pureTitle = metadata.pureTitle || sectionName;
-  let currentIndex = String(metadata.sectionIndex || "");
+  let currentIndex = String(metadata.sectionIndex || "").trim();
 
   if (FrontMatterSectionTypesIndexed.includes(sectionType)) {
+    const hadManualIndex = !!currentIndex;
+
     if (!currentIndex) {
+      // Только если индекса нет — генерируем новый
       localCounter++;
       currentIndex = parentIndex 
         ? `${parentIndex}.${localCounter}` 
         : `${localCounter}`;
     } else {
+      // Если индекс есть — уважаем его и обновляем localCounter
       const parts = currentIndex.split(".");
       const lastNum = parseInt(parts[parts.length - 1], 10);
-      if (!isNaN(lastNum)) localCounter = lastNum;
+      if (!isNaN(lastNum)) {
+        localCounter = Math.max(localCounter, lastNum);
+      }
     }
 
     const localSection = localSectionTypes.find(st => st.name === sectionType);
     const sectionLabel = localSection?.label || "";
     const newTitle = `${sectionLabel} ${currentIndex}. ${pureTitle}`;
 
-    // === Основное обновление ===
-    updateSectionMetadata(
-      sectionPath,
-      pureTitle,
-      sectionType,
-      sectionLabel,
-      currentIndex
-    );
+    // Обновляем файлы
+    updateSectionMetadata(sectionPath, pureTitle, sectionType, sectionLabel, currentIndex);
 
-    // Обновляем имя в родительском toc.yaml
     if (tocDoc?.items) {
       updateTocItemName(tocDoc, sectionName, newTitle);
     }
+
+    if (hadManualIndex) {
+      console.log(`   📍 Сохранён ручной индекс: ${currentIndex} → ${sectionName}`);
+    } else {
+      console.log(`   ➕ Присвоен индекс: ${currentIndex} → ${sectionName}`);
+    }
   }
 
-  return {
-    sectionPath,
-    currentIndex,
-    localCounter
-  };
+  return { sectionPath, currentIndex, localCounter };
 }
 
 module.exports = { reindexDirectory };

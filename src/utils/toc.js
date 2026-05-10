@@ -195,17 +195,39 @@ function compareIndexes(a, b, order = "ascending") {
   return 0;
 }
 
-/**
- * Получает sectionIndex из index.md по ссылке из toc
- * @param {{ href: string; }} item
- * @param {string} baseDir
- */
-function getItemIndex(item, baseDir) {
-  if (!item?.href) return null;
+/* ====================== УЛУЧШЕННАЯ СОРТИРОВКА (БЛОКАМИ) ====================== */
 
-  // Убираем /index.md если есть
-  const targetDir = item.href.replace(/\/index\.md$/, "");
-  const indexPath = path.join(baseDir, targetDir, FrontMatterFiles.INDEX_MD);
+/**
+ * Разбивает toc.yaml на отдельные блоки элементов
+ */
+function splitTocIntoBlocks(content) {
+  return content.split(/^(\s*-\s+name:)/m)
+    .reduce((acc, part, i) => {
+      if (i === 0) {
+        acc.header = part.trim();
+        return acc;
+      }
+      if (i % 2 === 1) { // начало нового элемента
+        acc.current = [part];
+      } else if (acc.current) {
+        acc.current.push(part);
+        acc.blocks.push(acc.current.join(''));
+        acc.current = null;
+      }
+      return acc;
+    }, { header: '', blocks: [], current: null })
+    .blocks;
+}
+
+/**
+ * Извлекает sectionIndex из блока элемента toc
+ */
+function getIndexFromBlock(block, baseDir) {
+  const hrefMatch = block.match(/href:\s+([^\s/]+)/);
+  if (!hrefMatch) return null;
+
+  const folderName = hrefMatch[1];
+  const indexPath = path.join(baseDir, folderName, FrontMatterFiles.INDEX_MD);
 
   if (!fs.existsSync(indexPath)) return null;
 
@@ -220,30 +242,36 @@ function getItemIndex(item, baseDir) {
 }
 
 /**
- * Сортирует элементы в toc.yaml по sectionIndex
- * @param {{ items: any[]; }} tocDoc
- * @param {any} baseDir
+ * Сортирует элементы toc.yaml, сохраняя форматирование
  */
-function sortTocItems(tocDoc, baseDir, sortOrder = "ascending", sortKind = "nonIndexedBottom") {
-  if (!tocDoc?.items || tocDoc.items.length === 0 || sortOrder === "none") {
-    return;
-  }
+function sortTocItems(baseDir, sortOrder = "ascending", sortKind = "nonIndexedBottom") {
+  const tocPath = path.join(baseDir, FrontMatterFiles.TOC_YAML);
+  if (!fs.existsSync(tocPath)) return;
 
-  const itemsWithIndex = tocDoc.items.map((item) => ({
-    item,
-    index: getItemIndex(item, baseDir),
+  let content = fs.readFileSync(tocPath, "utf8");
+
+  const blocks = splitTocIntoBlocks(content);
+  if (blocks.length === 0) return;
+
+  const itemsWithIndex = blocks.map(block => ({
+    block,
+    index: getIndexFromBlock(block, baseDir)
   }));
 
-  const indexed = itemsWithIndex.filter((i) => i.index !== null);
-  const nonIndexed = itemsWithIndex.filter((i) => i.index === null);
+  const indexed = itemsWithIndex.filter(i => i.index !== null);
+  const nonIndexed = itemsWithIndex.filter(i => i.index === null);
 
-  // Сортируем только индексированные
   indexed.sort((a, b) => compareIndexes(a.index, b.index, sortOrder));
 
-  // Собираем обратно
-  tocDoc.items = sortKind === "nonIndexedTop"
-    ? [...nonIndexed.map(i => i.item), ...indexed.map(i => i.item)]
-    : [...indexed.map(i => i.item), ...nonIndexed.map(i => i.item)];
+  const sortedBlocks = sortKind === "nonIndexedTop"
+    ? [...nonIndexed.map(i => i.block), ...indexed.map(i => i.block)]
+    : [...indexed.map(i => i.block), ...nonIndexed.map(i => i.block)];
+
+  const newContent = content.split(/^(\s*items:)/m)[0] + 
+                     "items:\n" + 
+                     sortedBlocks.join("\n");
+
+  fs.writeFileSync(tocPath, normalizeEmptyLines(newContent), "utf8");
 }
 /* ====================== ЭКСПОРТ ====================== */
 
