@@ -3,7 +3,7 @@
   "publisher": "paulyestchick",
   "displayName": "diplodoc-helper",
   "description": "",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "engines": {
     "vscode": "^1.116.0"
   },
@@ -21,6 +21,10 @@
       {
         "command": "diplodoc-helper.deleteSection",
         "title": "Удалить рубрику"
+      },
+      {
+        "command": "diplodoc-helper.renameSection",
+        "title": "Задать новый тип и наименование"
       },
       {
         "command": "diplodoc-helper.reindex",
@@ -51,6 +55,11 @@
           "command": "diplodoc-helper.deleteSection",
           "when": "explorerResourceIsFolder",
           "group": "1_main@2"
+        },
+        {
+          "command": "diplodoc-helper.renameSection",
+          "when": "explorerResourceIsFolder",
+          "group": "1_main@3"
         },
         {
           "command": "diplodoc-helper.reindex",

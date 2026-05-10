@@ -2,6 +2,7 @@
 const vscode = require("vscode");
 const { createSection } = require("./diplodoc-helper.createSection");
 const { deleteSection } = require("./diplodoc-helper.deleteSection");
+const { renameSection } = require("./diplodoc-helper.renameSection");
 const { generateContexts } = require("./diplodoc-helper.generateContexts");
 const { generateHelpmaps } = require("./diplodoc-helper.generateHelpMap");
 
@@ -19,6 +20,12 @@ function activate(context) {
   const deleteSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.deleteSection",
     deleteSection,
+  );
+
+  // Регистрируем команду renameSection
+  const renameSectionCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.renameSection",
+    renameSection,
   );
 
   // Регистрируем команду generateContexts
@@ -59,6 +66,7 @@ function activate(context) {
   context.subscriptions.push(
     createSectionCmd,
     deleteSectionCmd,
+    renameSectionCmd,
     generateContextsCmd,
     generateHelpmapsCmd,
     reindexCommand,
