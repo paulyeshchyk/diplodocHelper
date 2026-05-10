@@ -3,7 +3,7 @@
   "publisher": "paulyestchick",
   "displayName": "diplodoc-helper",
   "description": "",
-  "version": "0.5.6",
+  "version": "0.5.27",
   "engines": {
     "vscode": "^1.116.0"
   },
@@ -71,5 +71,8 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0"
   }
 }

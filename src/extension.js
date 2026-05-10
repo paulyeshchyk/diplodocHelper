@@ -7,6 +7,9 @@ const { renameSection } = require("./commands/diplodoc-helper.section.Rename");
 const { generateContexts } = require("./commands/generateContexts");
 const { generateHelpmaps } = require("./commands/generateHelpmap");
 
+/**
+ * @param {{ subscriptions: vscode.Disposable[]; }} context
+ */
 function activate(context) {
   const createSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.createSection",

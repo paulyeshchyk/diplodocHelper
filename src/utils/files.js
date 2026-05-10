@@ -65,7 +65,7 @@ function canCreateFolder(folderPath) {
  * @param {any} sectionIndex
  */
 function createSectionFolder(targetDir, sectionType, sectionName, sectionIndex) {
-  const folderName = TEMPLATE_FOLDER_NAME(sectionType, sectionName);
+  const folderName = TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex);
   const newFolderPath = path.join(targetDir, folderName);
 
   if (!canCreateFolder(newFolderPath)) return null;

@@ -7,11 +7,13 @@ const {
   createTocYaml,
   patchParentToc,
   createSectionFolder,
+  TEMPLATE_SECTION_NAME,
 } = require("../utils"); // ← используем barrel
 
 const {
   ShowSectionNameSelector,
   ShowSectionTypeSelector,
+  promptSectionIndex
 } = require("../utils");
 
 const {
@@ -36,18 +38,21 @@ async function createSection(uri) {
   const sectionType = await ShowSectionTypeSelector();
   if (!sectionType) return;
 
-  const sectionName = await ShowSectionNameSelector();
-  if (!sectionName) return;
+  const userSectionName = await ShowSectionNameSelector();
+  if (!userSectionName) return;
 
-  const sectionIndex = calculateNextIndex(targetDir);
+  const sectionIndexCalculated = calculateNextIndex(targetDir);
+  const sectionIndex = await promptSectionIndex(sectionIndexCalculated);
 
-  const folderResult = createSectionFolder(targetDir, sectionType, sectionName, sectionIndex);
+  const folderResult = createSectionFolder(targetDir, sectionType, userSectionName, sectionIndex);
   if (!folderResult) return;
+
+  const sectionName = TEMPLATE_SECTION_NAME(sectionType, userSectionName, sectionIndex);
 
   try {
     createIndexMd(
       folderResult.folderPath,
-      sectionName,
+      userSectionName,
       sectionType.name,
       sectionType.label,
       sectionIndex,
@@ -66,7 +71,9 @@ async function createSection(uri) {
     patchParentToc(
       targetDir,
       sectionName,
-      sectionType.label,
+      folderResult.folderName,
+      sectionType.name,
+      sectionIndex
     );
 
     vscode.window.showInformationMessage(

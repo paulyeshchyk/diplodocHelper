@@ -5,13 +5,14 @@ const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require("../utils/c
 const { get } = require("../utils/frontmatter");
 
 /**
- * Рассчитывает следующий индекс для нового раздела
- * @param {string} targetDir Путь к папке, где создаётся новый раздел
- * @returns {string} Новый индекс (например, "1.17")
+ * @param {string} targetDir
  */
 function calculateNextIndex(targetDir) {
   const parentIndexPath = path.join(targetDir, FrontMatterFiles.INDEX_MD);
-  const parentIndex = get(fs.readFileSync(parentIndexPath, "utf8"), "sectionIndex") || "";
+  if (!fs.existsSync(parentIndexPath)) return "1"; // Фоллбек, если родителя нет
+
+  const parentContent = fs.readFileSync(parentIndexPath, "utf8");
+  const parentIndex = String(get(parentContent, "sectionIndex") || "");
 
   const items = fs.readdirSync(targetDir, { withFileTypes: true });
   const siblingIndices = [];
@@ -22,18 +23,30 @@ function calculateNextIndex(targetDir) {
     const indexPath = path.join(targetDir, item.name, FrontMatterFiles.INDEX_MD);
     if (!fs.existsSync(indexPath)) continue;
 
-    const content = fs.readFileSync(indexPath, "utf8");
-    const sectionType = get(content, "sectionType");
-    const sectionIndex = get(content, "sectionIndex");
+    try {
+      const content = fs.readFileSync(indexPath, "utf8");
+      const sectionType = get(content, "sectionType");
+      // Принудительно приводим к строке, чтобы split не падал
+      const sectionIndex = String(get(content, "sectionIndex") || "");
 
-    if (sectionType && FrontMatterSectionTypesIndexed.includes(sectionType) && sectionIndex) {
-      const parts = sectionIndex.split(".");
-      const lastNum = parseInt(parts[parts.length - 1], 10);
-      if (!isNaN(lastNum)) siblingIndices.push(lastNum);
+      if (sectionType && FrontMatterSectionTypesIndexed.includes(sectionType) && sectionIndex) {
+        const parts = sectionIndex.split(".");
+        const lastPart = parts[parts.length - 1];
+        const lastNum = parseInt(lastPart, 10);
+
+        if (!isNaN(lastNum)) {
+          siblingIndices.push(lastNum);
+        }
+      }
+    } catch (e) {
+      console.error(`Ошибка при чтении ${indexPath}:`, e);
+      continue; // Пропускаем проблемный файл вместо падения
     }
   }
 
-  const nextSubNumber = siblingIndices.length > 0 ? Math.max(...siblingIndices) + 1 : 1;
+  // Безопасный поиск максимума без оператора '...'
+  const maxIdx = siblingIndices.reduce((a, b) => Math.max(a, b), 0);
+  const nextSubNumber = maxIdx + 1;
 
   return parentIndex === "" ? `${nextSubNumber}` : `${parentIndex}.${nextSubNumber}`;
 }

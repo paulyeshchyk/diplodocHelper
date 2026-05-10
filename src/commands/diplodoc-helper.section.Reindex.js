@@ -47,12 +47,12 @@ function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKi
     const metadata = getSectionMetadata(content);
     let sectionType = metadata.sectionType || "Page";
     let pureTitle = metadata.pureTitle || section.name;
-    let currentIndex = metadata.sectionIndex;
+    let currentIndex = String( metadata.sectionIndex || "");
 
     if (FrontMatterSectionTypesIndexed.includes(sectionType)) {
       if (!currentIndex) {
         localCounter++;
-        currentIndex = parentIndex ? `${parentIndex}.${localCounter}` : `${localCounter}`;
+        currentIndex = String( (parentIndex ? `${parentIndex}.${localCounter}` : `${localCounter}`) || "");
       } else {
         const parts = currentIndex.split(".");
         const lastNum = parseInt(parts[parts.length - 1], 10);

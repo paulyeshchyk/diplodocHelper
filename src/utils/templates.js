@@ -65,14 +65,34 @@ const TEMPLATE_PARENT_TOC_YAML = (/** @type {string} */ name, /** @type {string}
 
 /**
  * Генерирует имя папки раздела
- * @param {{label: string}} sectionType
+ * @param {{label: string;}} sectionType
  * @param {string} sectionName
+ * @param {string | undefined} sectionIndex
  */
-function TEMPLATE_FOLDER_NAME(sectionType, sectionName) {
-  return [
-    sectionType.label,
-    sectionName.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, ""),
-  ].join(".");
+function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = "") {
+  const cleanName = sectionName.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
+
+  if (sectionIndex && sectionIndex.trim() !== "") {
+    return `${sectionType.label}${sectionIndex.trim()}.${cleanName}`;
+  } else {
+    return `${sectionType.label}.${cleanName}`;
+  }
+}
+
+/**
+ * Генерирует имя папки раздела
+ * @param {{label: string;}} sectionType
+ * @param {string} sectionName
+ * @param {string | undefined} sectionIndex
+ */
+function TEMPLATE_SECTION_NAME(sectionType, sectionName, sectionIndex = "") {
+  const cleanName = sectionName;//.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
+
+  if (sectionIndex && sectionIndex.trim() !== "") {
+    return `${sectionType.label} ${sectionIndex.trim()}. ${cleanName}`;
+  } else {
+    return `${sectionType.label} ${cleanName}`;
+  }
 }
 
 module.exports = {
@@ -82,4 +102,5 @@ module.exports = {
   TEMPLATE_TOC_YAML,
   TEMPLATE_PARENT_TOC_YAML,
   TEMPLATE_FOLDER_NAME,
+  TEMPLATE_SECTION_NAME,
 };
