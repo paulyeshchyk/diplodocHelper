@@ -231,6 +231,35 @@ function updateTocYamlTitle(folderPath, composedTitle) {
   fs.writeFileSync(tocPath, content, "utf8");
 }
 
+/**
+ * Полностью обновляет index.md И index.yaml раздела при изменении индекса/заголовка
+ * @param {string} folderPath
+ * @param {any} pureTitle
+ * @param {any} sectionTypeName
+ * @param {any} sectionLabel
+ * @param {string} sectionIndex
+ */
+function updateSectionMetadata(
+  folderPath,
+  pureTitle,
+  sectionTypeName,
+  sectionLabel,
+  sectionIndex
+) {
+  const composedTitle = sectionIndex && sectionIndex.trim() !== ""
+    ? `${sectionLabel} ${sectionIndex}. ${pureTitle}`
+    : pureTitle;
+
+  // Обновляем index.md
+  updateIndexMdAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex);
+
+  // Обновляем index.yaml
+  updateIndexYamlAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex);
+
+  // Обновляем заголовок в своём toc.yaml
+  updateTocYamlTitle(folderPath, composedTitle);
+}
+
 module.exports = {
   isDiplodocSection,
   isLanguageRoot,
@@ -245,4 +274,5 @@ module.exports = {
   updateIndexMdAdvanced,
   updateIndexYamlAdvanced,
   updateTocYamlTitle,
+  updateSectionMetadata,
 };

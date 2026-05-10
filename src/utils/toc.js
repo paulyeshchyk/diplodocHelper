@@ -176,6 +176,8 @@ function updateTocItemName(tocDoc, folderName, newName) {
 
 /**
  * Сравнивает два индекса (например "1.2.3" и "1.10")
+ * @param {string} a
+ * @param {string} b
  */
 function compareIndexes(a, b, order = "ascending") {
   if (!a || !b) return 0;
