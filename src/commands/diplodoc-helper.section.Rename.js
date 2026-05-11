@@ -10,6 +10,8 @@ const {
   updateSectionMetadata,
 } = require("../utils");
 
+const { FrontMatterSectionTypesIndexed } = require("../utils")
+
 const {
   removeTocEntryByFolder,
   addTocEntry,
@@ -37,10 +39,16 @@ async function renameSection(uri) {
   const currentIndex = readCurrentSectionIndex(oldFolderPath);
   const currentPureTitle = readCurrentPureTitle(oldFolderPath);
   const newSectionObject = await promptSection(currentPureTitle, currentIndex);
-  if (!newSectionObject) return;
+  if (!newSectionObject) {
+    console.log("объект не будет переименован: ввод данных прерван");
+    return;
+  }
 
-  const finalIndex = newSectionObject.userIndex?.trim() || "";
-  const newPureTitle = newSectionObject.newPureTitle;
+  const finalIndex = FrontMatterSectionTypesIndexed.includes(newSectionObject.newSectionType.name)
+    ? newSectionObject.userIndex?.trim() || ""
+    : "";
+
+    const newPureTitle = newSectionObject.newPureTitle;
 
   const newFolderName = TEMPLATE_FOLDER_NAME(
     newSectionObject.newSectionType,
@@ -79,7 +87,7 @@ async function renameSection(uri) {
         oldFolderPath,
         newPureTitle,
         newSectionObject.newSectionType.name,
-        newSectionObject.newSectionType.label,
+        newSectionObject.newSectionType.value,
         finalIndex
       );
     }
@@ -89,7 +97,7 @@ async function renameSection(uri) {
       parentDir,
       composedTitle,
       finalFolderName,
-      newSectionObject.newSectionType.label,
+      newSectionObject.newSectionType.value,
       finalIndex
     );
 

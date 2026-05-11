@@ -6,11 +6,14 @@ const { deleteSection } = require("./commands/diplodoc-helper.section.Delete");
 const { renameSection } = require("./commands/diplodoc-helper.section.Rename");
 const { generateContexts } = require("./commands/generateContexts");
 const { generateHelpmaps } = require("./commands/generateHelpmap");
+const { copyLink } = require("./commands/diplodoc-helper.link.Copy.js");
+const { pasteLink } = require("./commands/diplodoc-helper.link.Paste.js");
 
 /**
- * @param {{ subscriptions: vscode.Disposable[]; }} context
+ * @param {{ subscriptions: vscode.Disposable[]; extension: { packageJSON: { version: any; }; }; }} context
  */
 function activate(context) {
+
   const createSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.createSection",
     createSection
@@ -34,6 +37,16 @@ function activate(context) {
   const generateHelpmapsCmd = vscode.commands.registerCommand(
     "diplodoc-helper.runGeneration",
     generateHelpmaps
+  );
+
+  const copyLinkCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.copyLink",
+    copyLink
+  );
+
+  const pasteLinkCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.pasteLink",
+    pasteLink
   );
 
   const reindexCommand = vscode.commands.registerCommand(
@@ -64,7 +77,52 @@ function activate(context) {
     reindexCommand
   );
 
-  console.log("Diplodoc Helper активирован (рефакторинг v1.1)");
+  context.subscriptions.push(
+    copyLinkCmd,
+    pasteLinkCmd
+  );
+
+  context.subscriptions.push(
+    vscode.window.onDidChangeActiveTextEditor(editor => updateContext(editor)),
+    vscode.workspace.onDidChangeTextDocument(event => {
+      const activeEditor = vscode.window.activeTextEditor;
+      if (activeEditor && event.document === activeEditor.document) {
+        updateContext(activeEditor);
+      }
+    })
+  );
+
+  //  // При смене активного редактора
+  //   vscode.window.onDidChangeActiveTextEditor(editor => updateContext(editor));
+  //   // При изменении текста в редакторе (например, после вставки)
+  //   vscode.workspace.onDidChangeTextDocument(event => {
+  //       const activeEditor = vscode.window.activeTextEditor;
+  //       if (activeEditor && event.document === activeEditor.document) {
+  //           updateContext(activeEditor);
+  //       }
+  //   });
+  //   // // Запускаем для текущего редактора при старте
+  //   // updateContext(vscode.window.activeTextEditor);
+
+
+  console.log(`Diplodoc Helper активирован (${context.extension.packageJSON.version})`);
 }
+
+/**
+ * @param {vscode.TextEditor | undefined} editor
+ */
+function updateContext(editor) {
+  let canPaste = false;
+  if (editor && editor.document) {
+    const doc = editor.document;
+    const text = doc.getText();
+    // Проверяем, есть ли в документе нужный маркер
+    if ((doc.languageId === 'yaml' || doc.languageId === 'markdown') && text.includes('---')) {
+      canPaste = true;
+    }
+  }
+  vscode.commands.executeCommand('setContext', 'diplodoc.canPasteLink', canPaste);
+}
+
 
 exports.activate = activate;

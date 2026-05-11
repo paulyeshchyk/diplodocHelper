@@ -3,7 +3,7 @@
   "publisher": "paulyestchick",
   "displayName": "diplodoc-helper",
   "description": "",
-  "version": "0.5.36",
+  "version": "0.6.0",
   "engines": {
     "vscode": "^1.116.0"
   },
@@ -29,23 +29,54 @@
       {
         "command": "diplodoc-helper.reindex",
         "title": "Переиндексировать всё"
+      },
+      {
+        "command": "diplodoc-helper.copyLink",
+        "title": "Копировать ссылку на документ"
+      },
+      {
+        "command": "diplodoc-helper.pasteLink",
+        "title": "Вставить ссылку на документ"
       }
     ],
     "submenus": [
       {
         "id": "diplodoc.menu",
         "label": "Diplodoc"
+      },
+      {
+        "id": "diplodoc.menu_editor",
+        "label": "Diplodoc"
       }
     ],
     "menus": {
+      
+      "editor/context": [
+        {
+          "submenu": "diplodoc.menu_editor",
+          "when": "editorTextFocus && !editorReadonly",
+          "group": "7_diplodoc_group@2"
+        }
+      ],
       "explorer/context": [
         {
           "submenu": "diplodoc.menu",
-          "when": "explorerResourceIsFolder",
           "group": "7_diplodoc_group@1"
         }
       ],
+      "diplodoc.menu_editor": [
+        {
+          "command": "diplodoc-helper.pasteLink",
+          "when": "editorTextFocus && !editorReadonly",
+          "group": "1_main0@1"
+        }
+      ],
       "diplodoc.menu": [
+        {
+          "command": "diplodoc-helper.copyLink",
+          "when": "explorerResourceIsFolder || resourceExtname == .md || resourceExtname == .png || resourceExtname == .jpg || resourceExtname == .svg",
+          "group": "1_main0@1"
+        },
         {
           "command": "diplodoc-helper.createSection",
           "when": "explorerResourceIsFolder",

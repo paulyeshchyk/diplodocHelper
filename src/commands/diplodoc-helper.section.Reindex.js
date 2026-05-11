@@ -3,17 +3,18 @@ const fs = require("fs");
 const path = require("path");
 const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require("../utils");
 const { sectionTypes, getSectionMetadata } = require("../utils");
-const { get, update } = require("../utils");
 const {
   renameSectionFolderIfNeeded,
   loadTocFromFile,
-  saveTocToFile,
   updateTocItemName,
   updateSectionMetadata,
   sortTocItems
 } = require("../utils");
 
 
+/**
+ * @param {string} dir
+ */
 function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKind = "nonIndexedBottom") {
   console.log(`Переиндексация: ${path.relative(process.cwd(), dir) || '.'}`);
 

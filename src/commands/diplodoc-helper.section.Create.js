@@ -10,6 +10,8 @@ const {
   TEMPLATE_SECTION_NAME,
 } = require("../utils"); // используем barrel
 
+const { FrontMatterSectionTypesIndexed } = require("../utils")
+
 const {
   ShowSectionNameSelector,
   ShowSectionTypeSelector,
@@ -41,11 +43,17 @@ async function createSection(uri) {
   const userSectionName = await ShowSectionNameSelector();
   if (!userSectionName) return;
 
+  const hasIndex = FrontMatterSectionTypesIndexed.includes(sectionType.name);
+
   const sectionIndexCalculated = calculateNextIndex(targetDir);
-  const sectionIndex = await promptSectionIndex(sectionIndexCalculated);
+
+  const sectionIndex = hasIndex
+    ? await promptSectionIndex(sectionIndexCalculated)
+    : "";
 
   const folderResult = createSectionFolder(targetDir, sectionType, userSectionName, sectionIndex);
-  if (!folderResult) return;
+  if (!folderResult) 
+    return;
 
   const sectionName = TEMPLATE_SECTION_NAME(sectionType, userSectionName, sectionIndex);
 
@@ -54,7 +62,7 @@ async function createSection(uri) {
       folderResult.folderPath,
       userSectionName,
       sectionType.name,
-      sectionType.label,
+      sectionType.value,
       sectionIndex,
     );
 
@@ -62,11 +70,11 @@ async function createSection(uri) {
       folderResult.folderPath,
       sectionName,
       sectionType.name,
-      sectionType.label,
+      sectionType.value,
       sectionIndex,
     );
 
-    createTocYaml(folderResult.folderPath, sectionName, sectionType.label, sectionIndex);
+    createTocYaml(folderResult.folderPath, sectionName, sectionType.value, sectionIndex);
 
     patchParentToc(
       targetDir,

@@ -17,21 +17,6 @@ const INDEX_MD_DEFAULT_CONTENT = (/** @type {string} */ title) =>
   ["---", `title: ${title}`, "---"].join("\n");
 
 // --- Утилиты ---
-/**
- * @typedef {Object} PageInfo
- * @property {string} title
- * @property {string} href
- */
-
-/**
- * @typedef {Object} ContextData
- * @property {number} rank
- * @property {PageInfo[]} pages
- */
-
-/**
- * @typedef {Object.<string, ContextData>} ContextMap
- */
 
 /**
  * @param {string} str
@@ -71,8 +56,9 @@ function getDisplayTitle(fullPath, langDir) {
   return articleTitle;
 }
 
-// --- Сбор данных ---
+/** @import {ContextMap} from  './utils/diplodocTypes'*/
 
+// --- Сбор данных ---
 /**
  * @param {string} langDir
  * @returns {ContextMap}

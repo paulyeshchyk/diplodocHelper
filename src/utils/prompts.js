@@ -1,11 +1,12 @@
 // src/utils/prompts.js
 const vscode = require("vscode");
+const { FrontMatterSectionTypesIndexed } = require("../utils/constants")
 const { isValidName } = require("./files");
 const { sectionTypes } = require("./section");
 
 /**
  * @typedef {Object} PromptResult
- * @property {import('./section').SectionTypeOption} newSectionType
+ * @property {import('./diplodocTypes').SectionTypeOption} newSectionType
  * @property {string} newPureTitle
  * @property {string | undefined} userIndex
  */
@@ -23,14 +24,18 @@ async function promptSection(currentName, currentIndex) {
   const newPureTitle = await promptSectionName(currentName);
   if (!newPureTitle) return null;
 
-  const userIndex = await promptSectionIndex(currentIndex);
+  const hasIndex = FrontMatterSectionTypesIndexed.includes(newSectionType.name);
+
+  const userIndex = hasIndex
+    ? await promptSectionIndex(currentIndex)
+    : "";
 
   return { newSectionType, newPureTitle, userIndex };
 }
 
 /**
  * Выбор типа раздела
- * @returns {Promise<import('./section').SectionTypeOption | undefined>}
+ * @returns {Promise<import('./diplodocTypes').SectionTypeOption | undefined>}
  */
 async function promptSectionType() {
   const types = sectionTypes();

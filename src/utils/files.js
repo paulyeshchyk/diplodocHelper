@@ -2,6 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 const vscode = require("vscode");
+
 const { FrontMatterFiles, FrontMatterFilesDefaultList } = require("./constants");
 const {
   TEMPLATE_INDEX_MD,
@@ -70,7 +71,8 @@ function createSectionFolder(targetDir, sectionType, sectionName, sectionIndex) 
   const folderName = TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex);
   const newFolderPath = path.join(targetDir, folderName);
 
-  if (!canCreateFolder(newFolderPath)) return null;
+  if (!canCreateFolder(newFolderPath)) 
+    return null;
 
   try {
     fs.mkdirSync(newFolderPath, { recursive: true });
@@ -86,12 +88,12 @@ function createSectionFolder(targetDir, sectionType, sectionName, sectionIndex) 
  * @param {string} folderPath
  * @param {any} title
  * @param {any} sectionType
- * @param {any} sectionLabel
+ * @param {any} sectionValue
  * @param {any} sectionIndex
  */
-function createIndexMd(folderPath, title, sectionType, sectionLabel, sectionIndex) {
+function createIndexMd(folderPath, title, sectionType, sectionValue, sectionIndex) {
   const filePath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
-  fs.writeFileSync(filePath, TEMPLATE_INDEX_MD(title, sectionType, sectionLabel, sectionIndex), "utf8");
+  fs.writeFileSync(filePath, TEMPLATE_INDEX_MD(title, sectionType, sectionValue, sectionIndex), "utf8");
 }
 
 /**
@@ -146,16 +148,27 @@ const { parse, stringify } = require("./frontmatter");
 const { FrontMatterMeta } = require("./constants");
 
 /**
+ * @param {string} folderPath
+ * @returns {import("./diplodocTypes").SectionInfo?}
+ */
+function readCurrentSection(folderPath) {
+    const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
+    if (!fs.existsSync(indexPath)) 
+      return null;
+  
+    const content = fs.readFileSync(indexPath, "utf8");
+    const data = (parse(content))
+    return data.data;
+}
+
+/**
  * Читает текущий sectionIndex
  * @param {string} folderPath
  * @returns {string}
  */
 function readCurrentSectionIndex(folderPath) {
-  const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
-  if (!fs.existsSync(indexPath)) return "";
-
-  const content = fs.readFileSync(indexPath, "utf8");
-  const { data } = parse(content);
+  const data  = readCurrentSection(folderPath);
+  if (!data) return "";
   return String(data.sectionIndex || "");
 }
 
@@ -165,11 +178,8 @@ function readCurrentSectionIndex(folderPath) {
  * @returns {string}
  */
 function readCurrentPureTitle(folderPath) {
-  const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
-  if (!fs.existsSync(indexPath)) return "";
-
-  const content = fs.readFileSync(indexPath, "utf8");
-  const { data } = parse(content);
+  const data  = readCurrentSection(folderPath);
+  if (!data) return "";
   return String(data.pureTitle || "");
 }
 
@@ -321,13 +331,17 @@ function renameSectionFolderIfNeeded(folderPath, pureTitle, sectionType, section
 
     return newFolderName;
   } catch (err) {
-    console.error(`Не удалось переименовать ${oldFolderName}:`, err.message);
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`Не удалось переименовать ${oldFolderName}:`, msg);
     return oldFolderName;
   }
 }
 
 /**
  * Обновляет все ссылки на папку в родительском toc.yaml и index.yaml
+ * @param {string} parentDir
+ * @param {string | RegExp} oldFolderName
+ * @param {string} newFolderName
  */
 function updateParentReferences(parentDir, oldFolderName, newFolderName) {
   // Обновляем toc.yaml родителя
@@ -355,6 +369,7 @@ module.exports = {
   createIndexYaml,
   createTocYaml,
   patchParentToc,
+  readCurrentSection,
   readCurrentSectionIndex,
   readCurrentPureTitle,
   updateIndexMdAdvanced,

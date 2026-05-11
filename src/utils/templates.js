@@ -7,25 +7,29 @@ const {
 
 /**
  * Формирует финальный заголовок с префиксом
- * @param {string} sectionLabel
+ * @param {string} sectionValue
  * @param {string} sectionIndex
  * @param {string} title
  */
-function TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title) {
+function TEMPLATE_FINAL_TITLE(sectionValue, sectionIndex, title) {
+  if (!sectionValue || sectionValue.trim() === "") {
+    return title;
+  }
+
   const leftPart = sectionIndex.trim().length === 0
-    ? sectionLabel
-    : `${sectionLabel} ${sectionIndex.trim()}`;
+    ? sectionValue
+    : `${sectionValue} ${sectionIndex.trim()}`;
   return `${leftPart}. ${title}`;
 }
 
 const TEMPLATE_INDEX_MD = (
   /** @type {string} */ title,
   /** @type {any} */ sectionType,
-  /** @type {string} */ sectionLabel,
+  /** @type {string} */ sectionValue,
   /** @type {string} */ sectionIndex
 ) => [
   `---`,
-  `${FrontMatterMeta.TITLE}: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title)}`,
+  `${FrontMatterMeta.TITLE}: ${TEMPLATE_FINAL_TITLE(sectionValue, sectionIndex, title)}`,
   `${FrontMatterMeta.SECTIONTYPE}: ${sectionType}`,
   `${FrontMatterMeta.PURETITLE}: ${title}`,
   `${FrontMatterMeta.SECTIONINDEX}: ${sectionIndex}`,
@@ -35,11 +39,11 @@ const TEMPLATE_INDEX_MD = (
 /**
  * @param {string} title
  * @param {any} sectionType
- * @param {string} sectionLabel
+ * @param {string} sectionValue
  * @param {string} sectionIndex
  */
-function TEMPLATE_INDEX_YAML(title, sectionType, sectionLabel, sectionIndex) {
-  const finalTitle = TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title);
+function TEMPLATE_INDEX_YAML(title, sectionType, sectionValue, sectionIndex) {
+  const finalTitle = TEMPLATE_FINAL_TITLE(sectionValue, sectionIndex, title);
   return [
     `${FrontMatterMeta.TITLE}: ${finalTitle}`,
     `${FrontMatterMeta.DESCRIPTION}: Описывает ${finalTitle}`,
@@ -65,33 +69,42 @@ const TEMPLATE_PARENT_TOC_YAML = (/** @type {string} */ name, /** @type {string}
 
 /**
  * Генерирует имя папки раздела
- * @param {{label: string;}} sectionType
+ * @param {import("./section").SectionTypeOption} sectionType
  * @param {string} sectionName
  * @param {string | undefined} sectionIndex
  */
 function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = "") {
   const cleanName = sectionName.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
 
-  if (sectionIndex && sectionIndex.trim() !== "") {
-    return `${sectionType.label}${sectionIndex.trim()}.${cleanName}`;
+  if (sectionType.value.trim() !== "") {
+    if (sectionIndex && sectionIndex.trim() !== "") {
+      return `${sectionType.label}${sectionIndex.trim()}.${cleanName}`;
+    } else {
+      return `${sectionType.label}.${cleanName}`;
+    }
   } else {
-    return `${sectionType.label}.${cleanName}`;
+    return cleanName;
+
   }
 }
 
 /**
  * Генерирует имя папки раздела
- * @param {{label: string;}} sectionType
+ * @param {import("./section").SectionTypeOption} sectionType
  * @param {string} sectionName
  * @param {string | undefined} sectionIndex
  */
 function TEMPLATE_SECTION_NAME(sectionType, sectionName, sectionIndex = "") {
   const cleanName = sectionName;//.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
 
-  if (sectionIndex && sectionIndex.trim() !== "") {
-    return `${sectionType.label} ${sectionIndex.trim()}. ${cleanName}`;
+  if (sectionType.value.trim() !== "") {
+    if (sectionIndex && sectionIndex.trim() !== "") {
+      return `${sectionType.value} ${sectionIndex.trim()}. ${cleanName}`;
+    } else {
+      return `${sectionType.value} ${cleanName}`;
+    }
   } else {
-    return `${sectionType.label} ${cleanName}`;
+    return cleanName;
   }
 }
 

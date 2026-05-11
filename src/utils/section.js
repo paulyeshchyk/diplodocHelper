@@ -2,12 +2,7 @@
 const { FrontMatterMeta, FrontMatterSectionTypes } = require("./constants");
 const { get } = require("./frontmatter");
 
-/**
- * @typedef {Object} SectionTypeOption
- * @property {string} label
- * @property {string} name
- * @property {string} description
- */
+/** @import {SectionTypeOption, SectionInfo} from  './diplodocTypes'*/
 
 /**
  * Возвращает список доступных типов разделов
@@ -16,21 +11,25 @@ const { get } = require("./frontmatter");
 function sectionTypes() {
   return [
     {
+      value: "Часть",
       label: "Часть",
       name: FrontMatterSectionTypes.PART,
       description: "Структурная единица руководства, представляющая собой наиболее крупную ступень его деления",
     },
     {
+      value: "Раздел",
       label: "Раздел",
       name: FrontMatterSectionTypes.SECTION,
       description: "Крупная рубрика, являющаяся одной из высших ступеней деления основного текста",
     },
     {
+      value: "Глава",
       label: "Глава",
       name: FrontMatterSectionTypes.CHAPTER,
       description: "Крупная рубрика, имеющая самостоятельный заголовок",
     },
     {
+      value: "",
       label: "Статья",
       name: FrontMatterSectionTypes.PAGE,
       description: "",
@@ -41,7 +40,7 @@ function sectionTypes() {
 /**
  * Извлекает метаданные раздела из содержимого index.md
  * @param {string} content
- * @returns {{ sectionType: string | null, pureTitle: string | null, sectionIndex: string | null }}
+ * @returns {SectionInfo}
  */
 function getSectionMetadata(content) {
   return {
