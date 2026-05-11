@@ -15,7 +15,7 @@ const {
 
 
 function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKind = "nonIndexedBottom") {
-  console.log(`🔄 Переиндексация: ${path.relative(process.cwd(), dir) || '.'}`);
+  console.log(`Переиндексация: ${path.relative(process.cwd(), dir) || '.'}`);
 
   const items = fs.readdirSync(dir, { withFileTypes: true });
 
@@ -35,7 +35,7 @@ function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKi
     try {
       tocDoc = loadTocFromFile(tocPath);
     } catch (e) {
-      console.error(`❌ Ошибка загрузки toc.yaml: ${dir}`);
+      console.error(`Ошибка загрузки toc.yaml: ${dir}`);
     }
   }
 
@@ -55,9 +55,9 @@ function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKi
 
   // Сортировка после обработки детей
   if (tocDoc && sortOrder !== "none") {
-    console.log(`   📊 Сортируем toc.yaml (${sections.length} элементов)`);
-    sortTocItems(dir, sortOrder, sortKind);        // ← передаём dir, а не tocDoc
-    console.log(`   ✅ toc.yaml отсортирован`);
+    console.log(`   Сортируем toc.yaml (${sections.length} элементов)`);
+    sortTocItems(dir, sortOrder, sortKind);        // передаём dir, а не tocDoc
+    console.log(`   toc.yaml отсортирован`);
   }
 }
 
@@ -113,9 +113,9 @@ function reindexSingleSection({ dir, sectionName, localCounter, parentIndex, loc
     }
 
     if (hadManualIndex) {
-      console.log(`   📍 Сохранён ручной индекс: ${currentIndex} → ${pureTitle}`);
+      console.log(`   Сохранён ручной индекс: ${currentIndex} -> ${pureTitle}`);
     } else {
-      console.log(`   ➕ Присвоен индекс: ${currentIndex} → ${pureTitle}`);
+      console.log(`   Присвоен индекс: ${currentIndex} -> ${pureTitle}`);
     }
   }
 

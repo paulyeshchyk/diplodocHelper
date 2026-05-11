@@ -7,14 +7,14 @@ const { promptSection, readCurrentPureTitle } = require("../utils");
 const { isDiplodocSection } = require("../utils");
 const {
   readCurrentSectionIndex,
-  updateSectionMetadata,        // новая универсальная функция
+  updateSectionMetadata,
 } = require("../utils");
 
 const {
   removeTocEntryByFolder,
   addTocEntry,
   updateParentIndexYaml,
-  renameSectionFolderIfNeeded,   // ← новая функция
+  renameSectionFolderIfNeeded,
 } = require("../utils");
 
 const { TEMPLATE_FOLDER_NAME } = require("../utils");
@@ -94,7 +94,7 @@ async function renameSection(uri) {
     );
 
     vscode.window.showInformationMessage(
-      `Раздел переименован: "${oldFolderName}" → "${finalFolderName}"`
+      `Раздел переименован: "${oldFolderName}"  "${finalFolderName}"`
     );
 
   } catch (err) {

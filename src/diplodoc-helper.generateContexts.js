@@ -249,11 +249,11 @@ async function generateContexts() {
 
   if (results.success.length > 0) {
     vscode.window.showInformationMessage(
-      `✅ Контексты обновлены: ${results.success.join(", ")}`,
+      `Контексты обновлены: ${results.success.join(", ")}`,
     );
   } else {
     vscode.window.showErrorMessage(
-      "❌ Не удалось найти теги 'context:' в документации.",
+      "Не удалось найти теги 'context:' в документации.",
     );
   }
 }
@@ -262,15 +262,15 @@ async function generateContexts() {
 
 if (require.main === module) {
   // Если скрипт запущен напрямую (node или npx)
-  console.log("🚀 Запуск генерации контекстов в режиме CLI...");
+  console.log("Запуск генерации контекстов в режиме CLI...");
   const projectRoot = process.cwd();
   const DOCS_ROOT = path.join(projectRoot, "docs");
 
   const results = runGeneration(DOCS_ROOT);
 
-  console.log(`✅ Успешно: ${results.success.join(", ") || "нет"}`);
+  console.log(`Успешно: ${results.success.join(", ") || "нет"}`);
   if (results.failed.length > 0)
-    console.log(`⚠️ Пропущено: ${results.failed.join(", ")}`);
+    console.log(`Пропущено: ${results.failed.join(", ")}`);
 } else {
   // Если скрипт подключен через require (в extension.js)
   module.exports = { generateContexts };

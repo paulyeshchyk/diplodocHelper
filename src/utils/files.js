@@ -278,10 +278,10 @@ function updateSectionMetadata(folderPath, pureTitle, sectionTypeName, sectionLa
     ? `${sectionLabel} ${sectionIndex}. ${pureTitle}`
     : pureTitle;
 
-  // index.md — используем gray-matter (это frontmatter)
+  // index.md используем gray-matter (это frontmatter)
   updateIndexMdAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex);
 
-  // index.yaml — обычный YAML, gray-matter здесь не нужен!
+  // index.yaml обычный YAML, gray-matter здесь не нужен!
   updateIndexYamlAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex);
 
   // toc.yaml своего раздела
@@ -308,20 +308,20 @@ function renameSectionFolderIfNeeded(folderPath, pureTitle, sectionType, section
   const newFolderPath = path.join(parentDir, newFolderName);
 
   if (fs.existsSync(newFolderPath)) {
-    console.warn(`⚠️ Конфликт имён: ${newFolderName} уже существует. Папка ${oldFolderName} не переименована.`);
+    console.warn(`Конфликт имён: ${newFolderName} уже существует. Папка ${oldFolderName} не переименована.`);
     return oldFolderName;
   }
 
   try {
     fs.renameSync(folderPath, newFolderPath);
-    console.log(`   📁 Переименована: ${oldFolderName} → ${newFolderName}`);
+    console.log(`   Переименована: ${oldFolderName}  ${newFolderName}`);
 
     // Обновляем ссылки в родителе
     updateParentReferences(parentDir, oldFolderName, newFolderName);
 
     return newFolderName;
   } catch (err) {
-    console.error(`❌ Не удалось переименовать ${oldFolderName}:`, err.message);
+    console.error(`Не удалось переименовать ${oldFolderName}:`, err.message);
     return oldFolderName;
   }
 }

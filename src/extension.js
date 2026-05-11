@@ -64,7 +64,7 @@ function activate(context) {
     reindexCommand
   );
 
-  console.log("✅ Diplodoc Helper активирован (рефакторинг v1.1)");
+  console.log("Diplodoc Helper активирован (рефакторинг v1.1)");
 }
 
 exports.activate = activate;

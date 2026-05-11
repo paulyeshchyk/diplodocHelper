@@ -8,7 +8,7 @@ const {
   patchParentToc,
   createSectionFolder,
   TEMPLATE_SECTION_NAME,
-} = require("../utils"); // ← используем barrel
+} = require("../utils"); // используем barrel
 
 const {
   ShowSectionNameSelector,
