@@ -3,19 +3,18 @@ const vscode = require("vscode");
 const fs = require("fs");
 const path = require("path");
 
-const { promptSection } = require("../utils");
+const { promptSection, readCurrentPureTitle } = require("../utils");
 const { isDiplodocSection } = require("../utils");
 const {
   readCurrentSectionIndex,
-  updateIndexMdAdvanced,
-  updateIndexYamlAdvanced,
-  updateTocYamlTitle,
-} = require("../utils"); // временно оставляем старые функции
+  updateSectionMetadata,        // новая универсальная функция
+} = require("../utils");
 
 const {
   removeTocEntryByFolder,
   addTocEntry,
   updateParentIndexYaml,
+  renameSectionFolderIfNeeded,   // ← новая функция
 } = require("../utils");
 
 const { TEMPLATE_FOLDER_NAME } = require("../utils");
@@ -31,86 +30,77 @@ async function renameSection(uri) {
   const parentDir = path.dirname(oldFolderPath);
 
   if (!isDiplodocSection(oldFolderPath)) {
-    vscode.window.showErrorMessage(
-      "Переименовать можно только полноценный раздел.",
-    );
+    vscode.window.showErrorMessage("Переименовать можно только полноценный раздел.");
     return;
   }
 
   const currentIndex = readCurrentSectionIndex(oldFolderPath);
-  const newSectionObject = await promptSection(currentIndex);
+  const currentPureTitle = readCurrentPureTitle(oldFolderPath);
+  const newSectionObject = await promptSection(currentPureTitle, currentIndex);
   if (!newSectionObject) return;
 
-  const finalIndex = newSectionObject.userIndex || "";
+  const finalIndex = newSectionObject.userIndex?.trim() || "";
+  const newPureTitle = newSectionObject.newPureTitle;
+
   const newFolderName = TEMPLATE_FOLDER_NAME(
     newSectionObject.newSectionType,
-    newSectionObject.newPureTitle,
-    currentIndex
+    newPureTitle,
+    finalIndex
   );
+
   const newFolderPath = path.join(parentDir, newFolderName);
 
-  if (fs.existsSync(newFolderPath)) {
+  if (fs.existsSync(newFolderPath) && newFolderName !== oldFolderName) {
     vscode.window.showErrorMessage(`Папка ${newFolderName} уже существует.`);
     return;
   }
 
   const composedTitle = finalIndex
-    ? `${newSectionObject.newSectionType.label} ${finalIndex}. ${newSectionObject.newPureTitle}`
-    : newSectionObject.newPureTitle;
+    ? `${newSectionObject.newSectionType.label} ${finalIndex}. ${newPureTitle}`
+    : newPureTitle;
 
-  // Удаляем старую запись
+  // 1. Удаляем старую запись из родительского toc
   removeTocEntryByFolder(parentDir, oldFolderName);
-  updateParentIndexYaml(parentDir, oldFolderName, newFolderName, composedTitle);
+
+  let finalFolderName = oldFolderName;
 
   try {
-    fs.renameSync(oldFolderPath, newFolderPath);
-  } catch (err) {
+    // 2. Переименовываем папку (если нужно)
+    if (newFolderName !== oldFolderName) {
+      finalFolderName = renameSectionFolderIfNeeded(
+        oldFolderPath,
+        newPureTitle,
+        newSectionObject.newSectionType,
+        finalIndex
+      );
+    } else {
+      // Просто обновляем содержимое без переименования папки
+      updateSectionMetadata(
+        oldFolderPath,
+        newPureTitle,
+        newSectionObject.newSectionType.name,
+        newSectionObject.newSectionType.label,
+        finalIndex
+      );
+    }
+
+    // 3. Добавляем новую запись в родительский toc
     addTocEntry(
       parentDir,
       composedTitle,
-      oldFolderName,
+      finalFolderName,
       newSectionObject.newSectionType.label,
-      finalIndex,
+      finalIndex
     );
-    var msg = err instanceof Error ? err.message : "unknown";
-    vscode.window.showErrorMessage(`Не удалось переименовать папку: ${msg}`);
-    return;
-  }
 
-  try {
-    updateIndexMdAdvanced(
-      newFolderPath,
-      newSectionObject.newPureTitle,
-      newSectionObject.newSectionType.name,
-      newSectionObject.newSectionType.label,
-      finalIndex,
+    vscode.window.showInformationMessage(
+      `Раздел переименован: "${oldFolderName}" → "${finalFolderName}"`
     );
-    updateIndexYamlAdvanced(
-      newFolderPath,
-      newSectionObject.newPureTitle,
-      newSectionObject.newSectionType.name,
-      newSectionObject.newSectionType.label,
-      finalIndex,
-    );
-    updateTocYamlTitle(newFolderPath, composedTitle);
+
   } catch (err) {
-    var msg = err instanceof Error ? err.message : "unknown";
-    vscode.window.showWarningMessage(
-      `Раздел переименован, но не все файлы обновлены: ${msg}`,
-    );
+    const msg = err instanceof Error ? err.message : String(err);
+    vscode.window.showErrorMessage(`Ошибка при переименовании: ${msg}`);
   }
-
-  addTocEntry(
-    parentDir,
-    composedTitle,
-    newFolderName,
-    newSectionObject.newSectionType.label,
-    finalIndex,
-  );
-
-  vscode.window.showInformationMessage(
-    `Раздел "${oldFolderName}" → "${newFolderName}"`,
-  );
 }
 
 module.exports = { renameSection };

@@ -11,6 +11,8 @@ const {
   TEMPLATE_FOLDER_NAME,
 } = require("./templates");
 
+const {updateParentIndexYaml} = require("./toc");
+
 /**
  * Проверяет, является ли папка полноценным разделом Diplodoc
  * @param {string} folderPath
@@ -158,6 +160,20 @@ function readCurrentSectionIndex(folderPath) {
 }
 
 /**
+ * Читает текущий pureTitle
+ * @param {string} folderPath
+ * @returns {string}
+ */
+function readCurrentPureTitle(folderPath) {
+  const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
+  if (!fs.existsSync(indexPath)) return "";
+
+  const content = fs.readFileSync(indexPath, "utf8");
+  const { data } = parse(content);
+  return String(data.pureTitle || "");
+}
+
+/**
  * Обновляет index.md
  * @param {string} folderPath
  * @param {any} pureTitle
@@ -272,6 +288,63 @@ function updateSectionMetadata(folderPath, pureTitle, sectionTypeName, sectionLa
   updateTocYamlTitle(folderPath, composedTitle);
 }
 
+/**
+ * Переименовывает папку раздела в правильный формат, если нужно
+ * @param {string} folderPath - текущий путь к папке раздела
+ * @param {string} pureTitle 
+ * @param {{name: string, label: string}} sectionType 
+ * @param {string} sectionIndex 
+ * @returns {string} новое имя папки
+ */
+function renameSectionFolderIfNeeded(folderPath, pureTitle, sectionType, sectionIndex = "") {
+  const oldFolderName = path.basename(folderPath);
+  const newFolderName = TEMPLATE_FOLDER_NAME(sectionType, pureTitle, sectionIndex);
+
+  if (oldFolderName === newFolderName) {
+    return oldFolderName;
+  }
+
+  const parentDir = path.dirname(folderPath);
+  const newFolderPath = path.join(parentDir, newFolderName);
+
+  if (fs.existsSync(newFolderPath)) {
+    console.warn(`⚠️ Конфликт имён: ${newFolderName} уже существует. Папка ${oldFolderName} не переименована.`);
+    return oldFolderName;
+  }
+
+  try {
+    fs.renameSync(folderPath, newFolderPath);
+    console.log(`   📁 Переименована: ${oldFolderName} → ${newFolderName}`);
+
+    // Обновляем ссылки в родителе
+    updateParentReferences(parentDir, oldFolderName, newFolderName);
+
+    return newFolderName;
+  } catch (err) {
+    console.error(`❌ Не удалось переименовать ${oldFolderName}:`, err.message);
+    return oldFolderName;
+  }
+}
+
+/**
+ * Обновляет все ссылки на папку в родительском toc.yaml и index.yaml
+ */
+function updateParentReferences(parentDir, oldFolderName, newFolderName) {
+  // Обновляем toc.yaml родителя
+  const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
+  if (fs.existsSync(tocPath)) {
+    let content = fs.readFileSync(tocPath, "utf8");
+    content = content.replace(
+      new RegExp(oldFolderName, "g"),
+      newFolderName
+    );
+    fs.writeFileSync(tocPath, content, "utf8");
+  }
+
+  // Обновляем index.yaml родителя
+  updateParentIndexYaml(parentDir, oldFolderName, newFolderName, ""); // composedTitle не нужен здесь
+}
+
 module.exports = {
   isDiplodocSection,
   isLanguageRoot,
@@ -283,8 +356,10 @@ module.exports = {
   createTocYaml,
   patchParentToc,
   readCurrentSectionIndex,
+  readCurrentPureTitle,
   updateIndexMdAdvanced,
   updateIndexYamlAdvanced,
   updateTocYamlTitle,
   updateSectionMetadata,
+  renameSectionFolderIfNeeded,
 };

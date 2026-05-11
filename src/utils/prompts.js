@@ -12,14 +12,15 @@ const { sectionTypes } = require("./section");
 
 /**
  * Полный диалог переименования/создания раздела
+ * @param {string} currentName
  * @param {string} currentIndex
  * @returns {Promise<PromptResult | null>}
  */
-async function promptSection(currentIndex) {
+async function promptSection(currentName, currentIndex) {
   const newSectionType = await promptSectionType();
   if (!newSectionType) return null;
 
-  const newPureTitle = await promptSectionName();
+  const newPureTitle = await promptSectionName(currentName);
   if (!newPureTitle) return null;
 
   const userIndex = await promptSectionIndex(currentIndex);
@@ -42,9 +43,11 @@ async function promptSectionType() {
 /**
  * Ввод названия раздела
  * @returns {Promise<string | undefined>}
+ * @param {string | undefined} [currentTitle]
  */
-async function promptSectionName() {
+async function promptSectionName(currentTitle) {
   return await vscode.window.showInputBox({
+    value: (currentTitle || ""),
     prompt: "Введите название раздела",
     placeHolder: "Например: Справочник Номенклатуры",
     validateInput: (value) =>

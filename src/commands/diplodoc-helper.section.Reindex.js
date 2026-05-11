@@ -4,12 +4,13 @@ const path = require("path");
 const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require("../utils");
 const { sectionTypes, getSectionMetadata } = require("../utils");
 const { get, update } = require("../utils");
-const { 
-  loadTocFromFile, 
-  saveTocToFile, 
-  updateTocItemName, 
+const {
+  renameSectionFolderIfNeeded,
+  loadTocFromFile,
+  saveTocToFile,
+  updateTocItemName,
   updateSectionMetadata,
-  sortTocItems 
+  sortTocItems
 } = require("../utils");
 
 
@@ -18,7 +19,7 @@ function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKi
 
   const items = fs.readdirSync(dir, { withFileTypes: true });
 
-  const sections = items.filter(item => 
+  const sections = items.filter(item =>
     item.isDirectory() && fs.existsSync(path.join(dir, item.name, FrontMatterFiles.INDEX_MD))
   );
 
@@ -53,22 +54,22 @@ function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKi
   }
 
   // Сортировка после обработки детей
-if (tocDoc && sortOrder !== "none") {
-  console.log(`   📊 Сортируем toc.yaml (${sections.length} элементов)`);
-  sortTocItems(dir, sortOrder, sortKind);        // ← передаём dir, а не tocDoc
-  console.log(`   ✅ toc.yaml отсортирован`);
-}
+  if (tocDoc && sortOrder !== "none") {
+    console.log(`   📊 Сортируем toc.yaml (${sections.length} элементов)`);
+    sortTocItems(dir, sortOrder, sortKind);        // ← передаём dir, а не tocDoc
+    console.log(`   ✅ toc.yaml отсортирован`);
+  }
 }
 
 /**
- * Обрабатывает один раздел (index.md + index.yaml)
+ * Обрабатывает один раздел + переименовывает папку при необходимости
  */
 function reindexSingleSection({ dir, sectionName, localCounter, parentIndex, localSectionTypes, tocDoc }) {
   const sectionPath = path.join(dir, sectionName);
   const indexMdPath = path.join(sectionPath, FrontMatterFiles.INDEX_MD);
-  
+
   if (!fs.existsSync(indexMdPath)) {
-    return { sectionPath, currentIndex: "", localCounter };
+    return { sectionPath, currentIndex: "", localCounter, newFolderName: sectionName };
   }
 
   let content = fs.readFileSync(indexMdPath, "utf8");
@@ -78,43 +79,52 @@ function reindexSingleSection({ dir, sectionName, localCounter, parentIndex, loc
   let pureTitle = metadata.pureTitle || sectionName;
   let currentIndex = String(metadata.sectionIndex || "").trim();
 
+  let newFolderName = sectionName;
+
   if (FrontMatterSectionTypesIndexed.includes(sectionType)) {
     const hadManualIndex = !!currentIndex;
 
     if (!currentIndex) {
-      // Только если индекса нет — генерируем новый
       localCounter++;
-      currentIndex = parentIndex 
-        ? `${parentIndex}.${localCounter}` 
-        : `${localCounter}`;
+      currentIndex = parentIndex ? `${parentIndex}.${localCounter}` : `${localCounter}`;
     } else {
-      // Если индекс есть — уважаем его и обновляем localCounter
       const parts = currentIndex.split(".");
       const lastNum = parseInt(parts[parts.length - 1], 10);
-      if (!isNaN(lastNum)) {
-        localCounter = Math.max(localCounter, lastNum);
-      }
+      if (!isNaN(lastNum)) localCounter = Math.max(localCounter, lastNum);
     }
 
     const localSection = localSectionTypes.find(st => st.name === sectionType);
     const sectionLabel = localSection?.label || "";
     const newTitle = `${sectionLabel} ${currentIndex}. ${pureTitle}`;
 
-    // Обновляем файлы
+    // === Основное обновление метаданных ===
     updateSectionMetadata(sectionPath, pureTitle, sectionType, sectionLabel, currentIndex);
 
+    // === Переименовываем папку ===
+    newFolderName = renameSectionFolderIfNeeded(
+      sectionPath,
+      pureTitle,
+      { name: sectionType, label: sectionLabel },
+      currentIndex
+    );
+
     if (tocDoc?.items) {
-      updateTocItemName(tocDoc, sectionName, newTitle);
+      updateTocItemName(tocDoc, sectionName, newTitle); // обновляем старое имя
     }
 
     if (hadManualIndex) {
-      console.log(`   📍 Сохранён ручной индекс: ${currentIndex} → ${sectionName}`);
+      console.log(`   📍 Сохранён ручной индекс: ${currentIndex} → ${pureTitle}`);
     } else {
-      console.log(`   ➕ Присвоен индекс: ${currentIndex} → ${sectionName}`);
+      console.log(`   ➕ Присвоен индекс: ${currentIndex} → ${pureTitle}`);
     }
   }
 
-  return { sectionPath, currentIndex, localCounter };
+  return {
+    sectionPath: path.join(dir, newFolderName),
+    currentIndex,
+    localCounter,
+    newFolderName
+  };
 }
 
 module.exports = { reindexDirectory };
