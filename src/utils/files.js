@@ -194,6 +194,7 @@ function readCurrentPureTitle(folderPath) {
  * @param {any} sectionIndex
  */
 function updateIndexMdAdvanced(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex) {
+  console.log(`updateIndexMdAdvanced:  ${folderPath}\ ${sectionLabel}\ ${pureTitle}`);
   const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
   if (!fs.existsSync(indexPath)) return;
 
@@ -311,6 +312,7 @@ function updateSectionMetadata(folderPath, pureTitle, sectionTypeName, sectionLa
 function renameSectionFolderIfNeeded(folderPath, pureTitle, sectionType, sectionIndex = "") {
   const oldFolderName = path.basename(folderPath);
   const newFolderName = TEMPLATE_FOLDER_NAME(sectionType, pureTitle, sectionIndex);
+  console.log(`renameSectionFolderIfNeeded:\n from: ${oldFolderName}\n   to: ${newFolderName}`);
 
   if (oldFolderName === newFolderName) {
     return oldFolderName;
