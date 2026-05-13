@@ -2,5 +2,6 @@
   "files.exclude": {
     "**\\build": "explorerExcludedFiles",
     "**\\node_modules": "explorerExcludedFiles"
-  }
+  },
+  "editor.formatOnSave": true
 }

@@ -4,10 +4,11 @@ const vscode = require("vscode");
 const { createSection } = require("./commands/diplodoc-helper.section.Create");
 const { deleteSection } = require("./commands/diplodoc-helper.section.Delete");
 const { renameSection } = require("./commands/diplodoc-helper.section.Rename");
-const { generateContexts } = require("./commands/generateContexts");
-const { generateHelpmaps } = require("./commands/generateHelpmap");
 const { copyLink } = require("./commands/diplodoc-helper.link.Copy.js");
 const { pasteLink } = require("./commands/diplodoc-helper.link.Paste.js");
+
+const { generateContexts } = require("./commands/diplodoc-helper.context.Generate");
+const { generateHelpmap } = require("./commands/diplodoc-helper.helpMap.Generate");
 
 /**
  * @param {{ subscriptions: vscode.Disposable[]; extension: { packageJSON: { version: any; }; }; }} context
@@ -35,8 +36,8 @@ function activate(context) {
   );
 
   const generateHelpmapsCmd = vscode.commands.registerCommand(
-    "diplodoc-helper.runGeneration",
-    generateHelpmaps
+    "diplodoc-helper.generateHelpMaps",
+    generateHelpmap
   );
 
   const copyLinkCmd = vscode.commands.registerCommand(
@@ -91,19 +92,6 @@ function activate(context) {
       }
     })
   );
-
-  //  // При смене активного редактора
-  //   vscode.window.onDidChangeActiveTextEditor(editor => updateContext(editor));
-  //   // При изменении текста в редакторе (например, после вставки)
-  //   vscode.workspace.onDidChangeTextDocument(event => {
-  //       const activeEditor = vscode.window.activeTextEditor;
-  //       if (activeEditor && event.document === activeEditor.document) {
-  //           updateContext(activeEditor);
-  //       }
-  //   });
-  //   // // Запускаем для текущего редактора при старте
-  //   // updateContext(vscode.window.activeTextEditor);
-
 
   console.log(`Diplodoc Helper активирован (${context.extension.packageJSON.version})`);
 }

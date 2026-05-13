@@ -67,9 +67,11 @@ const TEMPLATE_PARENT_TOC_YAML = (/** @type {string} */ name, /** @type {string}
   `      ${FrontMatterToc.ITEMS_INCLUDE_MODE}: link`,
 ].join("\n");
 
+/** @import {SectionTypeOption} from  './diplodocTypes'*/
+
 /**
  * Генерирует имя папки раздела
- * @param {import("./section").SectionTypeOption} sectionType
+ * @param {SectionTypeOption} sectionType
  * @param {string} sectionName
  * @param {string | undefined} sectionIndex
  */
@@ -90,7 +92,7 @@ function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = "") {
 
 /**
  * Генерирует имя папки раздела
- * @param {import("./section").SectionTypeOption} sectionType
+ * @param {SectionTypeOption} sectionType
  * @param {string} sectionName
  * @param {string | undefined} sectionIndex
  */

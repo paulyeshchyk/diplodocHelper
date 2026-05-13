@@ -31,6 +31,24 @@
             "presentation": {
                 "clear": true
             }
-        }
+        },
+        {
+            "label": "1. Компиляция Node Package",
+            "type": "shell",
+            "command": "npm pack --pack-destination ./build",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
     ]
 }

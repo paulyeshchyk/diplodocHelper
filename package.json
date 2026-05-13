@@ -3,7 +3,8 @@
   "publisher": "paulyestchick",
   "displayName": "diplodoc-helper",
   "description": "",
-  "version": "0.6.0",
+  "version": "0.7.0",
+  "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"
   },
@@ -11,7 +12,6 @@
     "Other"
   ],
   "activationEvents": [],
-  "main": "./src/extension.js",
   "contributes": {
     "commands": [
       {
@@ -37,65 +37,93 @@
       {
         "command": "diplodoc-helper.pasteLink",
         "title": "Вставить ссылку на документ"
+      },
+      {
+        "command": "diplodoc-helper.generateContexts",
+        "title": "Сформировать контексты"
+      },
+      {
+        "command": "diplodoc-helper.generateHelpMaps",
+        "title": "Сформировать навигационную карту для фронтэнд"
       }
     ],
     "submenus": [
       {
-        "id": "diplodoc.menu",
+        "id": "diplodoc.explorer.context.menu",
         "label": "Diplodoc"
       },
       {
-        "id": "diplodoc.menu_editor",
+        "id": "diplodoc.editor.context.menu",
         "label": "Diplodoc"
+      },
+      {
+        "id": "diplodoc.generators.explorer.context.menu",
+        "label": "Генераторы"
       }
     ],
     "menus": {
-      
       "editor/context": [
         {
-          "submenu": "diplodoc.menu_editor",
+          "submenu": "diplodoc.editor.context.menu",
           "when": "editorTextFocus && !editorReadonly",
-          "group": "7_diplodoc_group@2"
+          "group": "diplodoc.menu@1"
         }
       ],
       "explorer/context": [
         {
-          "submenu": "diplodoc.menu",
-          "group": "7_diplodoc_group@1"
+          "submenu": "diplodoc.explorer.context.menu",
+          "group": "diplodoc.menu@1"
         }
       ],
-      "diplodoc.menu_editor": [
+      "diplodoc.editor.context.menu": [
         {
           "command": "diplodoc-helper.pasteLink",
           "when": "editorTextFocus && !editorReadonly",
-          "group": "1_main0@1"
+          "group": "diplodoc.section@1"
         }
       ],
-      "diplodoc.menu": [
-        {
-          "command": "diplodoc-helper.copyLink",
-          "when": "explorerResourceIsFolder || resourceExtname == .md || resourceExtname == .png || resourceExtname == .jpg || resourceExtname == .svg",
-          "group": "1_main0@1"
-        },
+      "diplodoc.explorer.context.menu": [
         {
           "command": "diplodoc-helper.createSection",
           "when": "explorerResourceIsFolder",
-          "group": "1_main@1"
+          "group": "1.diplodoc.section@1"
         },
         {
           "command": "diplodoc-helper.deleteSection",
           "when": "explorerResourceIsFolder",
-          "group": "1_main@2"
+          "group": "1.diplodoc.section@2"
         },
         {
           "command": "diplodoc-helper.renameSection",
           "when": "explorerResourceIsFolder",
-          "group": "1_main@3"
+          "group": "1.diplodoc.section@3"
+        },
+        {
+          "command": "diplodoc-helper.copyLink",
+          "when": "explorerResourceIsFolder || resourceExtname == .md || resourceExtname == .png || resourceExtname == .jpg || resourceExtname == .svg",
+          "group": "2.diplodoc.copy@1"
+        },
+        {
+          "submenu": "diplodoc.generators.explorer.context.menu",
+          "when": "explorerResourceIsFolder",
+          "group": "3.diplodoc.generators@1"
+        }
+      ],
+      "diplodoc.generators.explorer.context.menu": [
+        {
+          "command": "diplodoc-helper.generateContexts",
+          "when": "explorerResourceIsFolder",
+          "group": "diplodoc.generators.section.command@1"
+        },
+        {
+          "command": "diplodoc-helper.generateHelpMaps",
+          "when": "explorerResourceIsFolder",
+          "group": "diplodoc.generators.section.command@2"
         },
         {
           "command": "diplodoc-helper.reindex",
           "when": "explorerResourceIsFolder",
-          "group": "1_main1@1"
+          "group": "diplodoc.generators.toc.command@3"
         }
       ]
     }
@@ -105,5 +133,12 @@
   },
   "devDependencies": {
     "esbuild": "^0.28.0"
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "echo 'No compilation needed for JS'",
+    "package": "vsce package",
+    "publish-vsix": "vsce publish",
+    "publish-npm": "npm publish"
   }
 }

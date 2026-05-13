@@ -8,7 +8,8 @@ const {
   loadTocFromFile,
   updateTocItemName,
   updateSectionMetadata,
-  sortTocItems
+  sortTocItems,
+  saveTocToFile
 } = require("../utils");
 
 
@@ -57,7 +58,12 @@ function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKi
   // Сортировка после обработки детей
   if (tocDoc && sortOrder !== "none") {
     console.log(`   Сортируем toc.yaml (${sections.length} элементов)`);
-    sortTocItems(dir, sortOrder, sortKind);        // передаём dir, а не tocDoc
+
+    const tocPath = path.join(dir, FrontMatterFiles.TOC_YAML);
+    saveTocToFile(tocPath, tocDoc);
+    // Теперь можно безопасно сортировать (она перечитает свежий файл)
+    sortTocItems(dir, sortOrder, sortKind);
+
     console.log(`   toc.yaml отсортирован`);
   }
 }
@@ -90,7 +96,7 @@ function reindexSingleSection({ dir, sectionName, localCounter, parentIndex, loc
       currentIndex = parentIndex ? `${parentIndex}.${localCounter}` : `${localCounter}`;
     } else {
       const parts = currentIndex.split(".");
-      const lastNum = parseInt(parts[parts.length - 1], 10);
+      const lastNum = parseInt(parts[parts.length - 1] || "0", 10);
       if (!isNaN(lastNum)) localCounter = Math.max(localCounter, lastNum);
     }
 

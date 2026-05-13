@@ -12,7 +12,7 @@ const {
   TEMPLATE_FOLDER_NAME,
 } = require("./templates");
 
-const {updateParentIndexYaml} = require("./toc");
+const { updateParentIndexYaml } = require("./toc");
 
 /**
  * Проверяет, является ли папка полноценным разделом Diplodoc
@@ -59,11 +59,13 @@ function canCreateFolder(folderPath) {
   }
 }
 
+/** @import {SectionTypeOption} from  './diplodocTypes'*/
+
 /* ==================== Создание раздела ==================== */
 
 /**
  * @param {string} targetDir
- * @param {{ label: string; }} sectionType
+ * @param {SectionTypeOption} sectionType
  * @param {string} sectionName
  * @param {any} sectionIndex
  */
@@ -71,7 +73,7 @@ function createSectionFolder(targetDir, sectionType, sectionName, sectionIndex) 
   const folderName = TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex);
   const newFolderPath = path.join(targetDir, folderName);
 
-  if (!canCreateFolder(newFolderPath)) 
+  if (!canCreateFolder(newFolderPath))
     return null;
 
   try {
@@ -152,13 +154,13 @@ const { FrontMatterMeta } = require("./constants");
  * @returns {import("./diplodocTypes").SectionInfo?}
  */
 function readCurrentSection(folderPath) {
-    const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
-    if (!fs.existsSync(indexPath)) 
-      return null;
-  
-    const content = fs.readFileSync(indexPath, "utf8");
-    const data = (parse(content))
-    return data.data;
+  const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
+  if (!fs.existsSync(indexPath))
+    return null;
+
+  const content = fs.readFileSync(indexPath, "utf8");
+  const data = (parse(content))
+  return data.data;
 }
 
 /**
@@ -167,7 +169,7 @@ function readCurrentSection(folderPath) {
  * @returns {string}
  */
 function readCurrentSectionIndex(folderPath) {
-  const data  = readCurrentSection(folderPath);
+  const data = readCurrentSection(folderPath);
   if (!data) return "";
   return String(data.sectionIndex || "");
 }
@@ -178,7 +180,7 @@ function readCurrentSectionIndex(folderPath) {
  * @returns {string}
  */
 function readCurrentPureTitle(folderPath) {
-  const data  = readCurrentSection(folderPath);
+  const data = readCurrentSection(folderPath);
   if (!data) return "";
   return String(data.pureTitle || "");
 }
@@ -302,7 +304,7 @@ function updateSectionMetadata(folderPath, pureTitle, sectionTypeName, sectionLa
  * Переименовывает папку раздела в правильный формат, если нужно
  * @param {string} folderPath - текущий путь к папке раздела
  * @param {string} pureTitle 
- * @param {{name: string, label: string}} sectionType 
+ * @param {SectionTypeOption} sectionType 
  * @param {string} sectionIndex 
  * @returns {string} новое имя папки
  */
@@ -331,8 +333,8 @@ function renameSectionFolderIfNeeded(folderPath, pureTitle, sectionType, section
 
     return newFolderName;
   } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error(`Не удалось переименовать ${oldFolderName}:`, msg);
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`Не удалось переименовать ${oldFolderName}:`, msg);
     return oldFolderName;
   }
 }

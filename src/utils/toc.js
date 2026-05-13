@@ -58,7 +58,7 @@ function addTocEntry(parentDir, composedTitle, folderName, sectionType, sectionI
   if (!fs.existsSync(tocPath)) return;
 
   let content = fs.readFileSync(tocPath, "utf8");
-  const indent = getTocIndentation(parentDir);
+  const indent = getTocIndentation(parentDir) || "";
   const newEntry = indentedTocEntry(indent, composedTitle, folderName);
 
   if (!content.includes("items:")) {
@@ -186,8 +186,8 @@ function compareIndexes(a, b, order = "ascending") {
   const maxLen = Math.max(aParts.length, bParts.length);
 
   for (let i = 0; i < maxLen; i++) {
-    const ai = i < aParts.length ? aParts[i] : 0;
-    const bi = i < bParts.length ? bParts[i] : 0;
+    const ai = (i < aParts.length ? aParts[i] : 0) || 0;
+    const bi = (i < bParts.length ? bParts[i] : 0) || 0;
     if (ai !== bi) {
       return order === "ascending" ? ai - bi : bi - ai;
     }
@@ -267,9 +267,9 @@ function sortTocItems(baseDir, sortOrder = "ascending", sortKind = "nonIndexedBo
     ? [...nonIndexed.map(i => i.block), ...indexed.map(i => i.block)]
     : [...indexed.map(i => i.block), ...nonIndexed.map(i => i.block)];
 
-  const newContent = content.split(/^(\s*items:)/m)[0] + 
-                     "items:\n" + 
-                     sortedBlocks.join("\n");
+  const newContent = content.split(/^(\s*items:)/m)[0] +
+    "items:\n" +
+    sortedBlocks.join("\n");
 
   fs.writeFileSync(tocPath, normalizeEmptyLines(newContent), "utf8");
 }
