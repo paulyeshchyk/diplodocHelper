@@ -1,14 +1,19 @@
 // src/commands/diplodoc-helper.section.Reindex.js
 const fs = require("fs");
 const path = require("path");
-const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require("../utils");
+const {
+  FrontMatterFiles,
+  FrontMatterSectionTypesIndexed,
+} = require("../utils");
 const { sectionTypes, getSectionMetadata } = require("../utils");
 const {
   renameSectionFolderIfNeeded,
   loadTocFromFile,
   updateTocItemName,
   updateSectionMetadata,
-  sortTocItems
+  sortTocItems,
+  getLanguageRoot,
+  cleanupEmptyDirectories,
 } = require("../utils");
 
 /** @import {SectionTypeOption} from '../utils/diplodocTypes' */
@@ -38,13 +43,20 @@ const {
  * @param {string} sortOrder
  * @param {string} sortKind
  */
-function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKind = "nonIndexedBottom") {
-  console.log(`🔄 Переиндексация: ${path.relative(process.cwd(), dir) || '.'}`);
+function reindexDirectory(
+  dir,
+  parentIndex = "",
+  sortOrder = "ascending",
+  sortKind = "nonIndexedBottom",
+) {
+  console.log(`Переиндексация: ${path.relative(process.cwd(), dir) || "."}`);
 
   const items = fs.readdirSync(dir, { withFileTypes: true });
 
-  const sections = items.filter(item =>
-    item.isDirectory() && fs.existsSync(path.join(dir, item.name, FrontMatterFiles.INDEX_MD))
+  const sections = items.filter(
+    (item) =>
+      item.isDirectory() &&
+      fs.existsSync(path.join(dir, item.name, FrontMatterFiles.INDEX_MD)),
   );
 
   if (sections.length === 0) return;
@@ -70,19 +82,28 @@ function reindexDirectory(dir, parentIndex = "", sortOrder = "ascending", sortKi
       localCounter,
       parentIndex,
       localSectionTypes,
-      tocDoc
+      tocDoc,
     });
 
     localCounter = result.localCounter;
-    reindexDirectory(result.sectionPath, result.currentIndex || parentIndex, sortOrder, sortKind);
+    reindexDirectory(
+      result.sectionPath,
+      result.currentIndex || parentIndex,
+      sortOrder,
+      sortKind,
+    );
   }
 
   // Сортировка после обработки всех детей
   if (tocDoc && sortOrder !== "none") {
-    console.log(`   📊 Сортируем toc.yaml (${sections.length} элементов)`);
+    console.log(`   Сортируем toc.yaml (${sections.length} элементов)`);
     sortTocItems(dir, sortOrder, sortKind);
-    console.log(`   ✅ toc.yaml отсортирован`);
+    console.log(`   toc.yaml отсортирован`);
   }
+
+  // Очистка пустых папок после реиндексации
+  const languageRoot = getLanguageRoot(dir); // если функция доступна
+  cleanupEmptyDirectories(dir, languageRoot);
 }
 
 /**
@@ -96,13 +117,18 @@ function reindexAndRenameSection({
   localCounter,
   parentIndex = "",
   localSectionTypes,
-  tocDoc
+  tocDoc,
 }) {
   const oldSectionPath = path.join(dir, sectionName);
   const indexMdPath = path.join(oldSectionPath, FrontMatterFiles.INDEX_MD);
 
   if (!fs.existsSync(indexMdPath)) {
-    return { sectionPath: oldSectionPath, currentIndex: "", newFolderName: sectionName, localCounter };
+    return {
+      sectionPath: oldSectionPath,
+      currentIndex: "",
+      newFolderName: sectionName,
+      localCounter,
+    };
   }
 
   let content = fs.readFileSync(indexMdPath, "utf8");
@@ -112,11 +138,12 @@ function reindexAndRenameSection({
   const DEFAULT_SECTION_TYPE = /** @type {SectionTypeOption} */ ({
     name: "Page",
     label: "Статья",
-    value: ""
+    value: "",
   });
 
-  const sectionTypeObj = localSectionTypes.find(st => st.name === metadata.sectionType)
-    || DEFAULT_SECTION_TYPE;
+  const sectionTypeObj =
+    localSectionTypes.find((st) => st.name === metadata.sectionType) ||
+    DEFAULT_SECTION_TYPE;
 
   const sectionType = sectionTypeObj.name;
   const pureTitle = metadata.pureTitle || sectionName;
@@ -127,7 +154,9 @@ function reindexAndRenameSection({
 
     if (!currentIndex) {
       localCounter++;
-      currentIndex = parentIndex ? `${parentIndex}.${localCounter}` : `${localCounter}`;
+      currentIndex = parentIndex
+        ? `${parentIndex}.${localCounter}`
+        : `${localCounter}`;
     } else {
       const parts = currentIndex.split(".");
       const lastNum = parseInt(parts[parts.length - 1], 10);
@@ -139,13 +168,19 @@ function reindexAndRenameSection({
     const sectionLabel = sectionTypeObj.label || "";
     const newTitle = `${sectionLabel} ${currentIndex}. ${pureTitle}`;
 
-    updateSectionMetadata(oldSectionPath, pureTitle, sectionType, sectionLabel, currentIndex);
+    updateSectionMetadata(
+      oldSectionPath,
+      pureTitle,
+      sectionType,
+      sectionLabel,
+      currentIndex,
+    );
 
     const newFolderName = renameSectionFolderIfNeeded(
       oldSectionPath,
       pureTitle,
       sectionTypeObj,
-      currentIndex
+      currentIndex,
     );
 
     const newSectionPath = path.join(dir, newFolderName);
@@ -154,13 +189,15 @@ function reindexAndRenameSection({
       updateTocItemName(tocDoc, sectionName, newTitle);
     }
 
-    console.log(`   ${hadManualIndex ? '📍' : '➕'} ${currentIndex} → ${newFolderName}`);
+    console.log(
+      `   ${hadManualIndex ? "📍" : "➕"} ${currentIndex} → ${newFolderName}`,
+    );
 
     return {
       sectionPath: newSectionPath,
       currentIndex,
       newFolderName,
-      localCounter
+      localCounter,
     };
   }
 
@@ -171,7 +208,7 @@ function reindexAndRenameSection({
     sectionPath: oldSectionPath,
     currentIndex: "",
     newFolderName: sectionName,
-    localCounter
+    localCounter,
   };
 }
 

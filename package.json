@@ -30,6 +30,10 @@
         "title": "Задать новый тип и наименование"
       },
       {
+        "command": "diplodoc-helper.moveSection",
+        "title": "Переместить рубрику"
+      },
+      {
         "command": "diplodoc-helper.reindex",
         "title": "Переиндексировать всё"
       },
@@ -100,6 +104,11 @@
           "command": "diplodoc-helper.renameSection",
           "when": "explorerResourceIsFolder",
           "group": "1.diplodoc.section@3"
+        },
+        {
+          "command": "diplodoc-helper.moveSection",
+          "when": "explorerResourceIsFolder",
+          "group": "1.diplodoc.section@4"
         },
         {
           "command": "diplodoc-helper.copyLink",
