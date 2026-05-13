@@ -111,7 +111,7 @@ function reindexSingleSection({ dir, sectionName, localCounter, parentIndex, loc
     newFolderName = renameSectionFolderIfNeeded(
       sectionPath,
       pureTitle,
-      { name: sectionType, label: sectionLabel },
+      { name: sectionType, label: sectionLabel, value: "", description: "" },
       currentIndex
     );
 

@@ -199,6 +199,8 @@ function compareIndexes(a, b, order = "ascending") {
 
 /**
  * Разбивает toc.yaml на отдельные блоки элементов
+ * @param {string} content
+ * @returns {string[]}
  */
 function splitTocIntoBlocks(content) {
   return content.split(/^(\s*-\s+name:)/m)
@@ -221,6 +223,8 @@ function splitTocIntoBlocks(content) {
 
 /**
  * Извлекает sectionIndex из блока элемента toc
+ * @param {string} block
+ * @param {string} baseDir
  */
 function getIndexFromBlock(block, baseDir) {
   const hrefMatch = block.match(/href:\s+([^\s/]+)/);
@@ -243,6 +247,7 @@ function getIndexFromBlock(block, baseDir) {
 
 /**
  * Сортирует элементы toc.yaml, сохраняя форматирование
+ * @param {string} baseDir
  */
 function sortTocItems(baseDir, sortOrder = "ascending", sortKind = "nonIndexedBottom") {
   const tocPath = path.join(baseDir, FrontMatterFiles.TOC_YAML);
