@@ -29,11 +29,21 @@ function isDiplodocSection(folderPath) {
 }
 
 /**
- * Проверяет, является ли папка корнем языка
- * @param {string} folderPath
+ * Проверяет, является ли папка корнем языка (docs/ru)
  */
 function isLanguageRoot(folderPath) {
-  return fs.existsSync(path.join(folderPath, FrontMatterFiles.TOC_YAML));
+  if (!folderPath || !fs.existsSync(folderPath)) return false;
+
+  // Корень языка обычно содержит toc.yaml, но не является "разделом" в полном смысле
+  const hasToc = fs.existsSync(
+    path.join(folderPath, FrontMatterFiles.TOC_YAML),
+  );
+  const hasIndexMd = fs.existsSync(
+    path.join(folderPath, FrontMatterFiles.INDEX_MD),
+  );
+
+  // Если есть index.md — это раздел, а не корень языка
+  return hasToc && !hasIndexMd;
 }
 
 /**
@@ -448,6 +458,100 @@ function updateParentReferences(parentDir, oldFolderName, newFolderName) {
   updateParentIndexYaml(parentDir, oldFolderName, newFolderName, ""); // composedTitle не нужен здесь
 }
 
+/**
+ * Проверяет, пуста ли папка (нет файлов и подпапок)
+ * @param {string} dirPath
+ * @returns {boolean}
+ */
+function isEmptyDirectory(dirPath) {
+  if (!fs.existsSync(dirPath)) return true;
+  try {
+    const entries = fs.readdirSync(dirPath);
+    return entries.length === 0;
+  } catch (e) {
+    return false;
+  }
+}
+
+/**
+ * Рекурсивно удаляет пустые папки вверх по дереву.
+ * Останавливается на stopAtPath (корень языка) или когда встречает непустую папку.
+ * @param {string} startPath - откуда начинать очистку
+ * @param {string} [stopAtPath] - не подниматься выше этой папки (обычно корень языка)
+ */
+function cleanupEmptyDirectories(startPath, stopAtPath) {
+  if (!startPath || !fs.existsSync(startPath)) return;
+
+  let current = startPath;
+
+  while (current) {
+    // Не выходим за пределы stopAtPath
+    if (stopAtPath && current === stopAtPath) break;
+
+    const parent = path.dirname(current);
+    if (parent === current) break; // корень диска
+
+    if (!isEmptyDirectory(current)) {
+      break; // нашли непустую папку — останавливаемся
+    }
+
+    try {
+      fs.rmSync(current, { recursive: true, force: true });
+      console.log(`🧹 Удалена пустая папка: ${current}`);
+      current = parent;
+    } catch (err) {
+      console.warn(`Не удалось удалить пустую папку ${current}:`, err.message);
+      break;
+    }
+  }
+}
+
+/**
+ * Надёжно определяет корень языка (docs/ru, docs/en и т.д.)
+ * @param {string} sourcePath - путь к любому разделу
+ * @returns {string} путь к корню языка
+ */
+function getLanguageRoot(sourcePath) {
+  let current = path.dirname(sourcePath);
+
+  while (current && current !== path.parse(current).root) {
+    const basename = path.basename(current).toLowerCase();
+
+    // Если дошли до папки "docs" — следующий уровень должен быть языком
+    if (basename === "docs") {
+      const nextDir = path.join(
+        current,
+        path.basename(path.dirname(sourcePath)),
+      ); // пытаемся взять язык из пути
+      if (fs.existsSync(nextDir) && isLanguageRoot(nextDir)) {
+        return nextDir;
+      }
+      return current; // fallback — возвращаем docs, если язык не найден
+    }
+
+    // Проверяем, является ли текущая папка корнем языка
+    if (isLanguageRoot(current) && !isDiplodocSection(current)) {
+      return current;
+    }
+
+    current = path.dirname(current);
+  }
+
+  // Если ничего не нашли — ищем папку docs в пути
+  const parts = sourcePath.split(path.sep);
+  const docsIndex = parts.findIndex((p) => p.toLowerCase() === "docs");
+
+  if (docsIndex !== -1 && docsIndex + 1 < parts.length) {
+    const langFolder = path.join(...parts.slice(0, docsIndex + 2));
+    if (fs.existsSync(langFolder)) {
+      return langFolder;
+    }
+  }
+
+  // Крайний fallback
+  return path.dirname(sourcePath);
+}
+
 module.exports = {
   isDiplodocSection,
   isLanguageRoot,
@@ -466,4 +570,7 @@ module.exports = {
   updateTocYamlTitle,
   updateSectionMetadata,
   renameSectionFolderIfNeeded,
+  cleanupEmptyDirectories,
+  isEmptyDirectory,
+  getLanguageRoot,
 };
