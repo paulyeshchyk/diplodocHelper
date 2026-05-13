@@ -1,5 +1,54 @@
 # Diplodoc Helper
 
+## Установка
+
+### marketplace
+
+Установка осуществляется через [ссылку](https://marketplace.visualstudio.com/items?itemName=paulyestchick.diplodochelper)
+
+### git
+
+#### clone
+
+Выполнить команду в терминале
+
+```bash
+git clone https://github.com/paulyeshchyk/diplodocHelper.git
+```
+
+#### build
+
+Выполнить команду в терминале
+
+```bash
+cd diplodocHelper
+npm install gray-matter@^4.0.3
+mkDir build
+vsce package --out build/ --allow-missing-repository
+```
+
+#### vsix install
+
+Выполнить команду в терминале
+
+```bash
+code --install-extension diplodochelper-0.7.0.vsix
+```
+
+## Сводка функций
+
+| Применяемость  | Наименование                                                                                                                                                   | Этап                   |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| Разделы        | [Создание раздела (`diplodoc-helper.createSection`)](#1-создание-раздела-diplodoc-helpercreatesection)                                                         | Редактирование         |
+|                | [Удаление раздела (`diplodoc-helper.deleteSection`)](#2-удаление-раздела-diplodoc-helperdeletesection))                                                        | Редактирование         |
+|                | [Переименование раздела и смена типа (`diplodoc-helper.renameSection`)](#3-переименование-раздела-и-смена-типа-diplodoc-helperrenamesection) Редактирование    |
+|                | [Переиндексация (`diplodoc-helper.reindex`)](#8-переиндексация-diplodoc-helperreindex)                                                                         | Редактирование, Сборка |
+| Ссылки         | [Копирование ссылки на статью (`diplodoc-helper.copyLink`)](#4-копирование-ссылки-на-статью-diplodoc-helpercopylink)                                           | Редактирование         |
+|                | [Вставка ссылки на статью (`diplodoc-helper.pasteLink`)](#5-вставка-ссылки-на-статью-diplodoc-helperpastelink)                                                 | Редактирование         |
+| Индексация     | [Генерация краткого указателя (`diplodoc-helper.generateContexts`)](#6-генерация-краткого-указателя-diplodoc-helpergeneratecontexts)                           | Редактирование, Сборка |
+|                | [Генерация списка контекстов для фронтенда (`diplodoc-helper.generateHelpMaps`)](#7-генерация-списка-контекстов-для-фронтенда-diplodoc-helpergeneratehelpmaps) | Редактирование, Сборка |
+| Хлебные крошки | [Хлебные крошки (`inject-breadcrumb.js`)](#9-хлебные-крошки-inject-breadcrumbjs)                                                                               | Сборка                 |
+
 ## Команды расширения Diplodoc Helper
 
 ### 1. Создание раздела (`diplodoc-helper.createSection`)
@@ -89,3 +138,412 @@
 
 **С расширением**  
 Скрипт (`inject-breadcrumb.js`) запускается после сборки документации (`@diplodoc/cli`). Он сканирует все `index.html` в папке `build`, по пути собирает родительские сегменты, извлекает из сгенерированных HTML-файлов заголовки страниц (из `diplodoc-state` или `<title>`), формирует навигационную цепочку и вставляет `nav` с крошками сразу перед основным содержимым страницы. Крошки обновляются автоматически при каждой сборке.
+
+## С чего начать
+
+### Базис
+
+Начните с загрузки стандартного проекта diplodoc, размещенного по [ссылке](https://github.com/diplodoc-platform/documentation-template)
+
+---
+
+Откройте проект, убедившись, что в папке `docs` есть две подпапки `en` и `ru`
+
+---
+
+Установите данное расширение.
+
+---
+
+После установки расширение, возможно, потребуется перезагрузка VS Code. После перезагрузки, в VS Code откройте зангуренный Вами проект documentation-template
+
+---
+
+В древовидной иерархии папок VS Code, под названием Explorer, найдите папку docs а в ней либо ru либо en. Если расширение из п.2 было установлено, тогда нажмите ПКМ. В появившемся меню должно быть подменю `diplodoc` ![diplodoc](./readme_images/explorer-context.png)
+
+---
+
+Выберите подменю `Создать рубрику`, и следуйте дальнейшим инструкциям
+
+- тип ![тип](./readme_images/dialog-type.png)
+- название секции ![секция](./readme_images/section-name.png)
+- индекс ![индекс](./readme_images/index-value.png)
+
+---
+
+В результате, у Вас должно получиться создать новый подраздес а автоматическим обновлением toc.yaml
+
+### Копирование
+
+Функция `Копирование ссылки на статью` имеет пару `Вставка ссылки на статью`. Не путайте со стандартном механизмом `Копирования-Вставки`.
+
+P.S. Функция вставки ссылки на статью будет работать только в документе формата md, yaml
+
+[результат](./readme_images/section-creation-result.png)
+
+## Базовый набор задач, исполняемых в VS Code
+
+- `1. Собрать документацию` преобразовывает(собирает) весь набор md-файлов в набор html- файлов
+- `2. Открыть (локальный сервер)` преобразовывает(собирает) весь набор md-файлов в набор html- файлов, запуская локальный http-server. Результат сборки будет доступен по адресу `localhost:5050`
+- `5. docker: build image` преобразовывает(собирает) весь набор md-файлов в набор html- файлов, компонуя из них docker-container
+
+```tasks.json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. Собрать документацию",
+      "dependsOn": [
+        "0.1 clean-build",
+        "0.1 generate-contexts",
+        "0.1 generate-helpmaps",
+        "0.2 build-docs",
+        "0.3 inject-breadcrumb",
+        "0.4 clean-temp"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "close": false,
+        "clear": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "2. Открыть (локальный сервер)",
+      "type": "shell",
+      "command": "node .vscode/scripts/open-url.js http://localhost:${config:docbuilder.port}",
+      "dependsOn": [
+        "4. Запустить HTTP сервер"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "close": true,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "2. Открыть (локальный файл)",
+      "type": "shell",
+      "command": "node .vscode/scripts/open-file.js build/index.html",
+      "dependsOn": [
+        "1. Собрать документацию"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "never",
+        "close": true,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "3. Подготовка окружения",
+      "dependsOn": [
+        "0.7 npm clean-install"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "4. Запустить HTTP сервер",
+      "type": "shell",
+      "command": "node .vscode/scripts/start-http-server.js ${config:docbuilder.port}",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Starting up",
+          "endsPattern": "Available on"
+        }
+      },
+      "presentation": {
+        "reveal": "never",
+        "close": false,
+        "panel": "dedicated",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "5. docker: build image",
+      "type": "shell",
+      "command": "docker build -t ${config:docbuilder.imageName} .",
+      "dependsOn": [
+        "0.12 check-docker"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "6. docker: run container (detached)",
+      "type": "shell",
+      "command": "node .vscode/scripts/docker-run.js ${config:docbuilder.containerName} ${config:docbuilder.port} ${config:docbuilder.imageName}",
+      "group": "test",
+      "dependsOn": [
+        "5. docker: build image"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "7. Экспорт в PDF",
+      "dependsOn": [
+        "0.1 clean-build",
+        "0.5 build-singlepage",
+        "0.6 generate-pdf",
+        "0.4 clean-temp"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent",
+        "close": false,
+        "panel": "shared",
+        "clear": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "8. Открыть (docker)",
+      "dependsOn": [
+        "0.12 check-docker",
+        "0.9 stop-all-servers",
+        "5. docker: build image",
+        "6. docker: run container (detached)"
+      ],
+      "dependsOrder": "sequence",
+      "type": "shell",
+      "command": "node .vscode/scripts/open-url-delayed.js http://localhost:${config:docbuilder.port} 3000",
+      "problemMatcher": [],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "close": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "9. Остановить все серверы",
+      "dependsOn": [
+        "0.9 stop-all-servers"
+      ],
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "10. Удалить Docker-контейнер",
+      "type": "shell",
+      "command": "node .vscode/scripts/remove-docker-container.js ${config:docbuilder.imageName}",
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "never",
+        "close": true,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.1 clean-build",
+      "type": "shell",
+      "command": "npx rimraf build",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.1 generate-contexts",
+      "type": "shell",
+      "command": "node ./plugins/diplodoc-helper/generators/generateContexts.js",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.1 generate-helpmaps",
+      "type": "shell",
+      "command": "node ./plugins/diplodoc-helper/generators/generateHelpMap.js",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.2 build-docs",
+      "type": "shell",
+      "command": "npx -y @diplodoc/cli -i ./docs -o ./build --allow-custom-resources",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.3 inject-breadcrumb",
+      "type": "shell",
+      "command": "node ./plugins/breadcrumb/inject-breadcrumb.js",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.4 clean-temp",
+      "type": "shell",
+      "command": "npx rimraf build/.yfm build/.yfmignore build/.yfmlint",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.5 build-singlepage",
+      "type": "shell",
+      "command": "npx -y @diplodoc/cli -i ./docs -o ./build --allow-custom-resources --singlePage",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.6 generate-pdf",
+      "type": "shell",
+      "command": "npx @diplodoc/docs2pdf@latest -i ./build --scroll-to-bottom",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.7 npm clean-install",
+      "type": "shell",
+      "command": "npm ci",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.8 stop-http",
+      "type": "shell",
+      "command": "node .vscode/scripts/kill-port.js ${config:docbuilder.port}",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.9a stop-docker",
+      "type": "shell",
+      "command": "node .vscode/scripts/stop-docker-container.js ${config:docbuilder.imageName}",
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.9 stop-all-servers",
+      "dependsOn": [
+        "0.8 stop-http",
+        "0.9a stop-docker"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.12 check-docker",
+      "type": "shell",
+      "command": "node .vscode/scripts/check-docker.js",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "always",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    }
+  ]
+}
+```

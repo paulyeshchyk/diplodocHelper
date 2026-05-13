@@ -3,7 +3,10 @@
   "publisher": "paulyestchick",
   "displayName": "diplodoc-helper",
   "description": "",
-  "version": "0.7.0",
+  "repository": {
+    "url": "https://github.com/paulyeshchyk/diplodocHelper"
+  },
+  "version": "0.8.0",
   "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"
