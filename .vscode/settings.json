@@ -1,7 +1,8 @@
 {
+  "editor.formatOnSave": true,
   "files.exclude": {
     "**\\build": "explorerExcludedFiles",
-    "**\\node_modules": "explorerExcludedFiles"
-  },
-  "editor.formatOnSave": true
+    "**\\node_modules": "explorerExcludedFiles",
+    "**/dist": "explorerExcludedFiles"
+  }
 }
