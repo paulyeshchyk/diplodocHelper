@@ -4,50 +4,67 @@ const vscode = require("vscode");
 const { createSection } = require("./commands/diplodoc-helper.section.Create");
 const { deleteSection } = require("./commands/diplodoc-helper.section.Delete");
 const { renameSection } = require("./commands/diplodoc-helper.section.Rename");
+const { moveSection } = require("./commands/diplodoc-helper.section.Move");
 const { copyLink } = require("./commands/diplodoc-helper.link.Copy.js");
 const { pasteLink } = require("./commands/diplodoc-helper.link.Paste.js");
+const {
+  wipeEmptyDirectories,
+} = require("./commands/diplodoc-hepler.context.WipeEmptyDirectories.js");
 
-const { generateContexts } = require("./commands/diplodoc-helper.context.Generate");
-const { generateHelpmap } = require("./commands/diplodoc-helper.helpMap.Generate");
+const {
+  generateContexts,
+} = require("./commands/diplodoc-helper.context.Generate");
+const {
+  generateHelpmap,
+} = require("./commands/diplodoc-helper.helpMap.Generate");
 
 /**
  * @param {{ subscriptions: vscode.Disposable[]; extension: { packageJSON: { version: any; }; }; }} context
  */
 function activate(context) {
+  const wipeEmptyDirectoriesCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.wipeEmptyDirectories",
+    wipeEmptyDirectories,
+  );
 
   const createSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.createSection",
-    createSection
+    createSection,
   );
 
   const deleteSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.deleteSection",
-    deleteSection
+    deleteSection,
   );
 
   const renameSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.renameSection",
-    renameSection
+    renameSection,
+  );
+
+  const moveSectionCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.moveSection",
+    moveSection,
   );
 
   const generateContextsCmd = vscode.commands.registerCommand(
     "diplodoc-helper.generateContexts",
-    generateContexts
+    generateContexts,
   );
 
   const generateHelpmapsCmd = vscode.commands.registerCommand(
     "diplodoc-helper.generateHelpMaps",
-    generateHelpmap
+    generateHelpmap,
   );
 
   const copyLinkCmd = vscode.commands.registerCommand(
     "diplodoc-helper.copyLink",
-    copyLink
+    copyLink,
   );
 
   const pasteLinkCmd = vscode.commands.registerCommand(
     "diplodoc-helper.pasteLink",
-    pasteLink
+    pasteLink,
   );
 
   const reindexCommand = vscode.commands.registerCommand(
@@ -61,39 +78,44 @@ function activate(context) {
           cancellable: false,
         },
         async () => {
-          const { reindexDirectory } = require("./commands/diplodoc-helper.section.Reindex");
+          const {
+            reindexDirectory,
+          } = require("./commands/diplodoc-helper.section.Reindex");
           reindexDirectory(uri.fsPath);
           vscode.window.showInformationMessage("Переиндексация завершена!");
-        }
+        },
       );
-    }
+    },
   );
 
   context.subscriptions.push(
     createSectionCmd,
     deleteSectionCmd,
     renameSectionCmd,
+    moveSectionCmd,
     generateContextsCmd,
     generateHelpmapsCmd,
-    reindexCommand
+    reindexCommand,
+    wipeEmptyDirectoriesCmd,
   );
 
-  context.subscriptions.push(
-    copyLinkCmd,
-    pasteLinkCmd
-  );
+  context.subscriptions.push(copyLinkCmd, pasteLinkCmd);
 
   context.subscriptions.push(
-    vscode.window.onDidChangeActiveTextEditor(editor => updateContext(editor)),
-    vscode.workspace.onDidChangeTextDocument(event => {
+    vscode.window.onDidChangeActiveTextEditor((editor) =>
+      updateContext(editor),
+    ),
+    vscode.workspace.onDidChangeTextDocument((event) => {
       const activeEditor = vscode.window.activeTextEditor;
       if (activeEditor && event.document === activeEditor.document) {
         updateContext(activeEditor);
       }
-    })
+    }),
   );
 
-  console.log(`Diplodoc Helper активирован (${context.extension.packageJSON.version})`);
+  console.log(
+    `Diplodoc Helper активирован (${context.extension.packageJSON.version})`,
+  );
 }
 
 /**
@@ -105,12 +127,18 @@ function updateContext(editor) {
     const doc = editor.document;
     const text = doc.getText();
     // Проверяем, есть ли в документе нужный маркер
-    if ((doc.languageId === 'yaml' || doc.languageId === 'markdown') && text.includes('---')) {
+    if (
+      (doc.languageId === "yaml" || doc.languageId === "markdown") &&
+      text.includes("---")
+    ) {
       canPaste = true;
     }
   }
-  vscode.commands.executeCommand('setContext', 'diplodoc.canPasteLink', canPaste);
+  vscode.commands.executeCommand(
+    "setContext",
+    "diplodoc.canPasteLink",
+    canPaste,
+  );
 }
-
 
 exports.activate = activate;

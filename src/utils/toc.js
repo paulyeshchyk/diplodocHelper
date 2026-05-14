@@ -2,7 +2,11 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { FrontMatterFiles, FrontMatterMeta, FrontMatterSectionTypesIndexed } = require("./constants");
+const {
+  FrontMatterFiles,
+  FrontMatterMeta,
+  FrontMatterSectionTypesIndexed,
+} = require("./constants");
 const { get } = require("../utils/frontmatter");
 
 /* ====================== ОБЩИЕ УТИЛИТЫ ====================== */
@@ -53,7 +57,13 @@ function indentedTocEntry(indent, composedTitle, folderName) {
  * @param {any} sectionType
  * @param {string | undefined} sectionIndex
  */
-function addTocEntry(parentDir, composedTitle, folderName, sectionType, sectionIndex) {
+function addTocEntry(
+  parentDir,
+  composedTitle,
+  folderName,
+  sectionType,
+  sectionIndex,
+) {
   const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) return;
 
@@ -198,27 +208,42 @@ function compareIndexes(a, b, order = "ascending") {
 /* ====================== УЛУЧШЕННАЯ СОРТИРОВКА (БЛОКАМИ) ====================== */
 
 /**
+ * @typedef {Object} TocBlocksAccumulator
+ * @property {string} header
+ * @property {string[]} blocks
+ * @property {string[] | null} current
+ */
+
+/**
  * Разбивает toc.yaml на отдельные блоки элементов
  * @param {string} content
  * @returns {string[]}
  */
 function splitTocIntoBlocks(content) {
-  return content.split(/^(\s*-\s+name:)/m)
-    .reduce((acc, part, i) => {
-      if (i === 0) {
-        acc.header = part.trim();
-        return acc;
-      }
-      if (i % 2 === 1) { // начало нового элемента
-        acc.current = [part];
-      } else if (acc.current) {
-        acc.current.push(part);
-        acc.blocks.push(acc.current.join(''));
-        acc.current = null;
-      }
-      return acc;
-    }, { header: '', blocks: [], current: null })
-    .blocks;
+  /** @type {TocBlocksAccumulator} */
+  const acc = {
+    header: "",
+    blocks: [],
+    current: null,
+  };
+
+  return content.split(/^(\s*-\s+name:)/m).reduce((accumulator, part, i) => {
+    if (i === 0) {
+      accumulator.header = part.trim();
+      return accumulator;
+    }
+
+    if (i % 2 === 1) {
+      // начало нового элемента (- name:)
+      accumulator.current = [part];
+    } else if (accumulator.current) {
+      accumulator.current.push(part);
+      accumulator.blocks.push(accumulator.current.join(""));
+      accumulator.current = null;
+    }
+
+    return accumulator;
+  }, acc).blocks;
 }
 
 /**
@@ -249,7 +274,11 @@ function getIndexFromBlock(block, baseDir) {
  * Сортирует элементы toc.yaml, сохраняя форматирование
  * @param {string} baseDir
  */
-function sortTocItems(baseDir, sortOrder = "ascending", sortKind = "nonIndexedBottom") {
+function sortTocItems(
+  baseDir,
+  sortOrder = "ascending",
+  sortKind = "nonIndexedBottom",
+) {
   const tocPath = path.join(baseDir, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) return;
 
@@ -258,23 +287,23 @@ function sortTocItems(baseDir, sortOrder = "ascending", sortKind = "nonIndexedBo
   const blocks = splitTocIntoBlocks(content);
   if (blocks.length === 0) return;
 
-  const itemsWithIndex = blocks.map(block => ({
+  const itemsWithIndex = blocks.map((block) => ({
     block,
-    index: getIndexFromBlock(block, baseDir)
+    index: getIndexFromBlock(block, baseDir),
   }));
 
-  const indexed = itemsWithIndex.filter(i => i.index !== null);
-  const nonIndexed = itemsWithIndex.filter(i => i.index === null);
+  const indexed = itemsWithIndex.filter((i) => i.index !== null);
+  const nonIndexed = itemsWithIndex.filter((i) => i.index === null);
 
   indexed.sort((a, b) => compareIndexes(a.index, b.index, sortOrder));
 
-  const sortedBlocks = sortKind === "nonIndexedTop"
-    ? [...nonIndexed.map(i => i.block), ...indexed.map(i => i.block)]
-    : [...indexed.map(i => i.block), ...nonIndexed.map(i => i.block)];
+  const sortedBlocks =
+    sortKind === "nonIndexedTop"
+      ? [...nonIndexed.map((i) => i.block), ...indexed.map((i) => i.block)]
+      : [...indexed.map((i) => i.block), ...nonIndexed.map((i) => i.block)];
 
-  const newContent = content.split(/^(\s*items:)/m)[0] +
-    "items:\n" +
-    sortedBlocks.join("\n");
+  const newContent =
+    content.split(/^(\s*items:)/m)[0] + "items:\n" + sortedBlocks.join("\n");
 
   fs.writeFileSync(tocPath, normalizeEmptyLines(newContent), "utf8");
 }

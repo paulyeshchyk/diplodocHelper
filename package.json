@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/paulyeshchyk/diplodocHelper"
   },
-  "version": "0.8.0",
+  "version": "0.9.0",
   "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"
@@ -30,6 +30,10 @@
         "title": "Задать новый тип и наименование"
       },
       {
+        "command": "diplodoc-helper.moveSection",
+        "title": "Переместить рубрику"
+      },
+      {
         "command": "diplodoc-helper.reindex",
         "title": "Переиндексировать всё"
       },
@@ -44,6 +48,10 @@
       {
         "command": "diplodoc-helper.generateContexts",
         "title": "Сформировать контексты"
+      },
+      {
+        "command": "diplodoc-helper.wipeEmptyDirectories",
+        "title": "Удалить пустые папки после переиндексации"
       },
       {
         "command": "diplodoc-helper.generateHelpMaps",
@@ -61,7 +69,7 @@
       },
       {
         "id": "diplodoc.generators.explorer.context.menu",
-        "label": "Генераторы"
+        "label": "Прочее"
       }
     ],
     "menus": {
@@ -102,6 +110,11 @@
           "group": "1.diplodoc.section@3"
         },
         {
+          "command": "diplodoc-helper.moveSection",
+          "when": "explorerResourceIsFolder",
+          "group": "1.diplodoc.section@4"
+        },
+        {
           "command": "diplodoc-helper.copyLink",
           "when": "explorerResourceIsFolder || resourceExtname == .md || resourceExtname == .png || resourceExtname == .jpg || resourceExtname == .svg",
           "group": "2.diplodoc.copy@1"
@@ -114,19 +127,24 @@
       ],
       "diplodoc.generators.explorer.context.menu": [
         {
+          "command": "diplodoc-helper.reindex",
+          "when": "explorerResourceIsFolder",
+          "group": "1diplodoc.generators.section.command@1"
+        },
+        {
           "command": "diplodoc-helper.generateContexts",
           "when": "explorerResourceIsFolder",
-          "group": "diplodoc.generators.section.command@1"
+          "group": "1diplodoc.generators.section.command@2"
         },
         {
           "command": "diplodoc-helper.generateHelpMaps",
           "when": "explorerResourceIsFolder",
-          "group": "diplodoc.generators.section.command@2"
+          "group": "1diplodoc.generators.section.command@3"
         },
         {
-          "command": "diplodoc-helper.reindex",
+          "command": "diplodoc-helper.wipeEmptyDirectories",
           "when": "explorerResourceIsFolder",
-          "group": "diplodoc.generators.toc.command@3"
+          "group": "99diplodoc.generators.files.command@1"
         }
       ]
     }

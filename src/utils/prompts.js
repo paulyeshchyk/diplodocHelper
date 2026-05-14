@@ -1,6 +1,5 @@
 // src/utils/prompts.js
 const vscode = require("vscode");
-const { FrontMatterSectionTypesIndexed } = require("../utils/constants")
 const { isValidName } = require("./files");
 const { sectionTypes } = require("./section");
 
@@ -12,25 +11,25 @@ const { sectionTypes } = require("./section");
  */
 
 /**
- * Полный диалог переименования/создания раздела
- * @param {string} currentName
- * @param {string} currentIndex
+ * Полный диалог переименования раздела
+ * @param {string} [currentPureTitle] - текущее чистое название (для предзаполнения)
+ * @param {string} [currentIndex] - текущий индекс
  * @returns {Promise<PromptResult | null>}
  */
-async function promptSection(currentName, currentIndex) {
+async function promptSection(currentPureTitle = "", currentIndex = "") {
   const newSectionType = await promptSectionType();
   if (!newSectionType) return null;
 
-  const newPureTitle = await promptSectionName(currentName);
+  const newPureTitle = await promptSectionName(currentPureTitle); // ← передаём текущее название
   if (!newPureTitle) return null;
 
-  const hasIndex = FrontMatterSectionTypesIndexed.includes(newSectionType.name);
+  const userIndex = await promptSectionIndex(currentIndex);
 
-  const userIndex = hasIndex
-    ? await promptSectionIndex(currentIndex)
-    : "";
-
-  return { newSectionType, newPureTitle, userIndex };
+  return {
+    newSectionType,
+    newPureTitle,
+    userIndex,
+  };
 }
 
 /**
@@ -46,14 +45,14 @@ async function promptSectionType() {
 }
 
 /**
- * Ввод названия раздела
+ * Ввод названия раздела с предзаполнением
+ * @param {string} [currentValue]
  * @returns {Promise<string | undefined>}
- * @param {string | undefined} [currentTitle]
  */
-async function promptSectionName(currentTitle) {
+async function promptSectionName(currentValue = "") {
   return await vscode.window.showInputBox({
-    value: (currentTitle || ""),
-    prompt: "Введите название раздела",
+    prompt: "Введите новое название раздела",
+    value: currentValue,
     placeHolder: "Например: Справочник Номенклатуры",
     validateInput: (value) =>
       value && value.trim().length > 0 && value.length <= 255
@@ -67,14 +66,33 @@ async function promptSectionName(currentTitle) {
  * @param {string} currentIndex
  * @returns {Promise<string | undefined>}
  */
-async function promptSectionIndex(currentIndex) {
+/**
+ * Валидация индекса
+ * Разрешаем: 0, 1, 2.5, 7.3, 10.15 и т.д.
+ * Запрещаем: -1, .5, 1., пустые строки с точками
+ */
+async function promptSectionIndex(currentIndex = "") {
   return await vscode.window.showInputBox({
-    prompt: "Укажите индекс раздела (или оставьте пустым)",
-    placeHolder: "Например: 1, 2.3 ...",
-    value: currentIndex || "",
+    prompt: "Укажите индекс раздела (можно с дробной частью, например 7.5)",
+    value: currentIndex,
+    placeHolder: "Например: 0.5, 1, 2.3, 7.5 ...",
     validateInput: (value) => {
-      if (!value || value.trim() === "") return null;
-      return /^\d+(\.\d+)*$/.test(value) ? null : "Индекс должен быть числом или пустым";
+      if (!value || value.trim() === "") return null; // пустой — разрешён
+
+      // Разрешаем только цифры и точки, но не начинаем и не заканчиваем на точку
+      if (!/^\d+(\.\d+)*$/.test(value)) {
+        return "Индекс должен состоять из цифр и точек (например: 0.5, 1, 7.3)";
+      }
+
+      // Дополнительно: запрещаем несколько точек подряд и ведущие нули в частях кроме 0
+      if (
+        /\.\./.test(value) ||
+        value.split(".").some((part) => part.length > 1 && part.startsWith("0"))
+      ) {
+        return "Некорректный формат индекса";
+      }
+
+      return null;
     },
   });
 }

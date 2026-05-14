@@ -5,12 +5,9 @@ const path = require("path");
 
 const { promptSection, readCurrentPureTitle } = require("../utils");
 const { isDiplodocSection } = require("../utils");
-const {
-  readCurrentSectionIndex,
-  updateSectionMetadata,
-} = require("../utils");
+const { readCurrentSectionIndex, updateSectionMetadata } = require("../utils");
 
-const { FrontMatterSectionTypesIndexed } = require("../utils")
+const { FrontMatterSectionTypesIndexed } = require("../utils");
 
 const {
   removeTocEntryByFolder,
@@ -32,7 +29,9 @@ async function renameSection(uri) {
   const parentDir = path.dirname(oldFolderPath);
 
   if (!isDiplodocSection(oldFolderPath)) {
-    vscode.window.showErrorMessage("Переименовать можно только полноценный раздел.");
+    vscode.window.showErrorMessage(
+      "Переименовать можно только полноценный раздел.",
+    );
     return;
   }
 
@@ -44,16 +43,14 @@ async function renameSection(uri) {
     return;
   }
 
-  const finalIndex = FrontMatterSectionTypesIndexed.includes(newSectionObject.newSectionType.name)
-    ? newSectionObject.userIndex?.trim() || ""
-    : "";
+  const finalIndex = newSectionObject.userIndex?.trim() || "";
 
-    const newPureTitle = newSectionObject.newPureTitle;
+  const newPureTitle = newSectionObject.newPureTitle;
 
   const newFolderName = TEMPLATE_FOLDER_NAME(
     newSectionObject.newSectionType,
     newPureTitle,
-    finalIndex
+    finalIndex,
   );
 
   const newFolderPath = path.join(parentDir, newFolderName);
@@ -79,7 +76,7 @@ async function renameSection(uri) {
         oldFolderPath,
         newPureTitle,
         newSectionObject.newSectionType,
-        finalIndex
+        finalIndex,
       );
     } else {
       // Просто обновляем содержимое без переименования папки
@@ -88,7 +85,7 @@ async function renameSection(uri) {
         newPureTitle,
         newSectionObject.newSectionType.name,
         newSectionObject.newSectionType.value,
-        finalIndex
+        finalIndex,
       );
     }
 
@@ -98,13 +95,12 @@ async function renameSection(uri) {
       composedTitle,
       finalFolderName,
       newSectionObject.newSectionType.value,
-      finalIndex
+      finalIndex,
     );
 
     vscode.window.showInformationMessage(
-      `Раздел переименован: "${oldFolderName}"  "${finalFolderName}"`
+      `Раздел переименован: "${oldFolderName}"  "${finalFolderName}"`,
     );
-
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     vscode.window.showErrorMessage(`Ошибка при переименовании: ${msg}`);
