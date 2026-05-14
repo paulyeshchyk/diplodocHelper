@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 
 const { isDiplodocSection } = require("../utils");
-const { removeTocEntryByFolder } = require("../utils");
+const { TocYamlEntryRemove } = require("../utils");
 
 /**
  * @param {{ fsPath: string }} uri
@@ -32,12 +32,12 @@ async function deleteSection(uri) {
   if (confirm !== "Удалить") return;
 
   try {
-    removeTocEntryByFolder(parentDir, folderName);
+    TocYamlEntryRemove(parentDir, folderName);
     fs.rmSync(targetDir, { recursive: true, force: true });
 
     vscode.window.showInformationMessage(`Раздел "${folderName}" успешно удалён.`);
   } catch (err) {
-    var msg = (err instanceof Error) ? err.message : "unknown";
+    let msg = (err instanceof Error) ? err.message : `${err}`;
     vscode.window.showErrorMessage(`Ошибка при удалении: ${msg}`);
   }
 }

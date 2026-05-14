@@ -1,7 +1,7 @@
 const vscode = require("vscode");
 const path = require('path');
 const fs = require('fs');
-const { readCurrentSection } = require("../utils");
+const { IndexMdFileRead } = require("../utils");
 
 /**
  * @param {vscode.Uri} uri
@@ -17,7 +17,7 @@ async function copyLink(uri) {
 
     if (stats.isDirectory()) {
         // Логика для раздела (папки)
-        const section = readCurrentSection(fsPath);
+        const section = IndexMdFileRead(fsPath);
         title = section?.pureTitle || path.basename(fsPath);
     } else {
         // Логика для файла (картинки, документы)

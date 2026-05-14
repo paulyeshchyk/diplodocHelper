@@ -1,6 +1,6 @@
 // src/utils/prompts.js
 const vscode = require("vscode");
-const { isValidName } = require("./files");
+const { isValidName } = require("./directory");
 const { sectionTypes } = require("./section");
 
 /**
@@ -20,7 +20,7 @@ async function promptSection(currentPureTitle = "", currentIndex = "") {
   const newSectionType = await promptSectionType();
   if (!newSectionType) return null;
 
-  const newPureTitle = await promptSectionName(currentPureTitle); // ← передаём текущее название
+  const newPureTitle = await promptSectionName(currentPureTitle);
   if (!newPureTitle) return null;
 
   const userIndex = await promptSectionIndex(currentIndex);

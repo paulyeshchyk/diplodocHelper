@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/paulyeshchyk/diplodocHelper"
   },
-  "version": "0.10.8",
+  "version": "0.10.39",
   "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"

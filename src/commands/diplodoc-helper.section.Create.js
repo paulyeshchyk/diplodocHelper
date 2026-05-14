@@ -2,26 +2,23 @@
 const vscode = require("vscode");
 const { calculateNextIndex } = require("../core/indexer");
 const {
-  createIndexMd,
-  createIndexYaml,
-  createTocYaml,
-  patchParentToc,
+  IndexMdFileCreate,
+  IndexYamlFileCreate,
+  TocYamlFileCreate,
+  TocYamlEntryPatchItems,
   createSectionFolder,
   TEMPLATE_SECTION_NAME,
 } = require("../utils"); // используем barrel
 
-const { FrontMatterSectionTypesIndexed } = require("../utils")
+const { FrontMatterSectionTypesIndexed } = require("../utils");
 
 const {
   ShowSectionNameSelector,
   ShowSectionTypeSelector,
-  promptSectionIndex
+  promptSectionIndex,
 } = require("../utils");
 
-const {
-  isDiplodocSection,
-  isLanguageRoot,
-} = require("../utils");
+const { isDiplodocSection, isLanguageRoot } = require("../utils");
 
 /**
  * @param {{ fsPath: any; }} uri
@@ -32,7 +29,7 @@ async function createSection(uri) {
 
   if (!isDiplodocSection(targetDir) && !isLanguageRoot(targetDir)) {
     vscode.window.showErrorMessage(
-      "Раздел можно создать только внутри другого раздела или в корне папки языка."
+      "Раздел можно создать только внутри другого раздела или в корне папки языка.",
     );
     return;
   }
@@ -51,14 +48,25 @@ async function createSection(uri) {
     ? await promptSectionIndex(sectionIndexCalculated)
     : "";
 
-  const folderResult = createSectionFolder(targetDir, sectionType, userSectionName, sectionIndex);
-  if (!folderResult) 
-    return;
+  /** @import {CreateFolderResult} from '../utils/directory' */
 
-  const sectionName = TEMPLATE_SECTION_NAME(sectionType, userSectionName, sectionIndex);
+  /** @type {CreateFolderResult?} */
+  const folderResult = createSectionFolder(
+    targetDir,
+    sectionType,
+    userSectionName,
+    sectionIndex,
+  );
+  if (!folderResult) return;
+
+  const sectionName = TEMPLATE_SECTION_NAME(
+    sectionType,
+    userSectionName,
+    sectionIndex,
+  );
 
   try {
-    createIndexMd(
+    IndexMdFileCreate(
       folderResult.folderPath,
       userSectionName,
       sectionType.name,
@@ -66,7 +74,7 @@ async function createSection(uri) {
       sectionIndex,
     );
 
-    createIndexYaml(
+    IndexYamlFileCreate(
       folderResult.folderPath,
       sectionName,
       sectionType.name,
@@ -74,21 +82,26 @@ async function createSection(uri) {
       sectionIndex,
     );
 
-    createTocYaml(folderResult.folderPath, sectionName, sectionType.value, sectionIndex);
+    TocYamlFileCreate(
+      folderResult.folderPath,
+      sectionName,
+      sectionType.value,
+      sectionIndex,
+    );
 
-    patchParentToc(
+    TocYamlEntryPatchItems(
       targetDir,
       sectionName,
       folderResult.folderName,
       sectionType.name,
-      sectionIndex
+      sectionIndex,
     );
 
     vscode.window.showInformationMessage(
-      `Раздел "${sectionName}" (${sectionType.label}) создан!`
+      `Раздел "${sectionName}" (${sectionType.label}) создан!`,
     );
   } catch (err) {
-    var msg = (err instanceof Error) ? err.message : "unknown";
+    let msg = err instanceof Error ? err.message : "${err}";
     vscode.window.showErrorMessage(`Критическая ошибка: ${msg}`);
   }
 }

@@ -4,9 +4,9 @@ const fs = require("fs");
 const path = require("path");
 
 const { isDiplodocSection, getSectionMetadata } = require("../utils");
-const { getLanguageRoot } = require("../utils");
+const { getLanguageRoot } = require("../utils/directory");
 const { reindexDirectory } = require("./diplodoc-helper.section.Reindex");
-const { removeTocEntryByFolder, addTocEntry } = require("../utils");
+const { TocYamlEntryRemove, TocYamlEntryCreate } = require("../utils");
 
 /**
  * @typedef {Object} MoveTarget
@@ -175,7 +175,7 @@ async function performMove(sourcePath, targetDir, position) {
     const newParentDir = targetDir;
 
     // 1. Удаляем запись из старого родителя
-    removeTocEntryByFolder(oldParentDir, sourceName);
+    TocYamlEntryRemove(oldParentDir, sourceName);
 
     // 2. Перемещаем папку
     fs.renameSync(sourcePath, targetPath);
@@ -186,7 +186,7 @@ async function performMove(sourcePath, targetDir, position) {
     // Получаем метаданные для корректного добавления
     const sectionInfo = await getSectionInfo(targetPath);
 
-    addTocEntry(
+    TocYamlEntryCreate(
       newParentDir,
       composedTitle,
       sourceName,
@@ -202,7 +202,7 @@ async function performMove(sourcePath, targetDir, position) {
 
     return true;
   } catch (err) {
-    var msg = err instanceof Error ? err.message : `${err}`;
+    let msg = err instanceof Error ? err.message : `${err}`;
     vscode.window.showErrorMessage(`Ошибка перемещения: ${msg}`);
     console.error(err);
     return false;

@@ -3,16 +3,14 @@ const vscode = require("vscode");
 const fs = require("fs");
 const path = require("path");
 
-const { promptSection, readCurrentPureTitle } = require("../utils");
+const { promptSection, IndexMdEntryReadTitle } = require("../utils");
 const { isDiplodocSection } = require("../utils");
-const { readCurrentSectionIndex, updateSectionMetadata } = require("../utils");
-
-const { FrontMatterSectionTypesIndexed } = require("../utils");
+const { IndexMdEntryReadIndex, IndexMdEntryPatch } = require("../utils");
 
 const {
-  removeTocEntryByFolder,
-  addTocEntry,
-  updateParentIndexYaml,
+  TocYamlEntryRemove,
+  TocYamlEntryCreate,
+
   renameSectionFolderIfNeeded,
 } = require("../utils");
 
@@ -35,8 +33,8 @@ async function renameSection(uri) {
     return;
   }
 
-  const currentIndex = readCurrentSectionIndex(oldFolderPath);
-  const currentPureTitle = readCurrentPureTitle(oldFolderPath);
+  const currentIndex = IndexMdEntryReadIndex(oldFolderPath);
+  const currentPureTitle = IndexMdEntryReadTitle(oldFolderPath);
   const newSectionObject = await promptSection(currentPureTitle, currentIndex);
   if (!newSectionObject) {
     console.log("объект не будет переименован: ввод данных прерван");
@@ -65,7 +63,7 @@ async function renameSection(uri) {
     : newPureTitle;
 
   // 1. Удаляем старую запись из родительского toc
-  removeTocEntryByFolder(parentDir, oldFolderName);
+  TocYamlEntryRemove(parentDir, oldFolderName);
 
   let finalFolderName = oldFolderName;
 
@@ -80,7 +78,7 @@ async function renameSection(uri) {
       );
     } else {
       // Просто обновляем содержимое без переименования папки
-      updateSectionMetadata(
+      IndexMdEntryPatch(
         oldFolderPath,
         newPureTitle,
         newSectionObject.newSectionType.name,
@@ -90,7 +88,7 @@ async function renameSection(uri) {
     }
 
     // 3. Добавляем новую запись в родительский toc
-    addTocEntry(
+    TocYamlEntryCreate(
       parentDir,
       composedTitle,
       finalFolderName,
@@ -102,7 +100,7 @@ async function renameSection(uri) {
       `Раздел переименован: "${oldFolderName}"  "${finalFolderName}"`,
     );
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
+    let msg = err instanceof Error ? err.message : `${err}`;
     vscode.window.showErrorMessage(`Ошибка при переименовании: ${msg}`);
   }
 }

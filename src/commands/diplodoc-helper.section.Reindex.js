@@ -8,9 +8,9 @@ const {
 const { sectionTypes, getSectionMetadata } = require("../utils");
 const {
   renameSectionFolderIfNeeded,
-  loadTocFromFile,
-  updateTocItemName,
-  updateSectionMetadata,
+  TocYamlFileLoad,
+  TocYamlEntryPatch,
+  IndexMdEntryPatch,
   sortTocItems,
 } = require("../utils");
 
@@ -67,7 +67,7 @@ function reindexDirectory(
 
   if (fs.existsSync(tocPath)) {
     try {
-      tocDoc = loadTocFromFile(tocPath);
+      tocDoc = TocYamlFileLoad(tocPath);
     } catch (e) {
       console.error(`Ошибка загрузки toc.yaml в ${dir}`);
     }
@@ -162,7 +162,7 @@ function reindexAndRenameSection({
     const sectionLabel = sectionTypeObj.label || "";
     const newTitle = `${sectionLabel} ${currentIndex}. ${pureTitle}`;
 
-    updateSectionMetadata(
+    IndexMdEntryPatch(
       oldSectionPath,
       pureTitle,
       sectionType,
@@ -180,7 +180,7 @@ function reindexAndRenameSection({
     const newSectionPath = path.join(dir, newFolderName);
 
     if (tocDoc?.items) {
-      updateTocItemName(tocDoc, sectionName, newTitle);
+      TocYamlEntryPatch(tocDoc, sectionName, newTitle);
     }
 
     console.log(
