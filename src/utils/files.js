@@ -30,6 +30,7 @@ function isDiplodocSection(folderPath) {
 
 /**
  * Проверяет, является ли папка корнем языка (docs/ru)
+ * @param {string} folderPath
  */
 function isLanguageRoot(folderPath) {
   if (!folderPath || !fs.existsSync(folderPath)) return false;
@@ -478,11 +479,14 @@ function isEmptyDirectory(dirPath) {
  * Останавливается на stopAtPath (корень языка) или когда встречает непустую папку.
  * @param {string} startPath - откуда начинать очистку
  * @param {string} [stopAtPath] - не подниматься выше этой папки (обычно корень языка)
+ * @returns {boolean}
  */
-function cleanupEmptyDirectories(startPath, stopAtPath) {
-  if (!startPath || !fs.existsSync(startPath)) return;
+function cleanupEmptyDirectoriesUp(startPath, stopAtPath) {
+  let result = false;
+  if (!startPath || !fs.existsSync(startPath)) return result;
 
   let current = startPath;
+  result = true;
 
   while (current) {
     // Не выходим за пределы stopAtPath
@@ -497,15 +501,73 @@ function cleanupEmptyDirectories(startPath, stopAtPath) {
 
     try {
       fs.rmSync(current, { recursive: true, force: true });
-      console.log(`🧹 Удалена пустая папка: ${current}`);
+      console.log(`Удалена пустая папка: ${current}`);
       current = parent;
     } catch (err) {
-      console.warn(`Не удалось удалить пустую папку ${current}:`, err.message);
+      var msg = err instanceof Error ? err.message : `${err}`;
+      console.warn(`Не удалось удалить пустую папку ${current}:`, msg);
+      result = false;
       break;
     }
   }
+  return result;
+}
+/**
+ * Рекурсивно сканирует дерево сверху вниз и удаляет все пустые папки
+ * @param {string} rootDir - корневая папка для сканирования
+ * @param {string?} [stopAtPath] - не опускаться ниже этой папки (например, корень языка)
+ * @returns {number} количество удалённых папок
+ */
+function cleanupEmptyDirectories(rootDir, stopAtPath = null) {
+  if (!rootDir || !fs.existsSync(rootDir)) return 0;
+
+  let deletedCount = 0;
+
+  /**
+   * @param {string} dir
+   */
+  function scan(dir) {
+    // Не выходим за границы stopAtPath
+    if (stopAtPath && path.relative(stopAtPath, dir).startsWith("..")) return;
+
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+    // 1. Сначала рекурсивно обходим все подпапки
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        scan(path.join(dir, entry.name));
+      }
+    }
+
+    // 2. После обработки детей проверяем, пустая ли текущая папка
+    if (isEmptyDirectory(dir) && (!stopAtPath || dir !== stopAtPath)) {
+      try {
+        fs.rmSync(dir, { recursive: true, force: true });
+        console.log(`Удалена пустая папка: ${dir}`);
+        deletedCount++;
+      } catch (err) {
+        var msg = err instanceof Error ? err.message : `{err}`;
+        console.warn(`Не удалось удалить пустую папку ${dir}:`, msg);
+      }
+    }
+  }
+
+  scan(rootDir);
+  return deletedCount;
 }
 
+/**
+ * Проверяет, пуста ли папка (нет ни файлов, ни подпапок)
+ * @param {fs.PathLike} dirPath
+ */
+function isEmptyDirectory(dirPath) {
+  if (!fs.existsSync(dirPath)) return true;
+  try {
+    return fs.readdirSync(dirPath).length === 0;
+  } catch {
+    return false;
+  }
+}
 /**
  * Надёжно определяет корень языка (docs/ru, docs/en и т.д.)
  * @param {string} sourcePath - путь к любому разделу
@@ -570,6 +632,7 @@ module.exports = {
   updateTocYamlTitle,
   updateSectionMetadata,
   renameSectionFolderIfNeeded,
+  cleanupEmptyDirectoriesUp,
   cleanupEmptyDirectories,
   isEmptyDirectory,
   getLanguageRoot,

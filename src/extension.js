@@ -7,6 +7,9 @@ const { renameSection } = require("./commands/diplodoc-helper.section.Rename");
 const { moveSection } = require("./commands/diplodoc-helper.section.Move");
 const { copyLink } = require("./commands/diplodoc-helper.link.Copy.js");
 const { pasteLink } = require("./commands/diplodoc-helper.link.Paste.js");
+const {
+  wipeEmptyDirectories,
+} = require("./commands/diplodoc-hepler.context.WipeEmptyDirectories.js");
 
 const {
   generateContexts,
@@ -19,6 +22,11 @@ const {
  * @param {{ subscriptions: vscode.Disposable[]; extension: { packageJSON: { version: any; }; }; }} context
  */
 function activate(context) {
+  const wipeEmptyDirectoriesCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.wipeEmptyDirectories",
+    wipeEmptyDirectories,
+  );
+
   const createSectionCmd = vscode.commands.registerCommand(
     "diplodoc-helper.createSection",
     createSection,
@@ -88,6 +96,7 @@ function activate(context) {
     generateContextsCmd,
     generateHelpmapsCmd,
     reindexCommand,
+    wipeEmptyDirectoriesCmd,
   );
 
   context.subscriptions.push(copyLinkCmd, pasteLinkCmd);

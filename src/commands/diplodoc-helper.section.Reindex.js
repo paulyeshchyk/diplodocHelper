@@ -12,8 +12,6 @@ const {
   updateTocItemName,
   updateSectionMetadata,
   sortTocItems,
-  getLanguageRoot,
-  cleanupEmptyDirectories,
 } = require("../utils");
 
 /** @import {SectionTypeOption} from '../utils/diplodocTypes' */
@@ -71,7 +69,7 @@ function reindexDirectory(
     try {
       tocDoc = loadTocFromFile(tocPath);
     } catch (e) {
-      console.error(`❌ Ошибка загрузки toc.yaml в ${dir}`);
+      console.error(`Ошибка загрузки toc.yaml в ${dir}`);
     }
   }
 
@@ -100,10 +98,6 @@ function reindexDirectory(
     sortTocItems(dir, sortOrder, sortKind);
     console.log(`   toc.yaml отсортирован`);
   }
-
-  // Очистка пустых папок после реиндексации
-  const languageRoot = getLanguageRoot(dir); // если функция доступна
-  cleanupEmptyDirectories(dir, languageRoot);
 }
 
 /**
@@ -190,7 +184,7 @@ function reindexAndRenameSection({
     }
 
     console.log(
-      `   ${hadManualIndex ? "📍" : "➕"} ${currentIndex} → ${newFolderName}`,
+      `   ${hadManualIndex ? "ручной" : "автоматический"} индекс ${currentIndex} - ${newFolderName}`,
     );
 
     return {
@@ -202,7 +196,7 @@ function reindexAndRenameSection({
   }
 
   // Для статей (Page) — не присваиваем индекс автоматически
-  console.log(`   📄 Статья без индекса: ${sectionName}`);
+  console.log(`   Статья без индекса: ${sectionName}`);
 
   return {
     sectionPath: oldSectionPath,

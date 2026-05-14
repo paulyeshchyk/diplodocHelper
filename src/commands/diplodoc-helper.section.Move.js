@@ -194,7 +194,7 @@ async function performMove(sourcePath, targetDir, position) {
       sectionInfo.sectionIndex || "",
     );
 
-    console.log(`Перемещён: ${sourceName} → ${newParentDir}`);
+    console.log(`Перемещён: ${sourceName} - ${newParentDir}`);
 
     // 4. Переиндексация обоих родителей
     reindexDirectory(oldParentDir);
@@ -202,7 +202,8 @@ async function performMove(sourcePath, targetDir, position) {
 
     return true;
   } catch (err) {
-    vscode.window.showErrorMessage(`Ошибка перемещения: ${err.message}`);
+    var msg = err instanceof Error ? err.message : `${err}`;
+    vscode.window.showErrorMessage(`Ошибка перемещения: ${msg}`);
     console.error(err);
     return false;
   }
