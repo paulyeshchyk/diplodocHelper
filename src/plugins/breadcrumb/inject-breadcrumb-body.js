@@ -7,6 +7,9 @@
     var lang = {{LANG}};
     var parentSegments = {{PARENT_SEGMENTS}};
 
+    /**
+ * @param {string} relativePath
+ */
     function getTitleForPath(relativePath) {
         var normalized = relativePath.replace(/\\/g, '/');
         if (titles[normalized]) return titles[normalized];
@@ -18,6 +21,9 @@
         return null;
     }
 
+    /**
+ * @param {string} name
+ */
     function beautify(name) {
         return name.replace(/([a-zа-яё])([A-ZА-ЯЁ])/g, '$1 $2')
                    .replace(/([A-ZА-ЯЁ])([A-ZА-ЯЁ][a-zа-яё])/g, '$1 $2');

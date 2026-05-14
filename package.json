@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/paulyeshchyk/diplodocHelper"
   },
-  "version": "0.9.0",
+  "version": "0.10.8",
   "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"
@@ -56,6 +56,10 @@
       {
         "command": "diplodoc-helper.generateHelpMaps",
         "title": "Сформировать навигационную карту для фронтэнд"
+      },
+      {
+        "command": "diplodoc-helper.generateBreadcrumbs",
+        "title": "Сформировать 'хлебные крошки'"
       }
     ],
     "submenus": [
@@ -142,6 +146,11 @@
           "group": "1diplodoc.generators.section.command@3"
         },
         {
+          "command": "diplodoc-helper.generateBreadcrumbs",
+          "when": "explorerResourceIsFolder",
+          "group": "1diplodoc.generators.section.command@4"
+        },
+        {
           "command": "diplodoc-helper.wipeEmptyDirectories",
           "when": "explorerResourceIsFolder",
           "group": "99diplodoc.generators.files.command@1"
@@ -150,7 +159,8 @@
     }
   },
   "dependencies": {
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "esbuild": "^0.28.0"

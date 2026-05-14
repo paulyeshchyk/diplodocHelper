@@ -14,9 +14,14 @@ const {
 const {
   generateContexts,
 } = require("./commands/diplodoc-helper.context.Generate");
+
 const {
   generateHelpmap,
 } = require("./commands/diplodoc-helper.helpMap.Generate");
+
+const {
+  generateBreadcrumbs,
+} = require("./commands/diplodoc-helper.breadCrumb.Generate");
 
 /**
  * @param {{ subscriptions: vscode.Disposable[]; extension: { packageJSON: { version: any; }; }; }} context
@@ -57,6 +62,11 @@ function activate(context) {
     generateHelpmap,
   );
 
+  const generateBreadcrumbsCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.generateBreadcrumbs",
+    generateBreadcrumbs,
+  );
+
   const copyLinkCmd = vscode.commands.registerCommand(
     "diplodoc-helper.copyLink",
     copyLink,
@@ -95,6 +105,7 @@ function activate(context) {
     moveSectionCmd,
     generateContextsCmd,
     generateHelpmapsCmd,
+    generateBreadcrumbsCmd,
     reindexCommand,
     wipeEmptyDirectoriesCmd,
   );
