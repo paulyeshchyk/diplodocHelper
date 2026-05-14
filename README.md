@@ -37,17 +37,18 @@ code --install-extension diplodochelper-0.7.0.vsix
 
 ## Сводка функций
 
-| Применяемость  | Наименование                                                                                                                                                   | Этап                   |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| Разделы        | [Создание раздела (`diplodoc-helper.createSection`)](#1-создание-раздела-diplodoc-helpercreatesection)                                                         | Редактирование         |
-|                | [Удаление раздела (`diplodoc-helper.deleteSection`)](#2-удаление-раздела-diplodoc-helperdeletesection))                                                        | Редактирование         |
-|                | [Переименование раздела и смена типа (`diplodoc-helper.renameSection`)](#3-переименование-раздела-и-смена-типа-diplodoc-helperrenamesection) Редактирование    |
-|                | [Переиндексация (`diplodoc-helper.reindex`)](#8-переиндексация-diplodoc-helperreindex)                                                                         | Редактирование, Сборка |
-| Ссылки         | [Копирование ссылки на статью (`diplodoc-helper.copyLink`)](#4-копирование-ссылки-на-статью-diplodoc-helpercopylink)                                           | Редактирование         |
-|                | [Вставка ссылки на статью (`diplodoc-helper.pasteLink`)](#5-вставка-ссылки-на-статью-diplodoc-helperpastelink)                                                 | Редактирование         |
-| Индексация     | [Генерация краткого указателя (`diplodoc-helper.generateContexts`)](#6-генерация-краткого-указателя-diplodoc-helpergeneratecontexts)                           | Редактирование, Сборка |
-|                | [Генерация списка контекстов для фронтенда (`diplodoc-helper.generateHelpMaps`)](#7-генерация-списка-контекстов-для-фронтенда-diplodoc-helpergeneratehelpmaps) | Редактирование, Сборка |
-| Хлебные крошки | [Хлебные крошки (`inject-breadcrumb.js`)](#9-хлебные-крошки-inject-breadcrumbjs)                                                                               | Сборка                 |
+| Применяемость       | Наименование                                                                                                                                                   | Этап                   |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| Разделы             | [Создание раздела (`diplodoc-helper.createSection`)](#1-создание-раздела-diplodoc-helpercreatesection)                                                         | Редактирование         |
+|                     | [Удаление раздела (`diplodoc-helper.deleteSection`)](#2-удаление-раздела-diplodoc-helperdeletesection))                                                        | Редактирование         |
+|                     | [Переименование раздела и смена типа (`diplodoc-helper.renameSection`)](#3-переименование-раздела-и-смена-типа-diplodoc-helperrenamesection) Редактирование    |
+|                     | [Переиндексация (`diplodoc-helper.reindex`)](#8-переиндексация-diplodoc-helperreindex)                                                                         | Редактирование, Сборка |
+| Ссылки              | [Копирование ссылки на статью (`diplodoc-helper.copyLink`)](#4-копирование-ссылки-на-статью-diplodoc-helpercopylink)                                           | Редактирование         |
+|                     | [Вставка ссылки на статью (`diplodoc-helper.pasteLink`)](#5-вставка-ссылки-на-статью-diplodoc-helperpastelink)                                                 | Редактирование         |
+| Индексация          | [Генерация краткого указателя (`diplodoc-helper.generateContexts`)](#6-генерация-краткого-указателя-diplodoc-helpergeneratecontexts)                           | Редактирование, Сборка |
+|                     | [Генерация списка контекстов для фронтенда (`diplodoc-helper.generateHelpMaps`)](#7-генерация-списка-контекстов-для-фронтенда-diplodoc-helpergeneratehelpmaps) | Редактирование, Сборка |
+| Хлебные крошки      | [Хлебные крошки (`inject-breadcrumb.js`)](#9-хлебные-крошки-inject-breadcrumbjs)                                                                               | Сборка                 |
+| Перемещение раздела | [Перемещение раздела (`diplodoc-helper.moveSection`)](#10-перемещение-раздела-diplodoc-helpermoveSection)                                                      | Редактирование         |
 
 ## Команды расширения Diplodoc Helper
 
