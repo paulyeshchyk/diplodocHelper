@@ -15,3 +15,5 @@
  * @property {string | undefined} [sectionIndex]
  * @property {string | undefined} [sectionType]
  */
+
+module.exports = [];

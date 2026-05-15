@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/paulyeshchyk/diplodocHelper"
   },
-  "version": "0.10.39",
+  "version": "0.11.0",
   "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"
@@ -160,7 +160,8 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "window": "^4.2.7"
   },
   "devDependencies": {
     "esbuild": "^0.28.0"

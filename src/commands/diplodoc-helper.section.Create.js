@@ -92,8 +92,8 @@ async function createSection(uri) {
     TocYamlEntryPatchItems(
       targetDir,
       sectionName,
+      sectionType.value,
       folderResult.folderName,
-      sectionType.name,
       sectionIndex,
     );
 

@@ -1,5 +1,5 @@
 // diplodoc-helper.breadCrumb.Generate.js
-const { runGeneration } = require("../plugins/breadcrumb/inject-breadcrumb");
+const { runGeneration } = require("../plugins/breadcrumb/breadcrumb");
 const path = require("path");
 let vscode = require("vscode");
 

@@ -1,13 +1,9 @@
 #!/usr/bin/env node
-const {
-  runGeneration: generateHelpMap,
-} = require("./helpMap/generateHelpMap");
-const {
-  runGeneration: generateContexts,
-} = require("./contexts/generateContexts");
+const { runGeneration: generateHelpMap } = require("./helpMap/helpMap.js");
+const { runGeneration: generateContexts } = require("./contexts/сontexts.js");
 const {
   runGeneration: generateBreadcrumb,
-} = require("./breadcrumb/inject-breadcrumb.js");
+} = require("./breadcrumb/breadcrumb.js");
 
 // Если запускают как cli
 if (require.main === module) {

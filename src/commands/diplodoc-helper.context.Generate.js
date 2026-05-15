@@ -1,5 +1,5 @@
 // diplodoc-helper.generateContexts.js
-const { runGeneration } = require("../plugins/contexts/generateContexts");
+const { runGeneration } = require("../plugins/contexts/сontexts");
 const path = require("path");
 let vscode = require("vscode");
 
@@ -7,7 +7,7 @@ async function generateContexts() {
   const workspaceFolders = vscode.workspace.workspaceFolders;
   if (!workspaceFolders) return;
   const projectRoot = workspaceFolders[0].uri.fsPath;
-  const DOCS_ROOT = path.join(projectRoot, "docs");
+  const DOCS_ROOT = projectRoot; //path.join(projectRoot, "docs");
 
   const results = runGeneration(DOCS_ROOT);
 

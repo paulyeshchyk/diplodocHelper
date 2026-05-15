@@ -21,7 +21,7 @@ const vscode = require("vscode");
 const outputFolderName = "build";
 const docsFolderName = "docs";
 
-const { runGeneration } = require("../plugins/helpMap/generateHelpMap");
+const { runGeneration } = require("../plugins/helpMap/helpMap");
 
 /**
  * Вызов из VS Code (Команда расширения)

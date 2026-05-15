@@ -1,12 +1,16 @@
-// src/core/contexts-writer.js
+// src/plugins/contexts/generateContexts.writer.js
 const fs = require("fs");
 const path = require("path");
+const { slugify } = require("../core/utils");
 const {
-  slugify,
   INDEX_MD_DEFAULT_CONTENT,
-} = require("./generateContexts.utils");
+  TOC_YAML_LINKS_TEMPLATE,
+  TOC_YAML_LINK_TEMPLATE,
+  INDEX_TAML_LINKS_TEMPLATE,
+  INDEX_YAML_LINK_TEMPLATE,
+} = require("./contexts.template");
 
-/** @import {ContextMap} from '../core/basetypes' */
+/** @import {ContextMap} from '../core/types' */
 
 /**
  * @param {string} outputDir
@@ -69,28 +73,23 @@ function writeTocAndIndexYaml(outputDir, sortedTerms, contextMap, lang) {
     slug: slugify(t),
   }));
 
-  // toc.yaml
   const tocItems = slugifiedItems
-    .map((i) => `  - name: ${i.term}\n    href: ${i.slug}.md`)
+    .map((i) => TOC_YAML_LINK_TEMPLATE(i))
     .join("\n");
 
   fs.writeFileSync(
     path.join(outputDir, "toc.yaml"),
-    `title: ${title}\nhref: index.md\nitems:\n${tocItems}`,
+    TOC_YAML_LINKS_TEMPLATE(title, tocItems),
     "utf8",
   );
 
-  // index.yaml
   const linksYaml = slugifiedItems
-    .map(
-      (i) =>
-        `- title: ${i.term}\n  description: "Rank: ${contextMap[i.term].rank}"\n  href: ${i.slug}.md`,
-    )
+    .map((i) => INDEX_YAML_LINK_TEMPLATE(i, contextMap))
     .join("\n");
 
   fs.writeFileSync(
     path.join(outputDir, "index.yaml"),
-    `title: ${title}\nlinks:\n${linksYaml}`,
+    INDEX_TAML_LINKS_TEMPLATE(title, linksYaml),
     "utf8",
   );
 }

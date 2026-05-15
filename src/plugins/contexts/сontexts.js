@@ -1,14 +1,16 @@
-// src/core/generateContexts.js
+// plugins/contexts/contexts.js
 const path = require("path");
 const fs = require("fs");
-/** @import {PluginExecutionResult, PageInfo, ContextData, ContextMap} from '../core/basetypes' */
 
-const { collectContextsForLang } = require("./generateContexts.collector");
+const { walkMdFilesGetContexts } = require("./сontexts.collector");
 const {
   writeTermFiles,
   writeIndexMd,
   writeTocAndIndexYaml,
-} = require("./generateContexts.writer");
+} = require("./contexts.writer");
+
+/** @import {PluginExecutionResult} from '../core/types' */
+/** @import {ContextMap} from '../core/types' */
 
 /**
  * @param {string} lang
@@ -21,9 +23,7 @@ function generateFilesForLang(lang, langDir, contextMap) {
     if (Object.keys(contextMap).length === 0) return false;
 
     const outputDir = path.join(langDir, "contexts");
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
     const sortedTerms = Object.keys(contextMap).sort((a, b) =>
       a.localeCompare(b, undefined, { sensitivity: "base" }),
@@ -43,20 +43,18 @@ function generateFilesForLang(lang, langDir, contextMap) {
 }
 
 /**
- * Основная функция генерации контекстов
  * @param {string} docsRoot
- * @returns {{ success: string[], failed: string[] }}
+ * @returns {PluginExecutionResult}
  */
 function runGeneration(docsRoot) {
   const LANGUAGES = ["ru", "en"];
-
-  /** @type {{ success: string[], failed: string[] }} */
+  /** @type {PluginExecutionResult} */
   const results = { success: [], failed: [] };
 
   for (const lang of LANGUAGES) {
     const langDir = path.join(docsRoot, lang);
     if (fs.existsSync(langDir)) {
-      const contextMap = collectContextsForLang(langDir);
+      const contextMap = walkMdFilesGetContexts(langDir);
       if (generateFilesForLang(lang, langDir, contextMap)) {
         results.success.push(lang);
       } else {
