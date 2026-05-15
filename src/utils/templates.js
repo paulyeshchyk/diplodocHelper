@@ -16,9 +16,10 @@ function TEMPLATE_FINAL_TITLE(sectionValue, sectionIndex, title) {
     return title;
   }
 
-  const leftPart = sectionIndex.trim().length === 0
-    ? sectionValue
-    : `${sectionValue} ${sectionIndex.trim()}`;
+  const leftPart =
+    sectionIndex.trim().length === 0
+      ? sectionValue
+      : `${sectionValue} ${sectionIndex.trim()}`;
   return `${leftPart}. ${title}`;
 }
 
@@ -26,15 +27,16 @@ const TEMPLATE_INDEX_MD = (
   /** @type {string} */ title,
   /** @type {any} */ sectionType,
   /** @type {string} */ sectionValue,
-  /** @type {string} */ sectionIndex
-) => [
-  `---`,
-  `${FrontMatterMeta.TITLE}: ${TEMPLATE_FINAL_TITLE(sectionValue, sectionIndex, title)}`,
-  `${FrontMatterMeta.SECTIONTYPE}: ${sectionType}`,
-  `${FrontMatterMeta.PURETITLE}: ${title}`,
-  `${FrontMatterMeta.SECTIONINDEX}: ${sectionIndex}`,
-  `---`,
-].join("\n");
+  /** @type {string} */ sectionIndex,
+) =>
+  [
+    `---`,
+    `${FrontMatterMeta.TITLE}: ${TEMPLATE_FINAL_TITLE(sectionValue, sectionIndex, title)}`,
+    `${FrontMatterMeta.SECTIONTYPE}: ${sectionType}`,
+    `${FrontMatterMeta.PURETITLE}: ${title}`,
+    `${FrontMatterMeta.SECTIONINDEX}: ${sectionIndex}`,
+    `---`,
+  ].join("\n");
 
 /**
  * @param {string} title
@@ -54,18 +56,29 @@ function TEMPLATE_INDEX_YAML(title, sectionType, sectionValue, sectionIndex) {
   ].join("\n");
 }
 
-const TEMPLATE_TOC_YAML = (/** @type {string} */ title, /** @type {string} */ sectionLabel, /** @type {string} */ sectionIndex) => [
-  `${FrontMatterToc.TITLE}: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title)}`,
-  `${FrontMatterToc.HREF}: ${FrontMatterFiles.INDEX_YAML}`,
-].join("\n");
+const TEMPLATE_TOC_YAML = (
+  /** @type {string} */ title,
+  /** @type {string} */ sectionLabel,
+  /** @type {string} */ sectionIndex,
+) =>
+  [
+    `${FrontMatterToc.TITLE}: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title)}`,
+    `${FrontMatterToc.HREF}: ${FrontMatterFiles.INDEX_YAML}`,
+  ].join("\n");
 
-const TEMPLATE_PARENT_TOC_YAML = (/** @type {string} */ name, /** @type {string} */ sectionLabel, /** @type {any} */ folderName, /** @type {string} */ sectionIndex) => [
-  `  - ${FrontMatterToc.ITEMS_NAME}: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, name)}`,
-  `    ${FrontMatterToc.ITEMS_HREF}: ${folderName}/${FrontMatterFiles.INDEX_MD}`,
-  `    ${FrontMatterToc.ITEMS_INCLUDE}:`,
-  `      ${FrontMatterToc.ITEMS_INCLUDE_PATH}: ${folderName}/${FrontMatterFiles.TOC_YAML}`,
-  `      ${FrontMatterToc.ITEMS_INCLUDE_MODE}: link`,
-].join("\n");
+const TEMPLATE_PARENT_TOC_YAML = (
+  /** @type {string} */ name,
+  /** @type {string} */ sectionLabel,
+  /** @type {any} */ folderName,
+  /** @type {string} */ sectionIndex,
+) =>
+  [
+    `  - ${FrontMatterToc.ITEMS_NAME}: ${name}`,
+    `    ${FrontMatterToc.ITEMS_HREF}: ${folderName}/${FrontMatterFiles.INDEX_MD}`,
+    `    ${FrontMatterToc.ITEMS_INCLUDE}:`,
+    `      ${FrontMatterToc.ITEMS_INCLUDE_PATH}: ${folderName}/${FrontMatterFiles.TOC_YAML}`,
+    `      ${FrontMatterToc.ITEMS_INCLUDE_MODE}: link`,
+  ].join("\n");
 
 /** @import {SectionTypeOption} from  './diplodocTypes'*/
 
@@ -86,7 +99,6 @@ function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = "") {
     }
   } else {
     return cleanName;
-
   }
 }
 
@@ -97,7 +109,7 @@ function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = "") {
  * @param {string | undefined} sectionIndex
  */
 function TEMPLATE_SECTION_NAME(sectionType, sectionName, sectionIndex = "") {
-  const cleanName = sectionName;//.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
+  const cleanName = sectionName; //.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
 
   if (sectionType.value.trim() !== "") {
     if (sectionIndex && sectionIndex.trim() !== "") {
