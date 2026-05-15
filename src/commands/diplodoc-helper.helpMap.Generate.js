@@ -10,6 +10,9 @@ const vscode = require("vscode");
  * @property {string} hint - Подсказка из метаданных
  * @property {string} context - Значение тега helptag
  * @property {string} lang - Языковой код (ru, en и т.д.)
+ * /
+ 
+/** 
  * @typedef {Object} GenerationResults
  * @property {HelpEntry[]} success - Успешно обработанные записи
  * @property {string[]} failed - Пути к файлам, вызвавшим ошибку
