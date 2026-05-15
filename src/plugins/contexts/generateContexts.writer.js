@@ -1,0 +1,102 @@
+// src/core/contexts-writer.js
+const fs = require("fs");
+const path = require("path");
+const {
+  slugify,
+  INDEX_MD_DEFAULT_CONTENT,
+} = require("./generateContexts.utils");
+
+/** @import {ContextMap} from '../core/basetypes' */
+
+/**
+ * @param {string} outputDir
+ * @param {string[]} sortedTerms
+ * @param {ContextMap} contextMap
+ */
+function writeTermFiles(outputDir, sortedTerms, contextMap) {
+  for (const term of sortedTerms) {
+    const slug = slugify(term);
+    let content = `# ${term.toUpperCase()}\n\n`;
+    contextMap[term]?.pages.forEach((p) => {
+      content += `* [${p.title}](../${p.href})\n`;
+    });
+    fs.writeFileSync(path.join(outputDir, `${slug}.md`), content, "utf8");
+  }
+}
+
+/**
+ * @param {string} outputDir
+ * @param {string[]} sortedTerms
+ * @param {ContextMap} contextMap
+ * @param {string} lang
+ * @param {string} title
+ */
+function writeIndexMd(outputDir, sortedTerms, contextMap, lang, title) {
+  const suffix = lang === "ru" ? "ст." : "docs";
+  let content = INDEX_MD_DEFAULT_CONTENT(title);
+  let currentLetter = "";
+
+  for (const term of sortedTerms) {
+    const firstLetter = term.charAt(0).toUpperCase();
+    const slug = slugify(term);
+    const count = contextMap[term]?.rank || 0;
+
+    if (firstLetter !== currentLetter) {
+      if (currentLetter !== "") content += "\n";
+      content += `\n## ${firstLetter}\n`;
+      currentLetter = firstLetter;
+    }
+    content += `* [${term}](${slug}.md) (${count} ${suffix})\n`;
+  }
+
+  fs.writeFileSync(
+    path.join(outputDir, "index.md"),
+    content.trim() + "\n",
+    "utf8",
+  );
+}
+
+/**
+ * @param {string} outputDir
+ * @param {string[]} sortedTerms
+ * @param {ContextMap} contextMap
+ * @param {string} lang
+ */
+function writeTocAndIndexYaml(outputDir, sortedTerms, contextMap, lang) {
+  const title = lang === "ru" ? "Контексты" : "Contexts";
+  const slugifiedItems = sortedTerms.map((t) => ({
+    term: t,
+    slug: slugify(t),
+  }));
+
+  // toc.yaml
+  const tocItems = slugifiedItems
+    .map((i) => `  - name: ${i.term}\n    href: ${i.slug}.md`)
+    .join("\n");
+
+  fs.writeFileSync(
+    path.join(outputDir, "toc.yaml"),
+    `title: ${title}\nhref: index.md\nitems:\n${tocItems}`,
+    "utf8",
+  );
+
+  // index.yaml
+  const linksYaml = slugifiedItems
+    .map(
+      (i) =>
+        `- title: ${i.term}\n  description: "Rank: ${contextMap[i.term].rank}"\n  href: ${i.slug}.md`,
+    )
+    .join("\n");
+
+  fs.writeFileSync(
+    path.join(outputDir, "index.yaml"),
+    `title: ${title}\nlinks:\n${linksYaml}`,
+    "utf8",
+  );
+}
+
+module.exports = {
+  writeTermFiles,
+  writeIndexMd,
+  writeTocAndIndexYaml,
+};
