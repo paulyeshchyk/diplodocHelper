@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { FrontMatterFiles } = require("./constants");
 
-const { TEMPLATE_INDEX_MD } = require(".");
+const { TEMPLATE_INDEX_MD } = require("./templates");
 
 // === Функции для Rename (обновление метаданных) ===
 

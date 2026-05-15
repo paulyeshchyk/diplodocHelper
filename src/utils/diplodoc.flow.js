@@ -3,12 +3,12 @@ const path = require("path");
 
 /** @import { SectionTypeOption } from './diplodocTypes' */
 /** @import { CreateFolderResult } from './directory' */
-const { TEMPLATE_FOLDER_NAME } = require(".");
+const { TEMPLATE_FOLDER_NAME } = require("../utils/templates");
 
-const { TocYamlEntryPatchReference } = require(".");
-const { IndexMdFilePatch } = require(".");
-const { IndexYamlEntryPatchSection } = require(".");
-const { TocYamlEntryPatchTitle } = require(".");
+const { TocYamlEntryPatchReference } = require("../utils/toc.yaml.entry");
+const { IndexMdFilePatch } = require("../utils/index.md.file");
+const { IndexYamlEntryPatchSection } = require("../utils/index.yaml.entry");
+const { TocYamlEntryPatchTitle } = require("../utils/toc.yaml.entry");
 
 const { canCreateFolder, createDirectory } = require("./directory");
 

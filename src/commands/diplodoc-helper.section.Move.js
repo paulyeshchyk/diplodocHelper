@@ -1,11 +1,14 @@
 // src/commands/diplodoc-helper.section.Move.js
+
+"use strict";
+
 const vscode = require("vscode");
 const fs = require("fs");
 const path = require("path");
 
 const { isDiplodocSection, getSectionMetadata } = require("../utils");
 const { getLanguageRoot } = require("../utils/directory");
-const { reindexDirectory } = require("./diplodoc-helper.section.Reindex");
+const { reindexDirectory } = require("../core/reindex");
 const { TocYamlEntryRemove, TocYamlEntryCreate } = require("../utils");
 
 /**

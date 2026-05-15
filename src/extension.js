@@ -89,9 +89,9 @@ function activate(context) {
         },
         async () => {
           const {
-            reindexDirectory,
+            reindexCommand,
           } = require("./commands/diplodoc-helper.section.Reindex");
-          reindexDirectory(uri.fsPath);
+          await reindexCommand(uri);
           vscode.window.showInformationMessage("Переиндексация завершена!");
         },
       );
