@@ -39,6 +39,8 @@ const FrontMatterSectionTypesIndexed = [
   FrontMatterSectionTypes.PART,
   FrontMatterSectionTypes.SECTION,
   FrontMatterSectionTypes.CHAPTER,
+
+  FrontMatterSectionTypes.PAGE,
 ];
 
 module.exports = {

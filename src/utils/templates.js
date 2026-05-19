@@ -84,24 +84,32 @@ const TEMPLATE_PARENT_TOC_YAML = (
 
 /**
  * Генерирует имя папки раздела
+ *
  * @param {SectionTypeOption} sectionType
  * @param {string} sectionName
  * @param {string | undefined} sectionIndex
+ * @returns {string}
  */
 function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = "") {
   const cleanName = sectionName.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
+  const hasType = !!sectionType.value?.trim();
+  const hasIndex = !!(sectionIndex && sectionIndex.trim() !== "");
 
-  if (sectionType.value.trim() !== "") {
-    if (sectionIndex && sectionIndex.trim() !== "") {
-      return `${sectionType.label}${sectionIndex.trim()}.${cleanName}`;
-    } else {
-      return `${sectionType.label}.${cleanName}`;
-    }
-  } else {
-    return cleanName;
+  // 1. Есть и тип, и индекс
+  if (hasType && hasIndex) {
+    return `${sectionType.label}${sectionIndex.trim()}.${cleanName}`;
   }
+  // 2. Есть тип, но нет индекса
+  if (hasType && !hasIndex) {
+    return `${sectionType.label}.${cleanName}`;
+  }
+  // 3. Нет типа, но есть индекс
+  if (!hasType && hasIndex) {
+    return `${sectionIndex.trim()}.${cleanName}`;
+  }
+  // 4. Нет ни типа, ни индекса
+  return cleanName;
 }
-
 /**
  * Генерирует имя папки раздела
  * @param {SectionTypeOption} sectionType

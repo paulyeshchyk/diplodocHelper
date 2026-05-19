@@ -1,3 +1,5 @@
+// index.md.entry.js
+
 const { IndexMdFileRead } = require("./index.md.file");
 
 /**

@@ -1,3 +1,5 @@
+// diplodoc.flow.js
+
 const fs = require("fs");
 const path = require("path");
 
@@ -9,6 +11,7 @@ const { TocYamlEntryPatchReference } = require("../utils/toc.yaml.entry");
 const { IndexMdFilePatch } = require("../utils/index.md.file");
 const { IndexYamlEntryPatchSection } = require("../utils/index.yaml.entry");
 const { TocYamlEntryPatchTitle } = require("../utils/toc.yaml.entry");
+const { composeFullTitle } = require("../utils/sectionTitle")
 
 const { canCreateFolder, createDirectory } = require("./directory");
 
@@ -50,10 +53,14 @@ function IndexMdEntryPatch(
   sectionLabel,
   sectionIndex = "",
 ) {
-  const composedTitle =
-    sectionIndex && sectionIndex.trim() !== ""
-      ? `${sectionLabel} ${sectionIndex}. ${pureTitle}`
-      : pureTitle;
+
+  const sectionTypeOpt = {
+    value: sectionLabel,
+    name: sectionTypeName,
+    label: "",
+    description: "",
+  }
+  const composedTitle = composeFullTitle(sectionIndex, sectionTypeOpt, pureTitle);
 
   // index.md используем gray-matter (это frontmatter)
   IndexMdFilePatch(

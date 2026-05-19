@@ -6,6 +6,8 @@ const path = require("path");
 const { promptSection, IndexMdEntryReadTitle } = require("../utils");
 const { isDiplodocSection } = require("../utils");
 const { IndexMdEntryReadIndex, IndexMdEntryPatch } = require("../utils");
+const { updateLinksAfterRename } = require("../utils/linksUpdater")
+const { getLanguageRoot } = require("../utils/directory")
 
 const {
   TocYamlEntryRemove,
@@ -14,7 +16,7 @@ const {
   renameSectionFolderIfNeeded,
 } = require("../utils");
 
-const { TEMPLATE_FOLDER_NAME } = require("../utils");
+const { composeFullTitle, isIndexedSectionType, composeFolderName } = require("../utils/sectionTitle")
 
 /**
  * @param {{ fsPath: any; }} uri
@@ -41,15 +43,19 @@ async function renameSection(uri) {
     return;
   }
 
-  const finalIndex = newSectionObject.userIndex?.trim() || "";
-
+  let finalIndex = newSectionObject.userIndex?.trim() || "";
   const newPureTitle = newSectionObject.newPureTitle;
+  const newSectionType = newSectionObject.newSectionType;
 
-  const newFolderName = TEMPLATE_FOLDER_NAME(
-    newSectionObject.newSectionType,
-    newPureTitle,
-    finalIndex,
-  );
+  // Нормализация индекса в зависимости от типа
+  const isIndexed = isIndexedSectionType(newSectionType);
+  if (!isIndexed) finalIndex = ""; // игнорируем индекс для неиндексируемых типов
+
+  // Единое формирование полного заголовка
+  const fullTitle = composeFullTitle(finalIndex, newSectionType, newPureTitle);
+
+  // Имя папки
+  const newFolderName = composeFolderName(finalIndex, newSectionType, newPureTitle);
 
   const newFolderPath = path.join(parentDir, newFolderName);
 
@@ -57,10 +63,6 @@ async function renameSection(uri) {
     vscode.window.showErrorMessage(`Папка ${newFolderName} уже существует.`);
     return;
   }
-
-  const composedTitle = finalIndex
-    ? `${newSectionObject.newSectionType.label} ${finalIndex}. ${newPureTitle}`
-    : newPureTitle;
 
   // 1. Удаляем старую запись из родительского toc
   TocYamlEntryRemove(parentDir, oldFolderName);
@@ -90,11 +92,15 @@ async function renameSection(uri) {
     // 3. Добавляем новую запись в родительский toc
     TocYamlEntryCreate(
       parentDir,
-      composedTitle,
+      fullTitle,
       finalFolderName,
       newSectionObject.newSectionType.value,
       finalIndex,
     );
+
+    // 4. Обновление ссылок
+    const projectRoot = getLanguageRoot(parentDir);
+    const updatedFiles = await updateLinksAfterRename(oldFolderPath, newFolderPath, projectRoot);
 
     vscode.window.showInformationMessage(
       `Раздел переименован: "${oldFolderName}"  "${finalFolderName}"`,
