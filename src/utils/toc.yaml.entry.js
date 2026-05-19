@@ -1,3 +1,5 @@
+// toc.yaml.entry.js
+
 const fs = require("fs");
 const path = require("path");
 const { IndexYamlEntryPatchHRef } = require("./index.yaml.entry");

@@ -7,10 +7,10 @@ const {
   TocYamlFileCreate,
   TocYamlEntryPatchItems,
   createSectionFolder,
-  TEMPLATE_SECTION_NAME,
 } = require("../utils"); // используем barrel
 
-const { FrontMatterSectionTypesIndexed } = require("../utils");
+const { FrontMatterSectionTypesIndexed } = require("../utils/constants");
+const { composeFullTitle } = require("../utils/sectionTitle")
 
 const {
   ShowSectionNameSelector,
@@ -59,16 +59,12 @@ async function createSection(uri) {
   );
   if (!folderResult) return;
 
-  const sectionName = TEMPLATE_SECTION_NAME(
-    sectionType,
-    userSectionName,
-    sectionIndex,
-  );
+  const fullTitle = composeFullTitle(sectionIndex, sectionType, userSectionName);
 
   try {
     IndexMdFileCreate(
       folderResult.folderPath,
-      userSectionName,
+      fullTitle,
       sectionType.name,
       sectionType.value,
       sectionIndex,
@@ -76,7 +72,7 @@ async function createSection(uri) {
 
     IndexYamlFileCreate(
       folderResult.folderPath,
-      sectionName,
+      fullTitle,
       sectionType.name,
       sectionType.value,
       sectionIndex,
@@ -84,21 +80,21 @@ async function createSection(uri) {
 
     TocYamlFileCreate(
       folderResult.folderPath,
-      sectionName,
+      fullTitle,
       sectionType.value,
       sectionIndex,
     );
 
     TocYamlEntryPatchItems(
       targetDir,
-      sectionName,
+      fullTitle,
       sectionType.value,
       folderResult.folderName,
       sectionIndex,
     );
 
     vscode.window.showInformationMessage(
-      `Раздел "${sectionName}" (${sectionType.label}) создан!`,
+      `Раздел "${fullTitle}" (${sectionType.label}) создан!`,
     );
   } catch (err) {
     let msg = err instanceof Error ? err.message : "${err}";
@@ -107,3 +103,5 @@ async function createSection(uri) {
 }
 
 module.exports = { createSection };
+
+
