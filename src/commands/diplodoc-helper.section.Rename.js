@@ -6,6 +6,8 @@ const path = require("path");
 const { promptSection, IndexMdEntryReadTitle } = require("../utils");
 const { isDiplodocSection } = require("../utils");
 const { IndexMdEntryReadIndex, IndexMdEntryPatch } = require("../utils");
+const { updateLinksAfterRename } = require("../utils/linksUpdater")
+const { getLanguageRoot } = require("../utils/directory")
 
 const {
   TocYamlEntryRemove,
@@ -95,6 +97,10 @@ async function renameSection(uri) {
       newSectionObject.newSectionType.value,
       finalIndex,
     );
+
+    // 4. Обновление ссылок
+    const projectRoot = getLanguageRoot(parentDir);
+    const updatedFiles = await updateLinksAfterRename(oldFolderPath, newFolderPath, projectRoot);
 
     vscode.window.showInformationMessage(
       `Раздел переименован: "${oldFolderName}"  "${finalFolderName}"`,
