@@ -8,6 +8,7 @@ const { isDiplodocSection } = require("../utils");
 const { IndexMdEntryReadIndex, IndexMdEntryPatch } = require("../utils");
 const { updateLinksAfterRename } = require("../utils/linksUpdater")
 const { getLanguageRoot } = require("../utils/directory")
+const { sortTocItems } = require("../utils/toc.yaml.sort");
 
 const {
   TocYamlEntryRemove,
@@ -100,7 +101,10 @@ async function renameSection(uri) {
 
     // 4. Обновление ссылок
     const projectRoot = getLanguageRoot(parentDir);
-    const updatedFiles = await updateLinksAfterRename(oldFolderPath, newFolderPath, projectRoot);
+    await updateLinksAfterRename(oldFolderPath, newFolderPath, projectRoot);
+
+    // 5. Сортировка родительского toc.yaml по индексам
+    sortTocItems(parentDir); // сортировка по возрастанию, неиндексированные внизу
 
     vscode.window.showInformationMessage(
       `Раздел переименован: "${oldFolderName}"  "${finalFolderName}"`,
