@@ -10,6 +10,7 @@ const { isDiplodocSection, getSectionMetadata } = require("../utils");
 const { getLanguageRoot } = require("../utils/directory");
 const { reindexDirectory } = require("../core/reindex");
 const { TocYamlEntryRemove, TocYamlEntryCreate } = require("../utils");
+const { updateLinksAfterRename } = require("../utils/linksUpdater");
 
 /**
  * @typedef {Object} MoveTarget
@@ -183,7 +184,17 @@ async function performMove(sourcePath, targetDir, position) {
     // 2. Перемещаем папку
     fs.renameSync(sourcePath, targetPath);
 
-    // 3. Добавляем запись в новый родитель
+    // 3. Обновляем ссылки на перемещённый раздел и его содержимое
+    const projectRoot = getLanguageRoot(targetPath);
+    const updatedFiles = await updateLinksAfterRename(sourcePath, targetPath, projectRoot);
+    if (updatedFiles > 0) {
+      vscode.window.showInformationMessage(`Обновлено ссылок в ${updatedFiles} файлах`);
+      vscode.window.showWarningMessage(
+        "Раздел перемещён. Ссылки изнутри этого раздела на внешние файлы могли сломаться. Проверьте их вручную."
+      );
+    }
+
+    // 4. Добавляем запись в новый родитель
     const composedTitle = await getComposedTitle(targetPath);
 
     // Получаем метаданные для корректного добавления
