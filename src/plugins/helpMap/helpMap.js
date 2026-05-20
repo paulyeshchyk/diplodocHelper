@@ -5,33 +5,26 @@ const matter = require("gray-matter");
 
 /**
  * @typedef {Object} HelpEntry
- * @property {string} url - Относительный путь к файлу без расширения
- * @property {string} title - Заголовок статьи
- * @property {string} hint - Подсказка из метаданных
- * @property {string} context - Значение тега helptag
- * @property {string} lang - Языковой код (ru, en и т.д.)
- * @typedef {Object} GenerationResults
- * @property {HelpEntry[]} success - Успешно обработанные записи
- * @property {string[]} failed - Пути к файлам, вызвавшим ошибку
+ * @property {string} url      - Относительный путь с .html (index.html или article.html)
+ * @property {string} title    - Заголовок статьи
+ * @property {string} hint     - Подсказка (hint)
+ * @property {string} context  - helptag (если есть)
+ * @property {string} lang     - Языковой код (ru, en и т.д.)
  */
 
-const defaultTitleValue = "Без заголовка";
+const defaultTitleValue = "";
 const defaultHintValue = "";
+const defaultContextValue = "";
 
 /**
- * Собирает данные для help-карты
+ * Собирает данные по всем статьям
  * @param {string} docsDir
- * @returns {GenerationResults}
+ * @returns {{ success: HelpEntry[], failed: string[] }}
  */
 function collectHelpData(docsDir) {
-  /**
-   * @type {HelpEntry[]}
-   */
+  /** @type {HelpEntry[]} */
   const success = [];
-
-  /**
-   * @type {string[]}
-   */
+  /** @type {string[]} */
   const failed = [];
 
   /**
@@ -39,6 +32,7 @@ function collectHelpData(docsDir) {
    */
   function walk(dir) {
     if (!fs.existsSync(dir)) return;
+
     const files = fs.readdirSync(dir);
 
     files.forEach((file) => {
@@ -47,31 +41,45 @@ function collectHelpData(docsDir) {
 
       if (fs.statSync(fullPath).isDirectory()) {
         walk(fullPath);
-      } else if (file.endsWith(".md")) {
+      }
+      else if (file.endsWith(".md")) {
         try {
           const content = fs.readFileSync(fullPath, "utf8");
           const { data } = matter(content);
 
-          if (data.helptag) {
-            const relativePath = path
-              .relative(docsDir, fullPath)
-              .replace(/\.md$/, "")
-              .replace(/\\/g, "/");
-
-            // Структура Diplodoc обычно: docs/ru/article.md -> lang = ru
-            const lang = relativePath.split("/")[0] || "default";
-
-            /** @type {HelpEntry} */
-            const entry = {
-              url: relativePath,
-              title: data.title || defaultTitleValue,
-              hint: data.hint || defaultHintValue,
-              context: data.helptag,
-              lang: lang,
-            };
-            success.push(entry);
+          let title = "";
+          if (data.pureTitle && String(data.pureTitle).trim() !== "") {
+            title = String(data.pureTitle).trim();
+          } else if (data.title && String(data.title).trim() !== "") {
+            title = String(data.title).trim();
           }
+
+          let relativePath = path
+            .relative(docsDir, fullPath)
+            .replace(/\.md$/, "")
+            .replace(/\\/g, "/");
+
+          // Приводим к корректному виду с расширением .html
+          if (relativePath.endsWith("/index") || relativePath === "index") {
+            relativePath += ".html";
+          } else if (!relativePath.endsWith(".html")) {
+            relativePath += ".html";
+          }
+
+          const lang = relativePath.split("/")[0] || "default";
+
+          /** @type {HelpEntry} */
+          const entry = {
+            url: relativePath,
+            title: title.trim() || defaultTitleValue,
+            hint: data.hint?.trim() || defaultHintValue,
+            context: data.helptag?.trim() || defaultContextValue,
+            lang: lang,
+          };
+
+          success.push(entry);
         } catch (err) {
+          console.error(`Ошибка обработки файла ${fullPath}:`, err.message);
           failed.push(fullPath);
         }
       }
@@ -82,16 +90,14 @@ function collectHelpData(docsDir) {
   return { success, failed };
 }
 
+// ====================== НАСТРОЙКИ ======================
+
 const outputFileName = "app-help-contents.json";
 const outputFolderName = "build";
 const docsFolderName = "docs";
 
 /**
- * Основная логика генерации и сохранения
- * @param {Object} options
- * @param {string} options.docsDir - Откуда берем md
- * @param {string} options.outputDir - Куда кладем json (по умолчанию 'build')
- * @param {boolean} options.segregation - Разделять ли по языкам
+ * Основная функция генерации
  */
 function runGeneration({
   docsDir,
@@ -99,6 +105,7 @@ function runGeneration({
   segregation = false,
 }) {
   const results = collectHelpData(docsDir);
+
   const absoluteOutputDir = path.isAbsolute(outputDir)
     ? outputDir
     : path.join(process.cwd(), outputDir);
@@ -108,7 +115,6 @@ function runGeneration({
   }
 
   if (segregation) {
-    // Группируем по языкам
     const langMap = results.success.reduce((acc, item) => {
       if (!acc[item.lang]) acc[item.lang] = [];
       acc[item.lang].push(item);
@@ -120,24 +126,26 @@ function runGeneration({
       if (!fs.existsSync(langPath)) fs.mkdirSync(langPath, { recursive: true });
 
       const filePath = path.join(langPath, outputFileName);
-      fs.writeFileSync(filePath, JSON.stringify(items, null, 2));
-      console.log(`[${lang}] Файл сохранён: ${filePath}`);
+      fs.writeFileSync(filePath, JSON.stringify(items, null, 2), "utf8");
+      console.log(`[${lang}] Сохранено ${items.length} статей`);
     }
   } else {
-    // Сохраняем одним файлом
     const outputPath = path.join(absoluteOutputDir, outputFileName);
-    fs.writeFileSync(outputPath, JSON.stringify(results.success, null, 2));
-    console.log(`Общий файл сохранён: ${outputPath}`);
+    fs.writeFileSync(outputPath, JSON.stringify(results.success, null, 2), "utf8");
+    console.log(`Общий файл сохранён: ${outputPath} (${results.success.length} статей)`);
+  }
+
+  if (results.failed.length > 0) {
+    console.warn(`Не удалось обработать ${results.failed.length} файлов`);
   }
 
   return results;
 }
 
-// Запуск через CLI (node script.js)
+// ====================== ЗАПУСК ======================
+
 if (require.main === module) {
   const projectRoot = process.cwd();
-
-  // В будущем тут можно использовать библиотеку 'yargs' для парсинга --segregation
   runGeneration({
     docsDir: path.join(projectRoot, docsFolderName),
     outputDir: outputFolderName,
