@@ -8,13 +8,15 @@ const matter = require("gray-matter");
  * @property {string} url      - Относительный путь с .html (index.html или article.html)
  * @property {string} title    - Заголовок статьи
  * @property {string} hint     - Подсказка (hint)
- * @property {string} context  - helptag (если есть)
+ * @property {string} helptag  - helptag (если есть)
+ * @property {string} context  - context (если есть)
  * @property {string} lang     - Языковой код (ru, en и т.д.)
  */
 
 const defaultTitleValue = "";
 const defaultHintValue = "";
 const defaultContextValue = "";
+const defaultHelptagValue = "";
 
 /**
  * Собирает данные по всем статьям
@@ -73,7 +75,8 @@ function collectHelpData(docsDir) {
             url: relativePath,
             title: title.trim() || defaultTitleValue,
             hint: data.hint?.trim() || defaultHintValue,
-            context: data.helptag?.trim() || defaultContextValue,
+            helptag: data.helptag?.trim() || defaultHelptagValue,
+            context: data.context?.trim() || defaultContextValue,
             lang: lang,
           };
 
