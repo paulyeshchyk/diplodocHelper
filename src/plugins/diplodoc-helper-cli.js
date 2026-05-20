@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 const { runGeneration: generateHelpMap } = require("./helpMap/helpMap.js");
 const { runGeneration: generateContexts } = require("./contexts/сontexts.js");
-const {
-  runGeneration: generateBreadcrumb,
-} = require("./breadcrumb/breadcrumb.js");
+const { runGeneration: generateBreadcrumb } = require("./breadcrumb/breadcrumb.js");
+const { injectCleanMode: generateTocCleanMode } = require("./tocCleanMode/post-build.js");
 
 // Если запускают как cli
 if (require.main === module) {
@@ -23,7 +22,9 @@ if (require.main === module) {
     generateContexts(docsDir);
   } else if (command === "breadcrumb") {
     generateBreadcrumb(outputDir);
+  } else if (command === "tocCleanMode") {
+    generateTocCleanMode(outputDir);
   }
 }
 
-module.exports = { generateHelpMap, generateContexts, generateBreadcrumb };
+module.exports = { generateHelpMap, generateContexts, generateBreadcrumb, generateTocCleanMode};
