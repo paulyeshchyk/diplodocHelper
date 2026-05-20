@@ -20,7 +20,7 @@ function runGeneration(buildDir) {
   const results = { success: [], failed: [] };
 
   if (!fs.existsSync(buildDir)) {
-    console.error(`Папка сборки не найдена: ${buildDir}`);
+    console.error(`[Breadcrumb] Папка сборки не найдена: ${buildDir}`);
     results.failed.push(buildDir);
     return results;
   }
@@ -31,9 +31,7 @@ function runGeneration(buildDir) {
 
   const titleMap = walkHtmlFilesBuildTitleMap(buildDir);
 
-  console.log(
-    `[Breadcrumb] Найдено ${titleMap.size} страниц. Вставка крошек...`,
-  );
+  console.log(`[Breadcrumb] Найдено ${titleMap.size} страниц. Вставка крошек...`);
 
   walkHtmlFiles(buildDir, (htmlPath) => {
     const script = generateBreadcrumbScript(htmlPath, titleMap, config);

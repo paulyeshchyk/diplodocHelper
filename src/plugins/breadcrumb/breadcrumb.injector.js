@@ -10,17 +10,17 @@ const path = require("path");
  */
 function injectScriptIntoFile(htmlPath, config, script) {
   if (!script) {
-    console.log(`Нет родителей для крошек: ${htmlPath}`);
+    console.debug(`[Breadcrumb] Нет родителей для крошек: ${htmlPath}`);
     return;
   }
 
   const fileName = path.basename(htmlPath);
   if (config.ignoreFiles.includes(fileName)) {
-    console.log(`Игнорируем служебный: ${htmlPath}`);
+    console.debug(`[Breadcrumb] Игнорируем служебный: ${htmlPath}`);
     return;
   }
   if (fileName === "index.html" && path.dirname(htmlPath) === config.buildDir) {
-    console.log(`Пропускаем корневой index.html: ${htmlPath}`);
+    console.debug(`[Breadcrumb] Пропускаем корневой index.html: ${htmlPath}`);
     return;
   }
 
@@ -28,7 +28,7 @@ function injectScriptIntoFile(htmlPath, config, script) {
   const bodyCloseIndex = content.lastIndexOf("</body>");
 
   if (bodyCloseIndex === -1) {
-    console.log(`Не найден </body> в: ${htmlPath}`);
+    console.warn(`[Breadcrumb] Не найден </body> в: ${htmlPath}`);
     return;
   }
 
@@ -40,7 +40,7 @@ function injectScriptIntoFile(htmlPath, config, script) {
     content.slice(bodyCloseIndex);
 
   fs.writeFileSync(htmlPath, newContent, "utf8");
-  console.log(`Вставлен скрипт: ${htmlPath}`);
+  console.debug(`[Breadcrumb] Вставлен скрипт: ${htmlPath}`);
 }
 
 module.exports = {

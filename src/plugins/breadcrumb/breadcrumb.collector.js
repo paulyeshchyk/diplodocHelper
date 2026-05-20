@@ -15,7 +15,7 @@ function walkHtmlFilesBuildTitleMap(buildDir) {
   /** @type {Map<string, string>} */
   const titleMap = new Map();
 
-  console.log("Сбор заголовков страниц...");
+  console.log("[Breadcrumb] Сбор заголовков страниц...");
 
   walkHtmlFiles(buildDir, (htmlPath) => {
     const fileName = path.basename(htmlPath);
@@ -31,7 +31,7 @@ function walkHtmlFilesBuildTitleMap(buildDir) {
     }
   });
 
-  console.log(`Собрано ${titleMap.size} заголовков.`);
+  console.log(`[Breadcrumb] Собрано ${titleMap.size} заголовков.`);
   return titleMap;
 }
 
