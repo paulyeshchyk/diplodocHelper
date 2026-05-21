@@ -1,24 +1,46 @@
 # Diplodoc Helper
 
-## Установка
+Helper for technical writers who work with Diplodoc / YFM
+
+It speeds up creating, updating, and refactoring documentation.
+
+It removes routine work with sections, tables of contents, links, and indexing.
+
+---
+
+## Main features
+
+- **Create sections** of any level (Part / Section / Chapter / Article)
+- **Move sections** with automatic reindexing
+- **Rename + change type** of a section and update all links
+- **Smart work with links** (copy and paste with automatic relative path calculation)
+- **Automatic generation**:
+  - Short index (contexts)
+  - Help Maps for the frontend
+- **Reindex** all documentation
+- **Breadcrumbs** on pages after build
+
+---
+
+## Installation
 
 ### marketplace
 
-Установка осуществляется через [ссылку](https://marketplace.visualstudio.com/items?itemName=paulyestchick.diplodochelper)
+Install via [link](https://marketplace.visualstudio.com/items?itemName=paulyestchick.diplodochelper)
 
 ### git
 
 #### clone
 
-Выполнить команду в терминале
+Run this command in the terminal
 
 ```bash
 git clone https://github.com/paulyeshchyk/diplodocHelper.git
 ```
 
-#### build
+### build
 
-Выполнить команду в терминале
+Run these commands in the terminal
 
 ```bash
 cd diplodocHelper
@@ -27,555 +49,182 @@ mkDir build
 vsce package --out build/ --allow-missing-repository
 ```
 
-#### vsix install
+### vsix install
 
-Выполнить команду в терминале
+Run this command in the terminal
 
 ```bash
 code --install-extension diplodochelper-0.7.0.vsix
 ```
 
-## Сводка функций
+## Feature summary
 
-| Применяемость       | Наименование                                                                                                                                                   | Этап                   |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| Разделы             | [Создание раздела (`diplodoc-helper.createSection`)](#1-создание-раздела-diplodoc-helpercreatesection)                                                         | Редактирование         |
-|                     | [Удаление раздела (`diplodoc-helper.deleteSection`)](#2-удаление-раздела-diplodoc-helperdeletesection))                                                        | Редактирование         |
-|                     | [Переименование раздела и смена типа (`diplodoc-helper.renameSection`)](#3-переименование-раздела-и-смена-типа-diplodoc-helperrenamesection) Редактирование    |
-|                     | [Переиндексация (`diplodoc-helper.reindex`)](#8-переиндексация-diplodoc-helperreindex)                                                                         | Редактирование, Сборка |
-| Ссылки              | [Копирование ссылки на статью (`diplodoc-helper.copyLink`)](#4-копирование-ссылки-на-статью-diplodoc-helpercopylink)                                           | Редактирование         |
-|                     | [Вставка ссылки на статью (`diplodoc-helper.pasteLink`)](#5-вставка-ссылки-на-статью-diplodoc-helperpastelink)                                                 | Редактирование         |
-| Индексация          | [Генерация краткого указателя (`diplodoc-helper.generateContexts`)](#6-генерация-краткого-указателя-diplodoc-helpergeneratecontexts)                           | Редактирование, Сборка |
-|                     | [Генерация списка контекстов для фронтенда (`diplodoc-helper.generateHelpMaps`)](#7-генерация-списка-контекстов-для-фронтенда-diplodoc-helpergeneratehelpmaps) | Редактирование, Сборка |
-| Хлебные крошки      | [Хлебные крошки (`inject-breadcrumb.js`)](#9-хлебные-крошки-inject-breadcrumbjs)                                                                               | Сборка                 |
-| Перемещение раздела | [Перемещение раздела (`diplodoc-helper.moveSection`)](#10-перемещение-раздела-diplodoc-helpermoveSection)                                                      | Редактирование         |
+| Applicability | Name                                                                  | Stage             |
+| ------------- | --------------------------------------------------------------------- | ----------------- |
+| Sections      |                                                                       |                   |
+|               | Create section (diplodoc-helper.createSection)                        | Editing           |
+|               | Delete section (diplodoc-helper.deleteSection)                        | Editing           |
+|               | Rename section and change type (diplodoc-helper.renameSection)        | Editing           |
+|               | Move section (diplodoc-helper.moveSection)                            | Editing           |
+| Links         |                                                                       |                   |
+|               | Links Copy link to article (diplodoc-helper.copyLink)                 | Editing           |
+|               | Paste link to article (diplodoc-helper.pasteLink)                     | Editing           |
+| Breadcrumbs   | Breadcrumbs (inject-breadcrumb.js)                                    | Building          |
+| Utils         |                                                                       |                   |
+|               | Reindex (diplodoc-helper.reindex)                                     | Editing, Building |
+|               | Indexing Generate short index (diplodoc-helper.generateContexts)      | Editing, Building |
+|               | Generate context list for frontend (diplodoc-helper.generateHelpMaps) | Editing, Building |
 
-## Команды расширения Diplodoc Helper
+## Diplodoc Helper extension commands
 
-### 1. Создание раздела (`diplodoc-helper.createSection`)
+1. Create section (diplodoc-helper.createSection)
 
-**Без расширения**  
-Приходится вручную создавать папку, в ней — `index.md`, `index.yaml`, `toc.yaml`, заполнять frontmatter (title, sectionType, pureTitle, sectionIndex), затем редактировать родительский `toc.yaml` — добавлять новый элемент `items` с правильным `name`, `href`, `include`. Нужно помнить структуру Diplodoc и синтаксис YAML.
+   **Without the extension**
+   You have to manually create a folder, inside it — index.md, index.yaml, toc.yaml, fill in frontmatter (title, sectionType, pureTitle, sectionIndex), then edit the parent toc.yaml — add a new items element with correct name, href, include. You need to remember the Diplodoc structure and YAML syntax.
 
-**С расширением**  
-Достаточно выбрать тип раздела (Часть/Раздел/Глава/Статья), ввести название и (при необходимости) индекс. Расширение само создаёт папку со всеми служебными файлами, заполняет метаданные и добавляет запись в родительское оглавление.
+   **With the extension**
+   Just choose the section type (Part/Section/Chapter/Article), enter the name and (if needed) the index. The extension creates the folder with all service files, fills in the metadata, and adds an entry to the parent table of contents.
 
----
+2. Delete section (diplodoc-helper.deleteSection)
 
-### 2. Удаление раздела (`diplodoc-helper.deleteSection`)
+   **Without the extension**
+   You have to manually delete the section folder, then open the parent toc.yaml and delete the corresponding items block. With many sections, it is easy to miss something or leave garbage in the table of contents.
 
-**Без расширения**  
-Приходится вручную удалять папку раздела, а затем открывать родительский `toc.yaml` и удалять соответствующий блок `items`. При большом количестве разделов легко пропустить или оставить мусор в оглавлении.
+   **With the extension**
+   Just right-click on the section in the explorer and choose "Delete section". The extension automatically removes the entry from the parent toc.yaml and only then permanently deletes the section folder. The table of contents stays clean.
 
-**С расширением**  
-Достаточно нажать на разделе в проводнике «Удалить рубрику». Расширение автоматически удаляет запись из родительского `toc.yaml` и только после этого безвозвратно удаляет папку раздела. Оглавление остаётся чистым.
+3. Rename section and change type (diplodoc-helper.renameSection)
 
----
+   **Without the extension**
+   You have to manually rename the folder, edit title, pureTitle, sectionType, sectionIndex in index.md and index.yaml, change the heading in the section's toc.yaml, and then update links in the parent toc.yaml (folder name, displayed title) and possibly in the parent's index.yaml. This is very time‑consuming and error‑prone.
 
-### 3. Переименование раздела и смена типа (`diplodoc-helper.renameSection`)
+   **With the extension**
+   Choose the new section type, enter the new name and (if needed) the index. The extension updates all metadata in all service files, renames the folder (if necessary), and corrects links in the parent toc.yaml and index.yaml.
 
-**Без расширения**  
-Приходится вручную переименовывать папку, править `title`, `pureTitle`, `sectionType`, `sectionIndex` в `index.md` и `index.yaml`, менять заголовок в `toc.yaml` раздела, а затем обновлять ссылки в родительском `toc.yaml` (имя папки, отображаемое название) и, возможно, в `index.yaml` родителя. Это очень трудоёмко и чревато ошибками.
+4. Copy link to article (diplodoc-helper.copyLink)
 
-**С расширением**  
-Выбираете новый тип раздела, вводите новое название и (при необходимости) индекс. Расширение само обновляет все метаданные во всех служебных файлах, переименовывает папку (если нужно) и корректирует ссылки в родительских `toc.yaml` и `index.yaml`.
+   **Without the extension**
+   You have to manually copy the file path (e.g., Part1.Introduction/index.md) and manually insert it into a Markdown link [text](path).
 
----
+   **With the extension**
+   Just right-click on any folder (section) or .md/.png/.jpg/.svg file and choose "Copy link to article". The extension saves a JSON object with the name and path to the clipboard. When pasting, a correct relative link is automatically created.
 
-### 4. Копирование ссылки на статью (`diplodoc-helper.copyLink`)
+5. Paste link to article (diplodoc-helper.pasteLink)
 
-**Без расширения**  
-Приходится вручную копировать путь к файлу (например, `Часть1.Введение/index.md`) и вставлять его вручную в Markdown-ссылку `[текст](путь)`. Для картинок нужно запоминать синтаксис `![]()`.
+   **Without the extension**
+   You need to manually calculate the relative path from the current file you are editing to the target section or image, encode Cyrillic names, put them in square brackets and parentheses. For images, do not forget the exclamation mark.
 
-**С расширением**  
-Достаточно кликнуть правой кнопкой на любой папке (разделе) или `.md`/`.png`/`.jpg`/`.svg` файле и выбрать «Копировать ссылку на документ». Расширение сохраняет в буфер обмена JSON-объект с именем и путём. При вставке автоматически формируется корректная относительная ссылка.
+   **With the extension**
+   In the Markdown or YAML editor, just press "Paste link to article". The extension reads the data from the clipboard (copied by the copyLink command), calculates the relative path considering the current file, encodes URL segments, and inserts \[name\]\(relative\/path\) or \!\[name\]\(path\) for images.
 
----
+6. Generate short index (diplodoc-helper.generateContexts)
 
-### 5. Вставка ссылки на статью (`diplodoc-helper.pasteLink`)
+   **Without the extension**
+   To make a "Contexts" page (a list of terms with links to articles), you would have to manually go through all .md files, look for the context: tag, write down the terms, and for each term create a separate page with a list of links, generate index.md, toc.yaml, index.yaml. When adding new articles, you would have to maintain everything by hand.
 
-**Без расширения**  
-Нужно вручную вычислять относительный путь от текущего редактируемого файла до целевого раздела или картинки, кодировать кириллические имена, вставлять в квадратные скобки и круглые. Для картинок не забыть восклицательный знак.
+   **With the extension**
+   Just run the command. The extension scans the docs/ru and docs/en folders, finds all articles with the frontmatter field context:, collects unique terms, creates for each term a .md file with a list of links, generates index.md (alphabetical index), toc.yaml and index.yaml in the contexts folder. The index is always up‑to‑date.
 
-**С расширением**  
-В редакторе Markdown или YAML достаточно нажать «Вставить ссылку на документ». Расширение читает данные из буфера (скопированные командой `copyLink`), вычисляет относительный путь с учётом текущего файла, кодирует сегменты URL и вставляет `[имя](относительный/путь)` или `![имя](путь)` для изображений.
+7. Generate context list for frontend (diplodoc-helper.generateHelpMaps)
 
----
+   **Without the extension**
+   Frontend developers need a JSON file that maps an article's URL to its title, hint, and helptag tag for help integration. You would have to manually go through all .md files, read frontmatter, create an array of entries, and save it to build/app-help-contents.json. When documentation changes, the file quickly becomes outdated.
 
-### 6. Генерация краткого указателя (`diplodoc-helper.generateContexts`)
+   **With the extension**
+   The command automatically goes through all .md files in docs, extracts helptag, title, hint, creates an array of entries with url, title, hint, context, lang fields, and saves it to build/ (or separates by language with the --segregation flag). The frontend always has a fresh help map.
 
-**Без расширения**  
-Чтобы сделать страницу «Контексты» (список терминов со ссылками на статьи), пришлось бы вручную обходить все `.md` файлы, искать тег `context:`, выписывать термины и создавать для каждого отдельную страницу со списком ссылок, генерировать `index.md`, `toc.yaml`, `index.yaml`. При добавлении новых статей поддерживать вручную.
+8. Reindex (diplodoc-helper.reindex)
 
-**С расширением**  
-Достаточно выполнить команду. Расширение сканирует папки `docs/ru` и `docs/en`, находит все статьи с frontmatter-полем `context:`, собирает уникальные термины, создаёт для каждого термина `.md` файл со списком ссылок, генерирует `index.md` (алфавитный указатель), `toc.yaml` и `index.yaml` в папке `contexts`. Указатель всегда актуален.
+   **Without the extension**
+   When sections are moved, renamed, or their indexes change (e.g., "1.2. Introduction" -> "1.3. Introduction"), you have to manually edit sectionIndex in all index.md files, then update headings in index.yaml, the section's toc.yaml, and also fix links in parent toc.yaml. It is easy to forget to sync folder names with new indexes.
 
----
+   **With the extension**
+   Just run the command on the root documentation folder. The extension recursively goes through all sections, calculates new indexes based on folder order (or keeps manual indexes), updates all metadata in all service files, renames folders according to the new index and name, and then sorts entries in parent toc.yaml. The whole table of contents and links stay valid.
 
-### 7. Генерация списка контекстов для фронтенда (`diplodoc-helper.generateHelpMaps`)
+9. Breadcrumbs (inject-breadcrumb.js)
 
-**Без расширения**  
-Фронтенд-разработчикам для интеграции подсказок (help) нужен JSON-файл, сопоставляющий URL статьи с заголовком, подсказкой и тегом `helptag`. Вручную пришлось бы обходить все `.md` файлы, читать frontmatter, формировать массив записей и сохранять в `build/app-help-contents.json`. При изменении документации файл легко устаревает.
+   **Without the extension**
+   To show a navigation chain on every documentation page (e.g., "Home - Section 1 - Subsection"), you would have to manually edit build templates or write a custom script that extracts parent page titles from index.html and inserts an HTML structure. When the documentation structure changes, breadcrumbs must be rebuilt from scratch.
 
-**С расширением**  
-Команда автоматически обходит все `.md` файлы в `docs`, извлекает `helptag`, `title`, `hint`, формирует массив записей с полями `url`, `title`, `hint`, `context`, `lang` и сохраняет в `build/` (или с разделением по языкам при флаге `--segregation`). Фронтенд всегда имеет свежую help-карту.
+   **With the extension**
+   The script (inject-breadcrumb.js) runs after building the documentation (@diplodoc/cli). It scans all index.html files in the build folder, collects parent segments from the path, extracts page titles from generated HTML files (from diplodoc-state or <title>), builds a navigation chain, and inserts a nav with breadcrumbs just before the main content of the page. Breadcrumbs update automatically on every build.
 
----
+10. Move section (diplodoc-helper.moveSection)
 
-### 8. Переиндексация (`diplodoc-helper.reindex`)
+**Without the extension**
+To move a section (chapter, subsection, article) from one place in the documentation to another, a technical writer had to:
 
-**Без расширения**  
-Когда разделы перемещают, переименовывают или меняют индексы (например, «1.2. Введение» -> «1.3. Введение»), приходится вручную править `sectionIndex` во всех `index.md`, затем обновлять заголовки в `index.yaml`, `toc.yaml` раздела, а также исправлять ссылки в родительских `toc.yaml`. Часто забывают синхронизировать имена папок с новыми индексами.
+Cut the folder manually,
 
-**С расширением**  
-Достаточно выполнить команду на корневой папке документации. Расширение рекурсивно проходит все разделы, вычисляет новые индексы на основе порядка папок (или сохраняет ручные индексы), обновляет все метаданные во всех служебных файлах, переименовывает папки в соответствии с новым индексом и названием, а затем сортирует записи в родительских `toc.yaml`. Всё оглавление и ссылки остаются валидными.
+Delete its entry in the old parent's toc.yaml,
 
----
+Add an entry in the new parent's toc.yaml (with correct name, href, include),
 
-### 9. Хлебные крошки (`inject-breadcrumb.js`)
+Update links in both parents' index.yaml,
 
-**Без расширения**  
-Чтобы на каждой странице документации отображалась навигационная цепочка (например, «Главная - Раздел 1 - Подраздел»), нужно вручную править шаблоны сборки или писать кастомный скрипт, который извлекает заголовки родительских страниц из `index.html` и вставляет HTML-структуру. При изменении структуры документации крошки приходится перестраивать заново.
+Fix indexes in index.md and index.yaml both in the old and new places (especially painful when inserting "in the middle"),
 
-**С расширением**  
-Скрипт (`inject-breadcrumb.js`) запускается после сборки документации (`@diplodoc/cli`). Он сканирует все `index.html` в папке `build`, по пути собирает родительские сегменты, извлекает из сгенерированных HTML-файлов заголовки страниц (из `diplodoc-state` или `<title>`), формирует навигационную цепочку и вставляет `nav` с крошками сразу перед основным содержимым страницы. Крошки обновляются автоматически при каждой сборке.
+Run reindex so that everything else does not break.
 
----
+It is very easy to make a mistake, leave broken links, or break the index hierarchy.
 
-### 10. Перемещение раздела (`diplodoc-helper.moveSection`)
+**With the extension**
+Just right-click on the desired section and choose "Move section".
 
-**Без расширения**
-Чтобы переместить раздел (главу, подраздел, статью) из одного места документации в другое, техпису приходилось:
+The extension allows you to:
 
-* Вырезать папку вручную,
-* Удалять запись о ней в toc.yaml старого родителя,
-* Добавлять запись в toc.yaml нового родителя (с правильным name, href, include),
-* Обновлять ссылки в index.yaml обоих родителей,
-* Править индексы в index.md и index.yaml как в старом, так и в новом месте (особенно болезненно при вставке «посередине»),
-* Запускать переиндексацию, чтобы всё остальное не развалилось.
+Select a target folder inside the current language (docs/ru),
 
-Очень легко ошибиться, оставить «битые» ссылки или нарушить иерархию индексов.
+Choose the exact insertion position (at the beginning, at the end, or after a specific section),
 
-**С расширением**
-Достаточно кликнуть правой кнопкой мыши на нужном разделе и выбрать «Переместить раздел».
+Automatically delete the entry from the old parent,
 
-Расширение позволяет:
+Add an entry to the new parent while keeping the correct include,
 
-* Выбрать целевую папку внутри текущего языка (docs/ru),
-* Указать точное место вставки (в начало, в конец или после конкретного раздела),
-* Автоматически удаляет запись из старого родителя,
-* Добавляет запись в новый родитель с сохранением корректного include,
-* Переименовывает папку в соответствии с новым индексом и типом (если требуется),
-* Запускает переиндексацию старого и нового родителя,
-* Очищает появившиеся пустые папки.
-
-В результате структура документации остаётся целостной, все ссылки и индексы — актуальными.
-
-## С чего начать
-
-### Базис
-
-Начните с загрузки стандартного проекта diplodoc, размещенного по [ссылке](https://github.com/diplodoc-platform/documentation-template)
-
----
-
-Откройте проект, убедившись, что в папке `docs` есть две подпапки `en` и `ru`
-
----
-
-Установите данное расширение.
-
----
-
-После установки расширение, возможно, потребуется перезагрузка VS Code. После перезагрузки, в VS Code откройте зангуренный Вами проект documentation-template
-
----
-
-В древовидной иерархии папок VS Code, под названием Explorer, найдите папку docs а в ней либо ru либо en. Если расширение из п.2 было установлено, тогда нажмите ПКМ. В появившемся меню должно быть подменю `diplodoc` ![diplodoc](./readme_images/explorer-context.png)
-
----
-
-Выберите подменю `Создать рубрику`, и следуйте дальнейшим инструкциям
-
-- тип ![тип](./readme_images/dialog-type.png)
-- название секции ![секция](./readme_images/section-name.png)
-- индекс ![индекс](./readme_images/index-value.png)
-
----
-
-В результате, у Вас должно получиться создать новый подраздес а автоматическим обновлением toc.yaml
-
-### Копирование
-
-Функция `Копирование ссылки на статью` имеет пару `Вставка ссылки на статью`. Не путайте со стандартном механизмом `Копирования-Вставки`.
-
-P.S. Функция вставки ссылки на статью будет работать только в документе формата md, yaml
-
-[результат](./readme_images/section-creation-result.png)
-
-## Базовый набор задач, исполняемых в VS Code
-
-- `1. Собрать документацию` преобразовывает(собирает) весь набор md-файлов в набор html- файлов
-- `2. Открыть (локальный сервер)` преобразовывает(собирает) весь набор md-файлов в набор html- файлов, запуская локальный http-server. Результат сборки будет доступен по адресу `localhost:5050`
-- `5. docker: build image` преобразовывает(собирает) весь набор md-файлов в набор html- файлов, компонуя из них docker-container
-
-```tasks.json
-{
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "1. Собрать документацию",
-      "dependsOn": [
-        "0.1 clean-build",
-        "0.1 generate-contexts",
-        "0.1 generate-helpmaps",
-        "0.2 build-docs",
-        "0.3 inject-breadcrumb",
-        "0.4 clean-temp"
-      ],
-      "dependsOrder": "sequence",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "presentation": {
-        "close": false,
-        "clear": false,
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "2. Открыть (локальный сервер)",
-      "type": "shell",
-      "command": "node .vscode/scripts/open-url.js http://localhost:${config:docbuilder.port}",
-      "dependsOn": [
-        "4. Запустить HTTP сервер"
-      ],
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "never",
-        "close": true,
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "2. Открыть (локальный файл)",
-      "type": "shell",
-      "command": "node .vscode/scripts/open-file.js build/index.html",
-      "dependsOn": [
-        "1. Собрать документацию"
-      ],
-      "dependsOrder": "sequence",
-      "problemMatcher": [],
-      "group": {
-        "kind": "test",
-        "isDefault": false
-      },
-      "presentation": {
-        "reveal": "never",
-        "close": true,
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "3. Подготовка окружения",
-      "dependsOn": [
-        "0.7 npm clean-install"
-      ],
-      "dependsOrder": "sequence",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "clear": true,
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "4. Запустить HTTP сервер",
-      "type": "shell",
-      "command": "node .vscode/scripts/start-http-server.js ${config:docbuilder.port}",
-      "isBackground": true,
-      "problemMatcher": {
-        "pattern": {
-          "regexp": "^.*$",
-          "file": 1,
-          "location": 2,
-          "message": 3
-        },
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": "Starting up",
-          "endsPattern": "Available on"
-        }
-      },
-      "presentation": {
-        "reveal": "never",
-        "close": false,
-        "panel": "dedicated",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "5. docker: build image",
-      "type": "shell",
-      "command": "docker build -t ${config:docbuilder.imageName} .",
-      "dependsOn": [
-        "0.12 check-docker"
-      ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "clear": true
-      }
-    },
-    {
-      "label": "6. docker: run container (detached)",
-      "type": "shell",
-      "command": "node .vscode/scripts/docker-run.js ${config:docbuilder.containerName} ${config:docbuilder.port} ${config:docbuilder.imageName}",
-      "group": "test",
-      "dependsOn": [
-        "5. docker: build image"
-      ],
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated"
-      }
-    },
-    {
-      "label": "7. Экспорт в PDF",
-      "dependsOn": [
-        "0.1 clean-build",
-        "0.5 build-singlepage",
-        "0.6 generate-pdf",
-        "0.4 clean-temp"
-      ],
-      "dependsOrder": "sequence",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "presentation": {
-        "reveal": "silent",
-        "close": false,
-        "panel": "shared",
-        "clear": true,
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "8. Открыть (docker)",
-      "dependsOn": [
-        "0.12 check-docker",
-        "0.9 stop-all-servers",
-        "5. docker: build image",
-        "6. docker: run container (detached)"
-      ],
-      "dependsOrder": "sequence",
-      "type": "shell",
-      "command": "node .vscode/scripts/open-url-delayed.js http://localhost:${config:docbuilder.port} 3000",
-      "problemMatcher": [],
-      "group": "test",
-      "presentation": {
-        "reveal": "always",
-        "close": false,
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "9. Остановить все серверы",
-      "dependsOn": [
-        "0.9 stop-all-servers"
-      ],
-      "problemMatcher": [],
-      "group": "none",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "10. Удалить Docker-контейнер",
-      "type": "shell",
-      "command": "node .vscode/scripts/remove-docker-container.js ${config:docbuilder.imageName}",
-      "problemMatcher": [],
-      "group": "none",
-      "presentation": {
-        "reveal": "never",
-        "close": true,
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.1 clean-build",
-      "type": "shell",
-      "command": "npx rimraf build",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.1 generate-contexts",
-      "type": "shell",
-      "command": "node ./plugins/diplodoc-helper/generators/generateContexts.js",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.1 generate-helpmaps",
-      "type": "shell",
-      "command": "node ./plugins/diplodoc-helper/generators/generateHelpMap.js",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.2 build-docs",
-      "type": "shell",
-      "command": "npx -y @diplodoc/cli -i ./docs -o ./build --allow-custom-resources",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.3 inject-breadcrumb",
-      "type": "shell",
-      "command": "node ./plugins/breadcrumb/inject-breadcrumb.js",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.4 clean-temp",
-      "type": "shell",
-      "command": "npx rimraf build/.yfm build/.yfmignore build/.yfmlint",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.5 build-singlepage",
-      "type": "shell",
-      "command": "npx -y @diplodoc/cli -i ./docs -o ./build --allow-custom-resources --singlePage",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.6 generate-pdf",
-      "type": "shell",
-      "command": "npx @diplodoc/docs2pdf@latest -i ./build --scroll-to-bottom",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.7 npm clean-install",
-      "type": "shell",
-      "command": "npm ci",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "always",
-        "panel": "dedicated",
-        "clear": false,
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.8 stop-http",
-      "type": "shell",
-      "command": "node .vscode/scripts/kill-port.js ${config:docbuilder.port}",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.9a stop-docker",
-      "type": "shell",
-      "command": "node .vscode/scripts/stop-docker-container.js ${config:docbuilder.imageName}",
-      "problemMatcher": [],
-      "presentation": {
-        "close": false,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.9 stop-all-servers",
-      "dependsOn": [
-        "0.8 stop-http",
-        "0.9a stop-docker"
-      ],
-      "dependsOrder": "sequence",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "silent",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    },
-    {
-      "label": "0.12 check-docker",
-      "type": "shell",
-      "command": "node .vscode/scripts/check-docker.js",
-      "problemMatcher": [],
-      "presentation": {
-        "close": true,
-        "reveal": "always",
-        "panel": "shared",
-        "showReuseMessage": false
-      }
-    }
-  ]
-}
-```
+Rename the folder according to the new index and type (if needed),
+
+Run reindex on the old and new parents,
+
+Remove any empty folders that appear.
+
+As a result, the documentation structure remains intact, and all links and indexes are up‑to‑date.
+
+## How to start
+
+### Basics
+
+Start by downloading the standard diplodoc project from this link
+
+Open the project and make sure that in the docs folder there are two subfolders en and ru
+
+### Install this extension.
+
+After installing the extension, you may need to restart VS Code. After restart, open the documentation-template project you downloaded in VS Code.
+
+In the VS Code Explorer tree, find the docs folder and inside it either ru or en. If the extension from step 2 was installed, right-click. In the menu that appears, you should see a submenu diplodoc https://./readme_images/explorer-context.png
+
+Choose the submenu Create section and follow the further instructions
+
+type https://./readme_images/dialog-type.png
+
+section name https://./readme_images/section-name.png
+
+index https://./readme_images/index-value.png
+
+As a result, you should be able to create a new subsection with automatic update of toc.yaml
+
+### Copying
+
+The Copy link to article function has a pair Paste link to article. Do not confuse it with the standard Copy-Paste mechanism.
+
+P.S. The paste link to article function will only work in a document of type md or yaml
+
+### Basic set of tasks that can be run in VS Code
+
+1. Build documentation converts (builds) all md files into html files
+
+2. Open (local server) converts (builds) all md files into html files and starts a local http‑server. The build result will be available at localhost:5050
+
+3. docker: build image converts (builds) all md files into html files and packages them into a docker container
+
+Ready list for adding to VS Code [tasks.json](./readme_images/tasks_en.json)

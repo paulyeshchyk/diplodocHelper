@@ -1,0 +1,19 @@
+{
+  "displayName": "Diplodoc Helper",
+  "description": "Набор инструментов для работы с документацией на платформе Diplodoc",
+
+  "command.createSection": "Создать рубрику",
+  "command.deleteSection": "Удалить рубрику",
+  "command.renameSection": "Задать новый тип и наименование",
+  "command.moveSection": "Переместить рубрику",
+  "command.reindex": "Переиндексировать всё",
+  "command.copyLink": "Копировать ссылку на документ",
+  "command.pasteLink": "Вставить ссылку на документ",
+  "command.generateContexts": "Сформировать контексты",
+  "command.wipeEmptyDirectories": "Удалить пустые папки после переиндексации",
+  "command.generateHelpMaps": "Сформировать навигационную карту для фронтенда",
+  "command.generateBreadcrumbs": "Сформировать 'хлебные крошки'",
+
+  "submenu.diplodoc": "Diplodoc",
+  "submenu.generators": "Прочее"
+}

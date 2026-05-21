@@ -1,12 +1,12 @@
 {
   "name": "diplodochelper",
   "publisher": "paulyestchick",
-  "displayName": "diplodoc-helper",
-  "description": "",
+  "displayName": "%displayName%",
+  "description": "%description%",
   "repository": {
     "url": "https://github.com/paulyeshchyk/diplodocHelper"
   },
-  "version": "0.13.0",
+  "version": "0.14.0",
   "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"
@@ -19,61 +19,61 @@
     "commands": [
       {
         "command": "diplodoc-helper.createSection",
-        "title": "Создать рубрику"
+        "title": "%command.createSection%"
       },
       {
         "command": "diplodoc-helper.deleteSection",
-        "title": "Удалить рубрику"
+        "title": "%command.deleteSection%"
       },
       {
         "command": "diplodoc-helper.renameSection",
-        "title": "Задать новый тип и наименование"
+        "title": "%command.renameSection%"
       },
       {
         "command": "diplodoc-helper.moveSection",
-        "title": "Переместить рубрику"
+        "title": "%command.moveSection%"
       },
       {
         "command": "diplodoc-helper.reindex",
-        "title": "Переиндексировать всё"
+        "title": "%command.reindex%"
       },
       {
         "command": "diplodoc-helper.copyLink",
-        "title": "Копировать ссылку на документ"
+        "title": "%command.copyLink%"
       },
       {
         "command": "diplodoc-helper.pasteLink",
-        "title": "Вставить ссылку на документ"
+        "title": "%command.pasteLink%"
       },
       {
         "command": "diplodoc-helper.generateContexts",
-        "title": "Сформировать контексты"
+        "title": "%command.generateContexts%"
       },
       {
         "command": "diplodoc-helper.wipeEmptyDirectories",
-        "title": "Удалить пустые папки после переиндексации"
+        "title": "%command.wipeEmptyDirectories%"
       },
       {
         "command": "diplodoc-helper.generateHelpMaps",
-        "title": "Сформировать навигационную карту для фронтэнд"
+        "title": "%command.generateHelpMaps%"
       },
       {
         "command": "diplodoc-helper.generateBreadcrumbs",
-        "title": "Сформировать 'хлебные крошки'"
+        "title": "%command.generateBreadcrumbs%"
       }
     ],
     "submenus": [
       {
         "id": "diplodoc.explorer.context.menu",
-        "label": "Diplodoc"
+        "label": "%submenu.diplodoc%"
       },
       {
         "id": "diplodoc.editor.context.menu",
-        "label": "Diplodoc"
+        "label": "%submenu.diplodoc%"
       },
       {
         "id": "diplodoc.generators.explorer.context.menu",
-        "label": "Прочее"
+        "label": "%submenu.generators%"
       }
     ],
     "menus": {
@@ -160,8 +160,7 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
-    "js-yaml": "^4.1.1",
-    "window": "^1.0.0"
+    "js-yaml": "^4.1.1"
   },
   "devDependencies": {
     "esbuild": "^0.28.0"

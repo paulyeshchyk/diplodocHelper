@@ -1,0 +1,324 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. Build Documentation",
+      "dependsOn": [
+        "0.1 clean-build",
+        "0.1 generate-contexts",
+        "0.1 generate-helpmaps",
+        "0.2 build-docs",
+        "0.3 inject-breadcrumb",
+        "0.4 clean-temp"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "close": false,
+        "clear": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "2. Open (Local Server)",
+      "type": "shell",
+      "command": "node .vscode/scripts/open-url.js http://localhost:${config:docbuilder.port}",
+      "dependsOn": [
+        "4. Start HTTP Server"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "close": true,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "2. Open (Local File)",
+      "type": "shell",
+      "command": "node .vscode/scripts/open-file.js build/index.html",
+      "dependsOn": [
+        "1. Build Documentation"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "never",
+        "close": true,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "3. Prepare Environment",
+      "dependsOn": [
+        "0.7 npm clean-install"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "4. Start HTTP Server",
+      "type": "shell",
+      "command": "node .vscode/scripts/start-http-server.js ${config:docbuilder.port}",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Starting up",
+          "endsPattern": "Available on"
+        }
+      },
+      "presentation": {
+        "reveal": "never",
+        "close": false,
+        "panel": "dedicated",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "5. Docker: Build Image",
+      "type": "shell",
+      "command": "docker build -t ${config:docbuilder.imageName} .",
+      "dependsOn": [
+        "0.12 check-docker"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "6. Docker: Run Container (detached)",
+      "type": "shell",
+      "command": "node .vscode/scripts/docker-run.js ${config:docbuilder.containerName} ${config:docbuilder.port} ${config:docbuilder.imageName}",
+      "group": "test",
+      "dependsOn": [
+        "5. Docker: Build Image"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "7. Export to PDF",
+      "dependsOn": [
+        "0.1 clean-build",
+        "0.5 build-singlepage",
+        "0.6 generate-pdf",
+        "0.4 clean-temp"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent",
+        "close": false,
+        "panel": "shared",
+        "clear": true,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "8. Open (Docker)",
+      "dependsOn": [
+        "0.12 check-docker",
+        "0.9 stop-all-servers",
+        "5. Docker: Build Image",
+        "6. Docker: Run Container (detached)"
+      ],
+      "dependsOrder": "sequence",
+      "type": "shell",
+      "command": "node .vscode/scripts/open-url-delayed.js http://localhost:${config:docbuilder.port} 3000",
+      "problemMatcher": [],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "close": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "9. Stop All Servers",
+      "dependsOn": [
+        "0.9 stop-all-servers"
+      ],
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "10. Remove Docker Container",
+      "type": "shell",
+      "command": "node .vscode/scripts/remove-docker-container.js ${config:docbuilder.imageName}",
+      "problemMatcher": [],
+      "group": "none",
+      "presentation": {
+        "reveal": "never",
+        "close": true,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.1 clean-build",
+      "type": "shell",
+      "command": "npx rimraf build",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.1 generate-contexts",
+      "type": "shell",
+      "command": "node ./plugins/diplodoc-helper/generators/generateContexts.js",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.1 generate-helpmaps",
+      "type": "shell",
+      "command": "node ./plugins/diplodoc-helper/generators/generateHelpMap.js",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.2 build-docs",
+      "type": "shell",
+      "command": "npx -y @diplodoc/cli -i ./docs -o ./build --allow-custom-resources",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.3 inject-breadcrumb",
+      "type": "shell",
+      "command": "node ./plugins/breadcrumb/inject-breadcrumb.js",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.4 clean-temp",
+      "type": "shell",
+      "command": "npx rimraf build/.yfm build/.yfmignore build/.yfmlint",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.5 build-singlepage",
+      "type": "shell",
+      "command": "npx -y @diplodoc/cli -i ./docs -o ./build --allow-custom-resources --singlePage",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.6 generate-pdf",
+      "type": "shell",
+      "command": "npx @diplodoc/docs2pdf@latest -i ./build --scroll-to-bottom",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.7 npm clean-install",
+      "type": "shell",
+      "command": "npm ci",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.8 stop-http",
+      "type": "shell",
+      "command": "node .vscode/scripts/kill-port.js ${config:docbuilder.port}",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "0.9a stop-docker",
+      "type": "shell",
+      "command": "node .vscode/scripts/stop-docker-container.js ${config:docbuilder.imageName}",
+      "problemMatcher": [],
+      "presentation": {
+        "close": false,
