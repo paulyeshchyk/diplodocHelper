@@ -1,19 +1,21 @@
 {
   "displayName": "Diplodoc Helper",
-  "description": "Набор инструментов для работы с документацией на платформе Diplodoc",
-
-  "command.createSection": "Создать рубрику",
-  "command.deleteSection": "Удалить рубрику",
-  "command.renameSection": "Задать новый тип и наименование",
-  "command.moveSection": "Переместить рубрику",
-  "command.reindex": "Переиндексировать всё",
-  "command.copyLink": "Копировать ссылку на документ",
-  "command.pasteLink": "Вставить ссылку на документ",
-  "command.generateContexts": "Сформировать контексты",
-  "command.wipeEmptyDirectories": "Удалить пустые папки после переиндексации",
-  "command.generateHelpMaps": "Сформировать навигационную карту для фронтенда",
-  "command.generateBreadcrumbs": "Сформировать 'хлебные крошки'",
-
+  "description": "Tools for working with Diplodoc documentation",
+  "command.createSection": "Create Section",
+  "command.deleteSection": "Delete Section",
+  "command.renameSection": "Rename Section",
+  "command.moveSection": "Move Section",
+  "command.reindex": "Reindex All",
+  "command.copyLink": "Copy Document Link",
+  "command.pasteLink": "Paste Document Link",
+  "command.generateContexts": "Generate Contexts",
+  "command.wipeEmptyDirectories": "Remove Empty Folders",
+  "command.generateHelpMaps": "Generate Help Map",
+  "command.generateBreadcrumbs": "Generate Breadcrumbs",
   "submenu.diplodoc": "Diplodoc",
-  "submenu.generators": "Прочее"
+  "submenu.generators": "Other",
+  "submenu.helptag": "Helptag",
+  "command.deleteHelptag": "Remove",
+  "command.updateHelptag": "Add / Update",
+  "submenu.context": "Context"
 }

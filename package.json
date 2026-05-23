@@ -60,6 +60,22 @@
       {
         "command": "diplodoc-helper.generateBreadcrumbs",
         "title": "%command.generateBreadcrumbs%"
+      },
+      {
+        "command": "diplodoc-helper.helptag.Update",
+        "title": "%command.updateHelptag%"
+      },
+      {
+        "command": "diplodoc-helper.helptag.Delete",
+        "title": "%command.deleteHelptag%"
+      },
+      {
+        "command": "diplodoc-helper.context.Update",
+        "title": "%command.updateHelptag%"
+      },
+      {
+        "command": "diplodoc-helper.context.Delete",
+        "title": "%command.deleteHelptag%"
       }
     ],
     "submenus": [
@@ -70,6 +86,14 @@
       {
         "id": "diplodoc.editor.context.menu",
         "label": "%submenu.diplodoc%"
+      },
+      {
+        "id": "diplodoc.helptag.explorer.context.menu",
+        "label": "%submenu.helptag%"
+      },
+      {
+        "id": "diplodoc.context.explorer.context.menu",
+        "label": "%submenu.context%"
       },
       {
         "id": "diplodoc.generators.explorer.context.menu",
@@ -124,9 +148,48 @@
           "group": "2.diplodoc.copy@1"
         },
         {
+          "submenu": "diplodoc.context.explorer.context.menu",
+          "when": "explorerResourceIsFolder",
+          "group": "3.diplodoc.context@1"
+        },
+        {
+          "submenu": "diplodoc.helptag.explorer.context.menu",
+          "when": "explorerResourceIsFolder",
+          "group": "4.diplodoc.helptag@1"
+        },
+        {
           "submenu": "diplodoc.generators.explorer.context.menu",
           "when": "explorerResourceIsFolder",
-          "group": "3.diplodoc.generators@1"
+          "group": "5.diplodoc.generators@1"
+        }
+      ],
+      "diplodoc.context.explorer.context.menu": [
+        {
+          "command": "diplodoc-helper.context.Update",
+          "when": "explorerResourceIsFolder",
+          "group": "1.diplodoc.section@5"
+        },
+        {
+          "command": "diplodoc-helper.context.Delete",
+          "when": "explorerResourceIsFolder",
+          "group": "1.diplodoc.section@6"
+        },
+        {
+          "command": "diplodoc-helper.generateContexts",
+          "when": "explorerResourceIsFolder",
+          "group": "1diplodoc.generators.section.command@2"
+        }
+      ],
+      "diplodoc.helptag.explorer.context.menu": [
+        {
+          "command": "diplodoc-helper.helptag.Update",
+          "when": "explorerResourceIsFolder",
+          "group": "1.diplodoc.section@5"
+        },
+        {
+          "command": "diplodoc-helper.helptag.Delete",
+          "when": "explorerResourceIsFolder",
+          "group": "1.diplodoc.section@6"
         }
       ],
       "diplodoc.generators.explorer.context.menu": [
@@ -134,11 +197,6 @@
           "command": "diplodoc-helper.reindex",
           "when": "explorerResourceIsFolder",
           "group": "1diplodoc.generators.section.command@1"
-        },
-        {
-          "command": "diplodoc-helper.generateContexts",
-          "when": "explorerResourceIsFolder",
-          "group": "1diplodoc.generators.section.command@2"
         },
         {
           "command": "diplodoc-helper.generateHelpMaps",

@@ -1,6 +1,10 @@
 // src/extension.js
 const vscode = require("vscode");
 
+const { updateContext } = require("./commands/diplodoc-helper.context.Update");
+const { deleteContext } = require("./commands/diplodoc-helper.context.Delete");
+const { updateHelptag } = require("./commands/diplodoc-helper.helptag.Update");
+const { deleteHelptag } = require("./commands/diplodoc-helper.helptag.Delete");
 const { createSection } = require("./commands/diplodoc-helper.section.Create");
 const { deleteSection } = require("./commands/diplodoc-helper.section.Delete");
 const { renameSection } = require("./commands/diplodoc-helper.section.Rename");
@@ -56,6 +60,15 @@ function activate(context) {
     "diplodoc-helper.generateContexts",
     generateContexts,
   );
+  const updateContextCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.context.Update",
+    updateContext,
+  );
+
+  const deleteContextCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.context.Delete",
+    deleteContext,
+  );
 
   const generateHelpmapsCmd = vscode.commands.registerCommand(
     "diplodoc-helper.generateHelpMaps",
@@ -97,29 +110,41 @@ function activate(context) {
       );
     },
   );
+  const updateHelptagCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.helptag.Update",
+    updateHelptag,
+  );
 
+  const deleteHelptagCmd = vscode.commands.registerCommand(
+    "diplodoc-helper.helptag.Delete",
+    deleteHelptag,
+  );
   context.subscriptions.push(
     createSectionCmd,
     deleteSectionCmd,
     renameSectionCmd,
     moveSectionCmd,
     generateContextsCmd,
+    updateContextCmd,
+    deleteContextCmd,
     generateHelpmapsCmd,
     generateBreadcrumbsCmd,
     reindexCommand,
     wipeEmptyDirectoriesCmd,
+    updateHelptagCmd,
+    deleteHelptagCmd,
   );
 
   context.subscriptions.push(copyLinkCmd, pasteLinkCmd);
 
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor((editor) =>
-      updateContext(editor),
+      updateContextMenu(editor),
     ),
     vscode.workspace.onDidChangeTextDocument((event) => {
       const activeEditor = vscode.window.activeTextEditor;
       if (activeEditor && event.document === activeEditor.document) {
-        updateContext(activeEditor);
+        updateContextMenu(activeEditor);
       }
     }),
   );
@@ -132,7 +157,7 @@ function activate(context) {
 /**
  * @param {vscode.TextEditor | undefined} editor
  */
-function updateContext(editor) {
+function updateContextMenu(editor) {
   let canPaste = false;
   if (editor && editor.document) {
     const doc = editor.document;
