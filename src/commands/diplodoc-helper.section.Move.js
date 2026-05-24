@@ -1,6 +1,7 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Move.js
 
-"use strict";
+("use strict");
 
 const vscode = require("vscode");
 const fs = require("fs");
@@ -29,7 +30,7 @@ async function moveSection(uri) {
   const sourcePath = uri.fsPath;
   if (!isDiplodocSection(sourcePath)) {
     vscode.window.showErrorMessage(
-      "Переместить можно только полноценный раздел Diplodoc.",
+      translate(nls_ts.plugin.section.move.error.incorrectSection),
     );
     return;
   }
@@ -48,7 +49,7 @@ async function moveSection(uri) {
   const success = await performMove(sourcePath, targetDir, position);
   if (success) {
     vscode.window.showInformationMessage(
-      `Раздел "${sourceName}" успешно перемещён`,
+      translate(nls_ts.plugin.section.move.info.success, sourceName),
     );
   }
 }
@@ -69,7 +70,7 @@ async function selectTargetDirectory(sourcePath) {
   }));
 
   const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: "Выберите целевую папку для перемещения",
+    placeHolder: translate(nls_ts.plugin.section.move.placeholder.targetfolder),
     matchOnDescription: true,
   });
 
@@ -125,20 +126,29 @@ async function selectInsertPosition(targetDir, movingSectionName) {
       (e) => e.isDirectory() && isDiplodocSection(path.join(targetDir, e.name)),
     )
     .map((e) => ({
-      label: `После: ${e.name}`,
+      label: translate(nls_ts.plugin.section.move.label.after, e.name),
       description: "",
       position: "after",
       afterName: e.name,
     }));
 
   const options = [
-    { label: "В начало списка", position: "start" },
+    {
+      label: translate(nls_ts.plugin.section.move.placeholder.start),
+      position: "start",
+    },
     ...items,
-    { label: "В конец списка", position: "end" },
+    {
+      label: translate(nls_ts.plugin.section.move.placeholder.end),
+      position: "end",
+    },
   ];
 
   const selected = await vscode.window.showQuickPick(options, {
-    placeHolder: `Куда переместить "${movingSectionName}" внутри целевой папки?`,
+    placeHolder: translate(
+      nls_ts.plugin.section.move.placeholder.target,
+      movingSectionName,
+    ),
   });
 
   return selected || null;
@@ -156,20 +166,22 @@ async function performMove(sourcePath, targetDir, position) {
 
   // === Защита от перемещения в самого себя или своего потомка ===
   if (sourcePath === targetPath) {
-    vscode.window.showErrorMessage("Нельзя переместить раздел в самого себя.");
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.section.move.error.self),
+    );
     return false;
   }
 
   if (targetPath.startsWith(sourcePath + path.sep)) {
     vscode.window.showErrorMessage(
-      "Нельзя переместить раздел в свой собственный подраздел.",
+      translate(nls_ts.plugin.section.move.error.recursive),
     );
     return false;
   }
 
   if (fs.existsSync(targetPath)) {
     vscode.window.showErrorMessage(
-      `В целевой папке уже существует раздел "${sourceName}"`,
+      translate(nls_ts.plugin.section.move.error.sectionexists, sourceName),
     );
     return false;
   }
@@ -186,11 +198,17 @@ async function performMove(sourcePath, targetDir, position) {
 
     // 3. Обновляем ссылки на перемещённый раздел и его содержимое
     const projectRoot = getLanguageRoot(targetPath);
-    const updatedFiles = await updateLinksAfterRename(sourcePath, targetPath, projectRoot);
+    const updatedFiles = await updateLinksAfterRename(
+      sourcePath,
+      targetPath,
+      projectRoot,
+    );
     if (updatedFiles > 0) {
-      vscode.window.showInformationMessage(`Обновлено ссылок в ${updatedFiles} файлах`);
+      vscode.window.showInformationMessage(
+        translate(nls_ts.plugin.section.move.info.success, updatedFiles),
+      );
       vscode.window.showWarningMessage(
-        "Раздел перемещён. Ссылки изнутри этого раздела на внешние файлы могли сломаться. Проверьте их вручную."
+        translate(nls_ts.plugin.section.move.warning.broken),
       );
     }
 
@@ -217,7 +235,9 @@ async function performMove(sourcePath, targetDir, position) {
     return true;
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(`Ошибка перемещения: ${msg}`);
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.section.move.error.critical, msg),
+    );
     console.error(err);
     return false;
   }

@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.helptag.Delete.js
 const vscode = require("vscode");
 const fs = require("fs");
@@ -34,12 +35,13 @@ async function deleteHelptag(uri) {
   }
 
   const confirm = await vscode.window.showWarningMessage(
-    `Удалить helptag "${currentHelptag}" из раздела?`,
+    translate(nls_ts.plugin.helptag.delete.confirm.title, currentHelptag),
     { modal: true },
-    "Удалить",
+    translate(nls_ts.plugin.helptag.delete.confirm.button),
   );
 
-  if (confirm !== "Удалить") return;
+  if (confirm !== translate(nls_ts.plugin.helptag.delete.confirm.button))
+    return;
 
   try {
     let content = fs.readFileSync(indexMdPath, "utf8");
@@ -47,10 +49,14 @@ async function deleteHelptag(uri) {
 
     fs.writeFileSync(indexMdPath, content, "utf8");
 
-    vscode.window.showInformationMessage(`helptag "${currentHelptag}" удалён.`);
+    vscode.window.showInformationMessage(
+      translate(nls_ts.plugin.helptag.delete.info.success, currentHelptag),
+    );
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(`Ошибка при удалении helptag: ${msg}`);
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.helptag.delete.error.critical, msg),
+    );
   }
 }
 

@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Create.js
 const vscode = require("vscode");
 const { calculateNextIndex } = require("../core/indexer");
@@ -10,7 +11,7 @@ const {
 } = require("../utils"); // используем barrel
 
 const { FrontMatterSectionTypesIndexed } = require("../utils/constants");
-const { composeFullTitle } = require("../utils/sectionTitle")
+const { composeFullTitle } = require("../utils/sectionTitle");
 
 const {
   ShowSectionNameSelector,
@@ -29,7 +30,7 @@ async function createSection(uri) {
 
   if (!isDiplodocSection(targetDir) && !isLanguageRoot(targetDir)) {
     vscode.window.showErrorMessage(
-      "Раздел можно создать только внутри другого раздела или в корне папки языка.",
+      translate(nls_ts.plugin.section.create.error.incorrectSection),
     );
     return;
   }
@@ -59,7 +60,11 @@ async function createSection(uri) {
   );
   if (!folderResult) return;
 
-  const fullTitle = composeFullTitle(sectionIndex, sectionType, userSectionName);
+  const fullTitle = composeFullTitle(
+    sectionIndex,
+    sectionType,
+    userSectionName,
+  );
 
   try {
     IndexMdFileCreate(
@@ -94,14 +99,18 @@ async function createSection(uri) {
     );
 
     vscode.window.showInformationMessage(
-      `Раздел "${fullTitle}" (${sectionType.label}) создан!`,
+      translate(
+        nls_ts.plugin.section.create.info.success,
+        fullTitle,
+        sectionType.label,
+      ),
     );
   } catch (err) {
     let msg = err instanceof Error ? err.message : "${err}";
-    vscode.window.showErrorMessage(`Критическая ошибка: ${msg}`);
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.section.create.error.critical, msg),
+    );
   }
 }
 
 module.exports = { createSection };
-
-

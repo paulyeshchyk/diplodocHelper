@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.context.Update.js
 const vscode = require("vscode");
 const fs = require("fs");
@@ -38,7 +39,7 @@ async function updateContext(uri) {
   const sectionPath = uri.fsPath;
   if (!isDiplodocSection(sectionPath)) {
     vscode.window.showWarningMessage(
-      "context можно изменять только в полноценных разделах Diplodoc.",
+      translate(nls_ts.plugin.context.update.error.incorrectSection),
     );
     return;
   }
@@ -60,10 +61,12 @@ async function updateContext(uri) {
   if (currentContexts.length === 0) {
     // Создание первого контекста
     const input = await vscode.window.showInputBox({
-      prompt: "Введите context (можно несколько через запятую или пробел)",
-      placeHolder: "номенклатура, справочник товаров, продажа",
+      prompt: translate(nls_ts.plugin.context.update.new.prompt),
+      placeHolder: translate(nls_ts.plugin.context.update.new.placeholder),
       validateInput: (v) =>
-        parseContexts(v).length === 0 ? "context не может быть пустым" : null,
+        parseContexts(v).length === 0
+          ? translate(nls_ts.plugin.context.update.new.error.empty)
+          : null,
     });
 
     if (!input) return;
@@ -71,7 +74,10 @@ async function updateContext(uri) {
   } else {
     /** @type {ContextDto[]} */
     const options = [
-      { label: "$(plus) Добавить новый контекст...", action: "add" },
+      {
+        label: translate(nls_ts.plugin.context.update.new.addnewcontext),
+        action: "add",
+      },
       ...currentContexts.map((ctx) => ({
         label: ctx,
         action: "edit",
@@ -81,16 +87,19 @@ async function updateContext(uri) {
 
     /** @type {ContextDto | undefined} */
     const selected = await vscode.window.showQuickPick(options, {
-      placeHolder: "Что вы хотите сделать с context?",
+      placeHolder: translate(
+        nls_ts.plugin.context.update.new.actionplaceholder,
+      ),
     });
 
     if (!selected) return;
 
     if (selected.action === "add") {
       const input = await vscode.window.showInputBox({
-        prompt:
-          "Введите новый контекст (можно несколько через запятую или пробел)",
-        placeHolder: "отчёт, аналитика, дашборд",
+        prompt: translate(nls_ts.plugin.context.update.new.add.inputprompt),
+        placeHolder: translate(
+          nls_ts.plugin.context.update.new.add.inputplaceholder,
+        ),
       });
 
       if (!input) return;
@@ -107,11 +116,14 @@ async function updateContext(uri) {
       if (!oldValue) return;
 
       const newInput = await vscode.window.showInputBox({
-        prompt: `Изменить "${oldValue}" на:`,
+        prompt: translate(
+          nls_ts.plugin.context.update.change.inputprompt,
+          oldValue,
+        ),
         value: oldValue,
         validateInput: (v) =>
           parseContexts(v).length === 0
-            ? "Значение не может быть пустым"
+            ? translate(nls_ts.plugin.context.update.change.error.validation)
             : null,
       });
 
@@ -141,10 +153,14 @@ async function updateContext(uri) {
 
     fs.writeFileSync(indexMdPath, updatedContent, "utf8");
 
-    vscode.window.showInformationMessage(`context обновлён: "${finalString}"`);
+    vscode.window.showInformationMessage(
+      translate(nls_ts.plugin.context.update.info.success, finalString),
+    );
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    vscode.window.showErrorMessage(`Ошибка при обновлении context: ${msg}`);
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.context.update.error.critical, msg),
+    );
   }
 }
 

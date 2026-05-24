@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // diplodoc-helper.breadCrumb.Generate.js
 const { runGeneration } = require("../plugins/breadcrumb/breadcrumb");
 const path = require("path");
@@ -17,15 +18,22 @@ async function generateBreadcrumbs() {
 
   if (results.success.length > 0) {
     vscode.window.showInformationMessage(
-      `"Хлебные крошки" обновлены: ${results.success.join(", ")}`,
+      translate(
+        nls_ts.plugin.breadcrumb.generate.info.success,
+        results.success.join(", "),
+      ),
     );
   } else {
     vscode.window.showErrorMessage(
-      `"Хлебные крошки" не обновлены. Папка не найдена: ${results.failed.join(", ")}`,
+      translate(
+        nls_ts.plugin.breadcrumb.generate.error.foldernotfound,
+        results.failed.join(", "),
+      ),
       {
         modal: true,
-        detail:
-          "Пересоберите проект.\nРезультат сбоки должен находиться в папке build",
+        detail: translate(
+          translate(nls_ts.plugin.breadcrumb.generate.error.detail),
+        ),
       },
     );
   }

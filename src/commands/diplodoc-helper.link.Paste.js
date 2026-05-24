@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 const vscode = require("vscode");
 const path = require("path");
 
@@ -34,7 +35,7 @@ async function pasteLink() {
     const data = JSON.parse(clipboardText);
 
     if (!data.sourceLinkPath || !data.sourceLinkName) {
-      throw new Error("В буфере нет данных для Diplodoc ссылки");
+      throw new Error(translate("plugin.link.paste.error.emptybuffer"));
     }
 
     const isImage = data.isImage === true;
@@ -52,7 +53,7 @@ async function pasteLink() {
   } catch (err) {
     // Если в буфере не JSON или не наши данные
     vscode.window.showErrorMessage(
-      "Не удалось вставить ссылку: проверьте, что вы её скопировали.",
+      translate(nls_ts.plugin.link.paste.error.critical),
     );
   }
 }

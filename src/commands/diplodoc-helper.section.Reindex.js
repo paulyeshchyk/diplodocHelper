@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Reindex.js
 const vscode = require("vscode");
 const path = require("path");
@@ -18,7 +19,7 @@ async function reindexCommand(uri) {
   await vscode.window.withProgress(
     {
       location: vscode.ProgressLocation.Notification,
-      title: "Переиндексация Diplodoc...",
+      title: translate(nls_ts.plugin.section.reindex.progress.text),
       cancellable: false,
     },
     async () => {
@@ -26,7 +27,9 @@ async function reindexCommand(uri) {
     },
   );
 
-  vscode.window.showInformationMessage("Переиндексация завершена!");
+  vscode.window.showInformationMessage(
+    translate(nls_ts.plugin.section.reindex.info.success),
+  );
 
   // Показываем предупреждения
   if (allWarnings.length > 0) {
@@ -49,9 +52,9 @@ function showWarnings(warnings) {
   const messageList = Array.from(messages).join("\n");
 
   vscode.window.showWarningMessage(
-    "Обнаружены проблемы при переиндексации:",
+    translate(nls_ts.plugin.section.reindex.warning.text),
     { modal: true, detail: messageList },
-    "Понятно",
+    translate(nls_ts.plugin.section.reindex.warning.button),
   );
 }
 

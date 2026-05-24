@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/generateHelpmap.js
 const path = require("path");
 const vscode = require("vscode");
@@ -36,7 +37,9 @@ async function generateHelpmap() {
   const selectedPath = projectRoot; //uri ? uri.fsPath : projectRoot;
 
   if (!selectedPath) {
-    vscode.window.showErrorMessage("Не удалось определить рабочую директорию");
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.helpmap.generate.error.emptypath),
+    );
     return;
   }
 
@@ -53,17 +56,25 @@ async function generateHelpmap() {
     const results = runGeneration(options);
     if (results.success.length > 0) {
       vscode.window.showInformationMessage(
-        `Help-карта создана (${results.success.length} эл.). Путь: ${options.outputDir}`,
+        translate(
+          nls_ts.plugin.helpmap.generate.info.success,
+          results.success.length,
+          options.outputDir,
+        ),
       );
     } else {
       vscode.window.showWarningMessage(
-        "Не найдено файлов с тегом 'helptag' в " + options.docsDir,
+        translate(
+          nls_ts.plugin.helpmap.generate.warning.nothingfound,
+          options.docsDir,
+        ),
       );
     }
   } catch (err) {
-    if (err instanceof Error)
-      vscode.window.showErrorMessage("Ошибка при генерации: " + err.message);
-    else throw err;
+    let msg = err instanceof Error ? err.message : "${err}";
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.helpmap.generate.error.critical, msg),
+    );
   }
 }
 

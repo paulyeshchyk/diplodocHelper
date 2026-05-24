@@ -26,11 +26,14 @@ const {
 const {
   generateBreadcrumbs,
 } = require("./commands/diplodoc-helper.breadCrumb.Generate");
+const { initNls } = require("../nls_loader");
 
 /**
- * @param {{ subscriptions: vscode.Disposable[]; extension: { packageJSON: { version: any; }; }; }} context
+ * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+  initNls(context);
+
   const wipeEmptyDirectoriesCmd = vscode.commands.registerCommand(
     "diplodoc-helper.wipeEmptyDirectories",
     wipeEmptyDirectories,

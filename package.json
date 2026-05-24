@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/paulyeshchyk/diplodocHelper"
   },
-  "version": "0.14.0",
+  "version": "0.15.0",
   "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"
@@ -14,6 +14,8 @@
   "categories": [
     "Other"
   ],
+  "changelogUrl": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
+  "releaseNotes": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
   "activationEvents": [],
   "contributes": {
     "commands": [
@@ -218,7 +220,8 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "vscode-nls": "^5.2.0"
   },
   "devDependencies": {
     "esbuild": "^0.28.0"

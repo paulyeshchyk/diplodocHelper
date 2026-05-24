@@ -1,9 +1,41 @@
 # Change Log
 
-All notable changes to the "diplodochelper" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
 ## [Unreleased]
 
-- Initial release
+### Added
+
+- Поддержка нового типа разделов
+
+### Changed
+
+- Улучшена логика переименования папок
+
+### Fixed
+
+- Исправлена ошибка при перемещении раздела
+
+## [0.14.0] - 2025-05-23
+
+### Added
+
+- Команда "Переместить рубрику" (`moveSection`)
+- Автоматическое обновление ссылок после переименования/перемещения
+- Генерация хлебных крошек (`generateBreadcrumbs`)
+- Команды управления `context` и `helptag`
+
+### Changed
+
+- Переработана система индексации и сортировки `toc.yaml`
+- Улучшена валидация имён разделов
+
+### Fixed
+
+- Баг с обновлением ссылок при переименовании
+- Проблемы с кодировкой в путях
+
+## [0.13.0] - 2025-04-15
+
+### Added
+
+- Создание и удаление разделов
+- Генерация контекстов

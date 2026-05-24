@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Rename.js
 const vscode = require("vscode");
 const fs = require("fs");
@@ -6,8 +7,8 @@ const path = require("path");
 const { promptSection, IndexMdEntryReadTitle } = require("../utils");
 const { isDiplodocSection } = require("../utils");
 const { IndexMdEntryReadIndex, IndexMdEntryPatch } = require("../utils");
-const { updateLinksAfterRename } = require("../utils/linksUpdater")
-const { getLanguageRoot } = require("../utils/directory")
+const { updateLinksAfterRename } = require("../utils/linksUpdater");
+const { getLanguageRoot } = require("../utils/directory");
 const { sortTocItems } = require("../utils/toc.yaml.sort");
 
 const {
@@ -17,7 +18,11 @@ const {
   renameSectionFolderIfNeeded,
 } = require("../utils");
 
-const { composeFullTitle, isIndexedSectionType, composeFolderName } = require("../utils/sectionTitle")
+const {
+  composeFullTitle,
+  isIndexedSectionType,
+  composeFolderName,
+} = require("../utils/sectionTitle");
 
 /**
  * @param {{ fsPath: any; }} uri
@@ -31,7 +36,7 @@ async function renameSection(uri) {
 
   if (!isDiplodocSection(oldFolderPath)) {
     vscode.window.showErrorMessage(
-      "Переименовать можно только полноценный раздел.",
+      translate(nls_ts.plugin.section.rename.error.isnotsection),
     );
     return;
   }
@@ -40,7 +45,7 @@ async function renameSection(uri) {
   const currentPureTitle = IndexMdEntryReadTitle(oldFolderPath);
   const newSectionObject = await promptSection(currentPureTitle, currentIndex);
   if (!newSectionObject) {
-    console.log("объект не будет переименован: ввод данных прерван");
+    console.log(translate(nls_ts.plugin.section.rename.error.interrupted));
     return;
   }
 
@@ -56,12 +61,18 @@ async function renameSection(uri) {
   const fullTitle = composeFullTitle(finalIndex, newSectionType, newPureTitle);
 
   // Имя папки
-  const newFolderName = composeFolderName(finalIndex, newSectionType, newPureTitle);
+  const newFolderName = composeFolderName(
+    finalIndex,
+    newSectionType,
+    newPureTitle,
+  );
 
   const newFolderPath = path.join(parentDir, newFolderName);
 
   if (fs.existsSync(newFolderPath) && newFolderName !== oldFolderName) {
-    vscode.window.showErrorMessage(`Папка ${newFolderName} уже существует.`);
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.section.rename.error.folderexists, newFolderName),
+    );
     return;
   }
 
@@ -107,11 +118,17 @@ async function renameSection(uri) {
     sortTocItems(parentDir); // сортировка по возрастанию, неиндексированные внизу
 
     vscode.window.showInformationMessage(
-      `Раздел переименован: "${oldFolderName}"  "${finalFolderName}"`,
+      translate(
+        nls_ts.plugin.section.rename.info.success,
+        oldFolderName,
+        finalFolderName,
+      ),
     );
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(`Ошибка при переименовании: ${msg}`);
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.section.rename.error.critical, msg),
+    );
   }
 }
 

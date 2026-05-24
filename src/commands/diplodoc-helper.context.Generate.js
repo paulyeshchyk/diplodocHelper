@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // diplodoc-helper.generateContexts.js
 const { runGeneration } = require("../plugins/contexts/сontexts");
 const path = require("path");
@@ -7,17 +8,18 @@ async function generateContexts() {
   const workspaceFolders = vscode.workspace.workspaceFolders;
   if (!workspaceFolders) return;
   const projectRoot = workspaceFolders[0].uri.fsPath;
-  const DOCS_ROOT = projectRoot; //path.join(projectRoot, "docs");
+  const DOCS_ROOT = path.join(projectRoot, "docs");
 
   const results = runGeneration(DOCS_ROOT);
 
   if (results.success.length > 0) {
+    const langs = results.success.join(", ");
     vscode.window.showInformationMessage(
-      `Контексты обновлены: ${results.success.join(", ")}`,
+      translate(nls_ts.plugin.context.generate.info.success, langs),
     );
   } else {
     vscode.window.showErrorMessage(
-      "Не удалось найти теги 'context:' в документации.",
+      translate(nls_ts.plugin.context.generate.error.notfound),
     );
   }
 }

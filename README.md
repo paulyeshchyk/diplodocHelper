@@ -1,5 +1,8 @@
 # Diplodoc Helper
 
+[![Version](https://img.shields.io/vscode-marketplace/v/paulyestchick.diplodochelper.svg)](https://marketplace.visualstudio.com/items?itemName=paulyestchick.diplodochelper)
+[![Changelog](https://img.shields.io/badge/Changelog-CHANGELOG.md-blue)](CHANGELOG.md)
+
 Helper for technical writers who work with Diplodoc / YFM
 
 It speeds up creating, updating, and refactoring documentation.

@@ -210,7 +210,7 @@ function reindexAndRenameSection({
     }
 
     console.log(
-      `   ${hadManualIndex ? "ручной" : "автоматический"} индекс ${currentIndex} - ${newFolderName}`,
+      `   ${hadManualIndex ? "manual" : "auto"} index ${currentIndex} - ${newFolderName}`,
     );
 
     return {
@@ -222,7 +222,7 @@ function reindexAndRenameSection({
     };
   }
 
-  console.log(`   Статья без индекса: ${sectionName}`);
+  console.log(`no index for section: ${sectionName}`);
 
   return {
     sectionPath: oldSectionPath,

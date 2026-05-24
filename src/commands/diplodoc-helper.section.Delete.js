@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Delete.js
 const vscode = require("vscode");
 const fs = require("fs");
@@ -18,27 +19,32 @@ async function deleteSection(uri) {
 
   if (!isDiplodocSection(targetDir)) {
     vscode.window.showWarningMessage(
-      "Выбранная папка не является разделом Diplodoc. Используйте стандартное удаление."
+      translate(nls_ts.plugin.section.delete.error.incorrectSection),
     );
     return;
   }
 
   const confirm = await vscode.window.showWarningMessage(
-    `Удалить раздел "${folderName}" и всё его содержимое безвозвратно?`,
+    translate(nls_ts.plugin.section.delete.confirmation.text, folderName),
     { modal: true },
-    "Удалить"
+    translate(nls_ts.plugin.section.delete.confirmation.title),
   );
 
-  if (confirm !== "Удалить") return;
+  if (confirm !== translate(nls_ts.plugin.section.delete.confirmation.title))
+    return;
 
   try {
     TocYamlEntryRemove(parentDir, folderName);
     fs.rmSync(targetDir, { recursive: true, force: true });
 
-    vscode.window.showInformationMessage(`Раздел "${folderName}" успешно удалён.`);
+    vscode.window.showInformationMessage(
+      translate(nls_ts.plugin.section.delete.info.success, folderName),
+    );
   } catch (err) {
-    let msg = (err instanceof Error) ? err.message : `${err}`;
-    vscode.window.showErrorMessage(`Ошибка при удалении: ${msg}`);
+    let msg = err instanceof Error ? err.message : `${err}`;
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.section.delete.error.critical, msg),
+    );
   }
 }
 

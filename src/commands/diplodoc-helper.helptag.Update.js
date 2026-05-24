@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.helptag.Update.js
 const vscode = require("vscode");
 const fs = require("fs");
@@ -5,13 +6,6 @@ const path = require("path");
 
 const { isDiplodocSection } = require("../utils");
 const { parse, update } = require("../utils/frontmatter");
-
-const SErrorHelptagChangeIncorrectFolder =
-  "helptag можно изменять только в полноценных разделах Diplodoc.";
-
-const SErrorEmptyHelptag = "helptag не может быть пустым";
-const SHintAddHelptag = "Например: nomenclature, invoice, report";
-const SPromptAddHelptag = "Введите значение helptag";
 
 /**
  * @param {{ fsPath: string }} uri
@@ -21,7 +15,9 @@ async function updateHelptag(uri) {
 
   const sectionPath = uri.fsPath;
   if (!isDiplodocSection(sectionPath)) {
-    vscode.window.showWarningMessage(SErrorHelptagChangeIncorrectFolder);
+    vscode.window.showWarningMessage(
+      translate(nls_ts.plugin.helptag.update.error.incorrectSection),
+    );
     return;
   }
 
@@ -35,12 +31,12 @@ async function updateHelptag(uri) {
   }
 
   const newHelptag = await vscode.window.showInputBox({
-    prompt: SPromptAddHelptag,
+    prompt: translate(nls_ts.plugin.helptag.update.prompt.add),
     value: currentHelptag,
-    placeHolder: SHintAddHelptag,
+    placeHolder: translate(nls_ts.plugin.helptag.update.placeholder.add),
     validateInput: (value) => {
       if (!value || value.trim() === "") {
-        return SErrorEmptyHelptag;
+        return translate(nls_ts.plugin.helptag.update.error.empty);
       }
       return null;
     },
@@ -54,11 +50,17 @@ async function updateHelptag(uri) {
 
     fs.writeFileSync(indexMdPath, content, "utf8");
 
-    const STipHelptagUpdated = `helptag обновлён: "${newHelptag}"`;
+    const STipHelptagUpdated = translate(
+      nls_ts.plugin.helptag.update.info.success,
+      newHelptag,
+    );
     vscode.window.showInformationMessage(STipHelptagUpdated);
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    const SErrorHelptagNotUpdated = `Ошибка при обновлении helptag: ${msg}`;
+    const SErrorHelptagNotUpdated = translate(
+      nls_ts.plugin.helptag.update.error.critical,
+      msg,
+    );
     vscode.window.showErrorMessage(SErrorHelptagNotUpdated);
   }
 }

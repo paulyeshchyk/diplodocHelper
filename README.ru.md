@@ -1,5 +1,8 @@
 # Diplodoc Helper
 
+[![Version](https://img.shields.io/vscode-marketplace/v/paulyestchick.diplodochelper.svg)](https://marketplace.visualstudio.com/items?itemName=paulyestchick.diplodochelper)
+[![Changelog](https://img.shields.io/badge/Changelog-CHANGELOG.md-blue)](CHANGELOG.md)
+
 Помощник для технических писателей, работающих с Diplodoc / YFM
 
 Значительно ускоряет создание, поддержку и рефакторинг документации.

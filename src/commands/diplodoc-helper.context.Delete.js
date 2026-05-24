@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.context.Delete.js
 const vscode = require("vscode");
 const fs = require("fs");
@@ -39,18 +40,19 @@ async function deleteContext(uri) {
     toDelete = contexts[0];
   } else {
     toDelete = await vscode.window.showQuickPick(contexts, {
-      placeHolder: "Выберите context для удаления",
+      placeHolder: translate(nls_ts.plugin.context.delete.dialog.placeholder),
     });
     if (!toDelete) return;
   }
 
   const confirm = await vscode.window.showWarningMessage(
-    `Удалить context "${toDelete}"?`,
+    translate(nls_ts.plugin.context.delete.confirm.prompt, toDelete),
     { modal: true },
-    "Удалить",
+    translate(nls_ts.plugin.context.delete.confirm.button),
   );
 
-  if (confirm !== "Удалить") return;
+  if (confirm !== translate(nls_ts.plugin.context.delete.confirm.button))
+    return;
 
   try {
     let content = fs.readFileSync(indexMdPath, "utf8");
@@ -67,10 +69,14 @@ async function deleteContext(uri) {
 
     fs.writeFileSync(indexMdPath, content, "utf8");
 
-    vscode.window.showInformationMessage(`context "${toDelete}" удалён.`);
+    vscode.window.showInformationMessage(
+      translate(nls_ts.plugin.context.delete.info.success, toDelete),
+    );
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(`Ошибка при удалении context: ${msg}`);
+    vscode.window.showErrorMessage(
+      translate(nls_ts.plugin.context.delete.error.critical, msg),
+    );
   }
 }
 
