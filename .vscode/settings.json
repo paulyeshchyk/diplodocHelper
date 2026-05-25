@@ -4,5 +4,6 @@
     "**\\build": "explorerExcludedFiles",
     "**\\node_modules": "explorerExcludedFiles",
     "**/dist": "explorerExcludedFiles"
-  }
+  },
+  "editor.language.brackets": []
 }
