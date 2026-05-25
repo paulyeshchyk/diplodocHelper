@@ -1,15 +1,12 @@
 // src/plugins/breadcrumb/inject-breadcrumb.js
-const fs = require("fs");
-const path = require("path");
-const {
-  walkHtmlFilesBuildTitleMap,
-  injectScriptIntoFile,
-  DEFAULT_CONFIG,
-} = require(".");
 
-const { walkHtmlFiles } = require(".");
+const fs = require('fs');
+const path = require('path');
+const { walkHtmlFilesBuildTitleMap, injectScriptIntoFile, DEFAULT_CONFIG } = require('.');
 
-const { generateBreadcrumbScript } = require("./breadcrumb.extractor");
+const { walkHtmlFiles } = require('.');
+
+const { generateBreadcrumbScript } = require('./breadcrumb.extractor');
 
 /**
  * @param {string} buildDir
@@ -33,7 +30,7 @@ function runGeneration(buildDir) {
 
   console.log(`[Breadcrumb] Найдено ${titleMap.size} страниц. Вставка крошек...`);
 
-  walkHtmlFiles(buildDir, (htmlPath) => {
+  walkHtmlFiles(buildDir, htmlPath => {
     const script = generateBreadcrumbScript(htmlPath, titleMap, config);
 
     injectScriptIntoFile(htmlPath, config, script);

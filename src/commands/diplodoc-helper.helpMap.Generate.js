@@ -1,7 +1,8 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/generateHelpmap.js
-const path = require("path");
-const vscode = require("vscode");
+
+const { nls_ts, translate } = require('../../nls_ts.js');
+const path = require('path');
+const vscode = require('vscode');
 
 // Проверка наличия vscode
 /**
@@ -19,10 +20,10 @@ const vscode = require("vscode");
  * @property {string[]} failed - Пути к файлам, вызвавшим ошибку
  */
 
-const outputFolderName = "build";
-const docsFolderName = "docs";
+const outputFolderName = 'build';
+const docsFolderName = 'docs';
 
-const { runGeneration } = require("../plugins/helpMap/helpMap");
+const { runGeneration } = require('../plugins/helpMap/helpMap');
 
 /**
  * Вызов из VS Code (Команда расширения)
@@ -33,13 +34,11 @@ async function generateHelpmap() {
   // Если нажали в меню проводника, берем путь папки, иначе корень проекта
   const projectRoot = vscode.workspace.workspaceFolders
     ? vscode.workspace.workspaceFolders[0].uri.fsPath
-    : "";
+    : '';
   const selectedPath = projectRoot; //uri ? uri.fsPath : projectRoot;
 
   if (!selectedPath) {
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.helpmap.generate.error.emptypath),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.helpmap.generate.error.emptypath));
     return;
   }
 
@@ -59,22 +58,17 @@ async function generateHelpmap() {
         translate(
           nls_ts.plugin.helpmap.generate.info.success,
           results.success.length,
-          options.outputDir,
-        ),
+          options.outputDir
+        )
       );
     } else {
       vscode.window.showWarningMessage(
-        translate(
-          nls_ts.plugin.helpmap.generate.warning.nothingfound,
-          options.docsDir,
-        ),
+        translate(nls_ts.plugin.helpmap.generate.warning.nothingfound, options.docsDir)
       );
     }
   } catch (err) {
-    let msg = err instanceof Error ? err.message : "${err}";
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.helpmap.generate.error.critical, msg),
-    );
+    let msg = err instanceof Error ? err.message : '${err}';
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.helpmap.generate.error.critical, msg));
   }
 }
 

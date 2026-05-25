@@ -1,11 +1,12 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Delete.js
-const vscode = require("vscode");
-const fs = require("fs");
-const path = require("path");
 
-const { isDiplodocSection } = require("../utils");
-const { TocYamlEntryRemove } = require("../utils");
+const { nls_ts, translate } = require('../../nls_ts.js');
+const vscode = require('vscode');
+const fs = require('fs');
+const path = require('path');
+
+const { isDiplodocSection } = require('../utils');
+const { TocYamlEntryRemove } = require('../utils');
 
 /**
  * @param {{ fsPath: string }} uri
@@ -19,7 +20,7 @@ async function deleteSection(uri) {
 
   if (!isDiplodocSection(targetDir)) {
     vscode.window.showWarningMessage(
-      translate(nls_ts.plugin.section.delete.error.incorrectSection),
+      translate(nls_ts.plugin.section.delete.error.incorrectSection)
     );
     return;
   }
@@ -27,24 +28,21 @@ async function deleteSection(uri) {
   const confirm = await vscode.window.showWarningMessage(
     translate(nls_ts.plugin.section.delete.confirmation.text, folderName),
     { modal: true },
-    translate(nls_ts.plugin.section.delete.confirmation.title),
+    translate(nls_ts.plugin.section.delete.confirmation.title)
   );
 
-  if (confirm !== translate(nls_ts.plugin.section.delete.confirmation.title))
-    return;
+  if (confirm !== translate(nls_ts.plugin.section.delete.confirmation.title)) return;
 
   try {
     TocYamlEntryRemove(parentDir, folderName);
     fs.rmSync(targetDir, { recursive: true, force: true });
 
     vscode.window.showInformationMessage(
-      translate(nls_ts.plugin.section.delete.info.success, folderName),
+      translate(nls_ts.plugin.section.delete.info.success, folderName)
     );
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.delete.error.critical, msg),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.delete.error.critical, msg));
   }
 }
 

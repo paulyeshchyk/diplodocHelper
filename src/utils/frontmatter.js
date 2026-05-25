@@ -1,5 +1,5 @@
 // src/utils/frontmatter.js
-const matter = require("gray-matter");
+const matter = require('gray-matter');
 
 /**
  * Парсит frontmatter + тело документа
@@ -16,7 +16,7 @@ function parse(content) {
  * @param {string} content
  * @returns {string}
  */
-function stringify(data, content = "") {
+function stringify(data, content = '') {
   return matter.stringify(content, data);
 }
 

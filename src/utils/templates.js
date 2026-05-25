@@ -1,9 +1,5 @@
 // src/utils/templates.js
-const {
-  FrontMatterMeta,
-  FrontMatterToc,
-  FrontMatterFiles,
-} = require("./constants");
+const { FrontMatterMeta, FrontMatterToc, FrontMatterFiles } = require('./constants');
 
 /**
  * Формирует финальный заголовок с префиксом
@@ -12,14 +8,12 @@ const {
  * @param {string} title
  */
 function TEMPLATE_FINAL_TITLE(sectionValue, sectionIndex, title) {
-  if (!sectionValue || sectionValue.trim() === "") {
+  if (!sectionValue || sectionValue.trim() === '') {
     return title;
   }
 
   const leftPart =
-    sectionIndex.trim().length === 0
-      ? sectionValue
-      : `${sectionValue} ${sectionIndex.trim()}`;
+    sectionIndex.trim().length === 0 ? sectionValue : `${sectionValue} ${sectionIndex.trim()}`;
   return `${leftPart}. ${title}`;
 }
 
@@ -27,7 +21,7 @@ const TEMPLATE_INDEX_MD = (
   /** @type {string} */ title,
   /** @type {any} */ sectionType,
   /** @type {string} */ sectionValue,
-  /** @type {string} */ sectionIndex,
+  /** @type {string} */ sectionIndex
 ) =>
   [
     `---`,
@@ -36,7 +30,7 @@ const TEMPLATE_INDEX_MD = (
     `${FrontMatterMeta.PURETITLE}: ${title}`,
     `${FrontMatterMeta.SECTIONINDEX}: ${sectionIndex}`,
     `---`,
-  ].join("\n");
+  ].join('\n');
 
 /**
  * @param {string} title
@@ -53,24 +47,24 @@ function TEMPLATE_INDEX_YAML(title, sectionType, sectionValue, sectionIndex) {
     `  ${FrontMatterMeta.META_TITLE}: ${finalTitle}`,
     `  ${FrontMatterMeta.META_SECTIONTYPE}: ${sectionType}`,
     `  ${FrontMatterMeta.META_NOINDEX}: true`,
-  ].join("\n");
+  ].join('\n');
 }
 
 const TEMPLATE_TOC_YAML = (
   /** @type {string} */ title,
   /** @type {string} */ sectionLabel,
-  /** @type {string} */ sectionIndex,
+  /** @type {string} */ sectionIndex
 ) =>
   [
     `${FrontMatterToc.TITLE}: ${TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, title)}`,
     `${FrontMatterToc.HREF}: ${FrontMatterFiles.INDEX_YAML}`,
-  ].join("\n");
+  ].join('\n');
 
 const TEMPLATE_PARENT_TOC_YAML = (
   /** @type {string} */ name,
   /** @type {string} */ sectionLabel,
   /** @type {any} */ folderName,
-  /** @type {string} */ sectionIndex,
+  /** @type {string} */ sectionIndex
 ) =>
   [
     `  - ${FrontMatterToc.ITEMS_NAME}: ${name}`,
@@ -78,7 +72,7 @@ const TEMPLATE_PARENT_TOC_YAML = (
     `    ${FrontMatterToc.ITEMS_INCLUDE}:`,
     `      ${FrontMatterToc.ITEMS_INCLUDE_PATH}: ${folderName}/${FrontMatterFiles.TOC_YAML}`,
     `      ${FrontMatterToc.ITEMS_INCLUDE_MODE}: link`,
-  ].join("\n");
+  ].join('\n');
 
 /** @import {SectionTypeOption} from  './diplodocTypes'*/
 
@@ -90,10 +84,10 @@ const TEMPLATE_PARENT_TOC_YAML = (
  * @param {string | undefined} sectionIndex
  * @returns {string}
  */
-function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = "") {
-  const cleanName = sectionName.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
+function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = '') {
+  const cleanName = sectionName.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, '');
   const hasType = !!sectionType.value?.trim();
-  const hasIndex = !!(sectionIndex && sectionIndex.trim() !== "");
+  const hasIndex = !!(sectionIndex && sectionIndex.trim() !== '');
 
   // 1. Есть и тип, и индекс
   if (hasType && hasIndex) {
@@ -116,11 +110,11 @@ function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = "") {
  * @param {string} sectionName
  * @param {string | undefined} sectionIndex
  */
-function TEMPLATE_SECTION_NAME(sectionType, sectionName, sectionIndex = "") {
+function TEMPLATE_SECTION_NAME(sectionType, sectionName, sectionIndex = '') {
   const cleanName = sectionName; //.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
 
-  if (sectionType.value.trim() !== "") {
-    if (sectionIndex && sectionIndex.trim() !== "") {
+  if (sectionType.value.trim() !== '') {
+    if (sectionIndex && sectionIndex.trim() !== '') {
       return `${sectionType.value} ${sectionIndex.trim()}. ${cleanName}`;
     } else {
       return `${sectionType.value} ${cleanName}`;

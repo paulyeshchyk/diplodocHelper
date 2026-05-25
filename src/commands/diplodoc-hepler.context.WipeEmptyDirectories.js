@@ -1,7 +1,9 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
-const vscode = require("vscode");
+// diplodoc-hepler.context.WipeEmptyDirectories.js
 
-const { cleanupEmptyDirectories, getLanguageRoot } = require("../utils");
+const { nls_ts, translate } = require('../../nls_ts.js');
+const vscode = require('vscode');
+
+const { cleanupEmptyDirectories, getLanguageRoot } = require('../utils');
 
 /**
  * Очистка пустых папок после реиндексации
@@ -14,9 +16,7 @@ async function wipeEmptyDirectories(uri) {
   const success = cleanupEmptyDirectories(uri.fsPath, languageRoot);
 
   if (success) {
-    vscode.window.showInformationMessage(
-      translate(nls_ts.plugin.context.wipe.success, uri.fsPath),
-    );
+    vscode.window.showInformationMessage(translate(nls_ts.plugin.context.wipe.success, uri.fsPath));
   }
 }
 

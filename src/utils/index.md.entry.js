@@ -1,6 +1,6 @@
 // index.md.entry.js
 
-const { IndexMdFileRead } = require("./index.md.file");
+const { IndexMdFileRead } = require('./index.md.file');
 
 /**
  * Читает текущий sectionIndex
@@ -9,8 +9,8 @@ const { IndexMdFileRead } = require("./index.md.file");
  */
 function IndexMdEntryReadIndex(folderPath) {
   const data = IndexMdFileRead(folderPath);
-  if (!data) return "";
-  return String(data.sectionIndex || "");
+  if (!data) return '';
+  return String(data.sectionIndex || '');
 }
 
 /**
@@ -20,8 +20,8 @@ function IndexMdEntryReadIndex(folderPath) {
  */
 function IndexMdEntryReadTitle(folderPath) {
   const data = IndexMdFileRead(folderPath);
-  if (!data) return "";
-  return String(data.pureTitle || data.title || "");
+  if (!data) return '';
+  return String(data.pureTitle || data.title || '');
 }
 
 module.exports = {

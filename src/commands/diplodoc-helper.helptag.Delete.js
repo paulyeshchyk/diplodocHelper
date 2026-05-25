@@ -1,11 +1,12 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.helptag.Delete.js
-const vscode = require("vscode");
-const fs = require("fs");
-const path = require("path");
 
-const { isDiplodocSection } = require("../utils");
-const { parse, remove } = require("../utils/frontmatter");
+const { nls_ts, translate } = require('../../nls_ts.js');
+const vscode = require('vscode');
+const fs = require('fs');
+const path = require('path');
+
+const { isDiplodocSection } = require('../utils');
+const { parse, remove } = require('../utils/frontmatter');
 
 /**
  * @param {{ fsPath: string }} uri
@@ -18,14 +19,14 @@ async function deleteHelptag(uri) {
     return; // silently
   }
 
-  const indexMdPath = path.join(sectionPath, "index.md");
+  const indexMdPath = path.join(sectionPath, 'index.md');
   if (!fs.existsSync(indexMdPath)) return;
 
-  let currentHelptag = "";
+  let currentHelptag = '';
   try {
-    const content = fs.readFileSync(indexMdPath, "utf8");
+    const content = fs.readFileSync(indexMdPath, 'utf8');
     const { data } = parse(content);
-    currentHelptag = data.helptag || "";
+    currentHelptag = data.helptag || '';
   } catch {
     return;
   }
@@ -37,26 +38,23 @@ async function deleteHelptag(uri) {
   const confirm = await vscode.window.showWarningMessage(
     translate(nls_ts.plugin.helptag.delete.confirm.title, currentHelptag),
     { modal: true },
-    translate(nls_ts.plugin.helptag.delete.confirm.button),
+    translate(nls_ts.plugin.helptag.delete.confirm.button)
   );
 
-  if (confirm !== translate(nls_ts.plugin.helptag.delete.confirm.button))
-    return;
+  if (confirm !== translate(nls_ts.plugin.helptag.delete.confirm.button)) return;
 
   try {
-    let content = fs.readFileSync(indexMdPath, "utf8");
-    content = remove(content, "helptag");
+    let content = fs.readFileSync(indexMdPath, 'utf8');
+    content = remove(content, 'helptag');
 
-    fs.writeFileSync(indexMdPath, content, "utf8");
+    fs.writeFileSync(indexMdPath, content, 'utf8');
 
     vscode.window.showInformationMessage(
-      translate(nls_ts.plugin.helptag.delete.info.success, currentHelptag),
+      translate(nls_ts.plugin.helptag.delete.info.success, currentHelptag)
     );
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.helptag.delete.error.critical, msg),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.helptag.delete.error.critical, msg));
   }
 }
 

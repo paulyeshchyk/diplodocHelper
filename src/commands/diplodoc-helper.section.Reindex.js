@@ -1,9 +1,10 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Reindex.js
-const vscode = require("vscode");
-const path = require("path");
 
-const { reindexDirectory } = require("../core/reindex");
+const { nls_ts, translate } = require('../../nls_ts.js');
+const vscode = require('vscode');
+const path = require('path');
+
+const { reindexDirectory } = require('../core/reindex');
 
 /**
  * @param {{ fsPath: string }} uri
@@ -24,12 +25,10 @@ async function reindexCommand(uri) {
     },
     async () => {
       allWarnings = reindexDirectory(targetDir);
-    },
+    }
   );
 
-  vscode.window.showInformationMessage(
-    translate(nls_ts.plugin.section.reindex.info.success),
-  );
+  vscode.window.showInformationMessage(translate(nls_ts.plugin.section.reindex.info.success));
 
   // Показываем предупреждения
   if (allWarnings.length > 0) {
@@ -49,12 +48,12 @@ function showWarnings(warnings) {
 
   if (messages.size === 0) return;
 
-  const messageList = Array.from(messages).join("\n");
+  const messageList = Array.from(messages).join('\n');
 
   vscode.window.showWarningMessage(
     translate(nls_ts.plugin.section.reindex.warning.text),
     { modal: true, detail: messageList },
-    translate(nls_ts.plugin.section.reindex.warning.button),
+    translate(nls_ts.plugin.section.reindex.warning.button)
   );
 }
 

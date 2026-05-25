@@ -1,17 +1,18 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Move.js
 
-("use strict");
+const { nls_ts, translate } = require('../../nls_ts.js');
 
-const vscode = require("vscode");
-const fs = require("fs");
-const path = require("path");
+('use strict');
 
-const { isDiplodocSection, getSectionMetadata } = require("../utils");
-const { getLanguageRoot } = require("../utils/directory");
-const { reindexDirectory } = require("../core/reindex");
-const { TocYamlEntryRemove, TocYamlEntryCreate } = require("../utils");
-const { updateLinksAfterRename } = require("../utils/linksUpdater");
+const vscode = require('vscode');
+const fs = require('fs');
+const path = require('path');
+
+const { isDiplodocSection, getSectionMetadata } = require('../utils');
+const { getLanguageRoot } = require('../utils/directory');
+const { reindexDirectory } = require('../core/reindex');
+const { TocYamlEntryRemove, TocYamlEntryCreate } = require('../utils');
+const { updateLinksAfterRename } = require('../utils/linksUpdater');
 
 /**
  * @typedef {Object} MoveTarget
@@ -29,9 +30,7 @@ async function moveSection(uri) {
 
   const sourcePath = uri.fsPath;
   if (!isDiplodocSection(sourcePath)) {
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.move.error.incorrectSection),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.move.error.incorrectSection));
     return;
   }
 
@@ -49,7 +48,7 @@ async function moveSection(uri) {
   const success = await performMove(sourcePath, targetDir, position);
   if (success) {
     vscode.window.showInformationMessage(
-      translate(nls_ts.plugin.section.move.info.success, sourceName),
+      translate(nls_ts.plugin.section.move.info.success, sourceName)
     );
   }
 }
@@ -63,8 +62,8 @@ async function selectTargetDirectory(sourcePath) {
 
   const targets = await collectMoveTargets(languageRoot);
 
-  const items = targets.map((t) => ({
-    label: "  ".repeat(t.level) + t.label,
+  const items = targets.map(t => ({
+    label: '  '.repeat(t.level) + t.label,
     description: t.path,
     targetPath: t.path,
   }));
@@ -122,33 +121,28 @@ async function collectMoveTargets(rootDir) {
 async function selectInsertPosition(targetDir, movingSectionName) {
   const items = fs
     .readdirSync(targetDir, { withFileTypes: true })
-    .filter(
-      (e) => e.isDirectory() && isDiplodocSection(path.join(targetDir, e.name)),
-    )
-    .map((e) => ({
+    .filter(e => e.isDirectory() && isDiplodocSection(path.join(targetDir, e.name)))
+    .map(e => ({
       label: translate(nls_ts.plugin.section.move.label.after, e.name),
-      description: "",
-      position: "after",
+      description: '',
+      position: 'after',
       afterName: e.name,
     }));
 
   const options = [
     {
       label: translate(nls_ts.plugin.section.move.placeholder.start),
-      position: "start",
+      position: 'start',
     },
     ...items,
     {
       label: translate(nls_ts.plugin.section.move.placeholder.end),
-      position: "end",
+      position: 'end',
     },
   ];
 
   const selected = await vscode.window.showQuickPick(options, {
-    placeHolder: translate(
-      nls_ts.plugin.section.move.placeholder.target,
-      movingSectionName,
-    ),
+    placeHolder: translate(nls_ts.plugin.section.move.placeholder.target, movingSectionName),
   });
 
   return selected || null;
@@ -166,22 +160,18 @@ async function performMove(sourcePath, targetDir, position) {
 
   // === Защита от перемещения в самого себя или своего потомка ===
   if (sourcePath === targetPath) {
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.move.error.self),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.move.error.self));
     return false;
   }
 
   if (targetPath.startsWith(sourcePath + path.sep)) {
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.move.error.recursive),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.move.error.recursive));
     return false;
   }
 
   if (fs.existsSync(targetPath)) {
     vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.move.error.sectionexists, sourceName),
+      translate(nls_ts.plugin.section.move.error.sectionexists, sourceName)
     );
     return false;
   }
@@ -198,18 +188,12 @@ async function performMove(sourcePath, targetDir, position) {
 
     // 3. Обновляем ссылки на перемещённый раздел и его содержимое
     const projectRoot = getLanguageRoot(targetPath);
-    const updatedFiles = await updateLinksAfterRename(
-      sourcePath,
-      targetPath,
-      projectRoot,
-    );
+    const updatedFiles = await updateLinksAfterRename(sourcePath, targetPath, projectRoot);
     if (updatedFiles > 0) {
       vscode.window.showInformationMessage(
-        translate(nls_ts.plugin.section.move.info.success, updatedFiles),
+        translate(nls_ts.plugin.section.move.info.success, updatedFiles)
       );
-      vscode.window.showWarningMessage(
-        translate(nls_ts.plugin.section.move.warning.broken),
-      );
+      vscode.window.showWarningMessage(translate(nls_ts.plugin.section.move.warning.broken));
     }
 
     // 4. Добавляем запись в новый родитель
@@ -222,8 +206,8 @@ async function performMove(sourcePath, targetDir, position) {
       newParentDir,
       composedTitle,
       sourceName,
-      sectionInfo.sectionType || "Page",
-      sectionInfo.sectionIndex || "",
+      sectionInfo.sectionType || 'Page',
+      sectionInfo.sectionIndex || ''
     );
 
     console.log(`Перемещён: ${sourceName} - ${newParentDir}`);
@@ -235,9 +219,7 @@ async function performMove(sourcePath, targetDir, position) {
     return true;
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.move.error.critical, msg),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.move.error.critical, msg));
     console.error(err);
     return false;
   }
@@ -248,21 +230,21 @@ async function performMove(sourcePath, targetDir, position) {
  * @param {string} sectionPath
  */
 async function getSectionInfo(sectionPath) {
-  const indexPath = path.join(sectionPath, "index.md");
+  const indexPath = path.join(sectionPath, 'index.md');
   if (!fs.existsSync(indexPath)) {
-    return { sectionType: "Page", sectionIndex: "" };
+    return { sectionType: 'Page', sectionIndex: '' };
   }
 
   try {
-    const content = fs.readFileSync(indexPath, "utf8");
+    const content = fs.readFileSync(indexPath, 'utf8');
     const metadata = getSectionMetadata(content); // из utils
 
     return {
-      sectionType: metadata.sectionType || "Page",
-      sectionIndex: metadata.sectionIndex || "",
+      sectionType: metadata.sectionType || 'Page',
+      sectionIndex: metadata.sectionIndex || '',
     };
   } catch (e) {
-    return { sectionType: "Page", sectionIndex: "" };
+    return { sectionType: 'Page', sectionIndex: '' };
   }
 }
 
@@ -271,10 +253,10 @@ async function getSectionInfo(sectionPath) {
  * @param {string} sectionPath
  */
 async function getComposedTitle(sectionPath) {
-  const indexPath = path.join(sectionPath, "index.md");
+  const indexPath = path.join(sectionPath, 'index.md');
   if (!fs.existsSync(indexPath)) return path.basename(sectionPath);
 
-  const content = fs.readFileSync(indexPath, "utf8");
+  const content = fs.readFileSync(indexPath, 'utf8');
   const titleMatch = content.match(/title:\s*(.+)/);
   return titleMatch ? titleMatch[1].trim() : path.basename(sectionPath);
 }

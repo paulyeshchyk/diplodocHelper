@@ -1,6 +1,7 @@
 // src/plugins/core/breadcrumb/breadcrumb-utils.js
-const fs = require("fs");
-const path = require("path");
+
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Извлекает заголовок страницы из HTML
@@ -8,15 +9,13 @@ const path = require("path");
  * @returns {string | null}
  */
 function extractTitleFromHtml(html) {
-  const stateMatch = html.match(
-    /<script\s+id="diplodoc-state"[^>]*>([\s\S]*?)<\/script>/,
-  );
+  const stateMatch = html.match(/<script\s+id="diplodoc-state"[^>]*>([\s\S]*?)<\/script>/);
   if (stateMatch) {
     try {
       const state = JSON.parse(stateMatch[1]);
       if (state.data?.title) return state.data.title;
       if (state.title) return state.title;
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/);
@@ -31,11 +30,11 @@ function extractTitleFromHtml(html) {
  * @returns {string | null}
  */
 function generateBreadcrumbScript(htmlPath, titleMap, config) {
-  const relPath = path.relative(config.buildDir, htmlPath).replace(/\\/g, "/");
-  let withoutHtml = relPath.replace(/\.html$/, "");
-  if (withoutHtml === "" || withoutHtml === "index") return null;
+  const relPath = path.relative(config.buildDir, htmlPath).replace(/\\/g, '/');
+  let withoutHtml = relPath.replace(/\.html$/, '');
+  if (withoutHtml === '' || withoutHtml === 'index') return null;
 
-  let segments = withoutHtml.split("/").filter((s) => s && s !== "index");
+  let segments = withoutHtml.split('/').filter(s => s && s !== 'index');
   if (segments.length < 2) return null;
 
   const lang = segments[0];
@@ -44,8 +43,8 @@ function generateBreadcrumbScript(htmlPath, titleMap, config) {
 
   // Читаем шаблон
   let template = fs.readFileSync(
-    path.join(__dirname, "../breadcrumb/breadcrumb.template.js"),
-    "utf8",
+    path.join(__dirname, '../breadcrumb/breadcrumb.template.js'),
+    'utf8'
   );
 
   const titlesJson = JSON.stringify(Object.fromEntries(titleMap));
@@ -56,12 +55,12 @@ function generateBreadcrumbScript(htmlPath, titleMap, config) {
   const parentSegmentsJson = JSON.stringify(parentSegments);
 
   template = template
-    .replace("{{TITLES_MAP}}", titlesJson)
-    .replace("{{SEPARATOR}}", separatorJson)
-    .replace("{{CLASSES}}", classesJson)
-    .replace("{{CONTAINER_SELECTOR}}", containerSelectorJson)
-    .replace("{{LANG}}", langJson)
-    .replace("{{PARENT_SEGMENTS}}", parentSegmentsJson);
+    .replace('{{TITLES_MAP}}', titlesJson)
+    .replace('{{SEPARATOR}}', separatorJson)
+    .replace('{{CLASSES}}', classesJson)
+    .replace('{{CONTAINER_SELECTOR}}', containerSelectorJson)
+    .replace('{{LANG}}', langJson)
+    .replace('{{PARENT_SEGMENTS}}', parentSegmentsJson);
 
   return template;
 }

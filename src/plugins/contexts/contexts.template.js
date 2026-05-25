@@ -1,7 +1,9 @@
+// contexts.template.js
+
 /** @import {ContextMap} from '../core/types' */
 
 const INDEX_MD_DEFAULT_CONTENT = (/** @type {string} */ title) =>
-  ["---", `title: ${title}`, `sectionType: Page`, "---"].join("\n");
+  ['---', `title: ${title}`, `sectionType: Page`, '---'].join('\n');
 
 /**
  * @param {{ term: any; slug: any; }} i

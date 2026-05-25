@@ -1,9 +1,8 @@
 // src/utils/prompts.js
-const vscode = require("vscode");
-const { isValidName } = require("./directory");
-const { sectionTypes } = require("./section");
-const { FrontMatterSectionTypesIndexed } = require("../utils/constants");
-
+const vscode = require('vscode');
+const { isValidName } = require('./directory');
+const { sectionTypes } = require('./section');
+const { FrontMatterSectionTypesIndexed } = require('../utils/constants');
 
 /**
  * @typedef {Object} PromptResult
@@ -18,7 +17,7 @@ const { FrontMatterSectionTypesIndexed } = require("../utils/constants");
  * @param {string} [currentIndex] - текущий индекс
  * @returns {Promise<PromptResult | null>}
  */
-async function promptSection(currentPureTitle = "", currentIndex = "") {
+async function promptSection(currentPureTitle = '', currentIndex = '') {
   const newSectionType = await promptSectionType();
   if (!newSectionType) return null;
 
@@ -26,9 +25,9 @@ async function promptSection(currentPureTitle = "", currentIndex = "") {
   if (!newPureTitle) return null;
 
   const isIndexed = FrontMatterSectionTypesIndexed.includes(newSectionType.name);
-  let userIndex = "";
+  let userIndex = '';
   if (isIndexed) {
-    userIndex = (await promptSectionIndex(currentIndex)) ?? "";
+    userIndex = (await promptSectionIndex(currentIndex)) ?? '';
   }
 
   return { newSectionType, newPureTitle, userIndex };
@@ -41,7 +40,7 @@ async function promptSection(currentPureTitle = "", currentIndex = "") {
 async function promptSectionType() {
   const types = sectionTypes();
   return await vscode.window.showQuickPick(types, {
-    placeHolder: "Выберите тип раздела",
+    placeHolder: 'Выберите тип раздела',
     canPickMany: false,
   });
 }
@@ -51,15 +50,15 @@ async function promptSectionType() {
  * @param {string} [currentValue]
  * @returns {Promise<string | undefined>}
  */
-async function promptSectionName(currentValue = "") {
+async function promptSectionName(currentValue = '') {
   return await vscode.window.showInputBox({
-    prompt: "Введите новое название раздела",
+    prompt: 'Введите новое название раздела',
     value: currentValue,
-    placeHolder: "Например: Справочник Номенклатуры",
-    validateInput: (value) =>
+    placeHolder: 'Например: Справочник Номенклатуры',
+    validateInput: value =>
       value && value.trim().length > 0 && value.length <= 255
         ? null
-        : "Название не может быть пустым или слишком длинным",
+        : 'Название не может быть пустым или слишком длинным',
   });
 }
 
@@ -73,25 +72,25 @@ async function promptSectionName(currentValue = "") {
  * Разрешаем: 0, 1, 2.5, 7.3, 10.15 и т.д.
  * Запрещаем: -1, .5, 1., пустые строки с точками
  */
-async function promptSectionIndex(currentIndex = "") {
+async function promptSectionIndex(currentIndex = '') {
   return await vscode.window.showInputBox({
-    prompt: "Укажите индекс раздела (можно с дробной частью, например 7.5)",
+    prompt: 'Укажите индекс раздела (можно с дробной частью, например 7.5)',
     value: currentIndex,
-    placeHolder: "Например: 0.5, 1, 2.3, 7.5 ...",
-    validateInput: (value) => {
-      if (!value || value.trim() === "") return null; // пустой — разрешён
+    placeHolder: 'Например: 0.5, 1, 2.3, 7.5 ...',
+    validateInput: value => {
+      if (!value || value.trim() === '') return null; // пустой — разрешён
 
       // Разрешаем только цифры и точки, но не начинаем и не заканчиваем на точку
       if (!/^\d+(\.\d+)*$/.test(value)) {
-        return "Индекс должен состоять из цифр и точек (например: 0.5, 1, 7.3)";
+        return 'Индекс должен состоять из цифр и точек (например: 0.5, 1, 7.3)';
       }
 
       // Дополнительно: запрещаем несколько точек подряд и ведущие нули в частях кроме 0
       if (
         /\.\./.test(value) ||
-        value.split(".").some((part) => part.length > 1 && part.startsWith("0"))
+        value.split('.').some(part => part.length > 1 && part.startsWith('0'))
       ) {
-        return "Некорректный формат индекса";
+        return 'Некорректный формат индекса';
       }
 
       return null;
@@ -104,9 +103,9 @@ async function promptSectionIndex(currentIndex = "") {
  */
 async function ShowSectionNameSelector() {
   return await vscode.window.showInputBox({
-    prompt: "Введите название подраздела",
-    placeHolder: "Например: Справочник Номенклатуры",
-    validateInput: (value) => (isValidName(value) ? null : "Некорректное имя"),
+    prompt: 'Введите название подраздела',
+    placeHolder: 'Например: Справочник Номенклатуры',
+    validateInput: value => (isValidName(value) ? null : 'Некорректное имя'),
   });
 }
 
@@ -116,7 +115,7 @@ async function ShowSectionNameSelector() {
 async function ShowSectionTypeSelector() {
   const types = sectionTypes();
   return await vscode.window.showQuickPick(types, {
-    placeHolder: "Выберите тип создаваемого раздела",
+    placeHolder: 'Выберите тип создаваемого раздела',
     canPickMany: false,
   });
 }

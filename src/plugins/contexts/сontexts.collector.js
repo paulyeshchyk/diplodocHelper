@@ -1,7 +1,8 @@
 // src/plugins/contexts/generateContexts.collector.js
-const fs = require("fs");
-const path = require("path");
-const { extractContextTagValue } = require("./contexts.extractor");
+
+const fs = require('fs');
+const path = require('path');
+const { extractContextTagValue } = require('./contexts.extractor');
 /** @import {ContextMap} from '../core/types' */
 
 /**
@@ -25,10 +26,10 @@ function walkMdFilesGetContexts(langDir) {
       const stat = fs.lstatSync(fullPath);
 
       if (stat.isDirectory()) {
-        if (file !== "contexts") {
+        if (file !== 'contexts') {
           walk(fullPath);
         }
-      } else if (file.endsWith(".md")) {
+      } else if (file.endsWith('.md')) {
         extractContextTagValue(fullPath, langDir, contextMap);
       }
     }

@@ -1,12 +1,12 @@
-const fs = require("fs");
-const path = require("path");
-const { get } = require("./frontmatter");
+const fs = require('fs');
+const path = require('path');
+const { get } = require('./frontmatter');
 
 const {
   FrontMatterFiles,
   FrontMatterMeta,
   FrontMatterSectionTypesIndexed,
-} = require("./constants");
+} = require('./constants');
 
 /**
  * @param {string} indent
@@ -21,7 +21,7 @@ function indentedTocEntry(indent, composedTitle, folderName) {
     `${indent}    path: ${folderName}/toc.yaml`,
     `${indent}    mode: link`,
   ];
-  return normalizeEmptyLines(result.join("\n"));
+  return normalizeEmptyLines(result.join('\n'));
 }
 
 /**
@@ -29,20 +29,20 @@ function indentedTocEntry(indent, composedTitle, folderName) {
  */
 function getTocIndentation(parentDir) {
   const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
-  if (!fs.existsSync(tocPath)) return "  ";
+  if (!fs.existsSync(tocPath)) return '  ';
 
-  const content = fs.readFileSync(tocPath, "utf8");
+  const content = fs.readFileSync(tocPath, 'utf8');
   const match = content.match(/^(\s*)- \s*name:/m);
-  return match ? match[1] : "  ";
+  return match ? match[1] : '  ';
 }
 
 /**
  * @param {string} str
  */
 function normalizeEmptyLines(str) {
-  str = str.replace(/\r\n/g, "\n");
-  str = str.replace(/\n\n/g, "\n");
-  return str.replace(/(\r?\n[ \t]*){3,}/g, "\n").trimEnd() + "\n";
+  str = str.replace(/\r\n/g, '\n');
+  str = str.replace(/\n\n/g, '\n');
+  return str.replace(/(\r?\n[ \t]*){3,}/g, '\n').trimEnd() + '\n';
 }
 
 /**
@@ -59,7 +59,7 @@ function getIndexFromBlock(block, baseDir) {
 
   if (!fs.existsSync(indexPath)) return null;
 
-  const content = fs.readFileSync(indexPath, "utf8");
+  const content = fs.readFileSync(indexPath, 'utf8');
   const sectionType = get(content, FrontMatterMeta.SECTIONTYPE);
 
   if (!sectionType || !FrontMatterSectionTypesIndexed.includes(sectionType)) {
@@ -84,7 +84,7 @@ function getIndexFromBlock(block, baseDir) {
 function splitTocIntoBlocks(content) {
   /** @type {TocBlocksAccumulator} */
   const acc = {
-    header: "",
+    header: '',
     blocks: [],
     current: null,
   };
@@ -100,7 +100,7 @@ function splitTocIntoBlocks(content) {
       accumulator.current = [part];
     } else if (accumulator.current) {
       accumulator.current.push(part);
-      accumulator.blocks.push(accumulator.current.join(""));
+      accumulator.blocks.push(accumulator.current.join(''));
       accumulator.current = null;
     }
 

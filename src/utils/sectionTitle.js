@@ -1,13 +1,13 @@
 // utils/sectionTitle.js
 
-const { FrontMatterSectionTypesIndexed } = require("./constants");
-const { TEMPLATE_FOLDER_NAME } = require("./templates");
+const { FrontMatterSectionTypesIndexed } = require('./constants');
+const { TEMPLATE_FOLDER_NAME } = require('./templates');
 
 /**
  * @param {import("./diplodocTypes").SectionTypeOption} sectionType
  */
 function isIndexedSectionType(sectionType) {
-    return FrontMatterSectionTypesIndexed.includes(sectionType.name);
+  return FrontMatterSectionTypesIndexed.includes(sectionType.name);
 }
 
 /**
@@ -17,13 +17,13 @@ function isIndexedSectionType(sectionType) {
  * @returns {string}
  */
 function composeTitlePrefix(index, sectionType) {
-    const hasPrefix = !!sectionType.value;
-    const hasIndex = !!index;
+  const hasPrefix = !!sectionType.value;
+  const hasIndex = !!index;
 
-    if (hasPrefix && hasIndex) return `${sectionType.value} ${index}. `;
-    if (hasPrefix && !hasIndex) return sectionType.value;
-    if (!hasPrefix && hasIndex) return `${index}. `;
-    return "";
+  if (hasPrefix && hasIndex) return `${sectionType.value} ${index}. `;
+  if (hasPrefix && !hasIndex) return sectionType.value;
+  if (!hasPrefix && hasIndex) return `${index}. `;
+  return '';
 }
 
 /**
@@ -34,9 +34,9 @@ function composeTitlePrefix(index, sectionType) {
  * @returns {string}
  */
 function composeFullTitle(index, sectionType, pureTitle) {
-    const prefix = composeTitlePrefix(index, sectionType);
-    if (!prefix && !index && !sectionType.value) return pureTitle;
-    return prefix + pureTitle;
+  const prefix = composeTitlePrefix(index, sectionType);
+  if (!prefix && !index && !sectionType.value) return pureTitle;
+  return prefix + pureTitle;
 }
 
 /**
@@ -48,9 +48,9 @@ function composeFullTitle(index, sectionType, pureTitle) {
  * @returns {string}
  */
 function composeFolderName(index, sectionType, pureTitle) {
-    // Предположим, что TEMPLATE_FOLDER_NAME уже реализует нужное правило
-    // Но важно, чтобы оно использовало те же index и sectionType, что и composeFullTitle
-    return TEMPLATE_FOLDER_NAME(sectionType, pureTitle, index);
+  // Предположим, что TEMPLATE_FOLDER_NAME уже реализует нужное правило
+  // Но важно, чтобы оно использовало те же index и sectionType, что и composeFullTitle
+  return TEMPLATE_FOLDER_NAME(sectionType, pureTitle, index);
 }
 
 module.exports = { composeFullTitle, composeFolderName, isIndexedSectionType };

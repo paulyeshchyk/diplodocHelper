@@ -1,4 +1,5 @@
 // src/core/plugin/types.js
+
 /**
  * @typedef {Object} Plugin
  * @property {string} name

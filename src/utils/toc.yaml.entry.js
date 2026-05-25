@@ -1,21 +1,17 @@
 // toc.yaml.entry.js
 
-const fs = require("fs");
-const path = require("path");
-const { IndexYamlEntryPatchHRef } = require("./index.yaml.entry");
+const fs = require('fs');
+const path = require('path');
+const { IndexYamlEntryPatchHRef } = require('./index.yaml.entry');
 
-const { FrontMatterFiles } = require("./constants");
-const {
-  getTocIndentation,
-  indentedTocEntry,
-  normalizeEmptyLines,
-} = require("./toc.yaml.utils");
+const { FrontMatterFiles } = require('./constants');
+const { getTocIndentation, indentedTocEntry, normalizeEmptyLines } = require('./toc.yaml.utils');
 
 /**
  * @param {string} value
  */
 function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
@@ -26,7 +22,7 @@ function TocYamlEntryRemove(parentDir, folderName) {
   const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) return;
 
-  let content = fs.readFileSync(tocPath, "utf8");
+  let content = fs.readFileSync(tocPath, 'utf8');
   const var_part = escapeRegExp(folderName);
 
   // Собираем паттерн:
@@ -35,12 +31,12 @@ function TocYamlEntryRemove(parentDir, folderName) {
   // 3. Жадный захват всего контента, пока не встретим новый "- name:" или конец файла
   const pattern = `^[ \\t]*- name:.*\\r?\\n[ \\t]*href:[ \\t]*${var_part}/index\\.md(?:(?!\\r?\\n[ \\t]*- name:)[\\s\\S])*`;
 
-  const regex = new RegExp(pattern, "gm");
+  const regex = new RegExp(pattern, 'gm');
 
   // Удаляем блок и подчищаем лишние переносы строк, которые могли остаться
-  content = content.replace(regex, "");
+  content = content.replace(regex, '');
 
-  fs.writeFileSync(tocPath, normalizeEmptyLines(content), "utf8");
+  fs.writeFileSync(tocPath, normalizeEmptyLines(content), 'utf8');
 }
 
 /**
@@ -50,27 +46,21 @@ function TocYamlEntryRemove(parentDir, folderName) {
  * @param {any} sectionType
  * @param {string | undefined} sectionIndex
  */
-function TocYamlEntryCreate(
-  parentDir,
-  composedTitle,
-  folderName,
-  sectionType,
-  sectionIndex,
-) {
+function TocYamlEntryCreate(parentDir, composedTitle, folderName, sectionType, sectionIndex) {
   const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) return;
 
-  let content = fs.readFileSync(tocPath, "utf8");
-  const indent = getTocIndentation(parentDir) || "";
+  let content = fs.readFileSync(tocPath, 'utf8');
+  const indent = getTocIndentation(parentDir) || '';
   const newEntry = indentedTocEntry(indent, composedTitle, folderName);
 
-  if (!content.includes("items:")) {
-    content = content.trimEnd() + "\nitems:\n" + newEntry;
+  if (!content.includes('items:')) {
+    content = content.trimEnd() + '\nitems:\n' + newEntry;
   } else {
-    content = content.trimEnd() + "\n" + newEntry;
+    content = content.trimEnd() + '\n' + newEntry;
   }
 
-  fs.writeFileSync(tocPath, normalizeEmptyLines(content), "utf8");
+  fs.writeFileSync(tocPath, normalizeEmptyLines(content), 'utf8');
 }
 
 /**
@@ -96,13 +86,13 @@ function TocYamlEntryPatchTitle(folderPath, composedTitle) {
   const tocPath = path.join(folderPath, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) return;
 
-  let content = fs.readFileSync(tocPath, "utf8");
+  let content = fs.readFileSync(tocPath, 'utf8');
   const regex = /(title:\s*)(.*)/;
   content = content.replace(regex, `$1${composedTitle}`);
-  fs.writeFileSync(tocPath, content, "utf8");
+  fs.writeFileSync(tocPath, content, 'utf8');
 }
 
-const { TEMPLATE_PARENT_TOC_YAML } = require("./templates");
+const { TEMPLATE_PARENT_TOC_YAML } = require('./templates');
 
 /**
  * @param {string} parentDir
@@ -116,26 +106,26 @@ function TocYamlEntryPatchItems(
   sectionTitle,
   sectionTypeLabel,
   folderName,
-  sectionIndex,
+  sectionIndex
 ) {
   const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
   if (!fs.existsSync(tocPath)) return;
 
-  let content = fs.readFileSync(tocPath, "utf8");
+  let content = fs.readFileSync(tocPath, 'utf8');
   const newItemEntry = TEMPLATE_PARENT_TOC_YAML(
     sectionTitle,
     sectionTypeLabel,
     folderName,
-    sectionIndex,
+    sectionIndex
   );
 
-  if (!content.includes("items:")) {
-    content = content.trimEnd() + "\nitems:\n" + newItemEntry;
+  if (!content.includes('items:')) {
+    content = content.trimEnd() + '\nitems:\n' + newItemEntry;
   } else {
-    content = content.trimEnd() + "\n" + newItemEntry;
+    content = content.trimEnd() + '\n' + newItemEntry;
   }
 
-  fs.writeFileSync(tocPath, content, "utf8");
+  fs.writeFileSync(tocPath, content, 'utf8');
 }
 
 /**
@@ -148,13 +138,13 @@ function TocYamlEntryPatchReference(parentDir, oldFolderName, newFolderName) {
   // Обновляем toc.yaml родителя
   const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
   if (fs.existsSync(tocPath)) {
-    let content = fs.readFileSync(tocPath, "utf8");
-    content = content.replace(new RegExp(oldFolderName, "g"), newFolderName);
-    fs.writeFileSync(tocPath, content, "utf8");
+    let content = fs.readFileSync(tocPath, 'utf8');
+    content = content.replace(new RegExp(oldFolderName, 'g'), newFolderName);
+    fs.writeFileSync(tocPath, content, 'utf8');
   }
 
   // Обновляем index.yaml родителя
-  IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, ""); // composedTitle не нужен здесь
+  IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, ''); // composedTitle не нужен здесь
 }
 
 module.exports = {

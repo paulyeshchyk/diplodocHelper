@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const { FrontMatterFiles } = require("./constants");
+const fs = require('fs');
+const path = require('path');
+const { FrontMatterFiles } = require('./constants');
 
 /**
  * @param {string} parentDir
@@ -8,32 +8,21 @@ const { FrontMatterFiles } = require("./constants");
  * @param {any} newFolderName
  * @param {any} composedTitle
  */
-function IndexYamlEntryPatchHRef(
-  parentDir,
-  oldFolderName,
-  newFolderName,
-  composedTitle,
-) {
+function IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, composedTitle) {
   const indexPath = path.join(parentDir, FrontMatterFiles.INDEX_YAML);
   if (!fs.existsSync(indexPath)) return;
 
-  let content = fs.readFileSync(indexPath, "utf8");
+  let content = fs.readFileSync(indexPath, 'utf8');
 
-  content = content.replace(
-    new RegExp(`(href:\\s*)${oldFolderName}/`, "g"),
-    `$1${newFolderName}/`,
-  );
+  content = content.replace(new RegExp(`(href:\\s*)${oldFolderName}/`, 'g'), `$1${newFolderName}/`);
 
   const selfRegex = new RegExp(
     `(\\s*-\\s+title:\\s*)([^\\n]+)(\\n\\s+href:\\s+)${oldFolderName}/index\\.md`,
-    "g",
+    'g'
   );
-  content = content.replace(
-    selfRegex,
-    `$1${composedTitle}$3${newFolderName}/index.md`,
-  );
+  content = content.replace(selfRegex, `$1${composedTitle}$3${newFolderName}/index.md`);
 
-  fs.writeFileSync(indexPath, content, "utf8");
+  fs.writeFileSync(indexPath, content, 'utf8');
 }
 /**
  * Обновляет index.yaml
@@ -48,15 +37,15 @@ function IndexYamlEntryPatchSection(
   pureTitle,
   sectionTypeName,
   sectionLabel,
-  sectionIndex = "",
+  sectionIndex = ''
 ) {
   const yamlPath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
   if (!fs.existsSync(yamlPath)) return;
 
-  let content = fs.readFileSync(yamlPath, "utf8");
+  let content = fs.readFileSync(yamlPath, 'utf8');
 
   const composedTitle =
-    sectionIndex && sectionIndex.trim() !== ""
+    sectionIndex && sectionIndex.trim() !== ''
       ? `${sectionLabel} ${sectionIndex}. ${pureTitle}`
       : pureTitle;
 
@@ -65,21 +54,15 @@ function IndexYamlEntryPatchSection(
 
   content = content.replace(/^pureTitle:.*/m, `pureTitle: ${pureTitle}`);
 
-  content = content.replace(
-    /^sectionType:.*/m,
-    `sectionType: ${sectionTypeName}`,
-  );
+  content = content.replace(/^sectionType:.*/m, `sectionType: ${sectionTypeName}`);
 
-  if (sectionIndex && sectionIndex.trim() !== "") {
-    content = content.replace(
-      /^sectionIndex:.*/m,
-      `sectionIndex: ${sectionIndex}`,
-    );
+  if (sectionIndex && sectionIndex.trim() !== '') {
+    content = content.replace(/^sectionIndex:.*/m, `sectionIndex: ${sectionIndex}`);
   } else {
-    content = content.replace(/^sectionIndex:.*\r?\n?/m, "");
+    content = content.replace(/^sectionIndex:.*\r?\n?/m, '');
   }
 
-  fs.writeFileSync(yamlPath, content, "utf8");
+  fs.writeFileSync(yamlPath, content, 'utf8');
 }
 
 module.exports = { IndexYamlEntryPatchHRef, IndexYamlEntryPatchSection };

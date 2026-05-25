@@ -19,18 +19,18 @@
 
 /** @type {BreadcrumbConfig} */
 const DEFAULT_CONFIG = {
-  buildDir: "./build",
-  separator: " ",
-  templateFile: "./breadcrumb.template.js",
+  buildDir: './build',
+  separator: ' ',
+  templateFile: './breadcrumb.template.js',
   cssClasses: {
-    nav: "dc-breadcrumb",
-    list: "dc-breadcrumb__list",
-    item: "dc-breadcrumb__item",
-    link: "dc-breadcrumb__link",
-    separator: "dc-breadcrumb__separator",
+    nav: 'dc-breadcrumb',
+    list: 'dc-breadcrumb__list',
+    item: 'dc-breadcrumb__item',
+    link: 'dc-breadcrumb__link',
+    separator: 'dc-breadcrumb__separator',
   },
-  ignoreFiles: ["404.html", "search.html"],
-  containerSelector: ".dc-doc-page__main",
+  ignoreFiles: ['404.html', 'search.html'],
+  containerSelector: '.dc-doc-page__main',
 };
 
 module.exports = {

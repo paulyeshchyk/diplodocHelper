@@ -1,13 +1,10 @@
 // plugins/contexts/contexts.js
-const path = require("path");
-const fs = require("fs");
 
-const { walkMdFilesGetContexts } = require("./сontexts.collector");
-const {
-  writeTermFiles,
-  writeIndexMd,
-  writeTocAndIndexYaml,
-} = require("./contexts.writer");
+const path = require('path');
+const fs = require('fs');
+
+const { walkMdFilesGetContexts } = require('./сontexts.collector');
+const { writeTermFiles, writeIndexMd, writeTocAndIndexYaml } = require('./contexts.writer');
 
 /** @import {PluginExecutionResult} from '../core/types' */
 /** @import {ContextMap} from '../core/types' */
@@ -22,14 +19,14 @@ function generateFilesForLang(lang, langDir, contextMap) {
   try {
     if (Object.keys(contextMap).length === 0) return false;
 
-    const outputDir = path.join(langDir, "contexts");
+    const outputDir = path.join(langDir, 'contexts');
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
     const sortedTerms = Object.keys(contextMap).sort((a, b) =>
-      a.localeCompare(b, undefined, { sensitivity: "base" }),
+      a.localeCompare(b, undefined, { sensitivity: 'base' })
     );
 
-    const title = lang === "ru" ? "Контексты" : "Contexts";
+    const title = lang === 'ru' ? 'Контексты' : 'Contexts';
 
     writeTermFiles(outputDir, sortedTerms, contextMap);
     writeIndexMd(outputDir, sortedTerms, contextMap, lang, title);
@@ -47,7 +44,7 @@ function generateFilesForLang(lang, langDir, contextMap) {
  * @returns {PluginExecutionResult}
  */
 function runGeneration(docsRoot) {
-  const LANGUAGES = ["ru", "en"];
+  const LANGUAGES = ['ru', 'en'];
   /** @type {PluginExecutionResult} */
   const results = { success: [], failed: [] };
 

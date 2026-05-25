@@ -1,12 +1,12 @@
-const fs = require("fs");
-const path = require("path");
-const { FrontMatterFiles } = require("./constants");
+const fs = require('fs');
+const path = require('path');
+const { FrontMatterFiles } = require('./constants');
 
-const { TEMPLATE_INDEX_MD } = require("./templates");
+const { TEMPLATE_INDEX_MD } = require('./templates');
 
 // === Функции для Rename (обновление метаданных) ===
 
-const { parse, stringify } = require("./frontmatter");
+const { parse, stringify } = require('./frontmatter');
 
 /**
  * @param {string} folderPath
@@ -15,18 +15,12 @@ const { parse, stringify } = require("./frontmatter");
  * @param {any} sectionValue
  * @param {any} sectionIndex
  */
-function IndexMdFileCreate(
-  folderPath,
-  title,
-  sectionType,
-  sectionValue,
-  sectionIndex,
-) {
+function IndexMdFileCreate(folderPath, title, sectionType, sectionValue, sectionIndex) {
   const filePath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
   fs.writeFileSync(
     filePath,
     TEMPLATE_INDEX_MD(title, sectionType, sectionValue, sectionIndex),
-    "utf8",
+    'utf8'
   );
 }
 
@@ -38,7 +32,7 @@ function IndexMdFileRead(folderPath) {
   const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
   if (!fs.existsSync(indexPath)) return null;
 
-  const content = fs.readFileSync(indexPath, "utf8");
+  const content = fs.readFileSync(indexPath, 'utf8');
   const data = parse(content);
   return data.data;
 }
@@ -51,25 +45,15 @@ function IndexMdFileRead(folderPath) {
  * @param {any} sectionLabel
  * @param {any} sectionIndex
  */
-function IndexMdFilePatch(
-  folderPath,
-  pureTitle,
-  sectionTypeName,
-  sectionLabel,
-  sectionIndex,
-) {
-  console.log(
-    `IndexMdFilePatch:  ${folderPath}\ ${sectionLabel}\ ${pureTitle}`,
-  );
+function IndexMdFilePatch(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex) {
+  console.log(`IndexMdFilePatch:  ${folderPath}\ ${sectionLabel}\ ${pureTitle}`);
   const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
   if (!fs.existsSync(indexPath)) return;
 
-  const content = fs.readFileSync(indexPath, "utf8");
+  const content = fs.readFileSync(indexPath, 'utf8');
   let { data, content: body } = parse(content);
 
-  const composedTitle = sectionIndex
-    ? `${sectionLabel} ${sectionIndex}. ${pureTitle}`
-    : pureTitle;
+  const composedTitle = sectionIndex ? `${sectionLabel} ${sectionIndex}. ${pureTitle}` : pureTitle;
 
   data.title = composedTitle;
   data.pureTitle = pureTitle;
@@ -80,7 +64,7 @@ function IndexMdFilePatch(
     delete data.sectionIndex;
   }
 
-  fs.writeFileSync(indexPath, stringify(data, body), "utf8");
+  fs.writeFileSync(indexPath, stringify(data, body), 'utf8');
 }
 
 module.exports = {

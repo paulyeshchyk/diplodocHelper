@@ -1,10 +1,11 @@
 // src/plugins/core/breadcrumb/breadcrumb-collector.js
-const fs = require("fs");
-const path = require("path");
-const { extractTitleFromHtml } = require("./breadcrumb.extractor");
-const { DEFAULT_CONFIG } = require("./breadcrumb.config");
-const { getRelativePath, isRootIndex } = require("../core/utils");
-const { walk, isHtmlFile } = require("../core/utils");
+
+const fs = require('fs');
+const path = require('path');
+const { extractTitleFromHtml } = require('./breadcrumb.extractor');
+const { DEFAULT_CONFIG } = require('./breadcrumb.config');
+const { getRelativePath, isRootIndex } = require('../core/utils');
+const { walk, isHtmlFile } = require('../core/utils');
 
 /**
  * Собирает карту заголовков всех страниц
@@ -15,14 +16,14 @@ function walkHtmlFilesBuildTitleMap(buildDir) {
   /** @type {Map<string, string>} */
   const titleMap = new Map();
 
-  console.log("[Breadcrumb] walking from title to tile");
+  console.log('[Breadcrumb] walking from title to tile');
 
-  walkHtmlFiles(buildDir, (htmlPath) => {
+  walkHtmlFiles(buildDir, htmlPath => {
     const fileName = path.basename(htmlPath);
     if (DEFAULT_CONFIG.ignoreFiles.includes(fileName)) return;
     if (isRootIndex(buildDir, htmlPath)) return;
 
-    const content = fs.readFileSync(htmlPath, "utf8");
+    const content = fs.readFileSync(htmlPath, 'utf8');
     const title = extractTitleFromHtml(content);
 
     if (title) {

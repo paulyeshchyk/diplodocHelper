@@ -1,22 +1,20 @@
 // src/core/reindex.js
-const fs = require("fs");
-const path = require("path");
 
-const {
-  FrontMatterFiles,
-  FrontMatterSectionTypesIndexed,
-} = require("../utils/constants");
+const fs = require('fs');
+const path = require('path');
 
-const { getSectionMetadata, sectionTypes } = require("../utils/section");
+const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require('../utils/constants');
+
+const { getSectionMetadata, sectionTypes } = require('../utils/section');
 const {
   renameSectionFolderIfNeeded,
   TocYamlFileLoad,
   TocYamlEntryPatch,
   IndexMdEntryPatch,
   sortTocItems,
-} = require("../utils");
+} = require('../utils');
 
-const { IndexMdFileRead } = require("../utils/index.md.file");
+const { IndexMdFileRead } = require('../utils/index.md.file');
 
 /** @import {SectionTypeOption} from '../utils/diplodocTypes' */
 
@@ -46,18 +44,17 @@ const { IndexMdFileRead } = require("../utils/index.md.file");
  */
 function reindexDirectory(
   dir,
-  parentIndex = "",
-  sortOrder = "ascending",
-  sortKind = "nonIndexedBottom",
+  parentIndex = '',
+  sortOrder = 'ascending',
+  sortKind = 'nonIndexedBottom'
 ) {
-  console.log(`Переиндексация: ${path.relative(process.cwd(), dir) || "."}`);
+  console.log(`Переиндексация: ${path.relative(process.cwd(), dir) || '.'}`);
 
   const items = fs.readdirSync(dir, { withFileTypes: true });
 
   const sections = items.filter(
-    (item) =>
-      item.isDirectory() &&
-      fs.existsSync(path.join(dir, item.name, FrontMatterFiles.INDEX_MD)),
+    item =>
+      item.isDirectory() && fs.existsSync(path.join(dir, item.name, FrontMatterFiles.INDEX_MD))
   );
 
   if (sections.length === 0) return [];
@@ -97,13 +94,13 @@ function reindexDirectory(
       result.sectionPath,
       result.currentIndex || parentIndex,
       sortOrder,
-      sortKind,
+      sortKind
     );
     allWarnings = allWarnings.concat(childWarnings);
   }
 
   // Сортировка
-  if (tocDoc && sortOrder !== "none") {
+  if (tocDoc && sortOrder !== 'none') {
     console.log(`   Сортируем toc.yaml (${sections.length} элементов)`);
     sortTocItems(dir, sortOrder, sortKind);
     console.log(`   toc.yaml отсортирован`);
@@ -126,7 +123,7 @@ function reindexAndRenameSection({
   dir,
   sectionName,
   localCounter,
-  parentIndex = "",
+  parentIndex = '',
   localSectionTypes,
   tocDoc,
 }) {
@@ -136,14 +133,14 @@ function reindexAndRenameSection({
   if (!fs.existsSync(indexMdPath)) {
     return {
       sectionPath: oldSectionPath,
-      currentIndex: "",
+      currentIndex: '',
       newFolderName: sectionName,
       localCounter,
       warnings: [],
     };
   }
 
-  const content = fs.readFileSync(indexMdPath, "utf8");
+  const content = fs.readFileSync(indexMdPath, 'utf8');
   const metadata = getSectionMetadata(content);
 
   /** @type {ReindexWarning[]} */
@@ -155,52 +152,43 @@ function reindexAndRenameSection({
 
   /** @type {SectionTypeOption} */
   const DEFAULT_SECTION_TYPE = {
-    name: "Page",
-    label: "Статья",
-    value: "",
-    description: "",
+    name: 'Page',
+    label: 'Статья',
+    value: '',
+    description: '',
   };
 
   const sectionTypeObj =
-    localSectionTypes.find((st) => st.name === metadata.sectionType) ||
-    DEFAULT_SECTION_TYPE;
+    localSectionTypes.find(st => st.name === metadata.sectionType) || DEFAULT_SECTION_TYPE;
 
   const sectionType = sectionTypeObj.name;
   const pureTitle = metadata.pureTitle || sectionName;
-  let currentIndex = String(metadata.sectionIndex || "").trim();
+  let currentIndex = String(metadata.sectionIndex || '').trim();
 
   if (FrontMatterSectionTypesIndexed.includes(sectionType)) {
     const hadManualIndex = !!currentIndex;
 
     if (!currentIndex) {
       localCounter++;
-      currentIndex = parentIndex
-        ? `${parentIndex}.${localCounter}`
-        : `${localCounter}`;
+      currentIndex = parentIndex ? `${parentIndex}.${localCounter}` : `${localCounter}`;
     } else {
-      const parts = currentIndex.split(".");
+      const parts = currentIndex.split('.');
       const lastNum = parseInt(parts[parts.length - 1], 10);
       if (!isNaN(lastNum)) {
         localCounter = Math.max(localCounter, lastNum);
       }
     }
 
-    const sectionLabel = sectionTypeObj.label || "";
+    const sectionLabel = sectionTypeObj.label || '';
     const newTitle = `${sectionLabel} ${currentIndex}. ${pureTitle}`;
 
-    IndexMdEntryPatch(
-      oldSectionPath,
-      pureTitle,
-      sectionType,
-      sectionLabel,
-      currentIndex,
-    );
+    IndexMdEntryPatch(oldSectionPath, pureTitle, sectionType, sectionLabel, currentIndex);
 
     const newFolderName = renameSectionFolderIfNeeded(
       oldSectionPath,
       pureTitle,
       sectionTypeObj,
-      currentIndex,
+      currentIndex
     );
 
     const newSectionPath = path.join(dir, newFolderName);
@@ -210,7 +198,7 @@ function reindexAndRenameSection({
     }
 
     console.log(
-      `   ${hadManualIndex ? "manual" : "auto"} index ${currentIndex} - ${newFolderName}`,
+      `   ${hadManualIndex ? 'manual' : 'auto'} index ${currentIndex} - ${newFolderName}`
     );
 
     return {
@@ -226,7 +214,7 @@ function reindexAndRenameSection({
 
   return {
     sectionPath: oldSectionPath,
-    currentIndex: "",
+    currentIndex: '',
     newFolderName: sectionName,
     localCounter,
     warnings,
@@ -239,9 +227,9 @@ function reindexAndRenameSection({
  * @param {ReindexWarning[]} warnings
  */
 function checkMissingSectionType(metadata, sectionPath, warnings) {
-  if (!metadata.sectionType || metadata.sectionType.trim() === "") {
+  if (!metadata.sectionType || metadata.sectionType.trim() === '') {
     warnings.push({
-      type: "missingSectionType",
+      type: 'missingSectionType',
       message: `Присвойте тип для раздела "${path.basename(sectionPath)}"`,
       sectionPath,
     });
@@ -256,15 +244,15 @@ function checkMissingSectionType(metadata, sectionPath, warnings) {
 function checkTitleHasPrefix(metadata, sectionPath, warnings) {
   if (metadata.pureTitle) return; // если pureTitle есть — считаем, что всё ок
 
-  const title = metadata.title || "";
+  const title = metadata.title || '';
   if (!title) return;
 
-  const prefixes = ["Часть", "Раздел", "Глава"];
+  const prefixes = ['Часть', 'Раздел', 'Глава'];
 
   for (const prefix of prefixes) {
-    if (title.startsWith(prefix + " ") || title.startsWith(prefix + ".")) {
+    if (title.startsWith(prefix + ' ') || title.startsWith(prefix + '.')) {
       warnings.push({
-        type: "titleHasPrefix",
+        type: 'titleHasPrefix',
         message: `Переименуйте статью "${title}"`,
         sectionPath,
       });

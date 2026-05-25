@@ -5,5 +5,6 @@
     "**\\node_modules": "explorerExcludedFiles",
     "**/dist": "explorerExcludedFiles"
   },
-  "editor.language.brackets": []
+  "editor.language.brackets": [],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

@@ -1,18 +1,19 @@
 // src/core/indexer.js
-const fs = require("fs");
-const path = require("path");
-const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require("../utils/constants");
-const { get } = require("../utils/frontmatter");
+
+const fs = require('fs');
+const path = require('path');
+const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require('../utils/constants');
+const { get } = require('../utils/frontmatter');
 
 /**
  * @param {string} targetDir
  */
 function calculateNextIndex(targetDir) {
   const parentIndexPath = path.join(targetDir, FrontMatterFiles.INDEX_MD);
-  if (!fs.existsSync(parentIndexPath)) return "1"; // Фоллбек, если родителя нет
+  if (!fs.existsSync(parentIndexPath)) return '1'; // Фоллбек, если родителя нет
 
-  const parentContent = fs.readFileSync(parentIndexPath, "utf8");
-  const parentIndex = String(get(parentContent, "sectionIndex") || "");
+  const parentContent = fs.readFileSync(parentIndexPath, 'utf8');
+  const parentIndex = String(get(parentContent, 'sectionIndex') || '');
 
   const items = fs.readdirSync(targetDir, { withFileTypes: true });
   const siblingIndices = [];
@@ -24,13 +25,13 @@ function calculateNextIndex(targetDir) {
     if (!fs.existsSync(indexPath)) continue;
 
     try {
-      const content = fs.readFileSync(indexPath, "utf8");
-      const sectionType = get(content, "sectionType");
+      const content = fs.readFileSync(indexPath, 'utf8');
+      const sectionType = get(content, 'sectionType');
       // Принудительно приводим к строке, чтобы split не падал
-      const sectionIndex = String(get(content, "sectionIndex") || "");
+      const sectionIndex = String(get(content, 'sectionIndex') || '');
 
       if (sectionType && FrontMatterSectionTypesIndexed.includes(sectionType) && sectionIndex) {
-        const parts = sectionIndex.split(".");
+        const parts = sectionIndex.split('.');
         const lastPart = parts[parts.length - 1];
         const lastNum = parseInt(lastPart, 10);
 
@@ -48,7 +49,7 @@ function calculateNextIndex(targetDir) {
   const maxIdx = siblingIndices.reduce((a, b) => Math.max(a, b), 0);
   const nextSubNumber = maxIdx + 1;
 
-  return parentIndex === "" ? `${nextSubNumber}` : `${parentIndex}.${nextSubNumber}`;
+  return parentIndex === '' ? `${nextSubNumber}` : `${parentIndex}.${nextSubNumber}`;
 }
 
 module.exports = { calculateNextIndex };

@@ -1,28 +1,29 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Rename.js
-const vscode = require("vscode");
-const fs = require("fs");
-const path = require("path");
 
-const { promptSection, IndexMdEntryReadTitle } = require("../utils");
-const { isDiplodocSection } = require("../utils");
-const { IndexMdEntryReadIndex, IndexMdEntryPatch } = require("../utils");
-const { updateLinksAfterRename } = require("../utils/linksUpdater");
-const { getLanguageRoot } = require("../utils/directory");
-const { sortTocItems } = require("../utils/toc.yaml.sort");
+const { nls_ts, translate } = require('../../nls_ts.js');
+const vscode = require('vscode');
+const fs = require('fs');
+const path = require('path');
+
+const { promptSection, IndexMdEntryReadTitle } = require('../utils');
+const { isDiplodocSection } = require('../utils');
+const { IndexMdEntryReadIndex, IndexMdEntryPatch } = require('../utils');
+const { updateLinksAfterRename } = require('../utils/linksUpdater');
+const { getLanguageRoot } = require('../utils/directory');
+const { sortTocItems } = require('../utils/toc.yaml.sort');
 
 const {
   TocYamlEntryRemove,
   TocYamlEntryCreate,
 
   renameSectionFolderIfNeeded,
-} = require("../utils");
+} = require('../utils');
 
 const {
   composeFullTitle,
   isIndexedSectionType,
   composeFolderName,
-} = require("../utils/sectionTitle");
+} = require('../utils/sectionTitle');
 
 /**
  * @param {{ fsPath: any; }} uri
@@ -35,9 +36,7 @@ async function renameSection(uri) {
   const parentDir = path.dirname(oldFolderPath);
 
   if (!isDiplodocSection(oldFolderPath)) {
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.rename.error.isnotsection),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.rename.error.isnotsection));
     return;
   }
 
@@ -49,29 +48,25 @@ async function renameSection(uri) {
     return;
   }
 
-  let finalIndex = newSectionObject.userIndex?.trim() || "";
+  let finalIndex = newSectionObject.userIndex?.trim() || '';
   const newPureTitle = newSectionObject.newPureTitle;
   const newSectionType = newSectionObject.newSectionType;
 
   // Нормализация индекса в зависимости от типа
   const isIndexed = isIndexedSectionType(newSectionType);
-  if (!isIndexed) finalIndex = ""; // игнорируем индекс для неиндексируемых типов
+  if (!isIndexed) finalIndex = ''; // игнорируем индекс для неиндексируемых типов
 
   // Единое формирование полного заголовка
   const fullTitle = composeFullTitle(finalIndex, newSectionType, newPureTitle);
 
   // Имя папки
-  const newFolderName = composeFolderName(
-    finalIndex,
-    newSectionType,
-    newPureTitle,
-  );
+  const newFolderName = composeFolderName(finalIndex, newSectionType, newPureTitle);
 
   const newFolderPath = path.join(parentDir, newFolderName);
 
   if (fs.existsSync(newFolderPath) && newFolderName !== oldFolderName) {
     vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.rename.error.folderexists, newFolderName),
+      translate(nls_ts.plugin.section.rename.error.folderexists, newFolderName)
     );
     return;
   }
@@ -88,7 +83,7 @@ async function renameSection(uri) {
         oldFolderPath,
         newPureTitle,
         newSectionObject.newSectionType,
-        finalIndex,
+        finalIndex
       );
     } else {
       // Просто обновляем содержимое без переименования папки
@@ -97,7 +92,7 @@ async function renameSection(uri) {
         newPureTitle,
         newSectionObject.newSectionType.name,
         newSectionObject.newSectionType.value,
-        finalIndex,
+        finalIndex
       );
     }
 
@@ -107,7 +102,7 @@ async function renameSection(uri) {
       fullTitle,
       finalFolderName,
       newSectionObject.newSectionType.value,
-      finalIndex,
+      finalIndex
     );
 
     // 4. Обновление ссылок
@@ -118,17 +113,11 @@ async function renameSection(uri) {
     sortTocItems(parentDir); // сортировка по возрастанию, неиндексированные внизу
 
     vscode.window.showInformationMessage(
-      translate(
-        nls_ts.plugin.section.rename.info.success,
-        oldFolderName,
-        finalFolderName,
-      ),
+      translate(nls_ts.plugin.section.rename.info.success, oldFolderName, finalFolderName)
     );
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.rename.error.critical, msg),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.rename.error.critical, msg));
   }
 }
 

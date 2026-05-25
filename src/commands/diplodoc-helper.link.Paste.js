@@ -1,6 +1,8 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
-const vscode = require("vscode");
-const path = require("path");
+//diplodoc-helper.link.Paste.js
+
+const { nls_ts, translate } = require('../../nls_ts.js');
+const vscode = require('vscode');
+const path = require('path');
 
 /**
  * Вычисляет относительный путь с кодированием
@@ -11,19 +13,19 @@ function calculateRelativeMdPath(fromPath, toPath) {
   // Если целевой путь - папка, добавим index.md (стандарт Diplodoc)
   // Если это уже файл .md, оставляем как есть
   let targetFile = toPath;
-  if (!toPath.endsWith(".md")) {
-    targetFile = path.join(toPath, "index.md");
+  if (!toPath.endsWith('.md')) {
+    targetFile = path.join(toPath, 'index.md');
   }
 
   let relPath = path.relative(path.dirname(fromPath), targetFile);
-  relPath = relPath.split(path.sep).join("/");
+  relPath = relPath.split(path.sep).join('/');
 
   const encodedPath = relPath
-    .split("/")
-    .map((segment) => encodeURIComponent(segment))
-    .join("/");
+    .split('/')
+    .map(segment => encodeURIComponent(segment))
+    .join('/');
 
-  return encodedPath.startsWith(".") ? encodedPath : "./" + encodedPath;
+  return encodedPath.startsWith('.') ? encodedPath : './' + encodedPath;
 }
 
 async function pasteLink() {
@@ -35,11 +37,11 @@ async function pasteLink() {
     const data = JSON.parse(clipboardText);
 
     if (!data.sourceLinkPath || !data.sourceLinkName) {
-      throw new Error(translate("plugin.link.paste.error.emptybuffer"));
+      throw new Error(translate('plugin.link.paste.error.emptybuffer'));
     }
 
     const isImage = data.isImage === true;
-    const prefix = isImage ? "!" : ""; // Добавляем ! для картинок
+    const prefix = isImage ? '!' : ''; // Добавляем ! для картинок
 
     const sourceFilePath = editor.document.uri.fsPath;
     const targetFilePath = data.sourceLinkPath;
@@ -47,14 +49,12 @@ async function pasteLink() {
     const mdPath = calculateRelativeMdPath(sourceFilePath, targetFilePath);
     const linkText = `${prefix}[${data.sourceLinkName}](${mdPath})`;
 
-    editor.edit((editBuilder) => {
+    editor.edit(editBuilder => {
       editBuilder.insert(editor.selection.active, linkText);
     });
   } catch (err) {
     // Если в буфере не JSON или не наши данные
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.link.paste.error.critical),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.link.paste.error.critical));
   }
 }
 

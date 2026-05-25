@@ -1,6 +1,7 @@
 // src/core/breadcrumb/breadcrumb-injector.js
-const fs = require("fs");
-const path = require("path");
+
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Вставляет скрипт в HTML-файл
@@ -19,13 +20,13 @@ function injectScriptIntoFile(htmlPath, config, script) {
     console.debug(`[Breadcrumb] Игнорируем служебный: ${htmlPath}`);
     return;
   }
-  if (fileName === "index.html" && path.dirname(htmlPath) === config.buildDir) {
+  if (fileName === 'index.html' && path.dirname(htmlPath) === config.buildDir) {
     console.debug(`[Breadcrumb] Пропускаем корневой index.html: ${htmlPath}`);
     return;
   }
 
-  let content = fs.readFileSync(htmlPath, "utf8");
-  const bodyCloseIndex = content.lastIndexOf("</body>");
+  let content = fs.readFileSync(htmlPath, 'utf8');
+  const bodyCloseIndex = content.lastIndexOf('</body>');
 
   if (bodyCloseIndex === -1) {
     console.warn(`[Breadcrumb] Не найден </body> в: ${htmlPath}`);
@@ -34,12 +35,12 @@ function injectScriptIntoFile(htmlPath, config, script) {
 
   const newContent =
     content.slice(0, bodyCloseIndex) +
-    "\n<script>\n" +
+    '\n<script>\n' +
     script +
-    "\n</script>\n" +
+    '\n</script>\n' +
     content.slice(bodyCloseIndex);
 
-  fs.writeFileSync(htmlPath, newContent, "utf8");
+  fs.writeFileSync(htmlPath, newContent, 'utf8');
   console.debug(`[Breadcrumb] Вставлен скрипт: ${htmlPath}`);
 }
 

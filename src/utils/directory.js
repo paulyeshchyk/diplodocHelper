@@ -1,12 +1,9 @@
 // src/utils/directory.js
-const fs = require("fs");
-const path = require("path");
-const vscode = require("vscode");
+const fs = require('fs');
+const path = require('path');
+const vscode = require('vscode');
 
-const {
-  FrontMatterFiles,
-  FrontMatterFilesDefaultList,
-} = require("./constants");
+const { FrontMatterFiles, FrontMatterFilesDefaultList } = require('./constants');
 
 /**
  * @typedef {Object} CreateFolderResult
@@ -20,9 +17,7 @@ const {
  */
 function isDiplodocSection(folderPath) {
   if (!folderPath || !fs.existsSync(folderPath)) return false;
-  return FrontMatterFilesDefaultList.every((file) =>
-    fs.existsSync(path.join(folderPath, file)),
-  );
+  return FrontMatterFilesDefaultList.every(file => fs.existsSync(path.join(folderPath, file)));
 }
 
 /**
@@ -32,12 +27,8 @@ function isDiplodocSection(folderPath) {
 function isLanguageRoot(folderPath) {
   if (!folderPath || !fs.existsSync(folderPath)) return false;
 
-  const hasToc = fs.existsSync(
-    path.join(folderPath, FrontMatterFiles.TOC_YAML),
-  );
-  const hasIndexMd = fs.existsSync(
-    path.join(folderPath, FrontMatterFiles.INDEX_MD),
-  );
+  const hasToc = fs.existsSync(path.join(folderPath, FrontMatterFiles.TOC_YAML));
+  const hasIndexMd = fs.existsSync(path.join(folderPath, FrontMatterFiles.INDEX_MD));
 
   return hasToc && !hasIndexMd;
 }
@@ -52,11 +43,8 @@ function getLanguageRoot(sourcePath) {
   while (current && current !== path.parse(current).root) {
     const basename = path.basename(current).toLowerCase();
 
-    if (basename === "docs") {
-      const langCandidate = path.join(
-        current,
-        path.basename(path.dirname(sourcePath)),
-      );
+    if (basename === 'docs') {
+      const langCandidate = path.join(current, path.basename(path.dirname(sourcePath)));
       if (fs.existsSync(langCandidate) && isLanguageRoot(langCandidate)) {
         return langCandidate;
       }
@@ -72,7 +60,7 @@ function getLanguageRoot(sourcePath) {
 
   // Fallback
   const parts = sourcePath.split(path.sep);
-  const docsIndex = parts.findIndex((p) => p.toLowerCase() === "docs");
+  const docsIndex = parts.findIndex(p => p.toLowerCase() === 'docs');
   if (docsIndex !== -1 && docsIndex + 1 < parts.length) {
     const langFolder = path.join(...parts.slice(0, docsIndex + 2));
     if (fs.existsSync(langFolder)) return langFolder;
@@ -95,9 +83,7 @@ function canCreateFolder(folderPath) {
     fs.accessSync(path.dirname(folderPath), fs.constants.W_OK);
     return true;
   } catch {
-    vscode.window.showErrorMessage(
-      `Нет прав на запись: ${path.dirname(folderPath)}`,
-    );
+    vscode.window.showErrorMessage(`Нет прав на запись: ${path.dirname(folderPath)}`);
     return false;
   }
 }
@@ -121,12 +107,7 @@ function isEmptyDirectory(dirPath) {
  * @param {string} folderName
  * @returns {CreateFolderResult?}
  */
-function createDirectory(
-  canCreateFolder,
-  newFolderPath,
-  recursive,
-  folderName,
-) {
+function createDirectory(canCreateFolder, newFolderPath, recursive, folderName) {
   if (!canCreateFolder(newFolderPath)) return null;
 
   try {
@@ -162,7 +143,7 @@ function cleanupEmptyDirectories(rootDir, stopAtPath = null) {
    */
   function scan(dir) {
     // Не выходим за границы stopAtPath
-    if (stopAtPath && path.relative(stopAtPath, dir).startsWith("..")) return;
+    if (stopAtPath && path.relative(stopAtPath, dir).startsWith('..')) return;
 
     const entries = fs.readdirSync(dir, { withFileTypes: true });
 

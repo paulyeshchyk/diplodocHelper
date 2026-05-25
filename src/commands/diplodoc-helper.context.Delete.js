@@ -1,11 +1,12 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.context.Delete.js
-const vscode = require("vscode");
-const fs = require("fs");
-const path = require("path");
 
-const { isDiplodocSection } = require("../utils");
-const { parse, stringify, remove } = require("../utils/frontmatter");
+const { nls_ts, translate } = require('../../nls_ts.js');
+const vscode = require('vscode');
+const fs = require('fs');
+const path = require('path');
+
+const { isDiplodocSection } = require('../utils');
+const { parse, stringify, remove } = require('../utils/frontmatter');
 
 /**
  * @param {{ fsPath: string }} uri
@@ -16,16 +17,16 @@ async function deleteContext(uri) {
   const sectionPath = uri.fsPath;
   if (!isDiplodocSection(sectionPath)) return;
 
-  const indexMdPath = path.join(sectionPath, "index.md");
+  const indexMdPath = path.join(sectionPath, 'index.md');
   if (!fs.existsSync(indexMdPath)) return;
 
   let contexts = [];
   try {
-    const content = fs.readFileSync(indexMdPath, "utf8");
+    const content = fs.readFileSync(indexMdPath, 'utf8');
     const { data } = parse(content);
-    const current = data.context || "";
+    const current = data.context || '';
     contexts = current
-      .split(",")
+      .split(',')
       .map((/** @type {string} */ s) => s.trim())
       .filter(Boolean);
   } catch {
@@ -48,35 +49,32 @@ async function deleteContext(uri) {
   const confirm = await vscode.window.showWarningMessage(
     translate(nls_ts.plugin.context.delete.confirm.prompt, toDelete),
     { modal: true },
-    translate(nls_ts.plugin.context.delete.confirm.button),
+    translate(nls_ts.plugin.context.delete.confirm.button)
   );
 
-  if (confirm !== translate(nls_ts.plugin.context.delete.confirm.button))
-    return;
+  if (confirm !== translate(nls_ts.plugin.context.delete.confirm.button)) return;
 
   try {
-    let content = fs.readFileSync(indexMdPath, "utf8");
+    let content = fs.readFileSync(indexMdPath, 'utf8');
     const { data, content: body } = parse(content);
 
     const remaining = contexts.filter((/** @type {any} */ c) => c !== toDelete);
 
     if (remaining.length === 0) {
-      content = remove(content, "context");
+      content = remove(content, 'context');
     } else {
-      data.context = remaining.join(", ");
+      data.context = remaining.join(', ');
       content = stringify(data, body);
     }
 
-    fs.writeFileSync(indexMdPath, content, "utf8");
+    fs.writeFileSync(indexMdPath, content, 'utf8');
 
     vscode.window.showInformationMessage(
-      translate(nls_ts.plugin.context.delete.info.success, toDelete),
+      translate(nls_ts.plugin.context.delete.info.success, toDelete)
     );
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.context.delete.error.critical, msg),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.context.delete.error.critical, msg));
   }
 }
 

@@ -1,7 +1,8 @@
 // src/commands/generateHelpmap.js
-const fs = require("fs");
-const path = require("path");
-const matter = require("gray-matter");
+
+const fs = require('fs');
+const path = require('path');
+const matter = require('gray-matter');
 
 /**
  * @typedef {Object} HelpEntry
@@ -13,10 +14,10 @@ const matter = require("gray-matter");
  * @property {string} lang     - Языковой код (ru, en и т.д.)
  */
 
-const defaultTitleValue = "";
-const defaultHintValue = "";
-const defaultContextValue = "";
-const defaultHelptagValue = "";
+const defaultTitleValue = '';
+const defaultHintValue = '';
+const defaultContextValue = '';
+const defaultHelptagValue = '';
 
 /**
  * Собирает данные по всем статьям
@@ -37,38 +38,37 @@ function collectHelpData(docsDir) {
 
     const files = fs.readdirSync(dir);
 
-    files.forEach((file) => {
+    files.forEach(file => {
       const fullPath = path.join(dir, file);
-      if (file.startsWith(".")) return;
+      if (file.startsWith('.')) return;
 
       if (fs.statSync(fullPath).isDirectory()) {
         walk(fullPath);
-      }
-      else if (file.endsWith(".md")) {
+      } else if (file.endsWith('.md')) {
         try {
-          const content = fs.readFileSync(fullPath, "utf8");
+          const content = fs.readFileSync(fullPath, 'utf8');
           const { data } = matter(content);
 
-          let title = "";
-          if (data.pureTitle && String(data.pureTitle).trim() !== "") {
+          let title = '';
+          if (data.pureTitle && String(data.pureTitle).trim() !== '') {
             title = String(data.pureTitle).trim();
-          } else if (data.title && String(data.title).trim() !== "") {
+          } else if (data.title && String(data.title).trim() !== '') {
             title = String(data.title).trim();
           }
 
           let relativePath = path
             .relative(docsDir, fullPath)
-            .replace(/\.md$/, "")
-            .replace(/\\/g, "/");
+            .replace(/\.md$/, '')
+            .replace(/\\/g, '/');
 
           // Приводим к корректному виду с расширением .html
-          if (relativePath.endsWith("/index") || relativePath === "index") {
-            relativePath += ".html";
-          } else if (!relativePath.endsWith(".html")) {
-            relativePath += ".html";
+          if (relativePath.endsWith('/index') || relativePath === 'index') {
+            relativePath += '.html';
+          } else if (!relativePath.endsWith('.html')) {
+            relativePath += '.html';
           }
 
-          const lang = relativePath.split("/")[0] || "default";
+          const lang = relativePath.split('/')[0] || 'default';
 
           /** @type {HelpEntry} */
           const entry = {
@@ -82,7 +82,8 @@ function collectHelpData(docsDir) {
 
           success.push(entry);
         } catch (err) {
-          console.error(`Ошибка обработки файла ${fullPath}:`, err.message);
+          let msg = err instanceof Error ? err.message : '${err}'
+          console.error(`Ошибка обработки файла ${fullPath}:`, msg);
           failed.push(fullPath);
         }
       }
@@ -95,18 +96,14 @@ function collectHelpData(docsDir) {
 
 // ====================== НАСТРОЙКИ ======================
 
-const outputFileName = "app-help-contents.json";
-const outputFolderName = "build";
-const docsFolderName = "docs";
+const outputFileName = 'app-help-contents.json';
+const outputFolderName = 'build';
+const docsFolderName = 'docs';
 
 /**
  * Основная функция генерации
  */
-function runGeneration({
-  docsDir,
-  outputDir = outputFolderName,
-  segregation = false,
-}) {
+function runGeneration({ docsDir, outputDir = outputFolderName, segregation = false }) {
   const results = collectHelpData(docsDir);
 
   const absoluteOutputDir = path.isAbsolute(outputDir)
@@ -119,8 +116,9 @@ function runGeneration({
 
   if (segregation) {
     const langMap = results.success.reduce((acc, item) => {
-      if (!acc[item.lang]) acc[item.lang] = [];
-      acc[item.lang].push(item);
+      const lang = item.lang;
+      if (!acc[lang]) acc[lang] = [];
+      acc[lang].push(item);
       return acc;
     }, {});
 
@@ -129,12 +127,12 @@ function runGeneration({
       if (!fs.existsSync(langPath)) fs.mkdirSync(langPath, { recursive: true });
 
       const filePath = path.join(langPath, outputFileName);
-      fs.writeFileSync(filePath, JSON.stringify(items, null, 2), "utf8");
+      fs.writeFileSync(filePath, JSON.stringify(items, null, 2), 'utf8');
       console.log(`[${lang}] Сохранено ${items.length} статей`);
     }
   } else {
     const outputPath = path.join(absoluteOutputDir, outputFileName);
-    fs.writeFileSync(outputPath, JSON.stringify(results.success, null, 2), "utf8");
+    fs.writeFileSync(outputPath, JSON.stringify(results.success, null, 2), 'utf8');
     console.log(`Общий файл сохранён: ${outputPath} (${results.success.length} статей)`);
   }
 
@@ -152,7 +150,7 @@ if (require.main === module) {
   runGeneration({
     docsDir: path.join(projectRoot, docsFolderName),
     outputDir: outputFolderName,
-    segregation: process.argv.includes("--segregate"),
+    segregation: process.argv.includes('--segregate'),
   });
 } else {
   module.exports = { runGeneration };

@@ -1,25 +1,26 @@
-const { nls_ts, translate } = require("../../nls_ts.js");
 // src/commands/diplodoc-helper.section.Create.js
-const vscode = require("vscode");
-const { calculateNextIndex } = require("../core/indexer");
+
+const { nls_ts, translate } = require('../../nls_ts.js');
+const vscode = require('vscode');
+const { calculateNextIndex } = require('../core/indexer');
 const {
   IndexMdFileCreate,
   IndexYamlFileCreate,
   TocYamlFileCreate,
   TocYamlEntryPatchItems,
   createSectionFolder,
-} = require("../utils"); // используем barrel
+} = require('../utils'); // используем barrel
 
-const { FrontMatterSectionTypesIndexed } = require("../utils/constants");
-const { composeFullTitle } = require("../utils/sectionTitle");
+const { FrontMatterSectionTypesIndexed } = require('../utils/constants');
+const { composeFullTitle } = require('../utils/sectionTitle');
 
 const {
   ShowSectionNameSelector,
   ShowSectionTypeSelector,
   promptSectionIndex,
-} = require("../utils");
+} = require('../utils');
 
-const { isDiplodocSection, isLanguageRoot } = require("../utils");
+const { isDiplodocSection, isLanguageRoot } = require('../utils');
 
 /**
  * @param {{ fsPath: any; }} uri
@@ -29,9 +30,7 @@ async function createSection(uri) {
   const targetDir = uri.fsPath;
 
   if (!isDiplodocSection(targetDir) && !isLanguageRoot(targetDir)) {
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.create.error.incorrectSection),
-    );
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.create.error.incorrectSection));
     return;
   }
 
@@ -45,26 +44,15 @@ async function createSection(uri) {
 
   const sectionIndexCalculated = calculateNextIndex(targetDir);
 
-  const sectionIndex = hasIndex
-    ? await promptSectionIndex(sectionIndexCalculated)
-    : "";
+  const sectionIndex = hasIndex ? await promptSectionIndex(sectionIndexCalculated) : '';
 
   /** @import {CreateFolderResult} from '../utils/directory' */
 
   /** @type {CreateFolderResult?} */
-  const folderResult = createSectionFolder(
-    targetDir,
-    sectionType,
-    userSectionName,
-    sectionIndex,
-  );
+  const folderResult = createSectionFolder(targetDir, sectionType, userSectionName, sectionIndex);
   if (!folderResult) return;
 
-  const fullTitle = composeFullTitle(
-    sectionIndex,
-    sectionType,
-    userSectionName,
-  );
+  const fullTitle = composeFullTitle(sectionIndex, sectionType, userSectionName);
 
   try {
     IndexMdFileCreate(
@@ -72,7 +60,7 @@ async function createSection(uri) {
       fullTitle,
       sectionType.name,
       sectionType.value,
-      sectionIndex,
+      sectionIndex
     );
 
     IndexYamlFileCreate(
@@ -80,36 +68,25 @@ async function createSection(uri) {
       fullTitle,
       sectionType.name,
       sectionType.value,
-      sectionIndex,
+      sectionIndex
     );
 
-    TocYamlFileCreate(
-      folderResult.folderPath,
-      fullTitle,
-      sectionType.value,
-      sectionIndex,
-    );
+    TocYamlFileCreate(folderResult.folderPath, fullTitle, sectionType.value, sectionIndex);
 
     TocYamlEntryPatchItems(
       targetDir,
       fullTitle,
       sectionType.value,
       folderResult.folderName,
-      sectionIndex,
+      sectionIndex
     );
 
     vscode.window.showInformationMessage(
-      translate(
-        nls_ts.plugin.section.create.info.success,
-        fullTitle,
-        sectionType.label,
-      ),
+      translate(nls_ts.plugin.section.create.info.success, fullTitle, sectionType.label)
     );
   } catch (err) {
-    let msg = err instanceof Error ? err.message : "${err}";
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.create.error.critical, msg),
-    );
+    let msg = err instanceof Error ? err.message : '${err}';
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.create.error.critical, msg));
   }
 }
 
