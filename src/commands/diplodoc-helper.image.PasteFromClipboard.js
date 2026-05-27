@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+const { nls_ts, translate } = require('../../nls_ts.js');
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
@@ -23,19 +24,19 @@ function sanitizeFilename(name) {
 async function pasteImageFromClipboard() {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
-        vscode.window.showErrorMessage('Нет активного редактора');
+        vscode.window.showErrorMessage(translate(nls_ts.paste.omage.error.noactiveeditor));
         return;
     }
 
     const document = editor.document;
     if (document.languageId !== 'markdown') {
-        vscode.window.showWarningMessage('Команда работает только в .md файлах');
+        vscode.window.showWarningMessage(translate(nls_ts.paste.image.warning.mdfileonly));
         return;
     }
 
     const clipboardImage = await getImageFromClipboard();
     if (!clipboardImage) {
-        vscode.window.showWarningMessage('В буфере обмена нет изображения (или формат не поддерживается)');
+        vscode.window.showWarningMessage(translate(nls_ts.paste.image.warning.emptybuffer));
         return;
     }
 
@@ -103,7 +104,7 @@ async function pasteImageFromClipboard() {
             editBuilder.insert(editor.selection.active, markdownLink);
         });
 
-        vscode.window.showInformationMessage(`✅ Картинка сохранена: ${fileName}`);
+        vscode.window.showInformationMessage(`Картинка сохранена: ${fileName}`);
     } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         vscode.window.showErrorMessage(`Не удалось сохранить картинку: ${msg}`);

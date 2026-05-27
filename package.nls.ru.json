@@ -87,5 +87,8 @@
   "plugin.section.rename.error.folderexists": "Папка {0} уже существует.",
   "plugin.section.rename.error.interrupted": "\"объект не будет переименован: ввод данных прерван\"",
   "plugin.section.rename.error.isnotsection": "\"Переименовать можно только полноценный раздел.\"",
-  "plugin.section.rename.info.success": "Раздел переименован: \"{0}\"  \"{1}\""
+  "plugin.section.rename.info.success": "Раздел переименован: \"{0}\"  \"{1}\"",
+  "paste.omage.error.noactiveeditor": "'Нет активного редактора'",
+  "paste.image.warning.mdfileonly": "'Команда работает только в .md файлах'",
+  "paste.image.warning.emptybuffer": "'В буфере обмена нет изображения (или формат не поддерживается)'"
 }

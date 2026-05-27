@@ -2,226 +2,240 @@
 const { translate } = require('./nls_loader');
 
 const nls_ts = {
-  displayName: 'displayName',
-  description: 'description',
+  description: "description",
+  displayName: "displayName",
   command: {
-    createSection: 'command.createSection',
-    deleteSection: 'command.deleteSection',
-    renameSection: 'command.renameSection',
-    moveSection: 'command.moveSection',
-    reindex: 'command.reindex',
-    copyLink: 'command.copyLink',
-    pasteLink: 'command.pasteLink',
-    generateContexts: 'command.generateContexts',
-    wipeEmptyDirectories: 'command.wipeEmptyDirectories',
-    generateHelpMaps: 'command.generateHelpMaps',
-    generateBreadcrumbs: 'command.generateBreadcrumbs',
-    deleteHelptag: 'command.deleteHelptag',
-    updateHelptag: 'command.updateHelptag',
+    copyLink: "command.copyLink",
+    createSection: "command.createSection",
+    deleteHelptag: "command.deleteHelptag",
+    deleteSection: "command.deleteSection",
+    generateBreadcrumbs: "command.generateBreadcrumbs",
+    generateContexts: "command.generateContexts",
+    generateHelpMaps: "command.generateHelpMaps",
+    moveSection: "command.moveSection",
+    pasteLink: "command.pasteLink",
+    pasteImage: "command.pasteImage",
+    reindex: "command.reindex",
+    renameSection: "command.renameSection",
+    updateHelptag: "command.updateHelptag",
+    wipeEmptyDirectories: "command.wipeEmptyDirectories"
   },
   submenu: {
-    diplodoc: 'submenu.diplodoc',
-    generators: 'submenu.generators',
-    helptag: 'submenu.helptag',
-    context: 'submenu.context',
+    context: "submenu.context",
+    diplodoc: "submenu.diplodoc",
+    generators: "submenu.generators",
+    helptag: "submenu.helptag"
   },
   plugin: {
     breadcrumb: {
       generate: {
         error: {
-          foldernotfound: 'plugin.breadcrumb.generate.error.foldernotfound',
-          detail: 'plugin.breadcrumb.generate.error.detail',
+          detail: "plugin.breadcrumb.generate.error.detail",
+          foldernotfound: "plugin.breadcrumb.generate.error.foldernotfound"
         },
         info: {
-          success: 'plugin.breadcrumb.generate.info.success',
-        },
-      },
-    },
-    section: {
-      create: {
-        error: {
-          incorrectSection: 'plugin.section.create.error.incorrectSection',
-          critical: 'plugin.section.create.error.critical',
-        },
-        info: {
-          success: 'plugin.section.create.info.success',
-        },
-      },
-      delete: {
-        error: {
-          incorrectSection: 'plugin.section.delete.error.incorrectSection',
-          critical: 'plugin.section.delete.error.critical',
-        },
-        confirmation: {
-          text: 'plugin.section.delete.confirmation.text',
-          title: 'plugin.section.delete.confirmation.title',
-        },
-        info: {
-          success: 'plugin.section.delete.info.success',
-        },
-      },
-      move: {
-        error: {
-          incorrectSection: 'plugin.section.move.error.incorrectSection',
-          critical: 'plugin.section.move.error.critical',
-          sectionexists: 'plugin.section.move.error.sectionexists',
-          recursive: 'plugin.section.move.error.recursive',
-          self: 'plugin.section.move.error.self',
-        },
-        info: {
-          success: 'plugin.section.move.info.success',
-        },
-        warning: {
-          broken: 'plugin.section.move.warning.broken',
-        },
-        placeholder: {
-          target: 'plugin.section.move.placeholder.target',
-          start: 'plugin.section.move.placeholder.start',
-          end: 'plugin.section.move.placeholder.end',
-          targetfolder: 'plugin.section.move.placeholder.targetfolder',
-        },
-        label: {
-          after: 'plugin.section.move.label.after',
-        },
-      },
-      rename: {
-        error: {
-          isnotsection: 'plugin.section.rename.error.isnotsection',
-          interrupted: 'plugin.section.rename.error.interrupted',
-          folderexists: 'plugin.section.rename.error.folderexists',
-          critical: 'plugin.section.rename.error.critical',
-        },
-        info: {
-          success: 'plugin.section.rename.info.success',
-        },
-      },
-      reindex: {
-        info: {
-          success: 'plugin.section.reindex.info.success',
-        },
-        warning: {
-          text: 'plugin.section.reindex.warning.text',
-          button: 'plugin.section.reindex.warning.button',
-        },
-        progress: {
-          text: 'plugin.section.reindex.progress.text',
-        },
-      },
+          success: "plugin.breadcrumb.generate.info.success"
+        }
+      }
     },
     context: {
-      update: {
-        error: {
-          incorrectSection: 'plugin.context.update.error.incorrectSection',
-          critical: 'plugin.context.update.error.critical',
-        },
-        new: {
-          prompt: 'plugin.context.update.new.prompt',
-          placeholder: 'plugin.context.update.new.placeholder',
-          error: {
-            empty: 'plugin.context.update.new.error.empty',
-          },
-          addnewcontext: 'plugin.context.update.new.addnewcontext',
-          actionplaceholder: 'plugin.context.update.new.actionplaceholder',
-          add: {
-            inputprompt: 'plugin.context.update.new.add.inputprompt',
-            inputplaceholder: 'plugin.context.update.new.add.inputplaceholder',
-          },
-        },
-        change: {
-          inputprompt: 'plugin.context.update.change.inputprompt',
-          error: {
-            validation: 'plugin.context.update.change.error.validation',
-          },
-        },
-        info: {
-          success: 'plugin.context.update.info.success',
-        },
-      },
       delete: {
-        dialog: {
-          placeholder: 'plugin.context.delete.dialog.placeholder',
-        },
         confirm: {
-          prompt: 'plugin.context.delete.confirm.prompt',
-          button: 'plugin.context.delete.confirm.button',
+          button: "plugin.context.delete.confirm.button",
+          prompt: "plugin.context.delete.confirm.prompt"
         },
-        info: {
-          success: 'plugin.context.delete.info.success',
+        dialog: {
+          placeholder: "plugin.context.delete.dialog.placeholder"
         },
         error: {
-          critical: 'plugin.context.delete.error.critical',
+          critical: "plugin.context.delete.error.critical"
         },
+        info: {
+          success: "plugin.context.delete.info.success"
+        }
       },
       generate: {
+        error: {
+          notfound: "plugin.context.generate.error.notfound"
+        },
         info: {
-          success: 'plugin.context.generate.info.success',
+          success: "plugin.context.generate.info.success"
+        }
+      },
+      update: {
+        change: {
+          error: {
+            validation: "plugin.context.update.change.error.validation"
+          },
+          inputprompt: "plugin.context.update.change.inputprompt"
         },
         error: {
-          notfound: 'plugin.context.generate.error.notfound',
+          critical: "plugin.context.update.error.critical",
+          incorrectSection: "plugin.context.update.error.incorrectSection"
         },
+        info: {
+          success: "plugin.context.update.info.success"
+        },
+        new: {
+          actionplaceholder: "plugin.context.update.new.actionplaceholder",
+          add: {
+            inputplaceholder: "plugin.context.update.new.add.inputplaceholder",
+            inputprompt: "plugin.context.update.new.add.inputprompt"
+          },
+          addnewcontext: "plugin.context.update.new.addnewcontext",
+          error: {
+            empty: "plugin.context.update.new.error.empty"
+          },
+          placeholder: "plugin.context.update.new.placeholder",
+          prompt: "plugin.context.update.new.prompt"
+        }
       },
       wipe: {
-        success: 'plugin.context.wipe.success',
-      },
-    },
-    link: {
-      copy: {
-        info: {
-          success: 'plugin.link.copy.info.success',
-        },
-      },
-      paste: {
-        error: {
-          critical: 'plugin.link.paste.error.critical',
-          emptybuffer: 'plugin.link.paste.error.emptybuffer',
-        },
-      },
+        success: "plugin.context.wipe.success"
+      }
     },
     helpmap: {
       generate: {
         error: {
-          emptypath: 'plugin.helpmap.generate.error.emptypath',
-          critical: 'plugin.helpmap.generate.error.critical',
+          critical: "plugin.helpmap.generate.error.critical",
+          emptypath: "plugin.helpmap.generate.error.emptypath"
         },
         info: {
-          success: 'plugin.helpmap.generate.info.success',
+          success: "plugin.helpmap.generate.info.success"
         },
         warning: {
-          nothingfound: 'plugin.helpmap.generate.warning.nothingfound',
-        },
-      },
+          nothingfound: "plugin.helpmap.generate.warning.nothingfound"
+        }
+      }
     },
     helptag: {
       delete: {
         confirm: {
-          title: 'plugin.helptag.delete.confirm.title',
-          button: 'plugin.helptag.delete.confirm.button',
-        },
-        info: {
-          success: 'plugin.helptag.delete.info.success',
+          button: "plugin.helptag.delete.confirm.button",
+          title: "plugin.helptag.delete.confirm.title"
         },
         error: {
-          critical: 'plugin.helptag.delete.error.critical',
+          critical: "plugin.helptag.delete.error.critical"
         },
+        info: {
+          success: "plugin.helptag.delete.info.success"
+        }
       },
       update: {
         error: {
-          critical: 'plugin.helptag.update.error.critical',
-          empty: 'plugin.helptag.update.error.empty',
-          incorrectSection: 'plugin.helptag.update.error.incorrectSection',
+          critical: "plugin.helptag.update.error.critical",
+          empty: "plugin.helptag.update.error.empty",
+          incorrectSection: "plugin.helptag.update.error.incorrectSection"
         },
         info: {
-          success: 'plugin.helptag.update.info.success',
-        },
-        prompt: {
-          add: 'plugin.helptag.update.prompt.add',
+          success: "plugin.helptag.update.info.success"
         },
         placeholder: {
-          add: 'plugin.helptag.update.placeholder.add',
+          add: "plugin.helptag.update.placeholder.add"
         },
-      },
+        prompt: {
+          add: "plugin.helptag.update.prompt.add"
+        }
+      }
     },
+    link: {
+      copy: {
+        info: {
+          success: "plugin.link.copy.info.success"
+        }
+      },
+      paste: {
+        error: {
+          critical: "plugin.link.paste.error.critical",
+          emptybuffer: "plugin.link.paste.error.emptybuffer"
+        }
+      }
+    },
+    section: {
+      create: {
+        error: {
+          critical: "plugin.section.create.error.critical",
+          incorrectSection: "plugin.section.create.error.incorrectSection"
+        },
+        info: {
+          success: "plugin.section.create.info.success"
+        }
+      },
+      delete: {
+        confirmation: {
+          text: "plugin.section.delete.confirmation.text",
+          title: "plugin.section.delete.confirmation.title"
+        },
+        error: {
+          critical: "plugin.section.delete.error.critical",
+          incorrectSection: "plugin.section.delete.error.incorrectSection"
+        },
+        info: {
+          success: "plugin.section.delete.info.success"
+        }
+      },
+      move: {
+        error: {
+          critical: "plugin.section.move.error.critical",
+          incorrectSection: "plugin.section.move.error.incorrectSection",
+          recursive: "plugin.section.move.error.recursive",
+          sectionexists: "plugin.section.move.error.sectionexists",
+          self: "plugin.section.move.error.self"
+        },
+        info: {
+          success: "plugin.section.move.info.success"
+        },
+        label: {
+          after: "plugin.section.move.label.after"
+        },
+        placeholder: {
+          end: "plugin.section.move.placeholder.end",
+          start: "plugin.section.move.placeholder.start",
+          target: "plugin.section.move.placeholder.target",
+          targetfolder: "plugin.section.move.placeholder.targetfolder"
+        },
+        warning: {
+          broken: "plugin.section.move.warning.broken"
+        }
+      },
+      reindex: {
+        info: {
+          success: "plugin.section.reindex.info.success"
+        },
+        progress: {
+          text: "plugin.section.reindex.progress.text"
+        },
+        warning: {
+          button: "plugin.section.reindex.warning.button",
+          text: "plugin.section.reindex.warning.text"
+        }
+      },
+      rename: {
+        error: {
+          critical: "plugin.section.rename.error.critical",
+          folderexists: "plugin.section.rename.error.folderexists",
+          interrupted: "plugin.section.rename.error.interrupted",
+          isnotsection: "plugin.section.rename.error.isnotsection"
+        },
+        info: {
+          success: "plugin.section.rename.info.success"
+        }
+      }
+    }
   },
+  paste: {
+    omage: {
+      error: {
+        noactiveeditor: "paste.omage.error.noactiveeditor"
+      }
+    },
+    image: {
+      warning: {
+        mdfileonly: "paste.image.warning.mdfileonly",
+        emptybuffer: "paste.image.warning.emptybuffer"
+      }
+    }
+  }
 };
 
 module.exports = { nls_ts, translate };

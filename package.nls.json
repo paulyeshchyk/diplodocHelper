@@ -87,5 +87,8 @@
   "plugin.section.rename.error.folderexists": "Folder {0} already exists.",
   "plugin.section.rename.error.interrupted": "object will not be renamed: input cancelled",
   "plugin.section.rename.error.isnotsection": "Only a full section can be renamed.",
-  "plugin.section.rename.info.success": "Section renamed: \"{0}\" -> \"{1}\""
+  "plugin.section.rename.info.success": "Section renamed: \"{0}\" -> \"{1}\"",
+  "paste.omage.error.noactiveeditor": "'Нет активного редактора'",
+  "paste.image.warning.mdfileonly": "'Команда работает только в .md файлах'",
+  "paste.image.warning.emptybuffer": "'В буфере обмена нет изображения (или формат не поддерживается)'"
 }
