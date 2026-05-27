@@ -22,14 +22,7 @@ async function deleteHelptag(uri) {
   const indexMdPath = path.join(sectionPath, 'index.md');
   if (!fs.existsSync(indexMdPath)) return;
 
-  let currentHelptag = '';
-  try {
-    const content = fs.readFileSync(indexMdPath, 'utf8');
-    const { data } = parse(content);
-    currentHelptag = data.helptag || '';
-  } catch {
-    return;
-  }
+  let currentHelptag = readHelpTag(indexMdPath);
 
   if (!currentHelptag) {
     return; // silently - no helptag
@@ -55,6 +48,20 @@ async function deleteHelptag(uri) {
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
     vscode.window.showErrorMessage(translate(nls_ts.plugin.helptag.delete.error.critical, msg));
+  }
+}
+
+/**
+ * @param {fs.PathOrFileDescriptor} indexMdPath
+ * @returns {string}
+ */
+function readHelpTag(indexMdPath) {
+  try {
+    const content = fs.readFileSync(indexMdPath, 'utf8');
+    const { data } = parse(content);
+    return data.helptag || '';
+  } catch {
+    return '';
   }
 }
 

@@ -21,12 +21,18 @@ const { generateHelpmap } = require('./commands/diplodoc-helper.helpMap.Generate
 
 const { generateBreadcrumbs } = require('./commands/diplodoc-helper.breadCrumb.Generate');
 const { initNls } = require('../nls_loader');
+const { pasteImageFromClipboard } = require('./commands/diplodoc-helper.image.PasteFromClipboard');
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
   initNls(context);
+
+  const pasteImageCmd = vscode.commands.registerCommand(
+    'diplodoc-helper.pasteImageFromClipboard',
+    pasteImageFromClipboard
+  );
 
   const wipeEmptyDirectoriesCmd = vscode.commands.registerCommand(
     'diplodoc-helper.wipeEmptyDirectories',
@@ -121,7 +127,7 @@ function activate(context) {
     deleteHelptagCmd
   );
 
-  context.subscriptions.push(copyLinkCmd, pasteLinkCmd);
+  context.subscriptions.push(copyLinkCmd, pasteLinkCmd, pasteImageCmd);
 
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(editor => updateContextMenu(editor)),

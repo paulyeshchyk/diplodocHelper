@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // src/plugins/core/utils.js
 
 const fs = require('fs');
@@ -31,7 +32,7 @@ function walk(dir, filter, callback) {
  */
 function slugify(str) {
   return str
-    .replace(/[^\p{L}\p{N}\-\._]/gu, '_')
+    .replace(/[^\p{L}\p{N}\-._]/gu, '_')
     .replace(/_+/g, '_')
     .replace(/^_+|_+$/g, '');
 }

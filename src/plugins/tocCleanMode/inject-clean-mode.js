@@ -1,3 +1,4 @@
+// @ts-nocheck
 // clean-mode.js
 
 (function () {

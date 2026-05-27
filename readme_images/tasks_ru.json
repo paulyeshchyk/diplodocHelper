@@ -28,9 +28,7 @@
       "label": "2. Открыть (локальный сервер)",
       "type": "shell",
       "command": "node .vscode/scripts/open-url.js http://localhost:${config:docbuilder.port}",
-      "dependsOn": [
-        "4. Запустить HTTP сервер"
-      ],
+      "dependsOn": ["4. Запустить HTTP сервер"],
       "problemMatcher": [],
       "presentation": {
         "reveal": "never",
@@ -43,9 +41,7 @@
       "label": "2. Открыть (локальный файл)",
       "type": "shell",
       "command": "node .vscode/scripts/open-file.js build/index.html",
-      "dependsOn": [
-        "1. Собрать документацию"
-      ],
+      "dependsOn": ["1. Собрать документацию"],
       "dependsOrder": "sequence",
       "problemMatcher": [],
       "group": {
@@ -61,9 +57,7 @@
     },
     {
       "label": "3. Подготовка окружения",
-      "dependsOn": [
-        "0.7 npm clean-install"
-      ],
+      "dependsOn": ["0.7 npm clean-install"],
       "dependsOrder": "sequence",
       "problemMatcher": [],
       "presentation": {
@@ -102,9 +96,7 @@
       "label": "5. docker: build image",
       "type": "shell",
       "command": "docker build -t ${config:docbuilder.imageName} .",
-      "dependsOn": [
-        "0.12 check-docker"
-      ],
+      "dependsOn": ["0.12 check-docker"],
       "group": {
         "kind": "build",
         "isDefault": true
@@ -120,9 +112,7 @@
       "type": "shell",
       "command": "node .vscode/scripts/docker-run.js ${config:docbuilder.containerName} ${config:docbuilder.port} ${config:docbuilder.imageName}",
       "group": "test",
-      "dependsOn": [
-        "5. docker: build image"
-      ],
+      "dependsOn": ["5. docker: build image"],
       "presentation": {
         "reveal": "always",
         "panel": "dedicated"
@@ -171,9 +161,7 @@
     },
     {
       "label": "9. Остановить все серверы",
-      "dependsOn": [
-        "0.9 stop-all-servers"
-      ],
+      "dependsOn": ["0.9 stop-all-servers"],
       "problemMatcher": [],
       "group": "none",
       "presentation": {
@@ -329,10 +317,7 @@
     },
     {
       "label": "0.9 stop-all-servers",
-      "dependsOn": [
-        "0.8 stop-http",
-        "0.9a stop-docker"
-      ],
+      "dependsOn": ["0.8 stop-http", "0.9a stop-docker"],
       "dependsOrder": "sequence",
       "problemMatcher": [],
       "presentation": {
@@ -356,4 +341,3 @@
     }
   ]
 }
-

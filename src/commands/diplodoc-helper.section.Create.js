@@ -85,7 +85,7 @@ async function createSection(uri) {
       translate(nls_ts.plugin.section.create.info.success, fullTitle, sectionType.label)
     );
   } catch (err) {
-    let msg = err instanceof Error ? err.message : '${err}';
+    let msg = err instanceof Error ? err.message : String(err);
     vscode.window.showErrorMessage(translate(nls_ts.plugin.section.create.error.critical, msg));
   }
 }

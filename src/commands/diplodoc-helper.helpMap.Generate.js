@@ -23,7 +23,7 @@ const vscode = require('vscode');
 const outputFolderName = 'build';
 const docsFolderName = 'docs';
 
-const { runGeneration } = require('../plugins/helpMap/helpMap');
+const { runGeneration } = require('../plugins/helpMap/index.js');
 
 /**
  * Вызов из VS Code (Команда расширения)
@@ -67,7 +67,7 @@ async function generateHelpmap() {
       );
     }
   } catch (err) {
-    let msg = err instanceof Error ? err.message : '${err}';
+    let msg = err instanceof Error ? err.message : String(err);
     vscode.window.showErrorMessage(translate(nls_ts.plugin.helpmap.generate.error.critical, msg));
   }
 }

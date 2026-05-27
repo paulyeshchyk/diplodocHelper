@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { runGeneration: generateHelpMap } = require('./helpMap/helpMap.js');
+const { runGeneration: generateHelpMap } = require('./helpMap/index.js');
 const { runGeneration: generateContexts } = require('./contexts/сontexts.js');
 const { runGeneration: generateBreadcrumb } = require('./breadcrumb/breadcrumb.js');
 const { injectCleanMode: generateTocCleanMode } = require('./tocCleanMode/post-build.js');

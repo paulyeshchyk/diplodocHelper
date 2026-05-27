@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/paulyeshchyk/diplodocHelper"
   },
-  "version": "0.15.0",
+  "version": "0.16.0",
   "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"
@@ -18,6 +18,39 @@
   "releaseNotes": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
   "activationEvents": [],
   "contributes": {
+    "configuration": {
+      "title": "Diplodoc Helper",
+      "properties": {
+        "diplodocHelper.maxDepth": {
+          "type": "number",
+          "default": 5,
+          "description": "Максимальная глубина поиска разделов"
+        },
+        "diplodocHelper.autoReindex": {
+          "type": "boolean",
+          "default": true,
+          "description": "Автоматически обновлять индексы при изменении структуры"
+        },
+        "diplodocHelper.defaultLanguage": {
+          "type": "string",
+          "default": "ru",
+          "enum": [
+            "ru",
+            "en"
+          ],
+          "enumDescriptions": [
+            "Русский",
+            "English"
+          ],
+          "description": "Язык интерфейса по умолчанию"
+        },
+        "diplodocHelper.outputFolder": {
+          "type": "string",
+          "default": "docs",
+          "description": "Папка для сгенерированных файлов (относительно корня рабочей области)"
+        }
+      }
+    },
     "commands": [
       {
         "command": "diplodoc-helper.createSection",
@@ -46,6 +79,11 @@
       {
         "command": "diplodoc-helper.pasteLink",
         "title": "%command.pasteLink%"
+      },
+      {
+        "command": "diplodoc-helper.pasteImageFromClipboard",
+        "when": "editorTextFocus && resourceExtname == .md",
+        "title": "%command.pasteImage%"
       },
       {
         "command": "diplodoc-helper.generateContexts",
@@ -121,6 +159,11 @@
           "command": "diplodoc-helper.pasteLink",
           "when": "editorTextFocus && !editorReadonly",
           "group": "diplodoc.section@1"
+        },
+        {
+          "command": "diplodoc-helper.pasteImageFromClipboard",
+          "when": "editorTextFocus && resourceExtname == .md",
+          "group": "diplodoc.section@2"
         }
       ],
       "diplodoc.explorer.context.menu": [
@@ -230,7 +273,11 @@
     "@eslint/markdown": "^8.0.2",
     "esbuild": "^0.28.0",
     "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.6.0",
+    "postcss": "^8.5.15",
+    "postcss-sorting": "^10.0.0",
     "prettier-plugin-css-order": "^2.2.0",
     "prettier-plugin-organize-imports": "^4.3.0"
   },
@@ -239,6 +286,8 @@
     "compile": "echo 'No compilation needed for JS'",
     "package": "vsce package",
     "publish-vsix": "vsce publish",
-    "publish-npm": "npm publish"
+    "publish-npm": "npm publish",
+    "lint": "eslint . --fix",
+    "format": "prettier --write ."
   }
 }

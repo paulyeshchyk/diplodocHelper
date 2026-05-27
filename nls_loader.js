@@ -1,7 +1,7 @@
 // Auto-generated runtime helper for NLS localization
-const fs = require("fs");
-const path = require("path");
-const vscode = require("vscode");
+const fs = require('fs');
+const path = require('path');
+const vscode = require('vscode');
 
 /** * Кэш текущих переводов (плоский словарь)
  * @type {Record<string, string>}
@@ -18,15 +18,15 @@ function initNls(context) {
   let nlsPath = path.join(rootPath, `package.nls.${locale}.json`);
 
   if (!fs.existsSync(nlsPath)) {
-    nlsPath = path.join(rootPath, "package.nls.json");
+    nlsPath = path.join(rootPath, 'package.nls.json');
   }
 
   try {
     if (fs.existsSync(nlsPath)) {
-      currentTranslations = JSON.parse(fs.readFileSync(nlsPath, "utf8"));
+      currentTranslations = JSON.parse(fs.readFileSync(nlsPath, 'utf8'));
     }
   } catch (err) {
-    console.error("Failed to load NLS file:", err);
+    console.error('Failed to load NLS file:', err);
   }
 }
 
@@ -44,7 +44,7 @@ function translate(key, ...args) {
     // Явно типизируем callback для replace
     template = template.replace(/\{(\d+)\}/g, (match, number) => {
       const index = parseInt(number, 10);
-      return typeof args[index] !== "undefined" ? String(args[index]) : match;
+      return typeof args[index] !== 'undefined' ? String(args[index]) : match;
     });
   }
   return template;

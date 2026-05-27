@@ -5,10 +5,6 @@ const { runGeneration } = require('../plugins/breadcrumb/breadcrumb');
 const path = require('path');
 let vscode = require('vscode');
 
-
-
-
-
 const BuildFolderName = 'build';
 
 async function generateBreadcrumbs() {

@@ -45,7 +45,7 @@ async function moveSection(uri) {
   if (!position) return;
 
   // 3. Выполняем перемещение
-  const success = await performMove(sourcePath, targetDir, position);
+  const success = await performMove(sourcePath, targetDir);
   if (success) {
     vscode.window.showInformationMessage(
       translate(nls_ts.plugin.section.move.info.success, sourceName)
@@ -152,9 +152,8 @@ async function selectInsertPosition(targetDir, movingSectionName) {
  * Выполняет перемещение раздела
  * @param {string} sourcePath
  * @param {string} targetDir
- * @param {{ label: string; position: string; }} position
  */
-async function performMove(sourcePath, targetDir, position) {
+async function performMove(sourcePath, targetDir) {
   const sourceName = path.basename(sourcePath);
   const targetPath = path.join(targetDir, sourceName);
 
@@ -243,7 +242,7 @@ async function getSectionInfo(sectionPath) {
       sectionType: metadata.sectionType || 'Page',
       sectionIndex: metadata.sectionIndex || '',
     };
-  } catch (e) {
+  } catch {
     return { sectionType: 'Page', sectionIndex: '' };
   }
 }

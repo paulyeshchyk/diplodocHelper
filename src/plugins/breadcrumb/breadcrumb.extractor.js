@@ -15,7 +15,9 @@ function extractTitleFromHtml(html) {
       const state = JSON.parse(stateMatch[1]);
       if (state.data?.title) return state.data.title;
       if (state.title) return state.title;
-    } catch (e) { }
+    } catch {
+      //
+    }
   }
 
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/);
@@ -64,6 +66,7 @@ function generateBreadcrumbScript(htmlPath, titleMap, config) {
 
   return template;
 }
+
 module.exports = {
   extractTitleFromHtml,
   generateBreadcrumbScript,

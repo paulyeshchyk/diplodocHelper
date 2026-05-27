@@ -15,17 +15,9 @@ async function copyLink(uri) {
   const fsPath = uri.fsPath;
   const stats = fs.statSync(fsPath);
 
-  let title = '';
   let targetPath = fsPath;
 
-  if (stats.isDirectory()) {
-    // Логика для раздела (папки)
-    const section = IndexMdFileRead(fsPath);
-    title = section?.pureTitle || path.basename(fsPath);
-  } else {
-    // Логика для файла (картинки, документы)
-    title = path.basename(fsPath);
-  }
+  let title = buildTitle(stats, fsPath);
 
   const data = {
     sourceLinkName: title,
@@ -35,6 +27,21 @@ async function copyLink(uri) {
 
   await vscode.env.clipboard.writeText(JSON.stringify(data));
   vscode.window.showInformationMessage(translate('plugin.link.copy.info.success', title));
+}
+
+/**
+ * @param {fs.Stats} stats
+ * @param {string} fsPath
+ */
+function buildTitle(stats, fsPath) {
+  if (stats.isDirectory()) {
+    // Логика для раздела (папки)
+    const section = IndexMdFileRead(fsPath);
+    return section?.pureTitle || path.basename(fsPath);
+  } else {
+    // Логика для файла (картинки, документы)
+    return path.basename(fsPath);
+  }
 }
 
 module.exports = { copyLink };

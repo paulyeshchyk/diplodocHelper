@@ -10,6 +10,7 @@
   "command.generateHelpMaps": "Создать карту ключей(helptag)",
   "command.moveSection": "Переместить секцию",
   "command.pasteLink": "Вставить ссылку на документ",
+  "command.pasteImage": "Вставить картинку",
   "command.reindex": "Переиндексировать",
   "command.renameSection": "Переименовать секцию",
   "command.updateHelptag": "Добавить / Удалить",

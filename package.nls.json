@@ -10,6 +10,7 @@
   "command.generateHelpMaps": "Generate help map for frontend",
   "command.moveSection": "Move section",
   "command.pasteLink": "Paste link to document",
+  "command.pasteImage": "Paste image to document",
   "command.reindex": "Reindex everything",
   "command.renameSection": "Set new type and name",
   "command.updateHelptag": "Add / Change",

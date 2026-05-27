@@ -20,18 +20,7 @@ async function deleteContext(uri) {
   const indexMdPath = path.join(sectionPath, 'index.md');
   if (!fs.existsSync(indexMdPath)) return;
 
-  let contexts = [];
-  try {
-    const content = fs.readFileSync(indexMdPath, 'utf8');
-    const { data } = parse(content);
-    const current = data.context || '';
-    contexts = current
-      .split(',')
-      .map((/** @type {string} */ s) => s.trim())
-      .filter(Boolean);
-  } catch {
-    return;
-  }
+  let contexts = readContexts(indexMdPath);
 
   if (contexts.length === 0) return; // ничего не делаем
 
@@ -75,6 +64,24 @@ async function deleteContext(uri) {
   } catch (err) {
     let msg = err instanceof Error ? err.message : `${err}`;
     vscode.window.showErrorMessage(translate(nls_ts.plugin.context.delete.error.critical, msg));
+  }
+}
+
+/**
+ * @param {fs.PathOrFileDescriptor} indexMdPath
+ * @returns string[]
+ */
+function readContexts(indexMdPath) {
+  try {
+    const content = fs.readFileSync(indexMdPath, 'utf8');
+    const { data } = parse(content);
+    const current = data.context || '';
+    return current
+      .split(',')
+      .map((/** @type {string} */ s) => s.trim())
+      .filter(Boolean);
+  } catch {
+    return [];
   }
 }
 

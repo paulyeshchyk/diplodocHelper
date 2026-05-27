@@ -9,9 +9,6 @@
   "bracketSameLine": true,
   "printWidth": 100,
   "endOfLine": "lf",
-  "plugins": [
-    "prettier-plugin-organize-imports",
-    "prettier-plugin-css-order"
-  ],
+  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-css-order"],
   "cssDeclarationSorterOrder": "frakto"
 }

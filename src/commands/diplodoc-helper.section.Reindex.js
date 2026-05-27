@@ -2,7 +2,6 @@
 
 const { nls_ts, translate } = require('../../nls_ts.js');
 const vscode = require('vscode');
-const path = require('path');
 
 const { reindexDirectory } = require('../core/reindex');
 
