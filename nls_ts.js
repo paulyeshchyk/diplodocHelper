@@ -235,6 +235,31 @@ const nls_ts = {
         emptybuffer: "paste.image.warning.emptybuffer"
       }
     }
+  },
+  screenshot: {
+    description: {
+      placeholder: "screenshot.description.placeholder"
+    },
+    name: {
+      prompt: "screenshot.name.prompt",
+      error: {
+        wrongcharacters: "screenshot.name.error.wrongcharacters"
+      }
+    },
+    saved: {
+      info: "screenshot.saved.info"
+    },
+    error: {
+      notsaved: "screenshot.error.notsaved",
+      alreadyexists: {
+        async: "screenshot.error.alreadyexists.async"
+      }
+    }
+  },
+  filename: {
+    error: {
+      alreadyexists: "filename.error.alreadyexists"
+    }
   }
 };
 

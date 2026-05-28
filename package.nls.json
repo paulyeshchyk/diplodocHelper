@@ -88,7 +88,14 @@
   "plugin.section.rename.error.interrupted": "object will not be renamed: input cancelled",
   "plugin.section.rename.error.isnotsection": "Only a full section can be renamed.",
   "plugin.section.rename.info.success": "Section renamed: \"{0}\" -> \"{1}\"",
-  "paste.omage.error.noactiveeditor": "'Нет активного редактора'",
-  "paste.image.warning.mdfileonly": "'Команда работает только в .md файлах'",
-  "paste.image.warning.emptybuffer": "'В буфере обмена нет изображения (или формат не поддерживается)'"
+  "paste.omage.error.noactiveeditor": "Found no active editor",
+  "paste.image.warning.mdfileonly": "Command can be used with .md files only",
+  "paste.image.warning.emptybuffer": "Clipboard contains incorrect data",
+  "screenshot.description.placeholder": "Screenshot description",
+  "screenshot.name.prompt": "{0}_Screenshot",
+  "screenshot.name.error.wrongcharacters": "Name contains incorrect symbols",
+  "filename.error.alreadyexists": "File already exists",
+  "screenshot.saved.info": "Image was saved: {0}",
+  "screenshot.error.notsaved": "Image was not saved: {0}",
+  "screenshot.error.alreadyexists.async": "File was created in parallel and already exists"
 }

@@ -1,14 +1,15 @@
-/* eslint-disable prettier/prettier */
+//clipboard.image.js
+
 const cp = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-/** 
- * @typedef {Object} ShellScript 
+/**
+ * @typedef {Object} ShellScript
  * @property {string} script
  * @property {string[]} args
-*/
+ */
 
 /**
  * Читает изображение из буфера обмена и сохраняет во временный файл.
@@ -19,8 +20,7 @@ async function getImageFromClipboard() {
     const platform = os.platform();
     const tempPath = path.join(os.tmpdir(), `vscode_clip_${Date.now()}.png`);
 
-    return new Promise((resolve) => {
-
+    return new Promise(resolve => {
         /** @type {ShellScript | null} */
         let shellScript = GetShellScript();
         if (shellScript === null) {
@@ -28,7 +28,7 @@ async function getImageFromClipboard() {
             return;
         }
 
-        cp.execFile(shellScript.script, shellScript.args, (error) => {
+        cp.execFile(shellScript.script, shellScript.args, error => {
             if (error) {
                 // Если произошла ошибка (или в буфере просто не было картинки)
                 if (fs.existsSync(tempPath)) {
@@ -84,7 +84,10 @@ async function getImageFromClipboard() {
     function GetImageDarwin() {
         // Для macOS используем встроенный AppleScript (osascript)
         let script = 'osascript';
-        let args = ['-e', `write (the clipboard as «class PNGf») to (open for access POSIX file "${tempPath}" with write permission)`];
+        let args = [
+            '-e',
+            `write (the clipboard as «class PNGf») to (open for access POSIX file "${tempPath}" with write permission)`,
+        ];
         return { script, args };
     }
 
@@ -108,10 +111,10 @@ async function getImageFromClipboard() {
                 } else {
                     exit 1;
                 }
-                `
+                `,
         ];
         return { script, args };
     }
 }
 
-module.exports = { getImageFromClipboard }
+module.exports = { getImageFromClipboard };

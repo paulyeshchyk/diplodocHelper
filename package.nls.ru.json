@@ -90,5 +90,12 @@
   "plugin.section.rename.info.success": "Раздел переименован: \"{0}\"  \"{1}\"",
   "paste.omage.error.noactiveeditor": "'Нет активного редактора'",
   "paste.image.warning.mdfileonly": "'Команда работает только в .md файлах'",
-  "paste.image.warning.emptybuffer": "'В буфере обмена нет изображения (или формат не поддерживается)'"
+  "paste.image.warning.emptybuffer": "'В буфере обмена нет изображения (или формат не поддерживается)'",
+  "screenshot.description.placeholder": "'Описание_скриншота'",
+  "screenshot.name.prompt": "`{0}_Скриншот`",
+  "screenshot.name.error.wrongcharacters": "'Имя содержит недопустимые символы'",
+  "filename.error.alreadyexists": "'Файл с таким именем уже существует'",
+  "screenshot.saved.info": "`Картинка сохранена: {0}`",
+  "screenshot.error.notsaved": "`Не удалось сохранить картинку: {0}`",
+  "screenshot.error.alreadyexists.async": "'Файл был создан параллельно и уже существует'"
 }

@@ -8,7 +8,10 @@
   "trailingComma": "es5",
   "bracketSameLine": true,
   "printWidth": 100,
-  "endOfLine": "lf",
-  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-css-order"],
+  "endOfLine": "auto",
+  "plugins": [
+    "prettier-plugin-organize-imports",
+    "prettier-plugin-css-order"
+  ],
   "cssDeclarationSorterOrder": "frakto"
 }
