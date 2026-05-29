@@ -5,66 +5,64 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../utils');
-const { parse, stringify, remove } = require('../utils/frontmatter');
+const { isDiplodocSection } = require('../plugins/utils/directory');
+const { parse, stringify, remove } = require('../plugins/utils/frontmatter');
 
 /**
  * @param {{ fsPath: string }} uri
  */
 async function deleteContext(uri) {
-  if (!uri) return;
+    if (!uri) return;
 
-  const sectionPath = uri.fsPath;
-  if (!isDiplodocSection(sectionPath)) return;
+    const sectionPath = uri.fsPath;
+    if (!isDiplodocSection(sectionPath)) return;
 
-  const indexMdPath = path.join(sectionPath, 'index.md');
-  if (!fs.existsSync(indexMdPath)) return;
+    const indexMdPath = path.join(sectionPath, 'index.md');
+    if (!fs.existsSync(indexMdPath)) return;
 
-  let contexts = readContexts(indexMdPath);
+    let contexts = readContexts(indexMdPath);
 
-  if (contexts.length === 0) return; // ничего не делаем
+    if (contexts.length === 0) return; // ничего не делаем
 
-  let toDelete;
+    let toDelete;
 
-  if (contexts.length === 1) {
-    toDelete = contexts[0];
-  } else {
-    toDelete = await vscode.window.showQuickPick(contexts, {
-      placeHolder: translate(nls_ts.plugin.context.delete.dialog.placeholder),
-    });
-    if (!toDelete) return;
-  }
-
-  const confirm = await vscode.window.showWarningMessage(
-    translate(nls_ts.plugin.context.delete.confirm.prompt, toDelete),
-    { modal: true },
-    translate(nls_ts.plugin.context.delete.confirm.button)
-  );
-
-  if (confirm !== translate(nls_ts.plugin.context.delete.confirm.button)) return;
-
-  try {
-    let content = fs.readFileSync(indexMdPath, 'utf8');
-    const { data, content: body } = parse(content);
-
-    const remaining = contexts.filter((/** @type {any} */ c) => c !== toDelete);
-
-    if (remaining.length === 0) {
-      content = remove(content, 'context');
+    if (contexts.length === 1) {
+        toDelete = contexts[0];
     } else {
-      data.context = remaining.join(', ');
-      content = stringify(data, body);
+        toDelete = await vscode.window.showQuickPick(contexts, {
+            placeHolder: translate(nls_ts.plugin.context.delete.dialog.placeholder),
+        });
+        if (!toDelete) return;
     }
 
-    fs.writeFileSync(indexMdPath, content, 'utf8');
-
-    vscode.window.showInformationMessage(
-      translate(nls_ts.plugin.context.delete.info.success, toDelete)
+    const confirm = await vscode.window.showWarningMessage(
+        translate(nls_ts.plugin.context.delete.confirm.prompt, toDelete),
+        { modal: true },
+        translate(nls_ts.plugin.context.delete.confirm.button)
     );
-  } catch (err) {
-    let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(translate(nls_ts.plugin.context.delete.error.critical, msg));
-  }
+
+    if (confirm !== translate(nls_ts.plugin.context.delete.confirm.button)) return;
+
+    try {
+        let content = fs.readFileSync(indexMdPath, 'utf8');
+        const { data, content: body } = parse(content);
+
+        const remaining = contexts.filter((/** @type {any} */ c) => c !== toDelete);
+
+        if (remaining.length === 0) {
+            content = remove(content, 'context');
+        } else {
+            data.context = remaining.join(', ');
+            content = stringify(data, body);
+        }
+
+        fs.writeFileSync(indexMdPath, content, 'utf8');
+
+        vscode.window.showInformationMessage(translate(nls_ts.plugin.context.delete.info.success, toDelete));
+    } catch (err) {
+        let msg = err instanceof Error ? err.message : `${err}`;
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.context.delete.error.critical, msg));
+    }
 }
 
 /**
@@ -72,17 +70,17 @@ async function deleteContext(uri) {
  * @returns string[]
  */
 function readContexts(indexMdPath) {
-  try {
-    const content = fs.readFileSync(indexMdPath, 'utf8');
-    const { data } = parse(content);
-    const current = data.context || '';
-    return current
-      .split(',')
-      .map((/** @type {string} */ s) => s.trim())
-      .filter(Boolean);
-  } catch {
-    return [];
-  }
+    try {
+        const content = fs.readFileSync(indexMdPath, 'utf8');
+        const { data } = parse(content);
+        const current = data.context || '';
+        return current
+            .split(',')
+            .map((/** @type {string} */ s) => s.trim())
+            .filter(Boolean);
+    } catch {
+        return [];
+    }
 }
 
 module.exports = { deleteContext };

@@ -2,14 +2,25 @@
 
 const fs = require('fs');
 const path = require('path');
-const { slugify } = require('../core/utils');
+
 const {
-  INDEX_MD_DEFAULT_CONTENT,
-  TOC_YAML_LINKS_TEMPLATE,
-  TOC_YAML_LINK_TEMPLATE,
-  INDEX_TAML_LINKS_TEMPLATE,
-  INDEX_YAML_LINK_TEMPLATE,
+    INDEX_MD_DEFAULT_CONTENT,
+    TOC_YAML_LINKS_TEMPLATE,
+    TOC_YAML_LINK_TEMPLATE,
+    INDEX_TAML_LINKS_TEMPLATE,
+    INDEX_YAML_LINK_TEMPLATE,
 } = require('./contexts.template');
+
+/**
+ * Приводит строку к slug-формату (для URL, имён файлов)
+ * @param {string} str
+ */
+function slugify_url(str) {
+    return str
+        .replace(/[^\p{L}\p{N}\-._]/gu, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_+|_+$/g, '');
+}
 
 /** @import {ContextMap} from '../core/types' */
 
@@ -19,14 +30,14 @@ const {
  * @param {ContextMap} contextMap
  */
 function writeTermFiles(outputDir, sortedTerms, contextMap) {
-  for (const term of sortedTerms) {
-    const slug = slugify(term);
-    let content = `# ${term.toUpperCase()}\n\n`;
-    contextMap[term]?.pages.forEach(p => {
-      content += `* [${p.title}](../${p.href})\n`;
-    });
-    fs.writeFileSync(path.join(outputDir, `${slug}.md`), content, 'utf8');
-  }
+    for (const term of sortedTerms) {
+        const slug = slugify_url(term);
+        let content = `# ${term.toUpperCase()}\n\n`;
+        contextMap[term]?.pages.forEach(p => {
+            content += `* [${p.title}](../${p.href})\n`;
+        });
+        fs.writeFileSync(path.join(outputDir, `${slug}.md`), content, 'utf8');
+    }
 }
 
 /**
@@ -37,24 +48,24 @@ function writeTermFiles(outputDir, sortedTerms, contextMap) {
  * @param {string} title
  */
 function writeIndexMd(outputDir, sortedTerms, contextMap, lang, title) {
-  const suffix = lang === 'ru' ? 'ст.' : 'docs';
-  let content = INDEX_MD_DEFAULT_CONTENT(title);
-  let currentLetter = '';
+    const suffix = lang === 'ru' ? 'ст.' : 'docs';
+    let content = INDEX_MD_DEFAULT_CONTENT(title);
+    let currentLetter = '';
 
-  for (const term of sortedTerms) {
-    const firstLetter = term.charAt(0).toUpperCase();
-    const slug = slugify(term);
-    const count = contextMap[term]?.rank || 0;
+    for (const term of sortedTerms) {
+        const firstLetter = term.charAt(0).toUpperCase();
+        const slug = slugify_url(term);
+        const count = contextMap[term]?.rank || 0;
 
-    if (firstLetter !== currentLetter) {
-      if (currentLetter !== '') content += '\n';
-      content += `\n## ${firstLetter}\n`;
-      currentLetter = firstLetter;
+        if (firstLetter !== currentLetter) {
+            if (currentLetter !== '') content += '\n';
+            content += `\n## ${firstLetter}\n`;
+            currentLetter = firstLetter;
+        }
+        content += `* [${term}](${slug}.md) (${count} ${suffix})\n`;
     }
-    content += `* [${term}](${slug}.md) (${count} ${suffix})\n`;
-  }
 
-  fs.writeFileSync(path.join(outputDir, 'index.md'), content.trim() + '\n', 'utf8');
+    fs.writeFileSync(path.join(outputDir, 'index.md'), content.trim() + '\n', 'utf8');
 }
 
 /**
@@ -64,31 +75,23 @@ function writeIndexMd(outputDir, sortedTerms, contextMap, lang, title) {
  * @param {string} lang
  */
 function writeTocAndIndexYaml(outputDir, sortedTerms, contextMap, lang) {
-  const title = lang === 'ru' ? 'Контексты' : 'Contexts';
-  const slugifiedItems = sortedTerms.map(t => ({
-    term: t,
-    slug: slugify(t),
-  }));
+    const title = lang === 'ru' ? 'Контексты' : 'Contexts';
+    const slugifiedItems = sortedTerms.map(t => ({
+        term: t,
+        slug: slugify_url(t),
+    }));
 
-  const tocItems = slugifiedItems.map(i => TOC_YAML_LINK_TEMPLATE(i)).join('\n');
+    const tocItems = slugifiedItems.map(i => TOC_YAML_LINK_TEMPLATE(i)).join('\n');
 
-  fs.writeFileSync(
-    path.join(outputDir, 'toc.yaml'),
-    TOC_YAML_LINKS_TEMPLATE(title, tocItems),
-    'utf8'
-  );
+    fs.writeFileSync(path.join(outputDir, 'toc.yaml'), TOC_YAML_LINKS_TEMPLATE(title, tocItems), 'utf8');
 
-  const linksYaml = slugifiedItems.map(i => INDEX_YAML_LINK_TEMPLATE(i, contextMap)).join('\n');
+    const linksYaml = slugifiedItems.map(i => INDEX_YAML_LINK_TEMPLATE(i, contextMap)).join('\n');
 
-  fs.writeFileSync(
-    path.join(outputDir, 'index.yaml'),
-    INDEX_TAML_LINKS_TEMPLATE(title, linksYaml),
-    'utf8'
-  );
+    fs.writeFileSync(path.join(outputDir, 'index.yaml'), INDEX_TAML_LINKS_TEMPLATE(title, linksYaml), 'utf8');
 }
 
 module.exports = {
-  writeTermFiles,
-  writeIndexMd,
-  writeTocAndIndexYaml,
+    writeTermFiles,
+    writeIndexMd,
+    writeTocAndIndexYaml,
 };

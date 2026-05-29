@@ -11,25 +11,25 @@ const { updateLinksInContent } = require('./markdownLinkUpdater');
  * @returns {Promise<number>} количество обновлённых файлов
  */
 async function updateLinksAfterRename(oldFolder, newFolder, projectRoot) {
-  const allMdFiles = await vscode.workspace.findFiles(
-    new vscode.RelativePattern(projectRoot, '**/*.md'),
-    '**/node_modules/**'
-  );
-  let updatedCount = 0;
+    const allMdFiles = await vscode.workspace.findFiles(
+        new vscode.RelativePattern(projectRoot, '**/*.md'),
+        '**/node_modules/**'
+    );
+    let updatedCount = 0;
 
-  for (const fileUri of allMdFiles) {
-    const filePath = fileUri.fsPath;
-    // Пропускаем файлы внутри переименовываемого раздела (их относительные ссылки не меняются)
-    if (filePath.startsWith(oldFolder + path.sep)) continue;
+    for (const fileUri of allMdFiles) {
+        const filePath = fileUri.fsPath;
+        // Пропускаем файлы внутри переименовываемого раздела (их относительные ссылки не меняются)
+        if (filePath.startsWith(oldFolder + path.sep)) continue;
 
-    let content = await fs.readFile(filePath, 'utf8');
-    let newContent = updateLinksInContent(content, filePath, oldFolder, newFolder);
-    if (newContent !== content) {
-      await fs.writeFile(filePath, newContent, 'utf8');
-      updatedCount++;
+        let content = await fs.readFile(filePath, 'utf8');
+        let newContent = updateLinksInContent(content, filePath, oldFolder, newFolder);
+        if (newContent !== content) {
+            await fs.writeFile(filePath, newContent, 'utf8');
+            updatedCount++;
+        }
     }
-  }
-  return updatedCount;
+    return updatedCount;
 }
 
 module.exports = { updateLinksAfterRename };

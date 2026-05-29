@@ -13,27 +13,27 @@ const { walk, isHtmlFile } = require('../core/utils');
  * @returns {Map<string, string>}
  */
 function walkHtmlFilesBuildTitleMap(buildDir) {
-  /** @type {Map<string, string>} */
-  const titleMap = new Map();
+    /** @type {Map<string, string>} */
+    const titleMap = new Map();
 
-  console.log('[Breadcrumb] walking from title to tile');
+    console.log('[Breadcrumb] walking from title to tile');
 
-  walkHtmlFiles(buildDir, htmlPath => {
-    const fileName = path.basename(htmlPath);
-    if (DEFAULT_CONFIG.ignoreFiles.includes(fileName)) return;
-    if (isRootIndex(buildDir, htmlPath)) return;
+    walkHtmlFiles(buildDir, htmlPath => {
+        const fileName = path.basename(htmlPath);
+        if (DEFAULT_CONFIG.ignoreFiles.includes(fileName)) return;
+        if (isRootIndex(buildDir, htmlPath)) return;
 
-    const content = fs.readFileSync(htmlPath, 'utf8');
-    const title = extractTitleFromHtml(content);
+        const content = fs.readFileSync(htmlPath, 'utf8');
+        const title = extractTitleFromHtml(content);
 
-    if (title) {
-      const rel = getRelativePath(buildDir, htmlPath);
-      titleMap.set(rel, title);
-    }
-  });
+        if (title) {
+            const rel = getRelativePath(buildDir, htmlPath);
+            titleMap.set(rel, title);
+        }
+    });
 
-  console.log(`[Breadcrumb] collected ${titleMap.size} titles.`);
-  return titleMap;
+    console.log(`[Breadcrumb] collected ${titleMap.size} titles.`);
+    return titleMap;
 }
 
 /**
@@ -42,8 +42,8 @@ function walkHtmlFilesBuildTitleMap(buildDir) {
  * @param {(htmlPath: string) => void} callback
  */
 function walkHtmlFiles(dir, callback) {
-  const filter = (/** @type {string}*/ fullPath) => isHtmlFile(fullPath);
-  walk(dir, filter, callback);
+    const filter = (/** @type {string}*/ fullPath) => isHtmlFile(fullPath);
+    walk(dir, filter, callback);
 }
 
 module.exports = { walkHtmlFiles, walkHtmlFilesBuildTitleMap };

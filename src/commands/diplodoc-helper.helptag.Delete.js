@@ -5,50 +5,48 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../utils');
-const { parse, remove } = require('../utils/frontmatter');
+const { isDiplodocSection } = require('../plugins/utils/directory.js');
+const { parse, remove } = require('../plugins/utils/frontmatter');
 
 /**
  * @param {{ fsPath: string }} uri
  */
 async function deleteHelptag(uri) {
-  if (!uri) return;
+    if (!uri) return;
 
-  const sectionPath = uri.fsPath;
-  if (!isDiplodocSection(sectionPath)) {
-    return; // silently
-  }
+    const sectionPath = uri.fsPath;
+    if (!isDiplodocSection(sectionPath)) {
+        return; // silently
+    }
 
-  const indexMdPath = path.join(sectionPath, 'index.md');
-  if (!fs.existsSync(indexMdPath)) return;
+    const indexMdPath = path.join(sectionPath, 'index.md');
+    if (!fs.existsSync(indexMdPath)) return;
 
-  let currentHelptag = readHelpTag(indexMdPath);
+    let currentHelptag = readHelpTag(indexMdPath);
 
-  if (!currentHelptag) {
-    return; // silently - no helptag
-  }
+    if (!currentHelptag) {
+        return; // silently - no helptag
+    }
 
-  const confirm = await vscode.window.showWarningMessage(
-    translate(nls_ts.plugin.helptag.delete.confirm.title, currentHelptag),
-    { modal: true },
-    translate(nls_ts.plugin.helptag.delete.confirm.button)
-  );
-
-  if (confirm !== translate(nls_ts.plugin.helptag.delete.confirm.button)) return;
-
-  try {
-    let content = fs.readFileSync(indexMdPath, 'utf8');
-    content = remove(content, 'helptag');
-
-    fs.writeFileSync(indexMdPath, content, 'utf8');
-
-    vscode.window.showInformationMessage(
-      translate(nls_ts.plugin.helptag.delete.info.success, currentHelptag)
+    const confirm = await vscode.window.showWarningMessage(
+        translate(nls_ts.plugin.helptag.delete.confirm.title, currentHelptag),
+        { modal: true },
+        translate(nls_ts.plugin.helptag.delete.confirm.button)
     );
-  } catch (err) {
-    let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(translate(nls_ts.plugin.helptag.delete.error.critical, msg));
-  }
+
+    if (confirm !== translate(nls_ts.plugin.helptag.delete.confirm.button)) return;
+
+    try {
+        let content = fs.readFileSync(indexMdPath, 'utf8');
+        content = remove(content, 'helptag');
+
+        fs.writeFileSync(indexMdPath, content, 'utf8');
+
+        vscode.window.showInformationMessage(translate(nls_ts.plugin.helptag.delete.info.success, currentHelptag));
+    } catch (err) {
+        let msg = err instanceof Error ? err.message : `${err}`;
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.helptag.delete.error.critical, msg));
+    }
 }
 
 /**
@@ -56,13 +54,13 @@ async function deleteHelptag(uri) {
  * @returns {string}
  */
 function readHelpTag(indexMdPath) {
-  try {
-    const content = fs.readFileSync(indexMdPath, 'utf8');
-    const { data } = parse(content);
-    return data.helptag || '';
-  } catch {
-    return '';
-  }
+    try {
+        const content = fs.readFileSync(indexMdPath, 'utf8');
+        const { data } = parse(content);
+        return data.helptag || '';
+    } catch {
+        return '';
+    }
 }
 
 module.exports = { deleteHelptag };

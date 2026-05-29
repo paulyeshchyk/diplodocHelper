@@ -11,32 +11,32 @@ const { extractContextTagValue } = require('./contexts.extractor');
  * @returns {ContextMap}
  */
 function walkMdFilesGetContexts(langDir) {
-  /** @type {ContextMap} */
-  const contextMap = {};
+    /** @type {ContextMap} */
+    const contextMap = {};
 
-  /**
-   * @param {string} dir
-   */
-  function walk(dir) {
-    if (!fs.existsSync(dir)) return;
-    const files = fs.readdirSync(dir);
+    /**
+     * @param {string} dir
+     */
+    function walk(dir) {
+        if (!fs.existsSync(dir)) return;
+        const files = fs.readdirSync(dir);
 
-    for (const file of files) {
-      const fullPath = path.join(dir, file);
-      const stat = fs.lstatSync(fullPath);
+        for (const file of files) {
+            const fullPath = path.join(dir, file);
+            const stat = fs.lstatSync(fullPath);
 
-      if (stat.isDirectory()) {
-        if (file !== 'contexts') {
-          walk(fullPath);
+            if (stat.isDirectory()) {
+                if (file !== 'contexts') {
+                    walk(fullPath);
+                }
+            } else if (file.endsWith('.md')) {
+                extractContextTagValue(fullPath, langDir, contextMap);
+            }
         }
-      } else if (file.endsWith('.md')) {
-        extractContextTagValue(fullPath, langDir, contextMap);
-      }
     }
-  }
 
-  walk(langDir);
-  return contextMap;
+    walk(langDir);
+    return contextMap;
 }
 
 module.exports = { walkMdFilesGetContexts };

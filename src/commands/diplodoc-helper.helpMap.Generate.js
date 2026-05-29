@@ -29,47 +29,41 @@ const { runGeneration } = require('../plugins/helpMap/index.js');
  * Вызов из VS Code (Команда расширения)
  */
 async function generateHelpmap() {
-  if (!vscode) return;
+    if (!vscode) return;
 
-  // Если нажали в меню проводника, берем путь папки, иначе корень проекта
-  const projectRoot = vscode.workspace.workspaceFolders
-    ? vscode.workspace.workspaceFolders[0].uri.fsPath
-    : '';
-  const selectedPath = projectRoot; //uri ? uri.fsPath : projectRoot;
+    // Если нажали в меню проводника, берем путь папки, иначе корень проекта
+    const projectRoot = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
+    const selectedPath = projectRoot; //uri ? uri.fsPath : projectRoot;
 
-  if (!selectedPath) {
-    vscode.window.showErrorMessage(translate(nls_ts.plugin.helpmap.generate.error.emptypath));
-    return;
-  }
-
-  const options = {
-    // Если вы хотите всегда сканировать /docs от корня проекта:
-    docsDir: path.join(projectRoot, docsFolderName),
-    // Или если хотите сканировать именно ту папку, на которой нажали ПКМ:
-    // docsDir: selectedPath,
-    outputDir: path.join(projectRoot, outputFolderName),
-    segregation: false,
-  };
-
-  try {
-    const results = runGeneration(options);
-    if (results.success.length > 0) {
-      vscode.window.showInformationMessage(
-        translate(
-          nls_ts.plugin.helpmap.generate.info.success,
-          results.success.length,
-          options.outputDir
-        )
-      );
-    } else {
-      vscode.window.showWarningMessage(
-        translate(nls_ts.plugin.helpmap.generate.warning.nothingfound, options.docsDir)
-      );
+    if (!selectedPath) {
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.helpmap.generate.error.emptypath));
+        return;
     }
-  } catch (err) {
-    let msg = err instanceof Error ? err.message : String(err);
-    vscode.window.showErrorMessage(translate(nls_ts.plugin.helpmap.generate.error.critical, msg));
-  }
+
+    const options = {
+        // Если вы хотите всегда сканировать /docs от корня проекта:
+        docsDir: path.join(projectRoot, docsFolderName),
+        // Или если хотите сканировать именно ту папку, на которой нажали ПКМ:
+        // docsDir: selectedPath,
+        outputDir: path.join(projectRoot, outputFolderName),
+        segregation: false,
+    };
+
+    try {
+        const results = runGeneration(options);
+        if (results.success.length > 0) {
+            vscode.window.showInformationMessage(
+                translate(nls_ts.plugin.helpmap.generate.info.success, results.success.length, options.outputDir)
+            );
+        } else {
+            vscode.window.showWarningMessage(
+                translate(nls_ts.plugin.helpmap.generate.warning.nothingfound, options.docsDir)
+            );
+        }
+    } catch (err) {
+        let msg = err instanceof Error ? err.message : String(err);
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.helpmap.generate.error.critical, msg));
+    }
 }
 
 module.exports = { generateHelpmap };

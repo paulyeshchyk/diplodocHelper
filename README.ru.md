@@ -69,7 +69,7 @@ code --install-extension diplodochelper-0.7.0.vsix
 | Разделы             | [Создание раздела (`diplodoc-helper.createSection`)](#1-создание-раздела-diplodoc-helpercreatesection)                                                         | Редактирование         |
 |                     | [Удаление раздела (`diplodoc-helper.deleteSection`)](#2-удаление-раздела-diplodoc-helperdeletesection))                                                        | Редактирование         |
 |                     | [Переименование раздела и смена типа (`diplodoc-helper.renameSection`)](#3-переименование-раздела-и-смена-типа-diplodoc-helperrenamesection) Редактирование    |
-|                     | [Переиндексация (`diplodoc-helper.reindex`)](#8-переиндексация-diplodoc-helperreindex)                                                                         | Редактирование, Сборка |
+|                     | [Переиндексация (`diplodoc-helper.reindexDirectories`)](#8-переиндексация-diplodoc-helperreindexdirectories)                                                   | Редактирование, Сборка |
 | Ссылки              | [Копирование ссылки на статью (`diplodoc-helper.copyLink`)](#4-копирование-ссылки-на-статью-diplodoc-helpercopylink)                                           | Редактирование         |
 |                     | [Вставка ссылки на статью (`diplodoc-helper.pasteLink`)](#5-вставка-ссылки-на-статью-diplodoc-helperpastelink)                                                 | Редактирование         |
 | Индексация          | [Генерация краткого указателя (`diplodoc-helper.generateContexts`)](#6-генерация-краткого-указателя-diplodoc-helpergeneratecontexts)                           | Редактирование, Сборка |
@@ -149,7 +149,7 @@ code --install-extension diplodochelper-0.7.0.vsix
 
 ---
 
-### 8. Переиндексация (`diplodoc-helper.reindex`)
+### 8. Переиндексация (`diplodoc-helper.reindexDirectories`)
 
 **Без расширения**  
 Когда разделы перемещают, переименовывают или меняют индексы (например, «1.2. Введение» -> «1.3. Введение»), приходится вручную править `sectionIndex` во всех `index.md`, затем обновлять заголовки в `index.yaml`, `toc.yaml` раздела, а также исправлять ссылки в родительских `toc.yaml`. Часто забывают синхронизировать имена папок с новыми индексами.

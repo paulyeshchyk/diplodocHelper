@@ -1,5 +1,5 @@
 {
-  "tabWidth": 2,
+  "tabWidth": 4,
   "useTabs": false,
   "singleQuote": true,
   "semi": true,
@@ -7,7 +7,7 @@
   "arrowParens": "avoid",
   "trailingComma": "es5",
   "bracketSameLine": true,
-  "printWidth": 100,
+  "printWidth": 120,
   "endOfLine": "auto",
   "plugins": [
     "prettier-plugin-organize-imports",

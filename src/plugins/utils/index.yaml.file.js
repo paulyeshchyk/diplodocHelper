@@ -13,14 +13,10 @@ const { TEMPLATE_INDEX_YAML } = require('./templates');
  * @param {any} sectionIndex
  */
 function IndexYamlFileCreate(folderPath, title, sectionType, sectionLabel, sectionIndex) {
-  const filePath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
-  fs.writeFileSync(
-    filePath,
-    TEMPLATE_INDEX_YAML(title, sectionType, sectionLabel, sectionIndex),
-    'utf8'
-  );
+    const filePath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
+    fs.writeFileSync(filePath, TEMPLATE_INDEX_YAML(title, sectionType, sectionLabel, sectionIndex), 'utf8');
 }
 
 module.exports = {
-  IndexYamlFileCreate,
+    IndexYamlFileCreate,
 };

@@ -8,9 +8,9 @@ const { IndexMdFileRead } = require('./index.md.file');
  * @returns {string}
  */
 function IndexMdEntryReadIndex(folderPath) {
-  const data = IndexMdFileRead(folderPath);
-  if (!data) return '';
-  return String(data.sectionIndex || '');
+    const data = IndexMdFileRead(folderPath);
+    if (!data) return '';
+    return String(data.sectionIndex || '');
 }
 
 /**
@@ -19,12 +19,12 @@ function IndexMdEntryReadIndex(folderPath) {
  * @returns {string}
  */
 function IndexMdEntryReadTitle(folderPath) {
-  const data = IndexMdFileRead(folderPath);
-  if (!data) return '';
-  return String(data.pureTitle || data.title || '');
+    const data = IndexMdFileRead(folderPath);
+    if (!data) return '';
+    return String(data.pureTitle || data.title || '');
 }
 
 module.exports = {
-  IndexMdEntryReadIndex,
-  IndexMdEntryReadTitle,
+    IndexMdEntryReadIndex,
+    IndexMdEntryReadTitle,
 };

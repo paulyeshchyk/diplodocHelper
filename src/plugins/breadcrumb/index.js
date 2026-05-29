@@ -6,8 +6,8 @@ const { injectScriptIntoFile } = require('./breadcrumb.injector');
 const { walkHtmlFiles } = require('./breadcrumb.collector');
 
 module.exports = {
-  DEFAULT_CONFIG,
-  walkHtmlFilesBuildTitleMap,
-  injectScriptIntoFile,
-  walkHtmlFiles,
+    DEFAULT_CONFIG,
+    walkHtmlFilesBuildTitleMap,
+    injectScriptIntoFile,
+    walkHtmlFiles,
 };

@@ -7,7 +7,7 @@ const matter = require('gray-matter');
  * @returns {{ data: Record<string, any>, content: string }}
  */
 function parse(content) {
-  return matter(content);
+    return matter(content);
 }
 
 /**
@@ -17,7 +17,7 @@ function parse(content) {
  * @returns {string}
  */
 function stringify(data, content = '') {
-  return matter.stringify(content, data);
+    return matter.stringify(content, data);
 }
 
 /**
@@ -27,8 +27,8 @@ function stringify(data, content = '') {
  * @param {*} defaultValue
  */
 function get(fileContent, key, defaultValue = null) {
-  const { data } = parse(fileContent);
-  return data[key] ?? defaultValue;
+    const { data } = parse(fileContent);
+    return data[key] ?? defaultValue;
 }
 
 /**
@@ -39,9 +39,9 @@ function get(fileContent, key, defaultValue = null) {
  * @returns {string}
  */
 function update(fileContent, key, value) {
-  const { data, content } = parse(fileContent);
-  data[key] = value;
-  return stringify(data, content);
+    const { data, content } = parse(fileContent);
+    data[key] = value;
+    return stringify(data, content);
 }
 
 /**
@@ -51,15 +51,15 @@ function update(fileContent, key, value) {
  * @returns {string}
  */
 function remove(fileContent, key) {
-  const { data, content } = parse(fileContent);
-  delete data[key];
-  return stringify(data, content);
+    const { data, content } = parse(fileContent);
+    delete data[key];
+    return stringify(data, content);
 }
 
 module.exports = {
-  parse,
-  stringify,
-  get,
-  update,
-  remove,
+    parse,
+    stringify,
+    get,
+    update,
+    remove,
 };

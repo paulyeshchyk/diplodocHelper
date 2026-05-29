@@ -5,59 +5,57 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../utils');
-const { parse, update } = require('../utils/frontmatter');
+const { isDiplodocSection } = require('../plugins/utils/directory.js');
+const { parse, update } = require('../plugins/utils/frontmatter');
 
 /**
  * @param {{ fsPath: string }} uri
  */
 async function updateHelptag(uri) {
-  if (!uri) return;
+    if (!uri) return;
 
-  const sectionPath = uri.fsPath;
-  if (!isDiplodocSection(sectionPath)) {
-    vscode.window.showWarningMessage(
-      translate(nls_ts.plugin.helptag.update.error.incorrectSection)
-    );
-    return;
-  }
+    const sectionPath = uri.fsPath;
+    if (!isDiplodocSection(sectionPath)) {
+        vscode.window.showWarningMessage(translate(nls_ts.plugin.helptag.update.error.incorrectSection));
+        return;
+    }
 
-  const indexMdPath = path.join(sectionPath, 'index.md');
-  let currentHelptag = '';
+    const indexMdPath = path.join(sectionPath, 'index.md');
+    let currentHelptag = '';
 
-  if (fs.existsSync(indexMdPath)) {
-    const content = fs.readFileSync(indexMdPath, 'utf8');
-    const { data } = parse(content);
-    currentHelptag = data.helptag || '';
-  }
+    if (fs.existsSync(indexMdPath)) {
+        const content = fs.readFileSync(indexMdPath, 'utf8');
+        const { data } = parse(content);
+        currentHelptag = data.helptag || '';
+    }
 
-  const newHelptag = await vscode.window.showInputBox({
-    prompt: translate(nls_ts.plugin.helptag.update.prompt.add),
-    value: currentHelptag,
-    placeHolder: translate(nls_ts.plugin.helptag.update.placeholder.add),
-    validateInput: value => {
-      if (!value || value.trim() === '') {
-        return translate(nls_ts.plugin.helptag.update.error.empty);
-      }
-      return null;
-    },
-  });
+    const newHelptag = await vscode.window.showInputBox({
+        prompt: translate(nls_ts.plugin.helptag.update.prompt.add),
+        value: currentHelptag,
+        placeHolder: translate(nls_ts.plugin.helptag.update.placeholder.add),
+        validateInput: value => {
+            if (!value || value.trim() === '') {
+                return translate(nls_ts.plugin.helptag.update.error.empty);
+            }
+            return null;
+        },
+    });
 
-  if (newHelptag === undefined) return;
+    if (newHelptag === undefined) return;
 
-  try {
-    let content = fs.readFileSync(indexMdPath, 'utf8');
-    content = update(content, 'helptag', newHelptag.trim());
+    try {
+        let content = fs.readFileSync(indexMdPath, 'utf8');
+        content = update(content, 'helptag', newHelptag.trim());
 
-    fs.writeFileSync(indexMdPath, content, 'utf8');
+        fs.writeFileSync(indexMdPath, content, 'utf8');
 
-    const STipHelptagUpdated = translate(nls_ts.plugin.helptag.update.info.success, newHelptag);
-    vscode.window.showInformationMessage(STipHelptagUpdated);
-  } catch (err) {
-    let msg = err instanceof Error ? err.message : `${err}`;
-    const SErrorHelptagNotUpdated = translate(nls_ts.plugin.helptag.update.error.critical, msg);
-    vscode.window.showErrorMessage(SErrorHelptagNotUpdated);
-  }
+        const STipHelptagUpdated = translate(nls_ts.plugin.helptag.update.info.success, newHelptag);
+        vscode.window.showInformationMessage(STipHelptagUpdated);
+    } catch (err) {
+        let msg = err instanceof Error ? err.message : `${err}`;
+        const SErrorHelptagNotUpdated = translate(nls_ts.plugin.helptag.update.error.critical, msg);
+        vscode.window.showErrorMessage(SErrorHelptagNotUpdated);
+    }
 }
 
 module.exports = { updateHelptag };

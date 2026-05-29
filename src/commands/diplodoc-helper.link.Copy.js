@@ -3,30 +3,30 @@
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs');
-const { IndexMdFileRead } = require('../utils');
+const { IndexMdFileRead } = require('../plugins/utils/index.md.file');
 const { translate } = require('../../nls_loader');
 
 /**
  * @param {vscode.Uri} uri
  */
 async function copyLink(uri) {
-  if (!uri) return;
+    if (!uri) return;
 
-  const fsPath = uri.fsPath;
-  const stats = fs.statSync(fsPath);
+    const fsPath = uri.fsPath;
+    const stats = fs.statSync(fsPath);
 
-  let targetPath = fsPath;
+    let targetPath = fsPath;
 
-  let title = buildTitle(stats, fsPath);
+    let title = buildTitle(stats, fsPath);
 
-  const data = {
-    sourceLinkName: title,
-    sourceLinkPath: targetPath,
-    isImage: /\.(png|jpe?g|gif|svg|webp)$/i.test(fsPath), // Пометка, если это картинка
-  };
+    const data = {
+        sourceLinkName: title,
+        sourceLinkPath: targetPath,
+        isImage: /\.(png|jpe?g|gif|svg|webp)$/i.test(fsPath), // Пометка, если это картинка
+    };
 
-  await vscode.env.clipboard.writeText(JSON.stringify(data));
-  vscode.window.showInformationMessage(translate('plugin.link.copy.info.success', title));
+    await vscode.env.clipboard.writeText(JSON.stringify(data));
+    vscode.window.showInformationMessage(translate('plugin.link.copy.info.success', title));
 }
 
 /**
@@ -34,14 +34,14 @@ async function copyLink(uri) {
  * @param {string} fsPath
  */
 function buildTitle(stats, fsPath) {
-  if (stats.isDirectory()) {
-    // Логика для раздела (папки)
-    const section = IndexMdFileRead(fsPath);
-    return section?.pureTitle || path.basename(fsPath);
-  } else {
-    // Логика для файла (картинки, документы)
-    return path.basename(fsPath);
-  }
+    if (stats.isDirectory()) {
+        // Логика для раздела (папки)
+        const section = IndexMdFileRead(fsPath);
+        return section?.pureTitle || path.basename(fsPath);
+    } else {
+        // Логика для файла (картинки, документы)
+        return path.basename(fsPath);
+    }
 }
 
 module.exports = { copyLink };

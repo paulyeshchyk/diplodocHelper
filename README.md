@@ -74,7 +74,7 @@ code --install-extension diplodochelper-0.7.0.vsix
 |               | Paste link to article (diplodoc-helper.pasteLink)                     | Editing           |
 | Breadcrumbs   | Breadcrumbs (inject-breadcrumb.js)                                    | Building          |
 | Utils         |                                                                       |                   |
-|               | Reindex (diplodoc-helper.reindex)                                     | Editing, Building |
+|               | Reindex (diplodoc-helper.reindexDirectories)                          | Editing, Building |
 |               | Indexing Generate short index (diplodoc-helper.generateContexts)      | Editing, Building |
 |               | Generate context list for frontend (diplodoc-helper.generateHelpMaps) | Editing, Building |
 
@@ -136,7 +136,7 @@ code --install-extension diplodochelper-0.7.0.vsix
    **With the extension**
    The command automatically goes through all .md files in docs, extracts helptag, title, hint, creates an array of entries with url, title, hint, context, lang fields, and saves it to build/ (or separates by language with the --segregation flag). The frontend always has a fresh help map.
 
-8. Reindex (diplodoc-helper.reindex)
+8. Reindex (diplodoc-helper.reindexDirectories)
 
    **Without the extension**
    When sections are moved, renamed, or their indexes change (e.g., "1.2. Introduction" -> "1.3. Introduction"), you have to manually edit sectionIndex in all index.md files, then update headings in index.yaml, the section's toc.yaml, and also fix links in parent toc.yaml. It is easy to forget to sync folder names with new indexes.

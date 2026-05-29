@@ -16,27 +16,27 @@ const { writeTermFiles, writeIndexMd, writeTocAndIndexYaml } = require('./contex
  * @returns {boolean}
  */
 function generateFilesForLang(lang, langDir, contextMap) {
-  try {
-    if (Object.keys(contextMap).length === 0) return false;
+    try {
+        if (Object.keys(contextMap).length === 0) return false;
 
-    const outputDir = path.join(langDir, 'contexts');
-    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+        const outputDir = path.join(langDir, 'contexts');
+        if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
-    const sortedTerms = Object.keys(contextMap).sort((a, b) =>
-      a.localeCompare(b, undefined, { sensitivity: 'base' })
-    );
+        const sortedTerms = Object.keys(contextMap).sort((a, b) =>
+            a.localeCompare(b, undefined, { sensitivity: 'base' })
+        );
 
-    const title = lang === 'ru' ? 'Контексты' : 'Contexts';
+        const title = lang === 'ru' ? 'Контексты' : 'Contexts';
 
-    writeTermFiles(outputDir, sortedTerms, contextMap);
-    writeIndexMd(outputDir, sortedTerms, contextMap, lang, title);
-    writeTocAndIndexYaml(outputDir, sortedTerms, contextMap, lang);
+        writeTermFiles(outputDir, sortedTerms, contextMap);
+        writeIndexMd(outputDir, sortedTerms, contextMap, lang, title);
+        writeTocAndIndexYaml(outputDir, sortedTerms, contextMap, lang);
 
-    return true;
-  } catch (err) {
-    console.error(`Error generating files for ${lang}:`, err);
-    return false;
-  }
+        return true;
+    } catch (err) {
+        console.error(`Error generating files for ${lang}:`, err);
+        return false;
+    }
 }
 
 /**
@@ -44,22 +44,22 @@ function generateFilesForLang(lang, langDir, contextMap) {
  * @returns {PluginExecutionResult}
  */
 function runGeneration(docsRoot) {
-  const LANGUAGES = ['ru', 'en'];
-  /** @type {PluginExecutionResult} */
-  const results = { success: [], failed: [] };
+    const LANGUAGES = ['ru', 'en'];
+    /** @type {PluginExecutionResult} */
+    const results = { success: [], failed: [] };
 
-  for (const lang of LANGUAGES) {
-    const langDir = path.join(docsRoot, lang);
-    if (fs.existsSync(langDir)) {
-      const contextMap = walkMdFilesGetContexts(langDir);
-      if (generateFilesForLang(lang, langDir, contextMap)) {
-        results.success.push(lang);
-      } else {
-        results.failed.push(lang);
-      }
+    for (const lang of LANGUAGES) {
+        const langDir = path.join(docsRoot, lang);
+        if (fs.existsSync(langDir)) {
+            const contextMap = walkMdFilesGetContexts(langDir);
+            if (generateFilesForLang(lang, langDir, contextMap)) {
+                results.success.push(lang);
+            } else {
+                results.failed.push(lang);
+            }
+        }
     }
-  }
-  return results;
+    return results;
 }
 
 module.exports = { runGeneration };

@@ -5,120 +5,106 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { promptSection, IndexMdEntryReadTitle } = require('../utils');
-const { isDiplodocSection } = require('../utils');
-const { IndexMdEntryReadIndex, IndexMdEntryPatch } = require('../utils');
-const { updateLinksAfterRename } = require('../utils/linksUpdater');
-const { getLanguageRoot } = require('../utils/directory');
-const { sortTocItems } = require('../utils/toc.yaml.sort');
+const { promptSection } = require('../plugins/utils/prompts.js');
+const { IndexMdEntryReadTitle } = require('../plugins/utils/index.md.entry.js');
+const { isDiplodocSection } = require('../plugins/utils/directory.js');
+const { IndexMdEntryPatch } = require('../plugins/utils/diplodoc.flow.js');
+const { IndexMdEntryReadIndex } = require('../plugins/utils/index.md.entry.js');
+const { updateLinksAfterRename } = require('../plugins/utils/linksUpdater');
+const { getLanguageRoot } = require('../plugins/utils/directory');
+const { sortTocItems } = require('../plugins/utils/toc.yaml.sort');
 
-const {
-  TocYamlEntryRemove,
-  TocYamlEntryCreate,
+const { TocYamlEntryRemove, TocYamlEntryCreate } = require('../plugins/utils/toc.yaml.entry.js');
+const { renameSectionFolderIfNeeded } = require('../plugins/utils/diplodoc.flow.js');
 
-  renameSectionFolderIfNeeded,
-} = require('../utils');
-
-const {
-  composeFullTitle,
-  isIndexedSectionType,
-  composeFolderName,
-} = require('../utils/sectionTitle');
+const { composeFullTitle, isIndexedSectionType, composeFolderName } = require('../plugins/utils/sectionTitle');
 
 /**
  * @param {{ fsPath: any; }} uri
  */
 async function renameSection(uri) {
-  if (!uri) return;
+    if (!uri) return;
 
-  const oldFolderPath = uri.fsPath;
-  const oldFolderName = path.basename(oldFolderPath);
-  const parentDir = path.dirname(oldFolderPath);
+    const oldFolderPath = uri.fsPath;
+    const oldFolderName = path.basename(oldFolderPath);
+    const parentDir = path.dirname(oldFolderPath);
 
-  if (!isDiplodocSection(oldFolderPath)) {
-    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.rename.error.isnotsection));
-    return;
-  }
-
-  const currentIndex = IndexMdEntryReadIndex(oldFolderPath);
-  const currentPureTitle = IndexMdEntryReadTitle(oldFolderPath);
-  const newSectionObject = await promptSection(currentPureTitle, currentIndex);
-  if (!newSectionObject) {
-    console.log(translate(nls_ts.plugin.section.rename.error.interrupted));
-    return;
-  }
-
-  let finalIndex = newSectionObject.userIndex?.trim() || '';
-  const newPureTitle = newSectionObject.newPureTitle;
-  const newSectionType = newSectionObject.newSectionType;
-
-  // Нормализация индекса в зависимости от типа
-  const isIndexed = isIndexedSectionType(newSectionType);
-  if (!isIndexed) finalIndex = ''; // игнорируем индекс для неиндексируемых типов
-
-  // Единое формирование полного заголовка
-  const fullTitle = composeFullTitle(finalIndex, newSectionType, newPureTitle);
-
-  // Имя папки
-  const newFolderName = composeFolderName(finalIndex, newSectionType, newPureTitle);
-
-  const newFolderPath = path.join(parentDir, newFolderName);
-
-  if (fs.existsSync(newFolderPath) && newFolderName !== oldFolderName) {
-    vscode.window.showErrorMessage(
-      translate(nls_ts.plugin.section.rename.error.folderexists, newFolderName)
-    );
-    return;
-  }
-
-  // 1. Удаляем старую запись из родительского toc
-  TocYamlEntryRemove(parentDir, oldFolderName);
-
-  let finalFolderName = oldFolderName;
-
-  try {
-    // 2. Переименовываем папку (если нужно)
-    if (newFolderName !== oldFolderName) {
-      finalFolderName = renameSectionFolderIfNeeded(
-        oldFolderPath,
-        newPureTitle,
-        newSectionObject.newSectionType,
-        finalIndex
-      );
-    } else {
-      // Просто обновляем содержимое без переименования папки
-      IndexMdEntryPatch(
-        oldFolderPath,
-        newPureTitle,
-        newSectionObject.newSectionType.name,
-        newSectionObject.newSectionType.value,
-        finalIndex
-      );
+    if (!isDiplodocSection(oldFolderPath)) {
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.section.rename.error.isnotsection));
+        return;
     }
 
-    // 3. Добавляем новую запись в родительский toc
-    TocYamlEntryCreate(
-      parentDir,
-      fullTitle,
-      finalFolderName,
-      newSectionObject.newSectionType.value,
-      finalIndex
-    );
+    const currentIndex = IndexMdEntryReadIndex(oldFolderPath);
+    const currentPureTitle = IndexMdEntryReadTitle(oldFolderPath);
+    const newSectionObject = await promptSection(currentPureTitle, currentIndex);
+    if (!newSectionObject) {
+        console.log(translate(nls_ts.plugin.section.rename.error.interrupted));
+        return;
+    }
 
-    // 4. Обновление ссылок
-    const projectRoot = getLanguageRoot(parentDir);
-    await updateLinksAfterRename(oldFolderPath, newFolderPath, projectRoot);
+    let finalIndex = newSectionObject.userIndex?.trim() || '';
+    const newPureTitle = newSectionObject.newPureTitle;
+    const newSectionType = newSectionObject.newSectionType;
 
-    // 5. Сортировка родительского toc.yaml по индексам
-    sortTocItems(parentDir); // сортировка по возрастанию, неиндексированные внизу
+    // Нормализация индекса в зависимости от типа
+    const isIndexed = isIndexedSectionType(newSectionType);
+    if (!isIndexed) finalIndex = ''; // игнорируем индекс для неиндексируемых типов
 
-    vscode.window.showInformationMessage(
-      translate(nls_ts.plugin.section.rename.info.success, oldFolderName, finalFolderName)
-    );
-  } catch (err) {
-    let msg = err instanceof Error ? err.message : `${err}`;
-    vscode.window.showErrorMessage(translate(nls_ts.plugin.section.rename.error.critical, msg));
-  }
+    // Единое формирование полного заголовка
+    const fullTitle = composeFullTitle(finalIndex, newSectionType, newPureTitle);
+
+    // Имя папки
+    const newFolderName = composeFolderName(finalIndex, newSectionType, newPureTitle);
+
+    const newFolderPath = path.join(parentDir, newFolderName);
+
+    if (fs.existsSync(newFolderPath) && newFolderName !== oldFolderName) {
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.section.rename.error.folderexists, newFolderName));
+        return;
+    }
+
+    // 1. Удаляем старую запись из родительского toc
+    TocYamlEntryRemove(parentDir, oldFolderName);
+
+    let finalFolderName = oldFolderName;
+
+    try {
+        // 2. Переименовываем папку (если нужно)
+        if (newFolderName !== oldFolderName) {
+            finalFolderName = renameSectionFolderIfNeeded(
+                oldFolderPath,
+                newPureTitle,
+                newSectionObject.newSectionType,
+                finalIndex
+            );
+        } else {
+            // Просто обновляем содержимое без переименования папки
+            IndexMdEntryPatch(
+                oldFolderPath,
+                newPureTitle,
+                newSectionObject.newSectionType.name,
+                newSectionObject.newSectionType.value,
+                finalIndex
+            );
+        }
+
+        // 3. Добавляем новую запись в родительский toc
+        TocYamlEntryCreate(parentDir, fullTitle, finalFolderName, newSectionObject.newSectionType.value, finalIndex);
+
+        // 4. Обновление ссылок
+        const projectRoot = getLanguageRoot(parentDir);
+        await updateLinksAfterRename(oldFolderPath, newFolderPath, projectRoot);
+
+        // 5. Сортировка родительского toc.yaml по индексам
+        sortTocItems(parentDir); // сортировка по возрастанию, неиндексированные внизу
+
+        vscode.window.showInformationMessage(
+            translate(nls_ts.plugin.section.rename.info.success, oldFolderName, finalFolderName)
+        );
+    } catch (err) {
+        let msg = err instanceof Error ? err.message : `${err}`;
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.section.rename.error.critical, msg));
+    }
 }
 
 module.exports = { renameSection };

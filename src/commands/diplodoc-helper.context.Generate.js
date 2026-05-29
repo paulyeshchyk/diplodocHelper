@@ -6,20 +6,18 @@ const path = require('path');
 let vscode = require('vscode');
 
 async function generateContexts() {
-  const workspaceFolders = vscode.workspace.workspaceFolders;
-  if (!workspaceFolders) return;
-  const projectRoot = workspaceFolders[0].uri.fsPath;
-  const DOCS_ROOT = path.join(projectRoot, 'docs');
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders) return;
+    const projectRoot = workspaceFolders[0].uri.fsPath;
+    const DOCS_ROOT = path.join(projectRoot, 'docs');
 
-  const results = runGeneration(DOCS_ROOT);
+    const results = runGeneration(DOCS_ROOT);
 
-  if (results.success.length > 0) {
-    const langs = results.success.join(', ');
-    vscode.window.showInformationMessage(
-      translate(nls_ts.plugin.context.generate.info.success, langs)
-    );
-  } else {
-    vscode.window.showErrorMessage(translate(nls_ts.plugin.context.generate.error.notfound));
-  }
+    if (results.success.length > 0) {
+        const langs = results.success.join(', ');
+        vscode.window.showInformationMessage(translate(nls_ts.plugin.context.generate.info.success, langs));
+    } else {
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.context.generate.error.notfound));
+    }
 }
 module.exports = { generateContexts, runGeneration };

@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/paulyeshchyk/diplodocHelper"
   },
-  "version": "0.16.1",
+  "version": "0.16.3",
   "main": "./src/extension.js",
   "engines": {
     "vscode": "^1.116.0"
@@ -21,6 +21,11 @@
     "configuration": {
       "title": "Diplodoc Helper",
       "properties": {
+        "diplodoc-helper.figurePrefix": {
+          "type": "string",
+          "default": "Рисунок",
+          "description": "Префикс для подписей рисунков (например, 'Figure' для английского)"
+        },
         "diplodocHelper.maxDepth": {
           "type": "number",
           "default": 5,
@@ -69,8 +74,8 @@
         "title": "%command.moveSection%"
       },
       {
-        "command": "diplodoc-helper.reindex",
-        "title": "%command.reindex%"
+        "command": "diplodoc-helper.reindexDirectories",
+        "title": "%command.reindexDirectories%"
       },
       {
         "command": "diplodoc-helper.copyLink",
@@ -79,6 +84,10 @@
       {
         "command": "diplodoc-helper.pasteLink",
         "title": "%command.pasteLink%"
+      },
+      {
+        "command": "diplodoc-helper.pasteImageFromList",
+        "title": "Вставить из списка"
       },
       {
         "command": "diplodoc-helper.pasteImageFromClipboard",
@@ -164,6 +173,11 @@
           "command": "diplodoc-helper.pasteImageFromClipboard",
           "when": "editorTextFocus && resourceExtname == .md",
           "group": "diplodoc.section@2"
+        },
+        {
+          "command": "diplodoc-helper.pasteImageFromList",
+          "when": "editorTextFocus && resourceExtname == .md",
+          "group": "diplodoc.section@3"
         }
       ],
       "diplodoc.explorer.context.menu": [
@@ -239,7 +253,7 @@
       ],
       "diplodoc.generators.explorer.context.menu": [
         {
-          "command": "diplodoc-helper.reindex",
+          "command": "diplodoc-helper.reindexDirectories",
           "when": "explorerResourceIsFolder",
           "group": "1diplodoc.generators.section.command@1"
         },
@@ -264,6 +278,7 @@
   "dependencies": {
     "gray-matter": "^4.0.3",
     "js-yaml": "^4.1.1",
+    "transliteration": "^2.6.1",
     "vscode-nls": "^5.2.0"
   },
   "devDependencies": {
