@@ -46,7 +46,7 @@ function IndexMdFileRead(folderPath) {
  * @param {any} sectionIndex
  */
 function IndexMdFilePatch(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex) {
-  console.log(`IndexMdFilePatch:  ${folderPath}\ ${sectionLabel}\ ${pureTitle}`);
+  console.log(`IndexMdFilePatch:  ${folderPath}\\ ${sectionLabel}\\ ${pureTitle}`);
   const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
   if (!fs.existsSync(indexPath)) return;
 

@@ -14,8 +14,6 @@ const {
   sortTocItems,
 } = require('../utils');
 
-const { IndexMdFileRead } = require('../utils/index.md.file');
-
 /** @import {SectionTypeOption} from '../utils/diplodocTypes' */
 
 /**
@@ -72,7 +70,8 @@ function reindexDirectory(
     try {
       tocDoc = TocYamlFileLoad(tocPath);
     } catch (e) {
-      console.error(`Ошибка загрузки toc.yaml в ${dir}`);
+      let msg = e instanceof Error ? e.message : String(e);
+      console.error(`Ошибка загрузки toc.yaml в ${dir} \n ${msg}`);
     }
   }
 
