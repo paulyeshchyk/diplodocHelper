@@ -1,0 +1,42 @@
+{
+    "contributes": {
+        "configuration": {
+            "title": "Diplodoc Helper",
+            "properties": {
+                "diplodoc-helper.figurePrefix": {
+                    "type": "string",
+                    "default": "Рисунок",
+                    "description": "Префикс для подписей рисунков (например, 'Figure' для английского)"
+                },
+                "diplodocHelper.maxDepth": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Максимальная глубина поиска разделов"
+                },
+                "diplodocHelper.autoReindex": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Автоматически обновлять индексы при изменении структуры"
+                },
+                "diplodocHelper.defaultLanguage": {
+                    "type": "string",
+                    "default": "ru",
+                    "enum": [
+                        "ru",
+                        "en"
+                    ],
+                    "enumDescriptions": [
+                        "Русский",
+                        "English"
+                    ],
+                    "description": "Язык интерфейса по умолчанию"
+                },
+                "diplodocHelper.outputFolder": {
+                    "type": "string",
+                    "default": "docs",
+                    "description": "Папка для сгенерированных файлов (относительно корня рабочей области)"
+                }
+            }
+        }
+    }
+}

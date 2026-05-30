@@ -4,6 +4,7 @@ const { nls_ts, translate } = require('../../nls_ts.js');
 const vscode = require('vscode');
 
 const { reindexFigures } = require('../plugins/reindexer/reindexFigures.js');
+
 function getFigurePrefix() {
     const config = vscode.workspace.getConfiguration('diplodoc-helper');
     return config.get('figurePrefix', 'Рисунок');

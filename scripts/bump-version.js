@@ -23,6 +23,6 @@ const outFile = path.join(outDir, `${pkg.name}-${newVersion}.vsix`);
 
 // Запускаем vsce из корня проекта, чтобы он видел все файлы расширения
 execSync(`vsce package --out "${outFile}" --allow-missing-repository`, {
-  stdio: 'inherit',
-  cwd: projectRoot,
+    stdio: 'inherit',
+    cwd: projectRoot,
 });

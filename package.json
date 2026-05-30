@@ -17,45 +17,18 @@
     "changelogUrl": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
     "releaseNotes": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
     "activationEvents": [],
+    "scripts": {
+        "generate-manifest": "node scripts/generate-manifest.js",
+        "compile": "npm run generate-manifest",
+        "build": "npm run compile",
+        "vscode:prepublish": "npm run compile",
+        "package": "npm run compile && vsce package",
+        "publish-vsix": "vsce publish",
+        "publish": "npm run package && npm run publish-vsix",
+        "lint": "eslint . --fix",
+        "format": "prettier --write ."
+    },
     "contributes": {
-        "configuration": {
-            "title": "Diplodoc Helper",
-            "properties": {
-                "diplodoc-helper.figurePrefix": {
-                    "type": "string",
-                    "default": "Рисунок",
-                    "description": "Префикс для подписей рисунков (например, 'Figure' для английского)"
-                },
-                "diplodocHelper.maxDepth": {
-                    "type": "number",
-                    "default": 5,
-                    "description": "Максимальная глубина поиска разделов"
-                },
-                "diplodocHelper.autoReindex": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Автоматически обновлять индексы при изменении структуры"
-                },
-                "diplodocHelper.defaultLanguage": {
-                    "type": "string",
-                    "default": "ru",
-                    "enum": [
-                        "ru",
-                        "en"
-                    ],
-                    "enumDescriptions": [
-                        "Русский",
-                        "English"
-                    ],
-                    "description": "Язык интерфейса по умолчанию"
-                },
-                "diplodocHelper.outputFolder": {
-                    "type": "string",
-                    "default": "docs",
-                    "description": "Папка для сгенерированных файлов (относительно корня рабочей области)"
-                }
-            }
-        },
         "commands": [
             {
                 "command": "diplodoc-helper.createSection",
@@ -131,32 +104,44 @@
                 "title": "%command.deleteHelptag%"
             }
         ],
-        "submenus": [
-            {
-                "id": "diplodoc.explorer.context.menu",
-                "label": "%submenu.diplodoc%"
-            },
-            {
-                "id": "diplodoc.editor.context.menu",
-                "label": "%submenu.diplodoc%"
-            },
-            {
-                "id": "diplodoc.helptag.explorer.context.menu",
-                "label": "%submenu.helptag%"
-            },
-            {
-                "id": "diplodoc.context.explorer.context.menu",
-                "label": "%submenu.context%"
-            },
-            {
-                "id": "diplodoc.generators.explorer.context.menu",
-                "label": "%submenu.generators%"
-            },
-            {
-                "id": "diplodoc.reindexier.explorer.context.menu",
-                "label": "%submenu.reindexier%"
+        "configuration": {
+            "title": "Diplodoc Helper",
+            "properties": {
+                "diplodoc-helper.figurePrefix": {
+                    "type": "string",
+                    "default": "Рисунок",
+                    "description": "Префикс для подписей рисунков (например, 'Figure' для английского)"
+                },
+                "diplodocHelper.maxDepth": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Максимальная глубина поиска разделов"
+                },
+                "diplodocHelper.autoReindex": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Автоматически обновлять индексы при изменении структуры"
+                },
+                "diplodocHelper.defaultLanguage": {
+                    "type": "string",
+                    "default": "ru",
+                    "enum": [
+                        "ru",
+                        "en"
+                    ],
+                    "enumDescriptions": [
+                        "Русский",
+                        "English"
+                    ],
+                    "description": "Язык интерфейса по умолчанию"
+                },
+                "diplodocHelper.outputFolder": {
+                    "type": "string",
+                    "default": "docs",
+                    "description": "Папка для сгенерированных файлов (относительно корня рабочей области)"
+                }
             }
-        ],
+        },
         "menus": {
             "editor/context": [
                 {
@@ -293,7 +278,33 @@
                     "group": "99diplodoc.generators.files.command@1"
                 }
             ]
-        }
+        },
+        "submenus": [
+            {
+                "id": "diplodoc.explorer.context.menu",
+                "label": "%submenu.diplodoc%"
+            },
+            {
+                "id": "diplodoc.editor.context.menu",
+                "label": "%submenu.diplodoc%"
+            },
+            {
+                "id": "diplodoc.helptag.explorer.context.menu",
+                "label": "%submenu.helptag%"
+            },
+            {
+                "id": "diplodoc.context.explorer.context.menu",
+                "label": "%submenu.context%"
+            },
+            {
+                "id": "diplodoc.generators.explorer.context.menu",
+                "label": "%submenu.generators%"
+            },
+            {
+                "id": "diplodoc.reindexier.explorer.context.menu",
+                "label": "%submenu.reindexier%"
+            }
+        ]
     },
     "dependencies": {
         "gray-matter": "^4.0.3",
@@ -315,14 +326,5 @@
         "postcss-sorting": "^10.0.0",
         "prettier-plugin-css-order": "^2.2.0",
         "prettier-plugin-organize-imports": "^4.3.0"
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "echo 'No compilation needed for JS'",
-        "package": "vsce package",
-        "publish-vsix": "vsce publish",
-        "publish-npm": "npm publish",
-        "lint": "eslint . --fix",
-        "format": "prettier --write ."
     }
 }

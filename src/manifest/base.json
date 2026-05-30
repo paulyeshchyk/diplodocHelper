@@ -1,0 +1,20 @@
+{
+    "name": "diplodochelper",
+    "publisher": "paulyestchick",
+    "displayName": "%displayName%",
+    "description": "%description%",
+    "repository": {
+        "url": "https://github.com/paulyeshchyk/diplodocHelper"
+    },
+    "version": "0.17.0",
+    "main": "./src/extension.js",
+    "engines": {
+        "vscode": "^1.116.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "changelogUrl": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
+    "releaseNotes": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
+    "activationEvents": []
+}

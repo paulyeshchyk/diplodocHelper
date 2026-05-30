@@ -1,0 +1,30 @@
+{
+    "contributes": {
+        "submenus": [
+            {
+                "id": "diplodoc.explorer.context.menu",
+                "label": "%submenu.diplodoc%"
+            },
+            {
+                "id": "diplodoc.editor.context.menu",
+                "label": "%submenu.diplodoc%"
+            },
+            {
+                "id": "diplodoc.helptag.explorer.context.menu",
+                "label": "%submenu.helptag%"
+            },
+            {
+                "id": "diplodoc.context.explorer.context.menu",
+                "label": "%submenu.context%"
+            },
+            {
+                "id": "diplodoc.generators.explorer.context.menu",
+                "label": "%submenu.generators%"
+            },
+            {
+                "id": "diplodoc.reindexier.explorer.context.menu",
+                "label": "%submenu.reindexier%"
+            }
+        ]
+    }
+}

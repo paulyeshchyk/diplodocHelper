@@ -1,0 +1,79 @@
+{
+    "contributes": {
+        "commands": [
+            {
+                "command": "diplodoc-helper.createSection",
+                "title": "%command.createSection%"
+            },
+            {
+                "command": "diplodoc-helper.deleteSection",
+                "title": "%command.deleteSection%"
+            },
+            {
+                "command": "diplodoc-helper.renameSection",
+                "title": "%command.renameSection%"
+            },
+            {
+                "command": "diplodoc-helper.moveSection",
+                "title": "%command.moveSection%"
+            },
+            {
+                "command": "diplodoc-helper.reindexDirectories",
+                "title": "%command.reindexDirectories%"
+            },
+            {
+                "command": "diplodoc-helper.reindexFigures",
+                "title": "%command.reindexFigures%"
+            },
+            {
+                "command": "diplodoc-helper.copyLink",
+                "title": "%command.copyLink%"
+            },
+            {
+                "command": "diplodoc-helper.pasteLink",
+                "title": "%command.pasteLink%"
+            },
+            {
+                "command": "diplodoc-helper.pasteImageFromList",
+                "title": "Вставить из списка"
+            },
+            {
+                "command": "diplodoc-helper.pasteImageFromClipboard",
+                "when": "editorTextFocus && resourceExtname == .md",
+                "title": "%command.pasteImage%"
+            },
+            {
+                "command": "diplodoc-helper.generateContexts",
+                "title": "%command.generateContexts%"
+            },
+            {
+                "command": "diplodoc-helper.wipeEmptyDirectories",
+                "title": "%command.wipeEmptyDirectories%"
+            },
+            {
+                "command": "diplodoc-helper.generateHelpMaps",
+                "title": "%command.generateHelpMaps%"
+            },
+            {
+                "command": "diplodoc-helper.generateBreadcrumbs",
+                "title": "%command.generateBreadcrumbs%"
+            },
+            {
+                "command": "diplodoc-helper.helptag.Update",
+                "title": "%command.updateHelptag%"
+            },
+            {
+                "command": "diplodoc-helper.helptag.Delete",
+                "title": "%command.deleteHelptag%"
+            },
+            {
+                "command": "diplodoc-helper.context.Update",
+                "title": "%command.updateHelptag%"
+            },
+            {
+                "command": "diplodoc-helper.context.Delete",
+                "title": "%command.deleteHelptag%"
+            }
+        ]
+    }
+}
