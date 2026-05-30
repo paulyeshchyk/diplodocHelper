@@ -3,16 +3,25 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Нормализует путь для использования в качестве ключа (решает проблему с регистром)
- * @typedef {Object} ImageInfo
- * @property {string} id
- * @property {string} caption
- * @property {string} filePath // .md файл, где найдено
- // .md файл, где найдено
- * @property {string} targetPath // абсолютный путь к КАРТИНКЕ
- // абсолютный путь к КАРТИНКЕ
- * @property {string} label
- * @property {'figure' | 'markdown'} type
+ * ==================== МОДЕЛЬ / КОНФИГУРАЦИЯ ====================
+ */
+const IMAGE_DETECTION_CONFIG = {
+    // Regex для поиска figure
+    figureRegex: /<figcaption\s+class="imageDescription"[^>]*?\bid="([^"]+)"[^>]*?>([\s\S]*?)<\/figcaption>/gi,
+
+    // Параметры поиска связанного изображения для figure
+    figureAssociation: {
+        maxDistance: 400, // символов после картинки
+        marker: '<figcaption',
+        // Можно расширить позже: например, добавить несколько маркеров
+    },
+
+    // Regex для markdown-изображений
+    markdownImageRegex: /!\[(.*?)\]\(([^)]+)\)/g,
+};
+
+/**
+ * Нормализация пути для дедупликации (регистронезависимо)
  * @param {string} filePath
  */
 function normalizePathForKey(filePath) {
@@ -20,7 +29,7 @@ function normalizePathForKey(filePath) {
 }
 
 /**
- * Главная функция
+ * Главная команда
  */
 async function pasteImageFromListAsync() {
     const editor = vscode.window.activeTextEditor;
@@ -69,8 +78,9 @@ async function pasteImageFromListAsync() {
     vscode.window.showInformationMessage(`Вставлена ссылка: ${image.caption}`);
 }
 
+/* ====================== СБОР ИЗОБРАЖЕНИЙ ====================== */
+
 /**
- * Улучшенный сборщик с правильной дедупликацией
  * @param {string | vscode.Uri | vscode.WorkspaceFolder} rootDir
  */
 async function collectAllImages(rootDir) {
@@ -82,17 +92,15 @@ async function collectAllImages(rootDir) {
         '**/node_modules/**'
     );
 
-    // 1. Figures — высший приоритет
-    const figRegex = /<figcaption\s+class="imageDescription"[^>]*?\bid="([^"]+)"[^>]*?>([\s\S]*?)<\/figcaption>/gi;
-
+    // 1. Figures — приоритет
     for (const fileUri of mdFiles) {
         const content = await fs.promises.readFile(fileUri.fsPath, 'utf8');
         const mdFilePath = fileUri.fsPath;
 
         let match;
-        while ((match = figRegex.exec(content)) !== null) {
+        while ((match = IMAGE_DETECTION_CONFIG.figureRegex.exec(content)) !== null) {
             const id = match[1].trim();
-            let caption = match[2].trim();
+            const caption = match[2].trim();
 
             const imageAbsPath = findAssociatedImageAbsolutePath(content, mdFilePath);
 
@@ -115,25 +123,17 @@ async function collectAllImages(rootDir) {
     }
 
     // 2. Markdown изображения (только без figure)
-    const mdImageRegex = /!\[(.*?)\]\(([^)]+)\)/g;
-
     for (const fileUri of mdFiles) {
         const content = await fs.promises.readFile(fileUri.fsPath, 'utf8');
         const mdDir = path.dirname(fileUri.fsPath);
 
         let match;
-        while ((match = mdImageRegex.exec(content)) !== null) {
+        while ((match = IMAGE_DETECTION_CONFIG.markdownImageRegex.exec(content)) !== null) {
             const rawPath = match[2]?.trim();
             if (!rawPath || rawPath.match(/^(https?:\/\/|#|mailto:|data:)/i)) continue;
 
             let decoded = decodeImagePath(rawPath);
-            let absImagePath;
-
-            try {
-                absImagePath = path.resolve(mdDir, decoded);
-            } catch {
-                absImagePath = decoded;
-            }
+            let absImagePath = path.resolve(mdDir, decoded);
 
             const normKey = normalizePathForKey(absImagePath);
 
@@ -156,6 +156,7 @@ async function collectAllImages(rootDir) {
         }
     }
 
+    // Сортировка
     images.sort((a, b) => {
         if (a.type !== b.type) return a.type === 'figure' ? -1 : 1;
         return a.caption.localeCompare(b.caption);
@@ -165,31 +166,30 @@ async function collectAllImages(rootDir) {
 }
 
 /**
- * Ищет путь к изображению, связанному с figure (улучшенная эвристика)
+ * Ищет связанное изображение для figure
  * @param {string} content
  * @param {string} mdFilePath
  */
 function findAssociatedImageAbsolutePath(content, mdFilePath) {
     const mdDir = path.dirname(mdFilePath);
+    const { marker, maxDistance } = IMAGE_DETECTION_CONFIG.figureAssociation;
 
-    // Regex для markdown-изображений: ![alt](path)
-    const imageRegex = /!\[[^\]]*\]\(([^)]+)\)/g;
+    const imageRegex = IMAGE_DETECTION_CONFIG.markdownImageRegex;
     let match;
 
     while ((match = imageRegex.exec(content)) !== null) {
-        const rawLink = match[1]?.trim();
+        const rawLink = match[2]?.trim(); // исправлено: match[2]
         if (!rawLink) continue;
 
         if (rawLink.match(/^(https?:\/\/|#|mailto:|data:)/i)) continue;
 
-        // Проверяем, есть ли figure в пределах ~400 символов после этой картинки
         const afterImage = content.slice(match.index);
-        if (afterImage.includes('<figcaption') && afterImage.indexOf('<figcaption') < 400) {
+        if (afterImage.includes(marker) && afterImage.indexOf(marker) < maxDistance) {
             try {
                 const decoded = decodeImagePath(rawLink);
                 return path.resolve(mdDir, decoded);
             } catch (err) {
-                console.warn(`Не удалось разрешить путь: ${rawLink}`);
+                console.warn(`Не удалось разрешить путь изображения: ${rawLink}`);
             }
         }
     }
@@ -198,7 +198,7 @@ function findAssociatedImageAbsolutePath(content, mdFilePath) {
 }
 
 /**
- * Декодирует путь
+ * Декодирует URL-encoded путь
  * @param {string} rawPath
  */
 function decodeImagePath(rawPath) {
@@ -210,16 +210,12 @@ function decodeImagePath(rawPath) {
 }
 
 /**
- * Корректный относительный путь
+ * Вычисляет относительный путь
  * @param {string} currentFilePath
  * @param {{ id: any; caption?: string; filePath: any; targetPath: any; label?: string; type: any; }} image
  */
 function getRelativeLink(currentFilePath, image) {
-    let target = image.targetPath; // теперь всегда путь к картинке
-
-    if (image.type === 'figure') {
-        target = `${image.filePath}#${image.id}`;
-    }
+    const target = image.type === 'figure' ? `${image.filePath}#${image.id}` : image.targetPath;
 
     let relative = path.relative(path.dirname(currentFilePath), target).replace(/\\/g, '/');
 

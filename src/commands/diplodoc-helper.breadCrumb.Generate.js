@@ -16,12 +16,17 @@ async function generateBreadcrumbs() {
     const results = runGeneration(BUILD_ROOT);
 
     if (results.success.length > 0) {
-        vscode.window.showInformationMessage(translate(nls_ts.plugin.breadcrumb.generate.info.success, results.success.join(', ')));
+        vscode.window.showInformationMessage(
+            translate(nls_ts.plugin.breadcrumb.generate.info.success, results.success.join(', '))
+        );
     } else {
-        vscode.window.showErrorMessage(translate(nls_ts.plugin.breadcrumb.generate.error.foldernotfound, results.failed.join(', ')), {
-            modal: true,
-            detail: translate(translate(nls_ts.plugin.breadcrumb.generate.error.detail)),
-        });
+        vscode.window.showErrorMessage(
+            translate(nls_ts.plugin.breadcrumb.generate.error.foldernotfound, results.failed.join(', ')),
+            {
+                modal: true,
+                detail: translate(translate(nls_ts.plugin.breadcrumb.generate.error.detail)),
+            }
+        );
     }
 }
 module.exports = { generateBreadcrumbs, runGeneration };
