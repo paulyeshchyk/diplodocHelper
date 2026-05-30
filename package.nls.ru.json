@@ -8,7 +8,7 @@
     "command.generateHelpMaps": "Создать карту ключей(helptag)",
     "command.moveSection": "Переместить секцию",
     "command.pasteImage": "Вставить картинку из буфера обмена",
-    "command.pasteLink": "Вставить ссылку на документ",
+    "command.pasteLink": "Вставить ссылку на документ из буфера обмена",
     "command.reindexDirectories": "Переиндексировать папки",
     "command.reindexFigures": "Переиндексировать рисунки",
     "command.renameSection": "Переименовать секцию",

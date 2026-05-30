@@ -3,15 +3,24 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * @typedef {Object} FigureInfo
+ * Нормализует путь для использования в качестве ключа (решает проблему с регистром)
+ * @typedef {Object} ImageInfo
  * @property {string} id
  * @property {string} caption
- * @property {string} filePath
+ * @property {string} filePath // .md файл, где найдено
+ // .md файл, где найдено
+ * @property {string} targetPath // абсолютный путь к КАРТИНКЕ
+ // абсолютный путь к КАРТИНКЕ
  * @property {string} label
+ * @property {'figure' | 'markdown'} type
+ * @param {string} filePath
  */
+function normalizePathForKey(filePath) {
+    return filePath.toLowerCase().replace(/\\/g, '/').replace(/\/+/g, '/');
+}
 
 /**
- * @returns { Promise<void>}
+ * Главная функция
  */
 async function pasteImageFromListAsync() {
     const editor = vscode.window.activeTextEditor;
@@ -22,34 +31,25 @@ async function pasteImageFromListAsync() {
 
     const currentFilePath = editor.document.uri.fsPath;
     const workspaceFolders = vscode.workspace.workspaceFolders;
-
-    if (!workspaceFolders) {
-        vscode.window.showErrorMessage('Рабочая папка не найдена');
-        return;
-    }
+    if (!workspaceFolders) return;
 
     const rootDir = workspaceFolders[0].uri.fsPath;
+    const images = await collectAllImages(rootDir);
 
-    // 1. Собираем все рисунки
-    const figures = await collectAllFigures(rootDir);
-
-    if (figures.length === 0) {
-        vscode.window.showInformationMessage('Не найдено ни одного рисунка с figcaption class="imageDescription"');
+    if (images.length === 0) {
+        vscode.window.showInformationMessage('Изображения не найдены');
         return;
     }
 
-    let seeAlso = 'см. ';
-
-    // 2. Показываем QuickPick
     const selected = await vscode.window.showQuickPick(
-        figures.map(f => ({
-            label: f.caption,
-            description: path.relative(rootDir, f.filePath),
-            // detail: `ID: ${f.id}`,
-            figure: f,
+        images.map(img => ({
+            label: img.caption,
+            description: path.relative(rootDir, img.filePath),
+            detail: img.type === 'figure' ? `Figure • ${img.id}` : `Изображение • ${path.basename(img.targetPath)}`,
+            image: img,
         })),
         {
-            placeHolder: 'Выберите рисунок, на который хотите сослаться...',
+            placeHolder: 'Выберите изображение для ссылки...',
             matchOnDescription: true,
             matchOnDetail: true,
         }
@@ -57,70 +57,177 @@ async function pasteImageFromListAsync() {
 
     if (!selected) return;
 
-    const { figure } = selected;
+    const { image } = selected;
+    const relativeLink = getRelativeLink(currentFilePath, image);
 
-    // 3. Вычисляем относительный путь + якорь
-    //const targetDir = path.dirname(figure.filePath);
-    let relativePath = path.relative(path.dirname(currentFilePath), figure.filePath).replace(/\\/g, '/');
+    const markdownLink = `см. [*${image.caption}*](${relativeLink})`;
 
-    if (!relativePath.startsWith('.')) {
-        relativePath = './' + relativePath;
-    }
-
-    const linkText = figure.caption; // "Рисунок 42. Описание окна"
-    const linkTarget = `${relativePath}#${figure.id}`;
-
-    const markdownLink = `${seeAlso}[*${linkText}*](${linkTarget})`;
-
-    // 4. Вставляем в редактор
     await editor.edit(editBuilder => {
         editBuilder.insert(editor.selection.active, markdownLink);
     });
 
-    vscode.window.showInformationMessage(`Вставлена ссылка на: ${linkText}`);
+    vscode.window.showInformationMessage(`Вставлена ссылка: ${image.caption}`);
 }
+
 /**
- * Сканирует все .md файлы и собирает информацию о рисунках
- * @param {string} rootDir
- * @returns {Promise<FigureInfo[]>}
+ * Улучшенный сборщик с правильной дедупликацией
+ * @param {string | vscode.Uri | vscode.WorkspaceFolder} rootDir
  */
-async function collectAllFigures(rootDir) {
-    const figures = [];
+async function collectAllImages(rootDir) {
+    const images = [];
+    const imageByNormalizedPath = new Map();
 
     const mdFiles = await vscode.workspace.findFiles(
         new vscode.RelativePattern(rootDir, '**/*.md'),
         '**/node_modules/**'
     );
 
-    const regex = /<figcaption\s+class="imageDescription"[^>]*?\bid="([^"]+)"[^>]*?>([\s\S]*?)<\/figcaption>/gi;
+    // 1. Figures — высший приоритет
+    const figRegex = /<figcaption\s+class="imageDescription"[^>]*?\bid="([^"]+)"[^>]*?>([\s\S]*?)<\/figcaption>/gi;
 
     for (const fileUri of mdFiles) {
-        try {
-            const content = await fs.promises.readFile(fileUri.fsPath, 'utf8');
-            let match;
+        const content = await fs.promises.readFile(fileUri.fsPath, 'utf8');
+        const mdFilePath = fileUri.fsPath;
 
-            while ((match = regex.exec(content)) !== null) {
-                const id = match[1].trim();
-                let caption = match[2].trim();
+        let match;
+        while ((match = figRegex.exec(content)) !== null) {
+            const id = match[1].trim();
+            let caption = match[2].trim();
 
-                // Очищаем возможные старые номера в тексте (на всякий случай)
-                //caption = caption.replace(/^(Рисунок|Figure|Fig\.|Рис\.)\s*\d+\.?\s*/i, '').trim();
+            const imageAbsPath = findAssociatedImageAbsolutePath(content, mdFilePath);
 
-                figures.push({
-                    id,
-                    caption: caption || 'Без описания',
-                    filePath: fileUri.fsPath,
-                    label: caption,
-                });
-            }
-        } catch {
-            console.warn(`Не удалось прочитать файл: ${fileUri.fsPath}`);
+            if (!imageAbsPath) continue;
+
+            const normKey = normalizePathForKey(imageAbsPath);
+
+            const entry = {
+                id,
+                caption: caption || 'Без описания',
+                filePath: mdFilePath,
+                targetPath: imageAbsPath,
+                label: caption,
+                type: 'figure',
+            };
+
+            images.push(entry);
+            imageByNormalizedPath.set(normKey, entry);
         }
     }
 
-    // Сортируем по имени файла + id
-    figures.sort((a, b) => a.filePath.localeCompare(b.filePath) || a.id.localeCompare(b.id));
+    // 2. Markdown изображения (только без figure)
+    const mdImageRegex = /!\[(.*?)\]\(([^)]+)\)/g;
 
-    return figures;
+    for (const fileUri of mdFiles) {
+        const content = await fs.promises.readFile(fileUri.fsPath, 'utf8');
+        const mdDir = path.dirname(fileUri.fsPath);
+
+        let match;
+        while ((match = mdImageRegex.exec(content)) !== null) {
+            const rawPath = match[2]?.trim();
+            if (!rawPath || rawPath.match(/^(https?:\/\/|#|mailto:|data:)/i)) continue;
+
+            let decoded = decodeImagePath(rawPath);
+            let absImagePath;
+
+            try {
+                absImagePath = path.resolve(mdDir, decoded);
+            } catch {
+                absImagePath = decoded;
+            }
+
+            const normKey = normalizePathForKey(absImagePath);
+
+            if (imageByNormalizedPath.has(normKey)) continue;
+
+            const basename = path.basename(absImagePath);
+            const caption = path.parse(basename).name || basename;
+
+            const entry = {
+                id: basename,
+                caption,
+                filePath: fileUri.fsPath,
+                targetPath: absImagePath,
+                label: caption,
+                type: 'markdown',
+            };
+
+            images.push(entry);
+            imageByNormalizedPath.set(normKey, entry);
+        }
+    }
+
+    images.sort((a, b) => {
+        if (a.type !== b.type) return a.type === 'figure' ? -1 : 1;
+        return a.caption.localeCompare(b.caption);
+    });
+
+    return images;
 }
+
+/**
+ * Ищет путь к изображению, связанному с figure (улучшенная эвристика)
+ * @param {string} content
+ * @param {string} mdFilePath
+ */
+function findAssociatedImageAbsolutePath(content, mdFilePath) {
+    const mdDir = path.dirname(mdFilePath);
+
+    // Regex для markdown-изображений: ![alt](path)
+    const imageRegex = /!\[[^\]]*\]\(([^)]+)\)/g;
+    let match;
+
+    while ((match = imageRegex.exec(content)) !== null) {
+        const rawLink = match[1]?.trim();
+        if (!rawLink) continue;
+
+        if (rawLink.match(/^(https?:\/\/|#|mailto:|data:)/i)) continue;
+
+        // Проверяем, есть ли figure в пределах ~400 символов после этой картинки
+        const afterImage = content.slice(match.index);
+        if (afterImage.includes('<figcaption') && afterImage.indexOf('<figcaption') < 400) {
+            try {
+                const decoded = decodeImagePath(rawLink);
+                return path.resolve(mdDir, decoded);
+            } catch (err) {
+                console.warn(`Не удалось разрешить путь: ${rawLink}`);
+            }
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Декодирует путь
+ * @param {string} rawPath
+ */
+function decodeImagePath(rawPath) {
+    try {
+        return decodeURIComponent(rawPath.split('#')[0]);
+    } catch {
+        return rawPath;
+    }
+}
+
+/**
+ * Корректный относительный путь
+ * @param {string} currentFilePath
+ * @param {{ id: any; caption?: string; filePath: any; targetPath: any; label?: string; type: any; }} image
+ */
+function getRelativeLink(currentFilePath, image) {
+    let target = image.targetPath; // теперь всегда путь к картинке
+
+    if (image.type === 'figure') {
+        target = `${image.filePath}#${image.id}`;
+    }
+
+    let relative = path.relative(path.dirname(currentFilePath), target).replace(/\\/g, '/');
+
+    if (!relative.startsWith('.')) {
+        relative = './' + relative;
+    }
+
+    return relative;
+}
+
 module.exports = { pasteImageFromListAsync };

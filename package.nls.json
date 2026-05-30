@@ -9,7 +9,7 @@
     "command.generateContexts": "Generate contexts",
     "command.generateHelpMaps": "Generate help map for frontend",
     "command.moveSection": "Move section",
-    "command.pasteLink": "Paste link to document",
+    "command.pasteLink": "Paste link to document from clipboard",
     "command.pasteImage": "Paste image to document from clipboard",
     "command.reindexDirectories": "Reindex everything",
     "command.reindexFigures": "Reindex figures",
