@@ -1,3 +1,4 @@
+const { nls_ts, translate } = require('../nls_ts.js');
 // src/extension.js
 const vscode = require('vscode');
 
@@ -71,7 +72,10 @@ function activate(context) {
         reindexDirectoriesAsync
     );
 
-    const reindexFiguresCommand = vscode.commands.registerCommand('diplodoc-helper.reindex', reindexFiguresAsync);
+    const reindexFiguresCommand = vscode.commands.registerCommand(
+        'diplodoc-helper.reindexFigures',
+        reindexFiguresAsync
+    );
 
     const updateHelptagCmd = vscode.commands.registerCommand('diplodoc-helper.helptag.Update', updateHelptag);
 
@@ -96,7 +100,9 @@ function activate(context) {
     context.subscriptions.push(copyLinkCmd, pasteLinkCmd, pasteImageCmd, pasteImageFromListCmd);
 
     context.subscriptions.push(
-        vscode.window.onDidChangeActiveTextEditor(editor => updateContextMenu(editor)),
+        vscode.window.onDidChangeActiveTextEditor(editor => {
+            updateContextMenu(editor);
+        }),
         vscode.workspace.onDidChangeTextDocument(event => {
             const activeEditor = vscode.window.activeTextEditor;
             if (activeEditor && event.document === activeEditor.document) {
@@ -142,7 +148,7 @@ async function reindexFiguresAsync(uri) {
         async () => {
             const { reindexFiguresCommand } = require('./commands/diplodoc-helper.ReindexFigures');
             await reindexFiguresCommand(uri);
-            vscode.window.showInformationMessage('Переиндексация завершена!');
+            vscode.window.showInformationMessage(translate(nls_ts.plugin.reindex.figures.info.success));
         }
     );
 }

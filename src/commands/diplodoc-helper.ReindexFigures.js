@@ -17,9 +17,12 @@ async function reindexFiguresCommand(uri) {
 
     const targetDir = uri.fsPath;
 
-    /** @type {import("../plugins/reindexer/reindexDirectories.js").ReindexWarning[]} */
-    let allWarnings = [];
-
+    /** @type {import("../plugins/reindexer/reindexFigures.js").ReindexFiguresResult} */
+    let result = {
+        success: false,
+        total: 0,
+        reason: 'not started',
+    };
     await vscode.window.withProgress(
         {
             location: vscode.ProgressLocation.Notification,
@@ -28,37 +31,22 @@ async function reindexFiguresCommand(uri) {
         },
         async () => {
             let prefix = getFigurePrefix();
-            reindexFigures(targetDir, prefix);
+            result = reindexFigures(targetDir, prefix);
         }
     );
 
-    vscode.window.showInformationMessage(translate(nls_ts.plugin.section.reindex.info.success));
-
-    // Показываем предупреждения
-    if (allWarnings.length > 0) {
-        showWarnings(allWarnings);
+    switch (result.success) {
+        case true:
+            vscode.window.showInformationMessage(
+                translate(nls_ts.plugin.reindex.figures.info.successDetailed, result.total)
+            );
+            break;
+        case false:
+            vscode.window.showWarningMessage(
+                translate(nls_ts.plugin.reindex.figures.info.failDetailed, result.reason || 'unknown')
+            );
+            break;
     }
-}
-
-/**
- * @param {import("../plugins/reindexer/reindexDirectories.js").ReindexWarning[]} warnings
- */
-function showWarnings(warnings) {
-    const messages = new Set();
-
-    for (const w of warnings) {
-        messages.add(w.message);
-    }
-
-    if (messages.size === 0) return;
-
-    const messageList = Array.from(messages).join('\n');
-
-    vscode.window.showWarningMessage(
-        translate(nls_ts.plugin.section.reindex.warning.text),
-        { modal: true, detail: messageList },
-        translate(nls_ts.plugin.section.reindex.warning.button)
-    );
 }
 
 module.exports = { reindexFiguresCommand };

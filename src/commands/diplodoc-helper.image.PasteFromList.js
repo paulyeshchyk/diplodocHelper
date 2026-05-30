@@ -7,7 +7,7 @@ const path = require('path');
  * @property {string} id
  * @property {string} caption
  * @property {string} filePath
- * @property {string} label          // для отображения в QuickPick
+ * @property {string} label
  */
 
 /**

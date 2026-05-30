@@ -3,10 +3,17 @@ const path = require('path');
 
 const { TocYamlFileLoad } = require('../utils/toc.yaml.file');
 
+/** @typedef {Object} ReindexFiguresResult
+ * @property {boolean} success
+ * @property {number} total
+ * @property {string | undefined} reason
+ */
+
 /**
  * Главная функция
  * @param {string} rootDir
  * @param {string} prefix
+ * @returns {ReindexFiguresResult}
  */
 function reindexFigures(rootDir, prefix) {
     console.log('Переиндексация рисунков...');
@@ -14,7 +21,7 @@ function reindexFigures(rootDir, prefix) {
     const tocPath = path.join(rootDir, 'toc.yaml');
     if (!fs.existsSync(tocPath)) {
         console.warn('toc.yaml не найден');
-        return { success: false, reason: 'no_toc' };
+        return { success: false, reason: 'no_toc', total: 0 };
     }
 
     let tocDoc;
@@ -22,7 +29,7 @@ function reindexFigures(rootDir, prefix) {
         tocDoc = TocYamlFileLoad(tocPath);
     } catch (err) {
         console.error('Ошибка парсинга toc.yaml:', err);
-        return { success: false, reason: 'parse_error' };
+        return { success: false, reason: 'parse_error', total: 0 };
     }
 
     // Важно: корневой toc обычно содержит поле items
@@ -32,7 +39,7 @@ function reindexFigures(rootDir, prefix) {
 
     if (allMdFiles.length === 0) {
         console.warn('Не найдено .md файлов через toc.yaml');
-        return { success: true, total: 0 };
+        return { success: true, total: 0, reason: 'no md-file found' };
     }
 
     let figureCounter = 1;
@@ -53,7 +60,7 @@ function reindexFigures(rootDir, prefix) {
     }
 
     console.log(`Готово. Всего пронумеровано: ${figureCounter - 1}`);
-    return { success: true, total: figureCounter - 1 };
+    return { success: true, total: figureCounter - 1, reason: '' };
 }
 
 /**

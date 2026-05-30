@@ -2,11 +2,11 @@ const fs = require('fs');
 const path = require('path');
 
 // Получаем аргументы: путь к папке и введенное название
-const targetDir = process.argv[2]; 
+const targetDir = process.argv[2];
 const rawName = process.argv[3];
 
 if (!rawName) {
-    console.error("Имя раздела не введено!");
+    console.error('Имя раздела не введено!');
     process.exit(1);
 }
 

@@ -1,308 +1,328 @@
 {
-  "name": "diplodochelper",
-  "publisher": "paulyestchick",
-  "displayName": "%displayName%",
-  "description": "%description%",
-  "repository": {
-    "url": "https://github.com/paulyeshchyk/diplodocHelper"
-  },
-  "version": "0.16.3",
-  "main": "./src/extension.js",
-  "engines": {
-    "vscode": "^1.116.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "changelogUrl": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
-  "releaseNotes": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
-  "activationEvents": [],
-  "contributes": {
-    "configuration": {
-      "title": "Diplodoc Helper",
-      "properties": {
-        "diplodoc-helper.figurePrefix": {
-          "type": "string",
-          "default": "Рисунок",
-          "description": "Префикс для подписей рисунков (например, 'Figure' для английского)"
-        },
-        "diplodocHelper.maxDepth": {
-          "type": "number",
-          "default": 5,
-          "description": "Максимальная глубина поиска разделов"
-        },
-        "diplodocHelper.autoReindex": {
-          "type": "boolean",
-          "default": true,
-          "description": "Автоматически обновлять индексы при изменении структуры"
-        },
-        "diplodocHelper.defaultLanguage": {
-          "type": "string",
-          "default": "ru",
-          "enum": [
-            "ru",
-            "en"
-          ],
-          "enumDescriptions": [
-            "Русский",
-            "English"
-          ],
-          "description": "Язык интерфейса по умолчанию"
-        },
-        "diplodocHelper.outputFolder": {
-          "type": "string",
-          "default": "docs",
-          "description": "Папка для сгенерированных файлов (относительно корня рабочей области)"
-        }
-      }
+    "name": "diplodochelper",
+    "publisher": "paulyestchick",
+    "displayName": "%displayName%",
+    "description": "%description%",
+    "repository": {
+        "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
-    "commands": [
-      {
-        "command": "diplodoc-helper.createSection",
-        "title": "%command.createSection%"
-      },
-      {
-        "command": "diplodoc-helper.deleteSection",
-        "title": "%command.deleteSection%"
-      },
-      {
-        "command": "diplodoc-helper.renameSection",
-        "title": "%command.renameSection%"
-      },
-      {
-        "command": "diplodoc-helper.moveSection",
-        "title": "%command.moveSection%"
-      },
-      {
-        "command": "diplodoc-helper.reindexDirectories",
-        "title": "%command.reindexDirectories%"
-      },
-      {
-        "command": "diplodoc-helper.copyLink",
-        "title": "%command.copyLink%"
-      },
-      {
-        "command": "diplodoc-helper.pasteLink",
-        "title": "%command.pasteLink%"
-      },
-      {
-        "command": "diplodoc-helper.pasteImageFromList",
-        "title": "Вставить из списка"
-      },
-      {
-        "command": "diplodoc-helper.pasteImageFromClipboard",
-        "when": "editorTextFocus && resourceExtname == .md",
-        "title": "%command.pasteImage%"
-      },
-      {
-        "command": "diplodoc-helper.generateContexts",
-        "title": "%command.generateContexts%"
-      },
-      {
-        "command": "diplodoc-helper.wipeEmptyDirectories",
-        "title": "%command.wipeEmptyDirectories%"
-      },
-      {
-        "command": "diplodoc-helper.generateHelpMaps",
-        "title": "%command.generateHelpMaps%"
-      },
-      {
-        "command": "diplodoc-helper.generateBreadcrumbs",
-        "title": "%command.generateBreadcrumbs%"
-      },
-      {
-        "command": "diplodoc-helper.helptag.Update",
-        "title": "%command.updateHelptag%"
-      },
-      {
-        "command": "diplodoc-helper.helptag.Delete",
-        "title": "%command.deleteHelptag%"
-      },
-      {
-        "command": "diplodoc-helper.context.Update",
-        "title": "%command.updateHelptag%"
-      },
-      {
-        "command": "diplodoc-helper.context.Delete",
-        "title": "%command.deleteHelptag%"
-      }
+    "version": "0.17.0",
+    "main": "./src/extension.js",
+    "engines": {
+        "vscode": "^1.116.0"
+    },
+    "categories": [
+        "Other"
     ],
-    "submenus": [
-      {
-        "id": "diplodoc.explorer.context.menu",
-        "label": "%submenu.diplodoc%"
-      },
-      {
-        "id": "diplodoc.editor.context.menu",
-        "label": "%submenu.diplodoc%"
-      },
-      {
-        "id": "diplodoc.helptag.explorer.context.menu",
-        "label": "%submenu.helptag%"
-      },
-      {
-        "id": "diplodoc.context.explorer.context.menu",
-        "label": "%submenu.context%"
-      },
-      {
-        "id": "diplodoc.generators.explorer.context.menu",
-        "label": "%submenu.generators%"
-      }
-    ],
-    "menus": {
-      "editor/context": [
-        {
-          "submenu": "diplodoc.editor.context.menu",
-          "when": "editorTextFocus && !editorReadonly",
-          "group": "diplodoc.menu@1"
+    "changelogUrl": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
+    "releaseNotes": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
+    "activationEvents": [],
+    "contributes": {
+        "configuration": {
+            "title": "Diplodoc Helper",
+            "properties": {
+                "diplodoc-helper.figurePrefix": {
+                    "type": "string",
+                    "default": "Рисунок",
+                    "description": "Префикс для подписей рисунков (например, 'Figure' для английского)"
+                },
+                "diplodocHelper.maxDepth": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Максимальная глубина поиска разделов"
+                },
+                "diplodocHelper.autoReindex": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Автоматически обновлять индексы при изменении структуры"
+                },
+                "diplodocHelper.defaultLanguage": {
+                    "type": "string",
+                    "default": "ru",
+                    "enum": [
+                        "ru",
+                        "en"
+                    ],
+                    "enumDescriptions": [
+                        "Русский",
+                        "English"
+                    ],
+                    "description": "Язык интерфейса по умолчанию"
+                },
+                "diplodocHelper.outputFolder": {
+                    "type": "string",
+                    "default": "docs",
+                    "description": "Папка для сгенерированных файлов (относительно корня рабочей области)"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "diplodoc-helper.createSection",
+                "title": "%command.createSection%"
+            },
+            {
+                "command": "diplodoc-helper.deleteSection",
+                "title": "%command.deleteSection%"
+            },
+            {
+                "command": "diplodoc-helper.renameSection",
+                "title": "%command.renameSection%"
+            },
+            {
+                "command": "diplodoc-helper.moveSection",
+                "title": "%command.moveSection%"
+            },
+            {
+                "command": "diplodoc-helper.reindexDirectories",
+                "title": "%command.reindexDirectories%"
+            },
+            {
+                "command": "diplodoc-helper.reindexFigures",
+                "title": "%command.reindexFigures%"
+            },
+            {
+                "command": "diplodoc-helper.copyLink",
+                "title": "%command.copyLink%"
+            },
+            {
+                "command": "diplodoc-helper.pasteLink",
+                "title": "%command.pasteLink%"
+            },
+            {
+                "command": "diplodoc-helper.pasteImageFromList",
+                "title": "Вставить из списка"
+            },
+            {
+                "command": "diplodoc-helper.pasteImageFromClipboard",
+                "when": "editorTextFocus && resourceExtname == .md",
+                "title": "%command.pasteImage%"
+            },
+            {
+                "command": "diplodoc-helper.generateContexts",
+                "title": "%command.generateContexts%"
+            },
+            {
+                "command": "diplodoc-helper.wipeEmptyDirectories",
+                "title": "%command.wipeEmptyDirectories%"
+            },
+            {
+                "command": "diplodoc-helper.generateHelpMaps",
+                "title": "%command.generateHelpMaps%"
+            },
+            {
+                "command": "diplodoc-helper.generateBreadcrumbs",
+                "title": "%command.generateBreadcrumbs%"
+            },
+            {
+                "command": "diplodoc-helper.helptag.Update",
+                "title": "%command.updateHelptag%"
+            },
+            {
+                "command": "diplodoc-helper.helptag.Delete",
+                "title": "%command.deleteHelptag%"
+            },
+            {
+                "command": "diplodoc-helper.context.Update",
+                "title": "%command.updateHelptag%"
+            },
+            {
+                "command": "diplodoc-helper.context.Delete",
+                "title": "%command.deleteHelptag%"
+            }
+        ],
+        "submenus": [
+            {
+                "id": "diplodoc.explorer.context.menu",
+                "label": "%submenu.diplodoc%"
+            },
+            {
+                "id": "diplodoc.editor.context.menu",
+                "label": "%submenu.diplodoc%"
+            },
+            {
+                "id": "diplodoc.helptag.explorer.context.menu",
+                "label": "%submenu.helptag%"
+            },
+            {
+                "id": "diplodoc.context.explorer.context.menu",
+                "label": "%submenu.context%"
+            },
+            {
+                "id": "diplodoc.generators.explorer.context.menu",
+                "label": "%submenu.generators%"
+            },
+            {
+                "id": "diplodoc.reindexier.explorer.context.menu",
+                "label": "%submenu.reindexier%"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "submenu": "diplodoc.editor.context.menu",
+                    "when": "editorTextFocus && !editorReadonly",
+                    "group": "diplodoc.menu@1"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "submenu": "diplodoc.explorer.context.menu",
+                    "group": "diplodoc.menu@1"
+                }
+            ],
+            "diplodoc.editor.context.menu": [
+                {
+                    "command": "diplodoc-helper.pasteLink",
+                    "when": "editorTextFocus && !editorReadonly",
+                    "group": "diplodoc.section@1"
+                },
+                {
+                    "command": "diplodoc-helper.pasteImageFromClipboard",
+                    "when": "editorTextFocus && resourceExtname == .md",
+                    "group": "diplodoc.section@2"
+                },
+                {
+                    "command": "diplodoc-helper.pasteImageFromList",
+                    "when": "editorTextFocus && resourceExtname == .md",
+                    "group": "diplodoc.section@3"
+                }
+            ],
+            "diplodoc.explorer.context.menu": [
+                {
+                    "command": "diplodoc-helper.createSection",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1.diplodoc.section@1"
+                },
+                {
+                    "command": "diplodoc-helper.deleteSection",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1.diplodoc.section@2"
+                },
+                {
+                    "command": "diplodoc-helper.renameSection",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1.diplodoc.section@3"
+                },
+                {
+                    "command": "diplodoc-helper.moveSection",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1.diplodoc.section@4"
+                },
+                {
+                    "command": "diplodoc-helper.copyLink",
+                    "when": "explorerResourceIsFolder || resourceExtname == .md || resourceExtname == .png || resourceExtname == .jpg || resourceExtname == .svg",
+                    "group": "2.diplodoc.copy@1"
+                },
+                {
+                    "submenu": "diplodoc.context.explorer.context.menu",
+                    "when": "explorerResourceIsFolder",
+                    "group": "3.diplodoc.context@1"
+                },
+                {
+                    "submenu": "diplodoc.helptag.explorer.context.menu",
+                    "when": "explorerResourceIsFolder",
+                    "group": "4.diplodoc.helptag@1"
+                },
+                {
+                    "submenu": "diplodoc.generators.explorer.context.menu",
+                    "when": "explorerResourceIsFolder",
+                    "group": "5.diplodoc.generators@1"
+                },
+                {
+                    "submenu": "diplodoc.reindexier.explorer.context.menu",
+                    "when": "explorerResourceIsFolder",
+                    "group": "6.diplodoc.generators@1"
+                }
+            ],
+            "diplodoc.context.explorer.context.menu": [
+                {
+                    "command": "diplodoc-helper.context.Update",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1.diplodoc.section@5"
+                },
+                {
+                    "command": "diplodoc-helper.context.Delete",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1.diplodoc.section@6"
+                },
+                {
+                    "command": "diplodoc-helper.generateContexts",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1diplodoc.generators.section.command@2"
+                }
+            ],
+            "diplodoc.helptag.explorer.context.menu": [
+                {
+                    "command": "diplodoc-helper.helptag.Update",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1.diplodoc.section@5"
+                },
+                {
+                    "command": "diplodoc-helper.helptag.Delete",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1.diplodoc.section@6"
+                }
+            ],
+            "diplodoc.reindexier.explorer.context.menu": [
+                {
+                    "command": "diplodoc-helper.reindexDirectories",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1diplodoc.generators.section.command@1"
+                },
+                {
+                    "command": "diplodoc-helper.reindexFigures",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1diplodoc.generators.section.command@2"
+                }
+            ],
+            "diplodoc.generators.explorer.context.menu": [
+                {
+                    "command": "diplodoc-helper.generateHelpMaps",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1diplodoc.generators.section.command@3"
+                },
+                {
+                    "command": "diplodoc-helper.generateBreadcrumbs",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1diplodoc.generators.section.command@4"
+                },
+                {
+                    "command": "diplodoc-helper.wipeEmptyDirectories",
+                    "when": "explorerResourceIsFolder",
+                    "group": "99diplodoc.generators.files.command@1"
+                }
+            ]
         }
-      ],
-      "explorer/context": [
-        {
-          "submenu": "diplodoc.explorer.context.menu",
-          "group": "diplodoc.menu@1"
-        }
-      ],
-      "diplodoc.editor.context.menu": [
-        {
-          "command": "diplodoc-helper.pasteLink",
-          "when": "editorTextFocus && !editorReadonly",
-          "group": "diplodoc.section@1"
-        },
-        {
-          "command": "diplodoc-helper.pasteImageFromClipboard",
-          "when": "editorTextFocus && resourceExtname == .md",
-          "group": "diplodoc.section@2"
-        },
-        {
-          "command": "diplodoc-helper.pasteImageFromList",
-          "when": "editorTextFocus && resourceExtname == .md",
-          "group": "diplodoc.section@3"
-        }
-      ],
-      "diplodoc.explorer.context.menu": [
-        {
-          "command": "diplodoc-helper.createSection",
-          "when": "explorerResourceIsFolder",
-          "group": "1.diplodoc.section@1"
-        },
-        {
-          "command": "diplodoc-helper.deleteSection",
-          "when": "explorerResourceIsFolder",
-          "group": "1.diplodoc.section@2"
-        },
-        {
-          "command": "diplodoc-helper.renameSection",
-          "when": "explorerResourceIsFolder",
-          "group": "1.diplodoc.section@3"
-        },
-        {
-          "command": "diplodoc-helper.moveSection",
-          "when": "explorerResourceIsFolder",
-          "group": "1.diplodoc.section@4"
-        },
-        {
-          "command": "diplodoc-helper.copyLink",
-          "when": "explorerResourceIsFolder || resourceExtname == .md || resourceExtname == .png || resourceExtname == .jpg || resourceExtname == .svg",
-          "group": "2.diplodoc.copy@1"
-        },
-        {
-          "submenu": "diplodoc.context.explorer.context.menu",
-          "when": "explorerResourceIsFolder",
-          "group": "3.diplodoc.context@1"
-        },
-        {
-          "submenu": "diplodoc.helptag.explorer.context.menu",
-          "when": "explorerResourceIsFolder",
-          "group": "4.diplodoc.helptag@1"
-        },
-        {
-          "submenu": "diplodoc.generators.explorer.context.menu",
-          "when": "explorerResourceIsFolder",
-          "group": "5.diplodoc.generators@1"
-        }
-      ],
-      "diplodoc.context.explorer.context.menu": [
-        {
-          "command": "diplodoc-helper.context.Update",
-          "when": "explorerResourceIsFolder",
-          "group": "1.diplodoc.section@5"
-        },
-        {
-          "command": "diplodoc-helper.context.Delete",
-          "when": "explorerResourceIsFolder",
-          "group": "1.diplodoc.section@6"
-        },
-        {
-          "command": "diplodoc-helper.generateContexts",
-          "when": "explorerResourceIsFolder",
-          "group": "1diplodoc.generators.section.command@2"
-        }
-      ],
-      "diplodoc.helptag.explorer.context.menu": [
-        {
-          "command": "diplodoc-helper.helptag.Update",
-          "when": "explorerResourceIsFolder",
-          "group": "1.diplodoc.section@5"
-        },
-        {
-          "command": "diplodoc-helper.helptag.Delete",
-          "when": "explorerResourceIsFolder",
-          "group": "1.diplodoc.section@6"
-        }
-      ],
-      "diplodoc.generators.explorer.context.menu": [
-        {
-          "command": "diplodoc-helper.reindexDirectories",
-          "when": "explorerResourceIsFolder",
-          "group": "1diplodoc.generators.section.command@1"
-        },
-        {
-          "command": "diplodoc-helper.generateHelpMaps",
-          "when": "explorerResourceIsFolder",
-          "group": "1diplodoc.generators.section.command@3"
-        },
-        {
-          "command": "diplodoc-helper.generateBreadcrumbs",
-          "when": "explorerResourceIsFolder",
-          "group": "1diplodoc.generators.section.command@4"
-        },
-        {
-          "command": "diplodoc-helper.wipeEmptyDirectories",
-          "when": "explorerResourceIsFolder",
-          "group": "99diplodoc.generators.files.command@1"
-        }
-      ]
+    },
+    "dependencies": {
+        "gray-matter": "^4.0.3",
+        "js-yaml": "^4.1.1",
+        "transliteration": "^2.6.1",
+        "vscode-nls": "^5.2.0"
+    },
+    "devDependencies": {
+        "@eslint/css": "^1.2.0",
+        "@eslint/js": "^10.0.1",
+        "@eslint/json": "^1.2.0",
+        "@eslint/markdown": "^8.0.2",
+        "esbuild": "^0.28.0",
+        "eslint": "^10.4.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.5",
+        "globals": "^17.6.0",
+        "postcss": "^8.5.15",
+        "postcss-sorting": "^10.0.0",
+        "prettier-plugin-css-order": "^2.2.0",
+        "prettier-plugin-organize-imports": "^4.3.0"
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "echo 'No compilation needed for JS'",
+        "package": "vsce package",
+        "publish-vsix": "vsce publish",
+        "publish-npm": "npm publish",
+        "lint": "eslint . --fix",
+        "format": "prettier --write ."
     }
-  },
-  "dependencies": {
-    "gray-matter": "^4.0.3",
-    "js-yaml": "^4.1.1",
-    "transliteration": "^2.6.1",
-    "vscode-nls": "^5.2.0"
-  },
-  "devDependencies": {
-    "@eslint/css": "^1.2.0",
-    "@eslint/js": "^10.0.1",
-    "@eslint/json": "^1.2.0",
-    "@eslint/markdown": "^8.0.2",
-    "esbuild": "^0.28.0",
-    "eslint": "^10.4.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
-    "globals": "^17.6.0",
-    "postcss": "^8.5.15",
-    "postcss-sorting": "^10.0.0",
-    "prettier-plugin-css-order": "^2.2.0",
-    "prettier-plugin-organize-imports": "^4.3.0"
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "echo 'No compilation needed for JS'",
-    "package": "vsce package",
-    "publish-vsix": "vsce publish",
-    "publish-npm": "npm publish",
-    "lint": "eslint . --fix",
-    "format": "prettier --write ."
-  }
 }

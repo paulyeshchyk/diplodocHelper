@@ -1,13 +1,13 @@
 {
   "editor.formatOnSave": true,
-  "files.exclude": {
-    "**\\build": "explorerExcludedFiles",
-    "**\\node_modules": "explorerExcludedFiles",
-    "**/dist": "explorerExcludedFiles"
-  },
   "editor.language.brackets": [],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.exclude": {
+    "**\\build": "explorerExcludedFiles",
+    "**\\node_modules": "explorerExcludedFiles",
+    "**/dist": "explorerExcludedFiles"
   }
 }
