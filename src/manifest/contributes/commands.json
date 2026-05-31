@@ -31,11 +31,11 @@
             },
             {
                 "command": "diplodoc-helper.pasteLink",
-                "title": "%command.md.link.paste%"
+                "title": "%command.md.link.paste.fromClipboard%"
             },
             {
                 "command": "diplodoc-helper.pasteImageFromList",
-                "title": "Вставить из списка"
+                "title": "%command.md.link.paste.fromList%"
             },
             {
                 "command": "diplodoc-helper.pasteImageFromClipboard",
@@ -73,6 +73,10 @@
             {
                 "command": "diplodoc-helper.context.Delete",
                 "title": "%command.md.context.delete%"
+            },
+            {
+                "command": "diplodoc-helper.settings",
+                "title": "%command.settings%"
             }
         ]
     }

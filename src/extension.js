@@ -1,7 +1,7 @@
 // src/extension.js
 
 const vscode = require('vscode');
-const { setupConfigWatcher } = require('./commands/vscode.config.manager');
+const { setupDiplodocConfigChangeWatcher } = require('./commands/vscode.config.manager');
 const { initNls } = require('../nls_loader');
 
 const { ux_breadcrumbs_generate } = require('./commands/diplodoc-helper.breadCrumb.Generate');
@@ -22,16 +22,17 @@ const { ux_section_create } = require('./commands/diplodoc-helper.section.Create
 const { ux_section_delete } = require('./commands/diplodoc-helper.section.Delete');
 const { ux_section_move } = require('./commands/diplodoc-helper.section.Move');
 const { ux_section_rename } = require('./commands/diplodoc-helper.section.Rename');
+const { CONFIG_KEY } = require('./plugins/constants');
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
     //
-    setupConfigWatcher();
+    setupDiplodocConfigChangeWatcher();
 
     //читаем конфиг при загрузке расширения
-    require('./commands/vscode.config.manager').readConfig();
+    require('./commands/vscode.config.manager').DiplodocConfigSharedInstance();
     const locale = vscode.env.language;
     const rootPath = context.extensionPath;
 
@@ -55,6 +56,9 @@ function activate(context) {
     const cmd14 = vscode.commands.registerCommand('diplodoc-helper.wipeEmptyDirectories', ux_directories_wipe);
     const cmd15 = vscode.commands.registerCommand('diplodoc-helper.helptag.Update', ux_helptag_update);
     const cmd16 = vscode.commands.registerCommand('diplodoc-helper.helptag.Delete', ux_helptag_delete);
+    const cmd99 = vscode.commands.registerCommand('diplodoc-helper.settings', () => {
+        vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_KEY);
+    });
 
     context.subscriptions.push(cmd01, cmd02, cmd03, cmd04);
     context.subscriptions.push(cmd07, cmd08);
@@ -63,6 +67,7 @@ function activate(context) {
     context.subscriptions.push(cmd14);
     context.subscriptions.push(cmd15, cmd16);
     context.subscriptions.push(cmd17, cmd18, cmd19, cmd20);
+    context.subscriptions.push(cmd99);
 
     context.subscriptions.push(
         vscode.window.onDidChangeActiveTextEditor(editor => {

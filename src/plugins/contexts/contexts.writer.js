@@ -22,7 +22,7 @@ function slugify_url(str) {
         .replace(/^_+|_+$/g, '');
 }
 
-/** @import {ContextMap} from '../model/imageitem.model' */
+/** @import {ContextMap} from '../model/contextmap.model' */
 
 /**
  * @param {string} outputDir

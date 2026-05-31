@@ -1,5 +1,6 @@
 // vscodeConfigGenerator.js
 
+const { CONFIG_KEY } = require('../plugins/constants');
 const { configDefinition } = require('../plugins/model/vscode.configdefinition.model');
 /** @import {ConfigurationContributeResult} from "../plugins/model/vscode.contributes.model" */
 /** @import {ConfigDefinition} from "../plugins/model/vscode.configfield.model" */
@@ -11,7 +12,6 @@ const { configDefinition } = require('../plugins/model/vscode.configdefinition.m
 function generateConfigurationContribute() {
     /** @type ConfigDefinition */
     const properties = {};
-    const CONFIG_KEY = 'diplodoc-helper';
     const CONFIG_TITLE = 'Diplodoc Helper';
 
     for (const [key, def] of Object.entries(configDefinition)) {

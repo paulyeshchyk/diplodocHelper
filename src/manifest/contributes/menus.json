@@ -29,6 +29,10 @@
                     "command": "diplodoc-helper.pasteImageFromList",
                     "when": "editorTextFocus && resourceExtname == .md",
                     "group": "diplodoc.section@3"
+                },
+                {
+                    "command": "diplodoc-helper.settings",
+                    "group": "znavigation@2"
                 }
             ],
             "diplodoc.explorer.context.menu": [
@@ -66,11 +70,6 @@
                     "submenu": "diplodoc.helptag.explorer.context.menu",
                     "when": "explorerResourceIsFolder",
                     "group": "4.diplodoc.helptag@1"
-                },
-                {
-                    "submenu": "diplodoc.generators.explorer.context.menu",
-                    "when": "explorerResourceIsFolder",
-                    "group": "5.diplodoc.generators@1"
                 },
                 {
                     "submenu": "diplodoc.reindexier.explorer.context.menu",
@@ -129,9 +128,7 @@
                     "command": "diplodoc-helper.reindexFigures",
                     "when": "explorerResourceIsFolder",
                     "group": "1diplodoc.generators.section.command@2"
-                }
-            ],
-            "diplodoc.generators.explorer.context.menu": [
+                },
                 {
                     "command": "diplodoc-helper.wipeEmptyDirectories",
                     "when": "explorerResourceIsFolder",

@@ -1,11 +1,9 @@
 // DiplodocConfigManager.js
 
-// @ts-nocheck
-
-/** @import { DiplodocConfig } from '../plugins/model/vscode.diplodocconfig.model' */
-
 const vscode = require('vscode');
-const { configDefinition } = require('../plugins/model/vscode.configdefinition.model');
+const { DiplodocConfigFromJson } = require('../plugins/utils/diplodoc.config');
+
+/** @import { DiplodocConfig } from '../plugins/model/diplodocconfig.model' */
 
 const CONFIG_KEY = 'diplodoc-helper';
 
@@ -16,17 +14,33 @@ let instance = null;
  * Возвращает экземпляр конфигурации (ленивая инициализация)
  * @returns {DiplodocConfig}
  */
-function readConfig() {
+function DiplodocConfigSharedInstance() {
     if (!instance) {
-        instance = createConfigInVsCode();
+        instance = createConfigInVsCode(CONFIG_KEY);
     }
     return instance;
 }
 
 /**
+ * Читает настройки расширения из VS Code и возвращает только
+ * необходимые для реиндексатора параметры.
+ * @param {string | undefined} CONFIG_KEY
+ * @returns {DiplodocConfig}
+ */
+function DiplodocConfigFromWorkspace(CONFIG_KEY) {
+    const config = vscode.workspace.getConfiguration(CONFIG_KEY);
+
+    return {
+        defaultLanguage: config.get('defaultLanguage', 'ru'),
+        figureCaptionPrefix: config.get('figureCaptionPrefix', 'Рисунок'),
+        figureReferencePrefix: config.get('figureReferencePrefix', 'см. '),
+    };
+}
+
+/**
  * Обновить конфиг при изменении настроек
  */
-function setupConfigWatcher() {
+function setupDiplodocConfigChangeWatcher() {
     vscode.workspace.onDidChangeConfiguration(event => {
         if (event.affectsConfiguration(CONFIG_KEY)) {
             instance = null; // сбрасываем кэш
@@ -36,60 +50,17 @@ function setupConfigWatcher() {
 }
 
 /**
- * Возвращает обычный объект с конфигурацией
+ * @param {string} CONFIG_KEY
  * @returns {DiplodocConfig}
  */
-function buildDefaultDiplodocConfig() {
+function createConfigInVsCode(CONFIG_KEY) {
     const rawConfig = vscode.workspace.getConfiguration(CONFIG_KEY);
-
-    const result = DiplodocConfigEmpty();
-
-    for (const key of Object.keys(configDefinition)) {
-        result[key] = rawConfig.get(key, configDefinition[key].default);
-    }
-
-    return result;
-}
-
-/**
- * Возвращает Proxy — самый удобный вариант
- * @returns {DiplodocConfig}
- */
-function createConfigInVsCode() {
-    const rawConfig = vscode.workspace.getConfiguration(CONFIG_KEY);
-
-    let proxy = new Proxy(
-        {},
-        {
-            get(_, prop) {
-                if (prop in configDefinition) {
-                    return rawConfig.get(prop);
-                }
-                return undefined;
-            },
-        }
-    );
-    return proxy;
-}
-
-/**
- *
- * @returns {DiplodocConfig}
- */
-function DiplodocConfigEmpty() {
-    return {
-        figurePrefix: '',
-        figureReferencePrefix: '',
-        maxDepth: 0,
-        autoReindex: false,
-        defaultLanguage: 'en',
-        outputFolder: '',
-    };
+    return DiplodocConfigFromJson(rawConfig);
 }
 
 module.exports = {
-    readConfig,
-    setupConfigWatcher,
-    buildDefaultDiplodocConfig,
     createConfigInVsCode,
+    DiplodocConfigSharedInstance,
+    setupDiplodocConfigChangeWatcher,
+    DiplodocConfigFromWorkspace,
 };

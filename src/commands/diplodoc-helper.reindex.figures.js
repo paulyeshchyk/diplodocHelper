@@ -3,8 +3,8 @@
 const { nls_ts, translate } = require('../../nls_ts.js');
 const vscode = require('vscode');
 const { reindexFigures } = require('../plugins/reindexer/reindexer.figures.js');
-
-const { readConfig } = require('./vscode.config.manager.js');
+const { DiplodocConfigFromWorkspace } = require('./vscode.config.manager.js');
+const { CONFIG_KEY } = require('../plugins/constants.js');
 
 /**
  * @param {{ fsPath: string }} uri
@@ -27,8 +27,9 @@ async function ux_reindex_figures(uri) {
             cancellable: false,
         },
         async () => {
-            let prefix = readConfig().figurePrefix;
-            result = reindexFigures(targetDir, prefix);
+            const configObj = DiplodocConfigFromWorkspace(CONFIG_KEY);
+            const vscodeLocale = vscode.env.language;
+            result = reindexFigures(targetDir, vscodeLocale, configObj);
         }
     );
 

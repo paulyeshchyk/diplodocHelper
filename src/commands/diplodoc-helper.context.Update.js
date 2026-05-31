@@ -8,6 +8,8 @@ const path = require('path');
 const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
 const { parse, stringify } = require('../plugins/utils/frontmatter.utils.js');
 
+/** @import {ContextDto} from '../plugins/model/context.model.js' */
+
 /**
  * Надёжно парсит строку в массив контекстов.
  * Поддерживает запятые, пробелы, несколько разделителей подряд.

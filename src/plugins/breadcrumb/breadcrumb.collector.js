@@ -1,5 +1,3 @@
-// src/plugins/core/breadcrumb/breadcrumb-collector.js
-
 const fs = require('fs');
 const path = require('path');
 const { extractTitleFromHtml } = require('./breadcrumb.extractor');
@@ -17,8 +15,6 @@ function walkHtmlFilesBuildTitleMap(buildDir) {
     /** @type {Map<string, string>} */
     const titleMap = new Map();
 
-    //console.log('[Breadcrumb] walking from title to tile');
-
     walkHtmlFiles(buildDir, htmlPath => {
         const fileName = path.basename(htmlPath);
         if (DEFAULT_CONFIG.ignoreFiles.includes(fileName)) return;
@@ -33,7 +29,6 @@ function walkHtmlFilesBuildTitleMap(buildDir) {
         }
     });
 
-    //console.log(`[Breadcrumb] collected ${titleMap.size} titles.`);
     return titleMap;
 }
 

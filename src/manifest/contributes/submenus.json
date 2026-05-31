@@ -18,10 +18,6 @@
                 "label": "%submenu.context%"
             },
             {
-                "id": "diplodoc.generators.explorer.context.menu",
-                "label": "%submenu.generators%"
-            },
-            {
                 "id": "diplodoc.reindexier.explorer.context.menu",
                 "label": "%submenu.reindexier%"
             },

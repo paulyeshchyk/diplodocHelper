@@ -1,6 +1,6 @@
 // contexts.template.js
 
-/** @import {ContextMap} from '../model/imageitem.model' */
+/** @import {ContextMap} from '../model/contextmap.model' */
 
 const INDEX_MD_DEFAULT_CONTENT = (/** @type {string} */ title) =>
     ['---', `title: ${title}`, `sectionType: Page`, '---'].join('\n');

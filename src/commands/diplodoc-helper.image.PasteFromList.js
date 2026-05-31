@@ -1,11 +1,12 @@
 // diplodoc-helper.image.PasteFromList.js
 const vscode = require('vscode');
 const path = require('path');
-const { readConfig } = require('./vscode.config.manager');
 const { showImagePicker } = require('./vscode.prompts.imagePicker');
 const { getRelativeLink } = require('../plugins/utils/path.extract');
 const { ExtractMdLinks, ExtractFigures } = require('../plugins/utils/md.links.extract');
 const { FindMdFiles } = require('./vscode.FindFiles');
+const { DiplodocConfigFromWorkspace } = require('./vscode.config.manager');
+const { CONFIG_KEY } = require('../plugins/constants');
 
 /** @import {ImageItem} from '../plugins/model/imageitem.model' */
 
@@ -41,7 +42,7 @@ async function ux_image_paste_list() {
     if (!selectedImage) return;
 
     const relativeLink = getRelativeLink(currentFilePath, selectedImage);
-    const figureReferencePrefix = readConfig().figureReferencePrefix;
+    const figureReferencePrefix = DiplodocConfigFromWorkspace(CONFIG_KEY).figureReferencePrefix;
     const markdownLink = `${figureReferencePrefix}[*${selectedImage.caption}*](${relativeLink})`;
 
     await editor.edit(editBuilder => {

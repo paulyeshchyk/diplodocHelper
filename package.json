@@ -1,12 +1,12 @@
 {
     "name": "diplodochelper",
-    "publisher": "paulyestchick",
     "displayName": "%displayName%",
     "description": "%description%",
+    "version": "0.17.3",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
-    "version": "0.17.2",
+    "publisher": "paulyestchick",
     "main": "./src/extension.js",
     "engines": {
         "vscode": "^1.116.0"
@@ -60,11 +60,11 @@
             },
             {
                 "command": "diplodoc-helper.pasteLink",
-                "title": "%command.md.link.paste%"
+                "title": "%command.md.link.paste.fromClipboard%"
             },
             {
                 "command": "diplodoc-helper.pasteImageFromList",
-                "title": "Вставить из списка"
+                "title": "%command.md.link.paste.fromList%"
             },
             {
                 "command": "diplodoc-helper.pasteImageFromClipboard",
@@ -102,6 +102,10 @@
             {
                 "command": "diplodoc-helper.context.Delete",
                 "title": "%command.md.context.delete%"
+            },
+            {
+                "command": "diplodoc-helper.settings",
+                "title": "%command.settings%"
             }
         ],
         "menus": {
@@ -133,6 +137,10 @@
                     "command": "diplodoc-helper.pasteImageFromList",
                     "when": "editorTextFocus && resourceExtname == .md",
                     "group": "diplodoc.section@3"
+                },
+                {
+                    "command": "diplodoc-helper.settings",
+                    "group": "znavigation@2"
                 }
             ],
             "diplodoc.explorer.context.menu": [
@@ -170,11 +178,6 @@
                     "submenu": "diplodoc.helptag.explorer.context.menu",
                     "when": "explorerResourceIsFolder",
                     "group": "4.diplodoc.helptag@1"
-                },
-                {
-                    "submenu": "diplodoc.generators.explorer.context.menu",
-                    "when": "explorerResourceIsFolder",
-                    "group": "5.diplodoc.generators@1"
                 },
                 {
                     "submenu": "diplodoc.reindexier.explorer.context.menu",
@@ -233,9 +236,7 @@
                     "command": "diplodoc-helper.reindexFigures",
                     "when": "explorerResourceIsFolder",
                     "group": "1diplodoc.generators.section.command@2"
-                }
-            ],
-            "diplodoc.generators.explorer.context.menu": [
+                },
                 {
                     "command": "diplodoc-helper.wipeEmptyDirectories",
                     "when": "explorerResourceIsFolder",
@@ -261,10 +262,6 @@
                 "label": "%submenu.context%"
             },
             {
-                "id": "diplodoc.generators.explorer.context.menu",
-                "label": "%submenu.generators%"
-            },
-            {
                 "id": "diplodoc.reindexier.explorer.context.menu",
                 "label": "%submenu.reindexier%"
             },
@@ -276,30 +273,20 @@
         "configuration": {
             "title": "Diplodoc Helper",
             "properties": {
-                "diplodoc-helper.figurePrefix": {
+                "diplodoc-helper.figureCaptionPrefix": {
                     "type": "string",
-                    "default": "Рисунок",
-                    "description": "Префикс для подписей рисунков (например, 'Figure' для английского)"
+                    "default": "%extension.settings.figureCaptionPrefix.default%",
+                    "description": "%extension.settings.figureCaptionPrefix.description%"
                 },
                 "diplodoc-helper.figureReferencePrefix": {
                     "type": "string",
-                    "default": "see ",
-                    "description": "Префикс для ссылок (напр 'см.')"
-                },
-                "diplodoc-helper.maxDepth": {
-                    "type": "number",
-                    "default": 5,
-                    "description": "Максимальная глубина поиска разделов"
-                },
-                "diplodoc-helper.autoReindex": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Автоматически обновлять индексы при изменении структуры"
+                    "default": "%extension.settings.figureReferencePrefix.default%",
+                    "description": "%extension.settings.figureReferencePrefix.description%"
                 },
                 "diplodoc-helper.defaultLanguage": {
                     "type": "string",
                     "default": "ru",
-                    "description": "Язык интерфейса по умолчанию",
+                    "description": "%extension.settings.defaultLanguage.description%",
                     "enum": [
                         "ru",
                         "en"
@@ -308,11 +295,6 @@
                         "Русский",
                         "English"
                     ]
-                },
-                "diplodoc-helper.outputFolder": {
-                    "type": "string",
-                    "default": "docs",
-                    "description": "Папка для сгенерированных файлов (относительно корня рабочей области)"
                 }
             }
         }

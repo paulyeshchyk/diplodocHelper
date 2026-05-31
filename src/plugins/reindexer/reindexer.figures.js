@@ -2,14 +2,21 @@ const fs = require('fs');
 const path = require('path');
 
 const { TocYamlFileLoad } = require('../utils/yaml.toc.file');
+const { DiplodocConfigFromJson } = require('../utils/diplodoc.config');
+
+/** @import {DiplodocConfig} from '../model/diplodocconfig.model' */
 
 /**
  * @param {string} rootDir
- * @param {string} prefix
+ * @param {string} [targetLocale] - Язык, для которого нужно применить настройки (например, 'ru' или 'en')
+ * @param {string|object} [configJsonOrObj] - JSON-строка или объект конфигурации
  * @returns {ReindexFiguresResult}
  */
-function reindexFigures(rootDir, prefix) {
+function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
     console.log('Переиндексация рисунков...');
+
+    // 1. Парсим конфигурацию (она может быть строкой из CLI или готовым объектом)
+    let finalPrefix = readFinalPrefix(configJsonOrObj, targetLocale);
 
     const tocPath = path.join(rootDir, 'toc.yaml');
     if (!fs.existsSync(tocPath)) {
@@ -20,27 +27,23 @@ function reindexFigures(rootDir, prefix) {
     let tocDoc;
     try {
         tocDoc = TocYamlFileLoad(tocPath);
-    } catch (err) {
-        console.error('Ошибка парсинга toc.yaml:', err);
+    } catch {
         return { success: false, reason: 'parse_error', total: 0 };
     }
 
-    // Важно: корневой toc обычно содержит поле items
     const entries = Array.isArray(tocDoc) ? tocDoc : tocDoc?.items ? tocDoc?.items : [];
-
     const allMdFiles = collectMdFilesInOrder(entries, rootDir);
 
     if (allMdFiles.length === 0) {
-        console.warn('Не найдено .md файлов через toc.yaml');
         return { success: true, total: 0, reason: 'no md-file found' };
     }
 
     let figureCounter = 1;
-
     for (const mdFilePath of allMdFiles) {
         try {
             const content = fs.readFileSync(mdFilePath, 'utf8');
-            const result = processFigureCaptions(content, figureCounter, prefix);
+            // Передаем наш вычисленный finalPrefix
+            const result = processFigureCaptions(content, figureCounter, finalPrefix);
 
             if (result.newContent !== content) {
                 fs.writeFileSync(mdFilePath, result.newContent, 'utf8');
@@ -54,6 +57,25 @@ function reindexFigures(rootDir, prefix) {
 
     console.log(`Готово. Всего пронумеровано: ${figureCounter - 1}`);
     return { success: true, total: figureCounter - 1, reason: '' };
+}
+
+/**
+ * @param {string | object | undefined} configJsonOrObj
+ * @param {string | undefined} targetLocale
+ */
+function readFinalPrefix(configJsonOrObj, targetLocale) {
+    let config = DiplodocConfigFromJson(configJsonOrObj);
+    const activeLocale = targetLocale || config.defaultLanguage || 'ru';
+    return GetPrefixOrDefault(config, activeLocale, targetLocale);
+}
+
+/**
+ * @param {DiplodocConfig} config
+ * @param {string} activeLocale
+ * @param {string | undefined} targetLocale
+ */
+function GetPrefixOrDefault(config, activeLocale, targetLocale) {
+    return activeLocale !== targetLocale ? 'Figure' : config.figureCaptionPrefix || 'Figure';
 }
 
 /**

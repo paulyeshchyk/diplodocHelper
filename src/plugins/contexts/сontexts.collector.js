@@ -3,7 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const { extractContextTagValue } = require('./contexts.extractor');
-/** @import {ContextMap} from '../model/imageitem.model' */
+
+/** @import {ContextMap} from '../model/contextmap.model' */
 
 /**
  * Собирает все контексты из директории языка
