@@ -4,8 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const { extractTitleFromHtml } = require('./breadcrumb.extractor');
 const { DEFAULT_CONFIG } = require('./breadcrumb.config');
-const { getRelativePath, isRootIndex } = require('../core/utils');
-const { walk, isHtmlFile } = require('../core/utils');
+const { getRelativePath } = require('../utils/path.extract');
+const { walk } = require('../utils/walk');
+const { isHtmlFile, isRootIndex } = require('../utils/html.utils');
 
 /**
  * Собирает карту заголовков всех страниц
@@ -16,7 +17,7 @@ function walkHtmlFilesBuildTitleMap(buildDir) {
     /** @type {Map<string, string>} */
     const titleMap = new Map();
 
-    console.log('[Breadcrumb] walking from title to tile');
+    //console.log('[Breadcrumb] walking from title to tile');
 
     walkHtmlFiles(buildDir, htmlPath => {
         const fileName = path.basename(htmlPath);
@@ -32,7 +33,7 @@ function walkHtmlFilesBuildTitleMap(buildDir) {
         }
     });
 
-    console.log(`[Breadcrumb] collected ${titleMap.size} titles.`);
+    //console.log(`[Breadcrumb] collected ${titleMap.size} titles.`);
     return titleMap;
 }
 

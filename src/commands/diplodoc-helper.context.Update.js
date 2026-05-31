@@ -5,15 +5,8 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/directory.js');
-const { parse, stringify } = require('../plugins/utils/frontmatter');
-
-/**
- * @typedef {Object} ContextDto
- * @property {any} label
- * @property {string} action
- * @property {any} [value]
- */
+const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
+const { parse, stringify } = require('../plugins/utils/frontmatter.utils.js');
 
 /**
  * Надёжно парсит строку в массив контекстов.
@@ -34,7 +27,7 @@ function parseContexts(input) {
 /**
  * @param {{ fsPath: string }} uri
  */
-async function updateContext(uri) {
+async function ux_context_update(uri) {
     if (!uri) return;
 
     const sectionPath = uri.fsPath;
@@ -150,4 +143,4 @@ async function updateContext(uri) {
     }
 }
 
-module.exports = { updateContext };
+module.exports = { ux_context_update };

@@ -3,30 +3,31 @@
 const fs = require('fs');
 const path = require('path');
 
-/** @import { SectionTypeOption } from './diplodocTypes' */
-/** @import { CreateFolderResult } from './directory' */
-const { TEMPLATE_FOLDER_NAME } = require('../utils/templates');
+/** @import { SectionTypeOption } from '../model/section.model' */
+/** @import { CreateFolderResult } from './path.directory' */
+const { TEMPLATE_FOLDER_NAME } = require('../model/frontmatter.templates');
 
-const { TocYamlEntryPatchReference } = require('../utils/toc.yaml.entry');
-const { IndexMdFilePatch } = require('../utils/index.md.file');
-const { IndexYamlEntryPatchSection } = require('../utils/index.yaml.entry');
-const { TocYamlEntryPatchTitle } = require('../utils/toc.yaml.entry');
-const { composeFullTitle } = require('../utils/sectionTitle');
+const { TocYamlEntryPatchReference } = require('./yaml.toc.entry');
+const { IndexMdFilePatch } = require('./md.index.file');
+const { IndexYamlEntryPatchSection } = require('./yaml.index.entry');
+const { TocYamlEntryPatchTitle } = require('./yaml.toc.entry');
+const { composeFullTitle } = require('./frontmatter.section.title');
 
-const { canCreateFolder, createDirectory } = require('./directory');
+const { canCreateFolder, createDirectory } = require('./path.directory');
 
 /**
  * @param {string} targetDir
  * @param {SectionTypeOption} sectionType
  * @param {string} sectionName
  * @param {string | undefined} sectionIndex
+ * @param {(message: string) => void} onError
  * @returns {CreateFolderResult?}
  */
-function createSectionFolder(targetDir, sectionType, sectionName, sectionIndex) {
+function createSectionFolder(targetDir, sectionType, sectionName, sectionIndex, onError) {
     const folderName = TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex);
     const newFolderPath = path.join(targetDir, folderName);
 
-    return createDirectory(canCreateFolder, newFolderPath, true, folderName);
+    return createDirectory(canCreateFolder, newFolderPath, true, folderName, onError);
 }
 
 /**

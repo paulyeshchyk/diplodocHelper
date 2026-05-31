@@ -5,24 +5,28 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { promptSection } = require('../plugins/utils/prompts.js');
-const { IndexMdEntryReadTitle } = require('../plugins/utils/index.md.entry.js');
-const { isDiplodocSection } = require('../plugins/utils/directory.js');
+const { promptSection } = require('./vscode.prompts.js');
+const { IndexMdEntryReadTitle } = require('../plugins/utils');
+const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
 const { IndexMdEntryPatch } = require('../plugins/utils/diplodoc.flow.js');
-const { IndexMdEntryReadIndex } = require('../plugins/utils/index.md.entry.js');
-const { updateLinksAfterRename } = require('../plugins/utils/linksUpdater');
-const { getLanguageRoot } = require('../plugins/utils/directory');
-const { sortTocItems } = require('../plugins/utils/toc.yaml.sort');
+const { IndexMdEntryReadIndex } = require('../plugins/utils/md.index.entry.js');
+const { updateLinksAfterRename } = require('./vscode.linksUpdater.js');
+const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
+const { sortTocItems } = require('../plugins/utils/yaml.toc.sort.js');
 
-const { TocYamlEntryRemove, TocYamlEntryCreate } = require('../plugins/utils/toc.yaml.entry.js');
+const { TocYamlEntryRemove, TocYamlEntryCreate } = require('../plugins/utils/yaml.toc.entry.js');
 const { renameSectionFolderIfNeeded } = require('../plugins/utils/diplodoc.flow.js');
 
-const { composeFullTitle, isIndexedSectionType, composeFolderName } = require('../plugins/utils/sectionTitle');
+const {
+    composeFullTitle,
+    isIndexedSectionType,
+    composeFolderName,
+} = require('../plugins/utils/frontmatter.section.title.js');
 
 /**
  * @param {{ fsPath: any; }} uri
  */
-async function renameSection(uri) {
+async function ux_section_rename(uri) {
     if (!uri) return;
 
     const oldFolderPath = uri.fsPath;
@@ -107,4 +111,4 @@ async function renameSection(uri) {
     }
 }
 
-module.exports = { renameSection };
+module.exports = { ux_section_rename };

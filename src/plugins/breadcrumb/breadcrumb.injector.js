@@ -11,7 +11,7 @@ const path = require('path');
  */
 function injectScriptIntoFile(htmlPath, config, script) {
     if (!script) {
-        console.debug(`[Breadcrumb] Нет родителей для крошек: ${htmlPath}`);
+        //console.debug(`[Breadcrumb] Нет родителей для крошек: ${htmlPath}`);
         return;
     }
 
@@ -37,7 +37,7 @@ function injectScriptIntoFile(htmlPath, config, script) {
         content.slice(0, bodyCloseIndex) + '\n<script>\n' + script + '\n</script>\n' + content.slice(bodyCloseIndex);
 
     fs.writeFileSync(htmlPath, newContent, 'utf8');
-    console.debug(`[Breadcrumb] Вставлен скрипт: ${htmlPath}`);
+    //console.debug(`[Breadcrumb] Вставлен скрипт: ${htmlPath}`);
 }
 
 module.exports = {

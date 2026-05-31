@@ -5,9 +5,5 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "files.exclude": {
-    "**\\build": "explorerExcludedFiles",
-    "**\\node_modules": "explorerExcludedFiles",
-    "**/dist": "explorerExcludedFiles"
-  }
+  "js/ts.implicitProjectConfig.checkJs": true
 }

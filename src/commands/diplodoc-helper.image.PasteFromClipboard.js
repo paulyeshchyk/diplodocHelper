@@ -5,8 +5,8 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 const { getImageFromClipboard } = require('../plugins/utils/clipboard.image');
-const { buildFigure } = require('../plugins/utils/figure.js');
-const { slugify_0x30_0x39_0x41_0x5A } = require('../plugins/utils/slugify.js');
+const { buildFigure } = require('../plugins/utils/md.links.figure.js');
+const { slugify_0x30_0x39_0x41_0x5A } = require('../plugins/utils/encoding.slugify.js');
 const { transliterate } = require('transliteration');
 
 /**
@@ -25,7 +25,7 @@ function sanitizeFilename(name) {
 /**
  * Основная команда
  */
-async function pasteImageFromClipboardAsync() {
+async function ux_image_paste_clipboard() {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
         vscode.window.showErrorMessage(translate(nls_ts.paste.image.error.noactiveeditor));
@@ -114,4 +114,4 @@ async function pasteImageFromClipboardAsync() {
     }
 }
 
-module.exports = { pasteImageFromClipboardAsync };
+module.exports = { ux_image_paste_clipboard };

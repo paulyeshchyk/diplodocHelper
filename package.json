@@ -6,7 +6,7 @@
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
-    "version": "0.17.0",
+    "version": "0.17.2",
     "main": "./src/extension.js",
     "engines": {
         "vscode": "^1.116.0"
@@ -32,35 +32,35 @@
         "commands": [
             {
                 "command": "diplodoc-helper.createSection",
-                "title": "%command.createSection%"
+                "title": "%command.md.section.create%"
             },
             {
                 "command": "diplodoc-helper.deleteSection",
-                "title": "%command.deleteSection%"
+                "title": "%command.md.section.delete%"
             },
             {
                 "command": "diplodoc-helper.renameSection",
-                "title": "%command.renameSection%"
+                "title": "%command.md.section.update%"
             },
             {
                 "command": "diplodoc-helper.moveSection",
-                "title": "%command.moveSection%"
+                "title": "%command.md.section.move%"
             },
             {
                 "command": "diplodoc-helper.reindexDirectories",
-                "title": "%command.reindexDirectories%"
+                "title": "%command.fs.naming.update%"
             },
             {
                 "command": "diplodoc-helper.reindexFigures",
-                "title": "%command.reindexFigures%"
+                "title": "%command.md.link.rebuild%"
             },
             {
                 "command": "diplodoc-helper.copyLink",
-                "title": "%command.copyLink%"
+                "title": "%command.md.link.copy%"
             },
             {
                 "command": "diplodoc-helper.pasteLink",
-                "title": "%command.pasteLink%"
+                "title": "%command.md.link.paste%"
             },
             {
                 "command": "diplodoc-helper.pasteImageFromList",
@@ -69,79 +69,41 @@
             {
                 "command": "diplodoc-helper.pasteImageFromClipboard",
                 "when": "editorTextFocus && resourceExtname == .md",
-                "title": "%command.pasteImage%"
+                "title": "%command.md.image.paste%"
             },
             {
                 "command": "diplodoc-helper.generateContexts",
-                "title": "%command.generateContexts%"
+                "title": "%command.fe.context.generate%"
             },
             {
                 "command": "diplodoc-helper.wipeEmptyDirectories",
-                "title": "%command.wipeEmptyDirectories%"
+                "title": "%command.fs.empty.wipe%"
             },
             {
                 "command": "diplodoc-helper.generateHelpMaps",
-                "title": "%command.generateHelpMaps%"
+                "title": "%command.fe.helptag.generate%"
             },
             {
                 "command": "diplodoc-helper.generateBreadcrumbs",
-                "title": "%command.generateBreadcrumbs%"
+                "title": "%command.html.breadcrumbs.generate%"
             },
             {
                 "command": "diplodoc-helper.helptag.Update",
-                "title": "%command.updateHelptag%"
+                "title": "%command.md.helptag.update%"
             },
             {
                 "command": "diplodoc-helper.helptag.Delete",
-                "title": "%command.deleteHelptag%"
+                "title": "%command.md.helptag.delete%"
             },
             {
                 "command": "diplodoc-helper.context.Update",
-                "title": "%command.updateHelptag%"
+                "title": "%command.md.context.update%"
             },
             {
                 "command": "diplodoc-helper.context.Delete",
-                "title": "%command.deleteHelptag%"
+                "title": "%command.md.context.delete%"
             }
         ],
-        "configuration": {
-            "title": "Diplodoc Helper",
-            "properties": {
-                "diplodoc-helper.figurePrefix": {
-                    "type": "string",
-                    "default": "Рисунок",
-                    "description": "Префикс для подписей рисунков (например, 'Figure' для английского)"
-                },
-                "diplodocHelper.maxDepth": {
-                    "type": "number",
-                    "default": 5,
-                    "description": "Максимальная глубина поиска разделов"
-                },
-                "diplodocHelper.autoReindex": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Автоматически обновлять индексы при изменении структуры"
-                },
-                "diplodocHelper.defaultLanguage": {
-                    "type": "string",
-                    "default": "ru",
-                    "enum": [
-                        "ru",
-                        "en"
-                    ],
-                    "enumDescriptions": [
-                        "Русский",
-                        "English"
-                    ],
-                    "description": "Язык интерфейса по умолчанию"
-                },
-                "diplodocHelper.outputFolder": {
-                    "type": "string",
-                    "default": "docs",
-                    "description": "Папка для сгенерированных файлов (относительно корня рабочей области)"
-                }
-            }
-        },
         "menus": {
             "editor/context": [
                 {
@@ -237,6 +199,13 @@
                     "group": "1diplodoc.generators.section.command@2"
                 }
             ],
+            "diplodoc.breadcrumbs.explorer.context.menu": [
+                {
+                    "command": "diplodoc-helper.generateBreadcrumbs",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1diplodoc.generators.section.command@4"
+                }
+            ],
             "diplodoc.helptag.explorer.context.menu": [
                 {
                     "command": "diplodoc-helper.helptag.Update",
@@ -247,6 +216,11 @@
                     "command": "diplodoc-helper.helptag.Delete",
                     "when": "explorerResourceIsFolder",
                     "group": "1.diplodoc.section@6"
+                },
+                {
+                    "command": "diplodoc-helper.generateHelpMaps",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1diplodoc.generators.section.command@3"
                 }
             ],
             "diplodoc.reindexier.explorer.context.menu": [
@@ -262,16 +236,6 @@
                 }
             ],
             "diplodoc.generators.explorer.context.menu": [
-                {
-                    "command": "diplodoc-helper.generateHelpMaps",
-                    "when": "explorerResourceIsFolder",
-                    "group": "1diplodoc.generators.section.command@3"
-                },
-                {
-                    "command": "diplodoc-helper.generateBreadcrumbs",
-                    "when": "explorerResourceIsFolder",
-                    "group": "1diplodoc.generators.section.command@4"
-                },
                 {
                     "command": "diplodoc-helper.wipeEmptyDirectories",
                     "when": "explorerResourceIsFolder",
@@ -303,10 +267,58 @@
             {
                 "id": "diplodoc.reindexier.explorer.context.menu",
                 "label": "%submenu.reindexier%"
+            },
+            {
+                "id": "diplodoc.breadcrumbs.explorer.context.menu",
+                "label": "хлебные крошки"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "Diplodoc Helper",
+            "properties": {
+                "diplodoc-helper.figurePrefix": {
+                    "type": "string",
+                    "default": "Рисунок",
+                    "description": "Префикс для подписей рисунков (например, 'Figure' для английского)"
+                },
+                "diplodoc-helper.figureReferencePrefix": {
+                    "type": "string",
+                    "default": "see ",
+                    "description": "Префикс для ссылок (напр 'см.')"
+                },
+                "diplodoc-helper.maxDepth": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Максимальная глубина поиска разделов"
+                },
+                "diplodoc-helper.autoReindex": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Автоматически обновлять индексы при изменении структуры"
+                },
+                "diplodoc-helper.defaultLanguage": {
+                    "type": "string",
+                    "default": "ru",
+                    "description": "Язык интерфейса по умолчанию",
+                    "enum": [
+                        "ru",
+                        "en"
+                    ],
+                    "enumDescriptions": [
+                        "Русский",
+                        "English"
+                    ]
+                },
+                "diplodoc-helper.outputFolder": {
+                    "type": "string",
+                    "default": "docs",
+                    "description": "Папка для сгенерированных файлов (относительно корня рабочей области)"
+                }
+            }
+        }
     },
     "dependencies": {
+        "barrelsby": "^2.8.1",
         "gray-matter": "^4.0.3",
         "js-yaml": "^4.1.1",
         "transliteration": "^2.6.1",
@@ -325,6 +337,7 @@
         "postcss": "^8.5.15",
         "postcss-sorting": "^10.0.0",
         "prettier-plugin-css-order": "^2.2.0",
-        "prettier-plugin-organize-imports": "^4.3.0"
+        "prettier-plugin-organize-imports": "^4.3.0",
+        "typescript": "^6.0.3"
     }
 }

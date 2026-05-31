@@ -3,35 +3,35 @@
         "commands": [
             {
                 "command": "diplodoc-helper.createSection",
-                "title": "%command.createSection%"
+                "title": "%command.md.section.create%"
             },
             {
                 "command": "diplodoc-helper.deleteSection",
-                "title": "%command.deleteSection%"
+                "title": "%command.md.section.delete%"
             },
             {
                 "command": "diplodoc-helper.renameSection",
-                "title": "%command.renameSection%"
+                "title": "%command.md.section.update%"
             },
             {
                 "command": "diplodoc-helper.moveSection",
-                "title": "%command.moveSection%"
+                "title": "%command.md.section.move%"
             },
             {
                 "command": "diplodoc-helper.reindexDirectories",
-                "title": "%command.reindexDirectories%"
+                "title": "%command.fs.naming.update%"
             },
             {
                 "command": "diplodoc-helper.reindexFigures",
-                "title": "%command.reindexFigures%"
+                "title": "%command.md.link.rebuild%"
             },
             {
                 "command": "diplodoc-helper.copyLink",
-                "title": "%command.copyLink%"
+                "title": "%command.md.link.copy%"
             },
             {
                 "command": "diplodoc-helper.pasteLink",
-                "title": "%command.pasteLink%"
+                "title": "%command.md.link.paste%"
             },
             {
                 "command": "diplodoc-helper.pasteImageFromList",
@@ -40,39 +40,39 @@
             {
                 "command": "diplodoc-helper.pasteImageFromClipboard",
                 "when": "editorTextFocus && resourceExtname == .md",
-                "title": "%command.pasteImage%"
+                "title": "%command.md.image.paste%"
             },
             {
                 "command": "diplodoc-helper.generateContexts",
-                "title": "%command.generateContexts%"
+                "title": "%command.fe.context.generate%"
             },
             {
                 "command": "diplodoc-helper.wipeEmptyDirectories",
-                "title": "%command.wipeEmptyDirectories%"
+                "title": "%command.fs.empty.wipe%"
             },
             {
                 "command": "diplodoc-helper.generateHelpMaps",
-                "title": "%command.generateHelpMaps%"
+                "title": "%command.fe.helptag.generate%"
             },
             {
                 "command": "diplodoc-helper.generateBreadcrumbs",
-                "title": "%command.generateBreadcrumbs%"
+                "title": "%command.html.breadcrumbs.generate%"
             },
             {
                 "command": "diplodoc-helper.helptag.Update",
-                "title": "%command.updateHelptag%"
+                "title": "%command.md.helptag.update%"
             },
             {
                 "command": "diplodoc-helper.helptag.Delete",
-                "title": "%command.deleteHelptag%"
+                "title": "%command.md.helptag.delete%"
             },
             {
                 "command": "diplodoc-helper.context.Update",
-                "title": "%command.updateHelptag%"
+                "title": "%command.md.context.update%"
             },
             {
                 "command": "diplodoc-helper.context.Delete",
-                "title": "%command.deleteHelptag%"
+                "title": "%command.md.context.delete%"
             }
         ]
     }

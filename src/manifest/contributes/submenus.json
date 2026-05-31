@@ -24,6 +24,10 @@
             {
                 "id": "diplodoc.reindexier.explorer.context.menu",
                 "label": "%submenu.reindexier%"
+            },
+            {
+                "id": "diplodoc.breadcrumbs.explorer.context.menu",
+                "label": "хлебные крошки"
             }
         ]
     }

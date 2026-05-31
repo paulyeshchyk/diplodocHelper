@@ -3,13 +3,13 @@
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs');
-const { IndexMdFileRead } = require('../plugins/utils/index.md.file');
+const { IndexMdFileRead } = require('../plugins/utils/md.index.file');
 const { translate } = require('../../nls_loader');
 
 /**
  * @param {vscode.Uri} uri
  */
-async function copyLink(uri) {
+async function ux_link_copy(uri) {
     if (!uri) return;
 
     const fsPath = uri.fsPath;
@@ -44,4 +44,4 @@ function buildTitle(stats, fsPath) {
     }
 }
 
-module.exports = { copyLink };
+module.exports = { ux_link_copy };

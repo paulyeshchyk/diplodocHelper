@@ -95,6 +95,13 @@
                     "group": "1diplodoc.generators.section.command@2"
                 }
             ],
+            "diplodoc.breadcrumbs.explorer.context.menu": [
+                {
+                    "command": "diplodoc-helper.generateBreadcrumbs",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1diplodoc.generators.section.command@4"
+                }
+            ],
             "diplodoc.helptag.explorer.context.menu": [
                 {
                     "command": "diplodoc-helper.helptag.Update",
@@ -105,6 +112,11 @@
                     "command": "diplodoc-helper.helptag.Delete",
                     "when": "explorerResourceIsFolder",
                     "group": "1.diplodoc.section@6"
+                },
+                {
+                    "command": "diplodoc-helper.generateHelpMaps",
+                    "when": "explorerResourceIsFolder",
+                    "group": "1diplodoc.generators.section.command@3"
                 }
             ],
             "diplodoc.reindexier.explorer.context.menu": [
@@ -120,16 +132,6 @@
                 }
             ],
             "diplodoc.generators.explorer.context.menu": [
-                {
-                    "command": "diplodoc-helper.generateHelpMaps",
-                    "when": "explorerResourceIsFolder",
-                    "group": "1diplodoc.generators.section.command@3"
-                },
-                {
-                    "command": "diplodoc-helper.generateBreadcrumbs",
-                    "when": "explorerResourceIsFolder",
-                    "group": "1diplodoc.generators.section.command@4"
-                },
                 {
                     "command": "diplodoc-helper.wipeEmptyDirectories",
                     "when": "explorerResourceIsFolder",

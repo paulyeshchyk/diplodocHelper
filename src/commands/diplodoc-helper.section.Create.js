@@ -2,21 +2,21 @@
 
 const { nls_ts, translate } = require('../../nls_ts.js');
 const vscode = require('vscode');
-const { calculateNextIndex } = require('../plugins/reindexer/reindexMD.js');
-const { IndexMdFileCreate } = require('../plugins/utils/index.md.file.js');
-const { IndexYamlFileCreate } = require('../plugins/utils/index.yaml.file.js');
-const { TocYamlFileCreate } = require('../plugins/utils/toc.yaml.file.js');
-const { TocYamlEntryPatchItems } = require('../plugins/utils/toc.yaml.entry.js');
-const { FrontMatterSectionTypesIndexed } = require('../plugins/utils/constants');
-const { composeFullTitle } = require('../plugins/utils/sectionTitle');
-const { ShowSectionNameSelector, ShowSectionTypeSelector, promptSectionIndex } = require('../plugins/utils/prompts.js');
-const { isDiplodocSection, isLanguageRoot } = require('../plugins/utils/directory.js');
+const { calculateNextIndex } = require('../plugins/reindexer/reindexer.md.js');
+const { IndexMdFileCreate } = require('../plugins/utils/md.index.file.js');
+const { IndexYamlFileCreate } = require('../plugins/utils/yaml.index.file.js');
+const { TocYamlFileCreate } = require('../plugins/utils/yaml.toc.file.js');
+const { TocYamlEntryPatchItems } = require('../plugins/utils/yaml.toc.entry.js');
+const { FrontMatterSectionTypesIndexed } = require('../plugins/model/frontmatter.model.js');
+const { composeFullTitle } = require('../plugins/utils/frontmatter.section.title.js');
+const { ShowSectionNameSelector, ShowSectionTypeSelector, promptSectionIndex } = require('./vscode.prompts.js');
+const { isDiplodocSection, isLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { createSectionFolder } = require('../plugins/utils/diplodoc.flow.js');
 
 /**
  * @param {{ fsPath: any; }} uri
  */
-async function createSection(uri) {
+async function ux_section_create(uri) {
     if (!uri) return;
     const targetDir = uri.fsPath;
 
@@ -37,10 +37,12 @@ async function createSection(uri) {
 
     const sectionIndex = hasIndex ? await promptSectionIndex(sectionIndexCalculated) : '';
 
-    /** @import {CreateFolderResult} from '../plugins/utils/directory' */
+    /** @import {CreateFolderResult} from '../plugins/utils/path.directory.js' */
 
     /** @type {CreateFolderResult?} */
-    const folderResult = createSectionFolder(targetDir, sectionType, userSectionName, sectionIndex);
+    const folderResult = createSectionFolder(targetDir, sectionType, userSectionName, sectionIndex, message => {
+        vscode.window.showErrorMessage(message);
+    });
     if (!folderResult) return;
 
     const fullTitle = composeFullTitle(sectionIndex, sectionType, userSectionName);
@@ -63,4 +65,4 @@ async function createSection(uri) {
     }
 }
 
-module.exports = { createSection };
+module.exports = { ux_section_create };

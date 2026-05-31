@@ -6,9 +6,6 @@ const fs = require('fs');
 const { walkMdFilesGetContexts } = require('./сontexts.collector');
 const { writeTermFiles, writeIndexMd, writeTocAndIndexYaml } = require('./contexts.writer');
 
-/** @import {PluginExecutionResult} from '../core/types' */
-/** @import {ContextMap} from '../core/types' */
-
 /**
  * @param {string} lang
  * @param {string} langDir

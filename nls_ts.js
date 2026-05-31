@@ -5,21 +5,21 @@ const nls_ts = {
     description: 'description',
     displayName: 'displayName',
     command: {
-        copyLink: 'command.copyLink',
-        createSection: 'command.createSection',
-        deleteHelptag: 'command.deleteHelptag',
-        deleteSection: 'command.deleteSection',
-        generateBreadcrumbs: 'command.generateBreadcrumbs',
-        generateContexts: 'command.generateContexts',
-        generateHelpMaps: 'command.generateHelpMaps',
-        moveSection: 'command.moveSection',
-        pasteLink: 'command.pasteLink',
-        pasteImage: 'command.pasteImage',
-        reindexDirectories: 'command.reindexDirectories',
-        reindexFigures: 'command.reindexFigures',
-        renameSection: 'command.renameSection',
-        updateHelptag: 'command.updateHelptag',
-        wipeEmptyDirectories: 'command.wipeEmptyDirectories',
+        copyLink: 'command.md.link.copy',
+        createSection: 'command.md.section.create',
+        deleteHelptag: 'command.md.helptag.delete',
+        deleteSection: 'command.md.section.delete',
+        generateBreadcrumbs: 'command.html.breadcrumbs.generate',
+        generateContexts: 'command.fe.context.generate',
+        generateHelpMaps: 'command.fe.helptag.generate',
+        moveSection: 'command.md.section.move',
+        pasteLink: 'command.md.link.paste',
+        pasteImage: 'command.md.image.paste',
+        reindexDirectories: 'command.fs.naming.update',
+        reindexFigures: 'command.md.link.rebuild',
+        renameSection: 'command.md.section.update',
+        updateHelptag: 'command.md.helptag.update',
+        wipeEmptyDirectories: 'command.fs.empty.wipe',
     },
     submenu: {
         context: 'submenu.context',
@@ -235,12 +235,10 @@ const nls_ts = {
         },
     },
     paste: {
-        omage: {
+        image: {
             error: {
                 noactiveeditor: 'paste.omage.error.noactiveeditor',
             },
-        },
-        image: {
             warning: {
                 mdfileonly: 'paste.image.warning.mdfileonly',
                 emptybuffer: 'paste.image.warning.emptybuffer',

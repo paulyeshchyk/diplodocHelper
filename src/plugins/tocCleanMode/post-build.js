@@ -32,9 +32,10 @@ function injectCleanMode(buildDir) {
         if (content.includes('</body>')) {
             content = content.replace('</body>', `<script>${cleanScript}</script>\n</body>`);
             fs.writeFileSync(file, content);
-            console.log(`Injected clean-mode into: ${file}`);
+            //console.log(`[tocInject] Injected clean-mode into: ${file}`);
         }
     });
+    console.log(`[tocInject] Процесс завершён.`);
 }
 
 module.exports = { injectCleanMode };

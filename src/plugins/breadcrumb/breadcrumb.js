@@ -2,11 +2,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const { walkHtmlFilesBuildTitleMap, injectScriptIntoFile, DEFAULT_CONFIG } = require('.');
-
-const { walkHtmlFiles } = require('.');
-
+const { walkHtmlFiles, walkHtmlFilesBuildTitleMap } = require('./breadcrumb.collector');
+const { injectScriptIntoFile } = require('./breadcrumb.injector');
 const { generateBreadcrumbScript } = require('./breadcrumb.extractor');
+const { DEFAULT_CONFIG } = require('./breadcrumb.config');
 
 /**
  * @param {string} buildDir
@@ -36,7 +35,7 @@ function runGeneration(buildDir) {
         injectScriptIntoFile(htmlPath, config, script);
     });
 
-    console.log(`[Breadcrumb] Готово!`);
+    console.log(`[Breadcrumb] Процесс завершён.`);
     results.success.push(buildDir);
 
     return results;

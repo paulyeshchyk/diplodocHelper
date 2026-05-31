@@ -4,13 +4,13 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/directory.js');
-const { TocYamlEntryRemove } = require('../plugins/utils/toc.yaml.entry.js');
+const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
+const { TocYamlEntryRemove } = require('../plugins/utils/yaml.toc.entry.js');
 
 /**
  * @param {{ fsPath: string }} uri
  */
-async function deleteSection(uri) {
+async function ux_section_delete(uri) {
     if (!uri) return;
 
     const targetDir = uri.fsPath;
@@ -41,4 +41,4 @@ async function deleteSection(uri) {
     }
 }
 
-module.exports = { deleteSection };
+module.exports = { ux_section_delete };

@@ -3,11 +3,11 @@
 const { nls_ts, translate } = require('../../nls_ts.js');
 const { runGeneration } = require('../plugins/breadcrumb/breadcrumb');
 const path = require('path');
-let vscode = require('vscode');
+const vscode = require('vscode');
 
 const BuildFolderName = 'build';
 
-async function generateBreadcrumbs() {
+async function ux_breadcrumbs_generate() {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders) return;
     const projectRoot = workspaceFolders[0].uri.fsPath;
@@ -29,4 +29,4 @@ async function generateBreadcrumbs() {
         );
     }
 }
-module.exports = { generateBreadcrumbs, runGeneration };
+module.exports = { ux_breadcrumbs_generate, runGeneration };

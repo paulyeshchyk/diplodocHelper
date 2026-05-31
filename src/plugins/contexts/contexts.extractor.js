@@ -2,7 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parse } = require('../../plugins/utils/frontmatter');
+const { parse } = require('../utils/frontmatter.utils');
+const { getTitleFromMetadata } = require('../utils/frontmatter.utils');
 
 /**
  * Извлекает значение context из frontmatter с помощью gray-matter
@@ -44,8 +45,6 @@ function extractContextTagValue(fullPath, langDir, contextMap) {
         });
     }
 }
-
-const { getTitleFromMetadata } = require('../core/utils');
 
 /**
  * Формирует отображаемый заголовок статьи

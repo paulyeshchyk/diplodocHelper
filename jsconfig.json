@@ -2,9 +2,20 @@
   "compilerOptions": {
     "module": "CommonJS",
     "target": "ES2022",
-    "checkJs": true /* Typecheck .js files. */,
-    "lib": ["ES2022", "DOM"]
+    "checkJs": true,
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "noImplicitAny": true,
+    "strictNullChecks": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "src/plugins/breadcrumb/breadcrumb.template.js"
+  ]
 }

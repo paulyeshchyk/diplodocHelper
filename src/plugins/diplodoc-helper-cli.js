@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-const { runGeneration: generateHelpMap } = require('./helpMap/index.js');
+const { runGeneration: generateHelpMap } = require('./helpMap/helpmap.js');
 const { runGeneration: generateContexts } = require('./contexts/сontexts.js');
 const { runGeneration: generateBreadcrumb } = require('./breadcrumb/breadcrumb.js');
 const { injectCleanMode: generateTocCleanMode } = require('./tocCleanMode/post-build.js');
-const { reindexFigures } = require('./reindexer/reindexFigures.js');
+const { reindexFigures } = require('./reindexer/reindexer.figures.js');
 
 // Если запускают как cli
 if (require.main === module) {

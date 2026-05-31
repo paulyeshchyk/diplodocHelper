@@ -4,8 +4,8 @@ const { nls_ts, translate } = require('../../nls_ts.js');
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs').promises;
-const { buildFigure } = require('../plugins/utils/figure.js');
-const { slugify_0x30_0x39_0x41_0x5A_legacy } = require('../plugins/utils/slugify.js');
+const { buildFigure } = require('../plugins/utils/md.links.figure.js');
+const { slugify_0x30_0x39_0x41_0x5A_legacy } = require('../plugins/utils/encoding.slugify.js');
 /**
  * Вычисляет относительный путь с кодированием
  * @param {string} fromPath – путь к исходному файлу (директория, относительно которой строим путь)
@@ -32,7 +32,7 @@ function calculateRelativeMdPath(fromPath, toPath, addIndex) {
     return encodedPath.startsWith('.') ? encodedPath : './' + encodedPath;
 }
 
-async function pasteLink() {
+async function ux_link_paste() {
     const editor = vscode.window.activeTextEditor;
     if (!editor) return;
 
@@ -116,4 +116,4 @@ function BuildCalculationRequest(targetFilePath, isDirectory) {
     }
     return { addIndex: false, prefix: '!' };
 }
-module.exports = { pasteLink };
+module.exports = { ux_link_paste };

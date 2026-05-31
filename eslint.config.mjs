@@ -8,39 +8,40 @@ import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 
 export default defineConfig([
-  // Базовая конфигурация для JS
-  {
-    files: ['**/*.{js,mjs,cjs}'],
-    plugins: { js, prettier: prettierPlugin },
-    extends: [
-      'js/recommended',
-      eslintConfigPrettier, // отключает правила ESLint, которые конфликтуют с Prettier
-    ],
-    languageOptions: { globals: globals.node },
-    rules: {
-      'prettier/prettier': 'error', // показывает проблемы форматирования как ошибки ESLint
-      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
+    // Базовая конфигурация для JS
+    {
+        files: ['**/*.{js,mjs,cjs}'],
+        plugins: { js, prettier: prettierPlugin },
+        ignores: ['src/plugins/breadcrumb/breadcrumb.template.js'],
+        extends: [
+            'js/recommended',
+            eslintConfigPrettier, // отключает правила ESLint, которые конфликтуют с Prettier
+        ],
+        languageOptions: { globals: globals.node },
+        rules: {
+            'prettier/prettier': 'error', // показывает проблемы форматирования как ошибки ESLint
+            'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
+        },
     },
-  },
-  // JSON, Markdown, CSS – можно оставить без Prettier, если не нужно
-  { files: ['**/*.json'], plugins: { json }, language: 'json/json', extends: ['json/recommended'] },
-  {
-    files: ['**/*.jsonc'],
-    plugins: { json },
-    language: 'json/jsonc',
-    extends: ['json/recommended'],
-  },
-  {
-    files: ['**/*.json5'],
-    plugins: { json },
-    language: 'json/json5',
-    extends: ['json/recommended'],
-  },
-  {
-    files: ['**/*.md'],
-    plugins: { markdown },
-    language: 'markdown/commonmark',
-    extends: ['markdown/recommended'],
-  },
-  { files: ['**/*.css'], plugins: { css }, language: 'css/css', extends: ['css/recommended'] },
+    // JSON, Markdown, CSS – можно оставить без Prettier, если не нужно
+    { files: ['**/*.json'], plugins: { json }, language: 'json/json', extends: ['json/recommended'] },
+    {
+        files: ['**/*.jsonc'],
+        plugins: { json },
+        language: 'json/jsonc',
+        extends: ['json/recommended'],
+    },
+    {
+        files: ['**/*.json5'],
+        plugins: { json },
+        language: 'json/json5',
+        extends: ['json/recommended'],
+    },
+    {
+        files: ['**/*.md'],
+        plugins: { markdown },
+        language: 'markdown/commonmark',
+        extends: ['markdown/recommended'],
+    },
+    { files: ['**/*.css'], plugins: { css }, language: 'css/css', extends: ['css/recommended'] },
 ]);

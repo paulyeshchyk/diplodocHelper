@@ -5,13 +5,13 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/directory.js');
-const { parse, remove } = require('../plugins/utils/frontmatter');
+const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
+const { parse, remove } = require('../plugins/utils/frontmatter.utils.js');
 
 /**
  * @param {{ fsPath: string }} uri
  */
-async function deleteHelptag(uri) {
+async function ux_helptag_delete(uri) {
     if (!uri) return;
 
     const sectionPath = uri.fsPath;
@@ -63,4 +63,4 @@ function readHelpTag(indexMdPath) {
     }
 }
 
-module.exports = { deleteHelptag };
+module.exports = { ux_helptag_delete };

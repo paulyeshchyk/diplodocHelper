@@ -8,12 +8,12 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/directory.js');
-const { getSectionMetadata } = require('../plugins/utils/section.js');
-const { getLanguageRoot } = require('../plugins/utils/directory');
-const { reindexDirectory } = require('../plugins/reindexer/reindexDirectories.js');
-const { TocYamlEntryRemove, TocYamlEntryCreate } = require('../plugins/utils/toc.yaml.entry.js');
-const { updateLinksAfterRename } = require('../plugins/utils/linksUpdater');
+const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
+const { getSectionMetadata } = require('../plugins/utils/frontmatter.section.metadata.js');
+const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
+const { reindexDirectory } = require('../plugins/reindexer/reindexer.directories.js');
+const { TocYamlEntryRemove, TocYamlEntryCreate } = require('../plugins/utils/yaml.toc.entry.js');
+const { updateLinksAfterRename } = require('./vscode.linksUpdater.js');
 
 /**
  * @typedef {Object} MoveTarget
@@ -26,7 +26,7 @@ const { updateLinksAfterRename } = require('../plugins/utils/linksUpdater');
  * Главная команда перемещения
  * @param {{ fsPath: string }} uri
  */
-async function moveSection(uri) {
+async function ux_section_move(uri) {
     if (!uri) return;
 
     const sourcePath = uri.fsPath;
@@ -255,4 +255,4 @@ async function getComposedTitle(sectionPath) {
     return titleMatch ? titleMatch[1].trim() : path.basename(sectionPath);
 }
 
-module.exports = { moveSection };
+module.exports = { ux_section_move };

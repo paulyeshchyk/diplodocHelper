@@ -5,13 +5,13 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/directory');
-const { parse, stringify, remove } = require('../plugins/utils/frontmatter');
+const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
+const { parse, stringify, remove } = require('../plugins/utils/frontmatter.utils.js');
 
 /**
  * @param {{ fsPath: string }} uri
  */
-async function deleteContext(uri) {
+async function ux_context_delete(uri) {
     if (!uri) return;
 
     const sectionPath = uri.fsPath;
@@ -83,4 +83,4 @@ function readContexts(indexMdPath) {
     }
 }
 
-module.exports = { deleteContext };
+module.exports = { ux_context_delete };

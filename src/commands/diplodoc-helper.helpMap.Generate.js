@@ -23,12 +23,12 @@ const vscode = require('vscode');
 const outputFolderName = 'build';
 const docsFolderName = 'docs';
 
-const { runGeneration } = require('../plugins/helpMap/index.js');
+const { runGeneration } = require('../plugins/helpMap/helpmap.js');
 
 /**
  * Вызов из VS Code (Команда расширения)
  */
-async function generateHelpmap() {
+async function ux_helpmap_generate() {
     if (!vscode) return;
 
     // Если нажали в меню проводника, берем путь папки, иначе корень проекта
@@ -66,4 +66,4 @@ async function generateHelpmap() {
     }
 }
 
-module.exports = { generateHelpmap };
+module.exports = { ux_helpmap_generate };

@@ -5,7 +5,7 @@ const { runGeneration } = require('../plugins/contexts/сontexts');
 const path = require('path');
 let vscode = require('vscode');
 
-async function generateContexts() {
+async function ux_context_run_generation() {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders) return;
     const projectRoot = workspaceFolders[0].uri.fsPath;
@@ -20,4 +20,4 @@ async function generateContexts() {
         vscode.window.showErrorMessage(translate(nls_ts.plugin.context.generate.error.notfound));
     }
 }
-module.exports = { generateContexts, runGeneration };
+module.exports = { ux_context_run_generation, runGeneration };
