@@ -4,8 +4,9 @@ const { nls_ts, translate } = require('../../nls_ts.js');
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs').promises;
-const { buildFigure } = require('../plugins/utils/md.links.figure.js');
-const { slugify_0x30_0x39_0x41_0x5A_legacy } = require('../plugins/utils/encoding.slugify.js');
+const { buildFigure, buildFigureId } = require('../plugins/utils/md.links.figure.js');
+const INDEX_MD = 'index.md';
+
 /**
  * Вычисляет относительный путь с кодированием
  * @param {string} fromPath – путь к исходному файлу (директория, относительно которой строим путь)
@@ -17,7 +18,7 @@ function calculateRelativeMdPath(fromPath, toPath, addIndex) {
 
     if (addIndex) {
         if (!targetFile.endsWith('.md')) {
-            targetFile = path.join(targetFile, 'index.md');
+            targetFile = path.join(targetFile, INDEX_MD);
         }
     }
 
@@ -74,8 +75,7 @@ async function ReadLinkText(clipboardText, sourceFilePath) {
     // === Для изображений ===
     const altText = path.basename(data.sourceLinkName, path.extname(data.sourceLinkName));
 
-    // Предлагаем осмысленный id
-    const suggestedId = `fig-${slugify_0x30_0x39_0x41_0x5A_legacy(altText)}`;
+    const suggestedId = buildFigureId(altText);
 
     return buildFigure(mdPath, altText, suggestedId);
 }

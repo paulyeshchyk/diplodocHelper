@@ -11,16 +11,7 @@ const {
     INDEX_YAML_LINK_TEMPLATE,
 } = require('./contexts.template');
 
-/**
- * Приводит строку к slug-формату (для URL, имён файлов)
- * @param {string} str
- */
-function slugify_url(str) {
-    return str
-        .replace(/[^\p{L}\p{N}\-._]/gu, '_')
-        .replace(/_+/g, '_')
-        .replace(/^_+|_+$/g, '');
-}
+const { slugify_filename } = require('../utils/encoding.slugify');
 
 /** @import {ContextMap} from '../model/contextmap.model' */
 
@@ -31,7 +22,7 @@ function slugify_url(str) {
  */
 function writeTermFiles(outputDir, sortedTerms, contextMap) {
     for (const term of sortedTerms) {
-        const slug = slugify_url(term);
+        const slug = slugify_filename(term);
         let content = `# ${term.toUpperCase()}\n\n`;
         contextMap[term]?.pages.forEach(p => {
             content += `* [${p.title}](../${p.href})\n`;
@@ -54,7 +45,7 @@ function writeIndexMd(outputDir, sortedTerms, contextMap, lang, title) {
 
     for (const term of sortedTerms) {
         const firstLetter = term.charAt(0).toUpperCase();
-        const slug = slugify_url(term);
+        const slug = slugify_filename(term);
         const count = contextMap[term]?.rank || 0;
 
         if (firstLetter !== currentLetter) {
@@ -78,7 +69,7 @@ function writeTocAndIndexYaml(outputDir, sortedTerms, contextMap, lang) {
     const title = lang === 'ru' ? 'Контексты' : 'Contexts';
     const slugifiedItems = sortedTerms.map(t => ({
         term: t,
-        slug: slugify_url(t),
+        slug: slugify_filename(t),
     }));
 
     const tocItems = slugifiedItems.map(i => TOC_YAML_LINK_TEMPLATE(i)).join('\n');

@@ -5,22 +5,10 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 const { getImageFromClipboard } = require('../plugins/utils/clipboard.image');
-const { buildFigure } = require('../plugins/utils/md.links.figure.js');
-const { slugify_0x30_0x39_0x41_0x5A } = require('../plugins/utils/encoding.slugify.js');
-const { transliterate } = require('transliteration');
+const { buildFigure, buildFigureId } = require('../plugins/utils/md.links.figure.js');
+const { slugify_latin_alphanumeric } = require('../plugins/utils/encoding.slugify.js');
 
-/**
- * Санитизация имени файла (без расширения)
- * @param {string} name
- */
-function sanitizeFilename(name) {
-    return transliterate(name)
-        .trim()
-        .replace(/[^a-zA-Zа-яА-Я0-9\s\-_]/g, '')
-        .replace(/\s+/g, '_')
-        .replace(/_+/g, '_')
-        .slice(0, 100);
-}
+const imageExtension = '.png';
 
 /**
  * Основная команда
@@ -52,10 +40,9 @@ async function ux_image_paste_clipboard() {
     }
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').slice(0, 19);
-
     const defaultFilename = translate(nls_ts.screenshot.name.prompt, timestamp);
 
-    // 1. Запрашиваем имя у пользователя (только один диалог)
+    // 1. Запрашиваем имя у пользователя
     const userInput = await vscode.window.showInputBox({
         prompt: translate(nls_ts.screenshot.name.prompt),
         placeHolder: translate(nls_ts.screenshot.description.placeholder),
@@ -64,11 +51,11 @@ async function ux_image_paste_clipboard() {
             if (!value || value.trim().length === 0) {
                 return 'Имя не может быть пустым';
             }
-            const sanitized = sanitizeFilename(value);
-            if (sanitized.length === 0) {
+            const cleanName = slugify_latin_alphanumeric(value);
+            if (cleanName.length === 0) {
                 return translate(nls_ts.screenshot.name.error.wrongcharacters);
             }
-            const testPath = path.join(imagesDir, `${sanitized}.png`);
+            const testPath = path.join(imagesDir, `${cleanName}${imageExtension}`);
             if (fs.existsSync(testPath)) {
                 return translate(nls_ts.filename.error.alreadyexists);
             }
@@ -76,10 +63,10 @@ async function ux_image_paste_clipboard() {
         },
     });
 
-    if (!userInput) return; // пользователь отменил
+    if (!userInput) return;
 
     // === Основная логика ===
-    const cleanName = sanitizeFilename(userInput); // для имени файла
+    const cleanName = slugify_latin_alphanumeric(userInput);
     const fileName = `${cleanName}.png`;
     const imagePath = path.join(imagesDir, fileName);
 
@@ -96,10 +83,11 @@ async function ux_image_paste_clipboard() {
             relativePath = './' + relativePath;
         }
 
-        // Используем введённое пользователем имя как alt-текст (читаемое)
+        // Alt-текст – введённое пользователем имя (оригинал, не очищенный)
         const altText = userInput.trim();
 
-        const customId = `fig-${slugify_0x30_0x39_0x41_0x5A(cleanName)}`;
+        // customId генерируем из очищенного имени (латиница + подчёркивания)
+        const customId = buildFigureId(cleanName);
 
         const figureBlock = buildFigure(relativePath, altText, customId);
 

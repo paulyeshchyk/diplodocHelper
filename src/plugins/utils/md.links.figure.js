@@ -1,5 +1,5 @@
 // utils/figure.js
-const { slugify_0x30_0x39_0x41_0x5A_legacy2 } = require('./encoding.slugify');
+const { slugify_latin_alphanumeric } = require('./encoding.slugify');
 
 /**
  * Создаёт figure с стабильным id для ссылок
@@ -10,11 +10,18 @@ const { slugify_0x30_0x39_0x41_0x5A_legacy2 } = require('./encoding.slugify');
 function buildFigure(url, altText, customId = null) {
     const linkBlock = `![${altText}](${url})`;
 
-    const figureId = customId || `fig-${slugify_0x30_0x39_0x41_0x5A_legacy2(altText)}`;
+    const figureId = customId || buildFigureId(altText);
 
     const figureBlock = `<figure><figcaption class="imageDescription" id="${figureId}">${altText}</figcaption></figure>`;
 
     return `${linkBlock}\n\n${figureBlock}\n`;
 }
 
-module.exports = { buildFigure };
+/**
+ * @param {string} altText
+ */
+function buildFigureId(altText) {
+    return `fig-${slugify_latin_alphanumeric(altText)}`;
+}
+
+module.exports = { buildFigure, buildFigureId };
