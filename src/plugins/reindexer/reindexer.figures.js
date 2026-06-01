@@ -4,20 +4,17 @@ const path = require('path');
 const { TocYamlFileLoad } = require('../utils/yaml.toc.file');
 const { DiplodocConfigFromJson } = require('../utils/diplodoc.config');
 
-/** @import {DiplodocConfig} from '../model/diplodocconfig.model' */
-
 /**
- * @param {string} rootDir
- * @param {string} [targetLocale] - Язык, для которого нужно применить настройки (например, 'ru' или 'en')
- * @param {string|object} [configJsonOrObj] - JSON-строка или объект конфигурации
- * @returns {ReindexFiguresResult}
+ * @import { DiplodocConfig } from '../model/diplodocconfig.model'
+ */
+
+/** @param {string} rootDir
+ * @param {string | undefined} targetLocale
+ * @param {string | object | undefined} configJsonOrObj
  */
 function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
     console.log('Переиндексация рисунков...');
-
-    // 1. Парсим конфигурацию (она может быть строкой из CLI или готовым объектом)
-    let finalPrefix = readFinalPrefix(configJsonOrObj, targetLocale);
-
+    const finalPrefix = readFinalPrefix(configJsonOrObj, targetLocale);
     const tocPath = path.join(rootDir, 'toc.yaml');
     if (!fs.existsSync(tocPath)) {
         console.warn('toc.yaml не найден');
@@ -31,29 +28,43 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
         return { success: false, reason: 'parse_error', total: 0 };
     }
 
-    const entries = Array.isArray(tocDoc) ? tocDoc : tocDoc?.items ? tocDoc?.items : [];
+    const entries = Array.isArray(tocDoc) ? tocDoc : tocDoc?.items || [];
     const allMdFiles = collectMdFilesInOrder(entries, rootDir);
 
     if (allMdFiles.length === 0) {
         return { success: true, total: 0, reason: 'no md-file found' };
     }
 
+    // ---- ПЕРВЫЙ ПРОХОД: обновляем подписи и собираем маппинг ----
+    let globalFigureMapping = new Map();
     let figureCounter = 1;
+
     for (const mdFilePath of allMdFiles) {
         try {
             const content = fs.readFileSync(mdFilePath, 'utf8');
-            // Передаем наш вычисленный finalPrefix
-            const result = processFigureCaptions(content, figureCounter, finalPrefix);
+            const { newContent, newCounter, figureMapping } = processFigureCaptions(
+                content,
+                figureCounter,
+                finalPrefix
+            );
 
-            if (result.newContent !== content) {
-                fs.writeFileSync(mdFilePath, result.newContent, 'utf8');
-                console.log(`${path.relative(rootDir, mdFilePath)} — +${result.newCounter - figureCounter} рис.`);
+            // Сливаем маппинг
+            for (const [id, num] of figureMapping) {
+                globalFigureMapping.set(id, num);
             }
-            figureCounter = result.newCounter;
+
+            if (newContent !== content) {
+                fs.writeFileSync(mdFilePath, newContent, 'utf8');
+                console.log(`${path.relative(rootDir, mdFilePath)} — +${newCounter - figureCounter} рис.`);
+            }
+            figureCounter = newCounter;
         } catch (err) {
             console.error(`Ошибка обработки ${mdFilePath}:`, err);
         }
     }
+
+    // ---- ВТОРОЙ ПРОХОД: обновляем ссылки ----
+    updateAllLinks(allMdFiles, globalFigureMapping, finalPrefix);
 
     console.log(`Готово. Всего пронумеровано: ${figureCounter - 1}`);
     return { success: true, total: figureCounter - 1, reason: '' };
@@ -140,41 +151,115 @@ function collectMdFilesInOrder(entries, rootDir, currentPath = '', visited = new
 }
 
 /**
- * Обработка подписей к рисункам
- * Обработка подписей к рисункам — сквозная нумерация
  * @param {string} content
  * @param {number} startCounter
  * @param {string} prefix
+ * @returns {{ newContent: string, newCounter: number, figureMapping: Map<string, number> }}
  */
 function processFigureCaptions(content, startCounter, prefix) {
     let counter = startCounter;
+    const mapping = new Map(); // id -> новый номер
 
     const regex =
         /<figure>\s*<figcaption\s+class="imageDescription"([^>]*?)\s+id="([^"]+)"([^>]*?)>([\s\S]*?)<\/figcaption>\s*<\/figure>/gi;
 
-    const newContent = content.replace(
-        regex,
-        (
-            /** @type {any} */ match,
-            /** @type {any} */ beforeId,
-            /** @type {any} */ id,
-            /** @type {any} */ afterId,
-            /** @type {string} */ captionText
-        ) => {
-            // Удаляем любой предыдущий номер (Рисунок 123., 456., Figure 5. и т.д.)
-            let cleaned = captionText
-                .replace(/^(Рисунок|Figure|Fig\.|Рис\.)\s*\d+\.?\s*/i, '')
-                .replace(/^\d+\.\s*/, '')
-                .trim();
+    const newContent = content.replace(regex, (match, beforeId, id, afterId, captionText) => {
+        // Очищаем старый номер
+        let cleaned = captionText
+            .replace(/^(Рисунок|Figure|Fig\.|Рис\.)\s*\d+\.?\s*/i, '')
+            .replace(/^\d+\.\s*/, '')
+            .trim();
 
-            const newCaption = `${prefix} ${counter}. ${cleaned}`;
-            const replacement = `<figure><figcaption class="imageDescription" id="${id}"${afterId}>${newCaption}</figcaption></figure>`;
-            counter++;
-            return replacement;
-        }
-    );
+        const newCaption = `${prefix} ${counter}. ${cleaned}`;
+        const replacement = `<figure><figcaption class="imageDescription" id="${id}"${afterId}>${newCaption}</figcaption></figure>`;
 
-    return { newContent, newCounter: counter };
+        mapping.set(id, counter); // запоминаем новый номер для этого id
+        counter++;
+        return replacement;
+    });
+
+    return { newContent, newCounter: counter, figureMapping: mapping };
 }
 
+/**
+ * Обновляет номера в тексте ссылок, ведущих на рисунки
+ * @param {string} filePath - путь к md-файлу
+ * @param {Map<string, number>} figureNumberMap - id -> новый номер
+ * @param {string} defaultPrefix - префикс ('Рисунок' или 'Figure') – используется, если не удалось определить из ссылки
+ */
+function updateFigureLinksInFile(filePath, figureNumberMap, defaultPrefix) {
+    let content = fs.readFileSync(filePath, 'utf8');
+    let updated = false;
+
+    // Ищем markdown-ссылки: [текст](путь#anchor)
+    const linkRegex = /\[([^\]]+)\]\(([^)]*?)(#fig-[^)]+)\)/g;
+
+    const newContent = content.replace(linkRegex, (match, linkText, pathPart, anchor) => {
+        const figId = anchor.substring(1);
+        if (!figureNumberMap.has(figId)) return match;
+
+        const newNumber = figureNumberMap.get(figId);
+
+        // 1. Определяем, есть ли markdown-форматирование по краям
+        let formatting = '';
+        let innerText = linkText;
+
+        // Поддерживаем: *...*, **...**, _..._, __...__
+        const formatPatterns = [
+            { regex: /^(\*{1,2})(.*?)\1$/, wrapper: '$1' }, // * или **
+            { regex: /^(_{1,2})(.*?)\1$/, wrapper: '$1' }, // _ или __
+        ];
+
+        for (const pattern of formatPatterns) {
+            const matchFormat = linkText.match(pattern.regex);
+            if (matchFormat) {
+                formatting = matchFormat[1];
+                innerText = matchFormat[2];
+                break;
+            }
+        }
+
+        // 2. Очищаем innerText от старого префикса и номера (аналогично processFigureCaptions)
+        let cleaned = innerText
+            .replace(/^(Рисунок|Figure|Fig\.|Рис\.)\s*\d+\.?\s*/i, '')
+            .replace(/^\d+\.\s*/, '')
+            .trim();
+
+        // 3. Определяем, какой префикс использовать (русский/английский) – лучше взять из конфига,
+        //    но можно попробовать определить по исходному тексту ссылки
+        let prefix = defaultPrefix;
+        const prefixMatch = innerText.match(/^(Рисунок|Figure|Fig\.|Рис\.)\s*/i);
+        if (prefixMatch) {
+            prefix = prefixMatch[1];
+        }
+
+        // 4. Формируем новый текст внутри ссылки
+        const newInnerText = `${prefix} ${newNumber}. ${cleaned}`;
+        // Если было форматирование – оборачиваем, иначе оставляем как есть
+        const newLinkText = formatting ? `${formatting}${newInnerText}${formatting}` : newInnerText;
+
+        updated = true;
+        return `[${newLinkText}](${pathPart}${anchor})`;
+    });
+
+    if (updated) {
+        fs.writeFileSync(filePath, newContent, 'utf8');
+        console.log(`Обновлены ссылки в ${path.relative(process.cwd(), filePath)}`);
+    }
+}
+
+/**
+ * @param {string[]} files
+ * @param {Map<any, any>} figureNumberMap
+ * @param {string} defaultPrefix
+ */
+function updateAllLinks(files, figureNumberMap, defaultPrefix) {
+    for (const file of files) {
+        try {
+            updateFigureLinksInFile(file, figureNumberMap, defaultPrefix);
+        } catch (err) {
+            console.error(`Ошибка обновления ссылок в ${file}:`, err);
+        }
+    }
+}
 module.exports = { reindexFigures };
