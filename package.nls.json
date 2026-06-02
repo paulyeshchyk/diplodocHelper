@@ -111,5 +111,22 @@
   "submenu.diplodoc": "Diplodoc",
   "submenu.generators": "Other",
   "submenu.helptag": "Helptag",
-  "submenu.reindexier": "Reindex"
+  "submenu.reindexier": "Reindex",
+  "plugin.link.paste.anchor.select": "Select anchor or enter custom",
+  "plugin.link.paste.anchor.quickPick.label": "$(pencil) Enter custom anchor...",
+  "plugin.link.paste.anchor.quickPick.description": "type any anchor manually",
+  "plugin.link.paste.anchor.input.prompt": "Enter anchor name (without #)",
+  "plugin.link.paste.anchor.input.placeHolder": "e.g., my-custom-anchor",
+  "plugin.link.paste.anchor.input.validate.error.emptyAnchor": "Anchor cannot be empty",
+  "plugin.link.paste.anchor.input.validate.error.incorrectCharacters": "Anchor cannot contain spaces",
+  "plugin.link.addAnchor.error.noEditor": "No active editor",
+  "plugin.link.addAnchor.error.notMarkdown": "This command can only be used in Markdown files",
+  "plugin.link.addAnchor.error.noSelection": "No text selected",
+  "plugin.link.addAnchor.error.emptySelection": "Selected text is empty",
+  "plugin.link.addAnchor.error.invalidContext": "Cannot add anchor inside HTML tag or Markdown link",
+  "plugin.link.addAnchor.error.invalidId": "Invalid anchor ID",
+  "plugin.link.addAnchor.input.prompt": "Enter anchor ID (will be transliterated)",
+  "plugin.link.addAnchor.input.placeHolder": "e.g., my-anchor",
+  "plugin.link.addAnchor.input.error.empty": "Anchor ID cannot be empty",
+  "plugin.link.addAnchor.input.error.invalidChars": "Only letters, numbers, hyphens and underscores allowed"
 }

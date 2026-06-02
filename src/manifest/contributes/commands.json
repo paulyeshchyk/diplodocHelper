@@ -2,6 +2,10 @@
     "contributes": {
         "commands": [
             {
+                "command": "diplodoc-helper.link.addAnchor",
+                "title": "Бросить якорь"
+            },
+            {
                 "command": "diplodoc-helper.createSection",
                 "title": "%command.md.section.create%"
             },

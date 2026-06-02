@@ -19,6 +19,7 @@ async function ux_link_copy(uri) {
 
     let title = buildTitle(stats, fsPath);
 
+    /** @type {ClipboardLink}*/
     const data = {
         sourceLinkName: title,
         sourceLinkPath: targetPath,

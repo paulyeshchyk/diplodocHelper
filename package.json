@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "0.17.5",
+    "version": "0.18.0",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -30,6 +30,10 @@
     },
     "contributes": {
         "commands": [
+            {
+                "command": "diplodoc-helper.link.addAnchor",
+                "title": "Бросить якорь"
+            },
             {
                 "command": "diplodoc-helper.createSection",
                 "title": "%command.md.section.create%"
@@ -124,23 +128,29 @@
             ],
             "diplodoc.editor.context.menu": [
                 {
+                    "submenu": "diplodoc.editor.context.menu",
+                    "when": "editorLangId == markdown && editorHasSelection",
+                    "command": "diplodoc-helper.link.addAnchor",
+                    "group": "1diplodoc.section@1"
+                },
+                {
                     "command": "diplodoc-helper.pasteLink",
                     "when": "editorTextFocus && !editorReadonly",
-                    "group": "diplodoc.section@1"
+                    "group": "2diplodoc.section@1"
                 },
                 {
                     "command": "diplodoc-helper.pasteImageFromClipboard",
                     "when": "editorTextFocus && resourceExtname == .md",
-                    "group": "diplodoc.section@2"
+                    "group": "2diplodoc.section@2"
                 },
                 {
                     "command": "diplodoc-helper.pasteImageFromList",
                     "when": "editorTextFocus && resourceExtname == .md",
-                    "group": "diplodoc.section@3"
+                    "group": "2diplodoc.section@3"
                 },
                 {
                     "command": "diplodoc-helper.settings",
-                    "group": "znavigation@2"
+                    "group": "3navigation@2"
                 }
             ],
             "diplodoc.explorer.context.menu": [

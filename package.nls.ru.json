@@ -111,5 +111,22 @@
   "submenu.diplodoc": "Diplodoc",
   "submenu.generators": "Прочее",
   "submenu.helptag": "Helptag",
-  "submenu.reindexier": "Прочее"
+  "submenu.reindexier": "Прочее",
+  "plugin.link.paste.anchor.select": "Выберите якорь или введите свой",
+  "plugin.link.paste.anchor.quickPick.label": "$(pencil) Ввести свой якорь...",
+  "plugin.link.paste.anchor.quickPick.description": "введите якорь вручную",
+  "plugin.link.paste.anchor.input.prompt": "Введите имя якоря (без #)",
+  "plugin.link.paste.anchor.input.placeHolder": "например, moj-yakor",
+  "plugin.link.paste.anchor.input.validate.error.emptyAnchor": "Якорь не может быть пустым",
+  "plugin.link.paste.anchor.input.validate.error.incorrectCharacters": "Якорь не может содержать пробелы",
+  "plugin.link.addAnchor.error.noEditor": "Нет активного редактора",
+  "plugin.link.addAnchor.error.notMarkdown": "Эта команда может использоваться только в Markdown-файлах",
+  "plugin.link.addAnchor.error.noSelection": "Текст не выделен",
+  "plugin.link.addAnchor.error.emptySelection": "Выделенный текст пуст",
+  "plugin.link.addAnchor.error.invalidContext": "Нельзя добавить якорь внутри HTML-тега или Markdown-ссылки",
+  "plugin.link.addAnchor.error.invalidId": "Неверный идентификатор якоря",
+  "plugin.link.addAnchor.input.prompt": "Введите идентификатор якоря (будет транслитерирован)",
+  "plugin.link.addAnchor.input.placeHolder": "например, moj-yakor",
+  "plugin.link.addAnchor.input.error.empty": "Идентификатор якоря не может быть пустым",
+  "plugin.link.addAnchor.input.error.invalidChars": "Разрешены только буквы, цифры, дефисы и подчёркивания"
 }
