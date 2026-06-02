@@ -2,25 +2,6 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "1. Компиляция VSIX",
-      "type": "shell",
-      "command": "npm install;vsce package --out build/ --allow-missing-repository",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "presentation": {
-        "echo": false,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": false,
-        "clear": true,
-        "close": false
-      }
-    },
-    {
       "label": "1. Собрать VSIX (с увеличением patch-версии)",
       "type": "shell",
       "command": "node scripts/bump-version.js",
@@ -41,7 +22,8 @@
       "command": "node scripts/bump-minor.js",
       "problemMatcher": [],
       "group": {
-        "kind": "build"
+        "kind": "build",
+        "isDefault": true
       },
       "presentation": {
         "clear": true,

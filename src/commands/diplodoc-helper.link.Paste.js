@@ -47,11 +47,12 @@ async function promptAnchorSelection(anchors) {
         anchor: item.anchor,
     }));
 
-    quickPickItems.push({
+    let item = {
         label: translate(nls_ts.plugin.link.paste.anchor.quickPick.label),
         description: translate(nls_ts.plugin.link.paste.anchor.quickPick.description),
         anchor: '__CUSTOM__',
-    });
+    };
+    quickPickItems.push(item);
 
     const selected = await vscode.window.showQuickPick(quickPickItems, {
         placeHolder: translate(nls_ts.plugin.link.paste.anchor.select),
