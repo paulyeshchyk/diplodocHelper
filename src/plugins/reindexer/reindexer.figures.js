@@ -98,33 +98,11 @@ function GetPrefixOrDefault(config, activeLocale, targetLocale) {
 function collectMdFilesInOrder(entries, rootDir, currentPath = '', visited = new Set()) {
     if (!entries) return [];
 
-    // Если передан не массив — оборачиваем
     const items = Array.isArray(entries) ? entries : [entries];
     let files = [];
 
     for (const entry of items) {
-        // 1. include
-        if (entry.include?.path) {
-            const includeRelPath = entry.include.path;
-            const absIncludePath = path.join(rootDir, currentPath, includeRelPath);
-            const canonical = path.resolve(absIncludePath);
-
-            if (visited.has(canonical)) continue;
-            visited.add(canonical);
-
-            try {
-                const toc = TocYamlFileLoad(absIncludePath);
-                const subItems = toc.items;
-
-                const includeDir = path.join(currentPath, path.dirname(includeRelPath));
-                files.push(...collectMdFilesInOrder(subItems, rootDir, includeDir, visited));
-            } catch (err) {
-                let msg = err instanceof Error ? err.message : String(err);
-                console.error(`Не удалось загрузить include ${absIncludePath}:`, msg);
-            }
-        }
-
-        // 2. href (только md-файлы)
+        // 1. Сначала добавляем файл текущего элемента (href)
         if (entry.href) {
             const href = entry.href.trim();
             if (href.endsWith('toc.yaml') || href.endsWith('index.yaml')) continue;
@@ -141,9 +119,31 @@ function collectMdFilesInOrder(entries, rootDir, currentPath = '', visited = new
             }
         }
 
-        // 3. вложенные items
+        // 2. Затем обрабатываем include (подключаемый toc.yaml) – его файлы встают после текущего
+        if (entry.include?.path) {
+            const includeRelPath = entry.include.path;
+            const absIncludePath = path.join(rootDir, currentPath, includeRelPath);
+            const canonical = path.resolve(absIncludePath);
+
+            if (!visited.has(canonical)) {
+                visited.add(canonical);
+                try {
+                    const toc = TocYamlFileLoad(absIncludePath);
+                    const subItems = toc.items;
+                    const includeDir = path.join(currentPath, path.dirname(includeRelPath));
+                    const includeFiles = collectMdFilesInOrder(subItems, rootDir, includeDir, visited);
+                    files.push(...includeFiles);
+                } catch (err) {
+                    let msg = err instanceof Error ? err.message : String(err);
+                    console.error(`Не удалось загрузить include ${absIncludePath}:`, msg);
+                }
+            }
+        }
+
+        // 3. И только потом – вложенные подразделы (items) – они идут после всего вышеперечисленного
         if (Array.isArray(entry.items)) {
-            files.push(...collectMdFilesInOrder(entry.items, rootDir, currentPath, visited));
+            const subFiles = collectMdFilesInOrder(entry.items, rootDir, currentPath, visited);
+            files.push(...subFiles);
         }
     }
 
