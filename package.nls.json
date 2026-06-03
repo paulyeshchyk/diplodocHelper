@@ -23,6 +23,8 @@
   "extension.settings.defaultLanguage.description": "Default language",
   "extension.settings.figureCaptionPrefix.default": "Figure",
   "extension.settings.figureCaptionPrefix.description": "Caption prefix under the figure",
+  "extension.settings.figureReferenceCaptionPrefix.default": "fig.({0})",
+  "extension.settings.figureReferenceCaptionPrefix.description": "Caption prefix for figure reference",
   "extension.settings.figureReferencePrefix.default": "see ",
   "extension.settings.figureReferencePrefix.description": "Links prefix",
   "filename.error.alreadyexists": "File already exists",

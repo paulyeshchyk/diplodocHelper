@@ -14,7 +14,9 @@ const { DiplodocConfigFromJson } = require('../utils/diplodoc.config');
  */
 function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
     console.log('Переиндексация рисунков...');
-    const finalPrefix = readFinalPrefix(configJsonOrObj, targetLocale);
+    const figureCaptionTemplate = readFigureCaptionTemplate(configJsonOrObj, targetLocale);
+    const figureReferenceCaptionTemplate = readFigureReferenceCaptionTemplate(configJsonOrObj, targetLocale);
+
     const tocPath = path.join(rootDir, 'toc.yaml');
     if (!fs.existsSync(tocPath)) {
         console.warn('toc.yaml не найден');
@@ -45,7 +47,7 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
             const { newContent, newCounter, figureMapping } = processFigureCaptions(
                 content,
                 figureCounter,
-                finalPrefix
+                figureCaptionTemplate
             );
 
             // Сливаем маппинг
@@ -64,7 +66,7 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
     }
 
     // ---- ВТОРОЙ ПРОХОД: обновляем ссылки ----
-    updateAllLinks(allMdFiles, globalFigureMapping, finalPrefix);
+    updateAllLinks(allMdFiles, globalFigureMapping, figureReferenceCaptionTemplate);
 
     console.log(`Готово. Всего пронумеровано: ${figureCounter - 1}`);
     return { success: true, total: figureCounter - 1, reason: '' };
@@ -74,10 +76,29 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
  * @param {string | object | undefined} configJsonOrObj
  * @param {string | undefined} targetLocale
  */
-function readFinalPrefix(configJsonOrObj, targetLocale) {
+function readFigureCaptionTemplate(configJsonOrObj, targetLocale) {
     let config = DiplodocConfigFromJson(configJsonOrObj);
     const activeLocale = targetLocale || config.defaultLanguage || 'ru';
     return GetPrefixOrDefault(config, activeLocale, targetLocale);
+}
+
+/**
+ * @param {string | object | undefined} configJsonOrObj
+ * @param {string | undefined} targetLocale
+ */
+function readFigureReferenceCaptionTemplate(configJsonOrObj, targetLocale) {
+    let config = DiplodocConfigFromJson(configJsonOrObj);
+    const activeLocale = targetLocale || config.defaultLanguage || 'ru';
+    return GetReferencePrefixOrDefault(config, activeLocale, targetLocale);
+}
+
+/**
+ * @param {DiplodocConfig} config
+ * @param {string} activeLocale
+ * @param {string | undefined} targetLocale
+ */
+function GetReferencePrefixOrDefault(config, activeLocale, targetLocale) {
+    return activeLocale !== targetLocale ? 'Figure' : config.figureReferenceCaptionPrefix || '(fig. {0})';
 }
 
 /**
@@ -185,9 +206,9 @@ function processFigureCaptions(content, startCounter, prefix) {
  * Обновляет номера в тексте ссылок, ведущих на рисунки
  * @param {string} filePath - путь к md-файлу
  * @param {Map<string, number>} figureNumberMap - id -> новый номер
- * @param {string} defaultPrefix - префикс ('Рисунок' или 'Figure') – используется, если не удалось определить из ссылки
+ * @param {string} defaultTemplate - префикс ('(рис. {0})' или '(fig. {0})') – используется, если не удалось определить из ссылки
  */
-function updateFigureLinksInFile(filePath, figureNumberMap, defaultPrefix) {
+function updateFigureLinksInFile(filePath, figureNumberMap, defaultTemplate) {
     let content = fs.readFileSync(filePath, 'utf8');
     let updated = false;
 
@@ -200,43 +221,32 @@ function updateFigureLinksInFile(filePath, figureNumberMap, defaultPrefix) {
 
         const newNumber = figureNumberMap.get(figId);
 
-        // 1. Определяем, есть ли markdown-форматирование по краям
-        let formatting = '';
+        // 1. Определяем markdown-форматирование по краям
+        //let formatting = '';
         let innerText = linkText;
-
-        // Поддерживаем: *...*, **...**, _..._, __...__
         const formatPatterns = [
-            { regex: /^(\*{1,2})(.*?)\1$/, wrapper: '$1' }, // * или **
-            { regex: /^(_{1,2})(.*?)\1$/, wrapper: '$1' }, // _ или __
+            { regex: /^(\*{1,2})(.*?)\1$/, wrapper: '$1' },
+            { regex: /^(_{1,2})(.*?)\1$/, wrapper: '$1' },
         ];
-
         for (const pattern of formatPatterns) {
             const matchFormat = linkText.match(pattern.regex);
             if (matchFormat) {
-                formatting = matchFormat[1];
+                //formatting = matchFormat[1];
                 innerText = matchFormat[2];
                 break;
             }
         }
 
-        // 2. Очищаем innerText от старого префикса и номера (аналогично processFigureCaptions)
-        let cleaned = innerText
-            .replace(/^(Рисунок|Figure|Fig\.|Рис\.)\s*\d+\.?\s*/i, '')
-            .replace(/^\d+\.\s*/, '')
-            .trim();
-
-        // 3. Определяем, какой префикс использовать (русский/английский) – лучше взять из конфига,
-        //    но можно попробовать определить по исходному тексту ссылки
-        let prefix = defaultPrefix;
-        const prefixMatch = innerText.match(/^(Рисунок|Figure|Fig\.|Рис\.)\s*/i);
-        if (prefixMatch) {
-            prefix = prefixMatch[1];
+        // 3. Определяем, какой шаблон использовать (русский или английский)
+        let template = defaultTemplate;
+        if (/(рис|Рисунок|Рис\.)/i.test(innerText)) {
+            template = '(рис. {0})';
+        } else if (/(fig|Figure|Fig\.)/i.test(innerText)) {
+            template = '(fig. {0})';
         }
 
-        // 4. Формируем новый текст внутри ссылки
-        const newInnerText = `${prefix} ${newNumber}. ${cleaned}`;
-        // Если было форматирование – оборачиваем, иначе оставляем как есть
-        const newLinkText = formatting ? `${formatting}${newInnerText}${formatting}` : newInnerText;
+        // 4. Формируем новый текст ссылки
+        const newLinkText = template.replace('{0}', (newNumber ?? '').toString());
 
         updated = true;
         return `[${newLinkText}](${pathPart}${anchor})`;

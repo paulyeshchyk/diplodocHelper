@@ -60,6 +60,10 @@ const nls_ts = {
             defaultLanguage: {
                 description: 'extension.settings.defaultLanguage.description',
             },
+            figureReferenceCaptionPrefix: {
+                default: `extension.settings.figureReferenceCaptionPrefix.default`,
+                description: `extension.settings.figureReferenceCaptionPrefix.default`,
+            },
             figureCaptionPrefix: {
                 default: 'extension.settings.figureCaptionPrefix.default',
                 description: 'extension.settings.figureCaptionPrefix.description',

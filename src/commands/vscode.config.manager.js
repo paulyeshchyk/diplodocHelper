@@ -32,6 +32,7 @@ function DiplodocConfigFromWorkspace(CONFIG_KEY) {
 
     return {
         defaultLanguage: config.get('defaultLanguage', 'ru'),
+        figureReferenceCaptionPrefix: config.get('figureReferenceCaptionPrefix', 'рис.'),
         figureCaptionPrefix: config.get('figureCaptionPrefix', 'Рисунок'),
         figureReferencePrefix: config.get('figureReferencePrefix', 'см. '),
     };

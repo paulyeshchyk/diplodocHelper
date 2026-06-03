@@ -23,6 +23,8 @@
   "extension.settings.defaultLanguage.description": "Язык интерфейса по умолчанию",
   "extension.settings.figureCaptionPrefix.default": "Рисунок",
   "extension.settings.figureCaptionPrefix.description": "Префикс для подписей рисунков",
+  "extension.settings.figureReferenceCaptionPrefix.default": "рис.({0})",
+  "extension.settings.figureReferenceCaptionPrefix.description": "Префик для ссылки на рисунок",
   "extension.settings.figureReferencePrefix.default": "см. ",
   "extension.settings.figureReferencePrefix.description": "Префикс для ссылок (напр 'см.')",
   "filename.error.alreadyexists": "Файл с таким именем уже существует",

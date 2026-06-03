@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "0.18.7",
+    "version": "0.18.13",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -287,6 +287,11 @@
                     "type": "string",
                     "default": "%extension.settings.figureCaptionPrefix.default%",
                     "description": "%extension.settings.figureCaptionPrefix.description%"
+                },
+                "diplodoc-helper.figureReferenceCaptionPrefix": {
+                    "type": "string",
+                    "default": "%extension.settings.figureReferenceCaptionPrefix.default%",
+                    "description": "%extension.settings.figureReferenceCaptionPrefix.description%"
                 },
                 "diplodoc-helper.figureReferencePrefix": {
                     "type": "string",

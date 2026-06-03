@@ -7,6 +7,11 @@ const configDefinition = {
         default: '%extension.settings.figureCaptionPrefix.default%',
         description: '%extension.settings.figureCaptionPrefix.description%',
     },
+    figureReferenceCaptionPrefix: {
+        type: 'string',
+        default: '%extension.settings.figureReferenceCaptionPrefix.default%',
+        description: '%extension.settings.figureReferenceCaptionPrefix.description%',
+    },
     figureReferencePrefix: {
         type: 'string',
         default: '%extension.settings.figureReferencePrefix.default%',
