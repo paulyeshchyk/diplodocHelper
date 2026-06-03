@@ -5,6 +5,7 @@ const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs').promises;
 const { buildImageLink } = require('../plugins/utils/md.links.figure.js');
+const { slugify_diplodoc_reference } = require('../plugins/utils/encoding.slugify.js');
 
 const INDEX_MD = 'index.md';
 
@@ -91,10 +92,11 @@ async function promptAnchorSelection(anchors) {
  * @returns {string}
  */
 function generateSlug(text) {
-    return text
+    let slug = text
         .toLowerCase()
         .replace(/[^\w\u0400-\u04FF]+/g, '-')
         .replace(/^-+|-+$/g, '');
+    return slugify_diplodoc_reference(slug);
 }
 
 /**

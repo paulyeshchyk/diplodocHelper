@@ -67,7 +67,23 @@ function slugify_latin_alphanumeric(text) {
     return slug;
 }
 
+/**
+ * @param {string} text
+ */
+function slugify_diplodoc_reference(text) {
+    if (!text || typeof text !== 'string') return '';
+
+    let slug = transliterate(text);
+    slug = slug.toLowerCase();
+    slug = slug.replace(/[^a-z0-9]+/g, '-');
+    slug = slug.replace(/-+/g, '-');
+    slug = slug.replace(/^-+|-+$/g, '');
+
+    return slug;
+}
+
 module.exports = {
+    slugify_diplodoc_reference,
     slugify_filename,
     slugify_latin,
     slugify_latin_alphanumeric,
