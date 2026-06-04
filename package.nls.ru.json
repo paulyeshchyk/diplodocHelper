@@ -11,7 +11,7 @@
   "command.md.image.paste": "Вставить рисунок из буфера обмена",
   "command.md.link.copy": "Копировать ссылку на документ",
   "command.md.link.paste.fromClipboard": "Вставить ссылку на документ из буфера обмена",
-  "command.md.link.paste.fromList": "Вставить рисунок из списка",
+  "command.md.link.paste.fromList": "Вставить ссылку на рисунок из списка",
   "command.md.link.rebuild": "Переиндексировать рисунки",
   "command.md.section.create": "Создать секцию",
   "command.md.section.delete": "Удалить секцию",
