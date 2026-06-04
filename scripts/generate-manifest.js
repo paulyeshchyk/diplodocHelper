@@ -26,15 +26,19 @@ try {
 
         if (content.contributes) {
             Object.assign(contributes, content.contributes);
-            console.log(`   ${file}`);
         }
     }
 
-    // Генерируем configuration из config.js
-    const configContribute = generateConfigurationContribute();
+    const configContribute = generateConfigurationContribute({
+        modelPath: '../plugins/model/diplodocconfig.model.js',
+        typeDefName: 'DiplodocConfig',
+        settingPrefix: 'diplodoc-helper',
+        title: 'Diplodoc Helper',
+    });
+
     Object.assign(contributes, configContribute.contributes);
 
-    console.log(`   configuration (сгенерировано из config.js)`);
+    console.log(`   configuration (автоматически сгенерировано из DiplodocConfig)`);
 
     const finalManifest = {
         ...originalPackage,
@@ -44,8 +48,6 @@ try {
     fs.writeFileSync(packageJsonPath, JSON.stringify(finalManifest, null, 4));
 
     console.log('\nManifest успешно собран!');
-    console.log(`   Секций в contributes: ${Object.keys(contributes).length}`);
-    console.log(`   Команд: ${contributes.commands ? contributes.commands.length : 0}`);
 } catch (error) {
     let msg = error instanceof Error ? error.message : String(error);
     console.error(`Ошибка генерации манифеста: \n ${msg}`);

@@ -131,5 +131,6 @@
   "submenu.diplodoc": "Diplodoc",
   "submenu.generators": "Прочее",
   "submenu.helptag": "Helptag",
-  "submenu.reindexier": "Прочее"
+  "submenu.reindexier": "Прочее",
+  "extension.settings.contextPollingInterval.description": "Интервал polling'а контекста в миллисекундах"
 }

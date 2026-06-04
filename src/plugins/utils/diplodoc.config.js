@@ -8,11 +8,15 @@ const fs = require('fs');
  * @returns {DiplodocConfig}
  */
 function DefaultDiplodocConfig() {
-    return {
+    let result = {
         defaultLanguage: 'ru',
         figureCaptionPrefix: 'Рисунок',
         figureReferencePrefix: 'Рис.',
+        figureReferenceCaptionPrefix: 'см. ',
+        usePollingForContext: true,
+        contextPollingInterval: 800,
     };
+    return result;
 }
 
 /**
@@ -94,6 +98,7 @@ function DiplodocConfigFromWorkspace(CONFIG_KEY) {
  */
 function DiplodocConfigFromCli(CONFIG_KEY) {
     // 1. Базовая конфигурация из workspace
+    /**@type {DiplodocConfig} */
     let configObj = DiplodocConfigFromWorkspace(CONFIG_KEY);
     let targetLocale = configObj.defaultLanguage;
 

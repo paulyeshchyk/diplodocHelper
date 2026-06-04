@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "0.20.0",
+    "version": "0.20.39",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -288,35 +288,42 @@
                 "diplodoc-helper.figureCaptionPrefix": {
                     "type": "string",
                     "default": "%extension.settings.figureCaptionPrefix.default%",
-                    "description": "%extension.settings.figureCaptionPrefix.description%"
+                    "description": "%extension.settings.figureCaptionPrefix.description%",
+                    "order": 10
                 },
                 "diplodoc-helper.figureReferenceCaptionPrefix": {
                     "type": "string",
                     "default": "%extension.settings.figureReferenceCaptionPrefix.default%",
-                    "description": "%extension.settings.figureReferenceCaptionPrefix.description%"
+                    "description": "%extension.settings.figureReferenceCaptionPrefix.description%",
+                    "order": 20
                 },
                 "diplodoc-helper.figureReferencePrefix": {
                     "type": "string",
                     "default": "%extension.settings.figureReferencePrefix.default%",
-                    "description": "%extension.settings.figureReferencePrefix.description%"
+                    "description": "%extension.settings.figureReferencePrefix.description%",
+                    "order": 30
                 },
                 "diplodoc-helper.defaultLanguage": {
                     "type": "string",
                     "default": "ru",
                     "description": "%extension.settings.defaultLanguage.description%",
+                    "order": 40,
                     "enum": [
                         "ru",
                         "en"
-                    ],
-                    "enumDescriptions": [
-                        "Русский",
-                        "English"
                     ]
                 },
                 "diplodoc-helper.usePollingForContext": {
                     "type": "boolean",
-                    "default": "true",
-                    "description": "%extension.settings.usePollingForContext.description%"
+                    "default": true,
+                    "description": "%extension.settings.usePollingForContext.description%",
+                    "order": 50
+                },
+                "diplodoc-helper.contextPollingInterval": {
+                    "type": "number",
+                    "default": 800,
+                    "description": "%extension.settings.contextPollingInterval.description% /",
+                    "order": 60
                 }
             }
         }
