@@ -327,4 +327,4 @@ async function ConvertDocumentPathToLink(clipboardText, sourceFilePath) {
 // =============================================================================
 // ЭКСПОРТ
 // =============================================================================
-module.exports = { ux_link_paste };
+module.exports = { ux_link_paste, parseClipboardLink };

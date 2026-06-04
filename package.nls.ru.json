@@ -27,6 +27,7 @@
   "extension.settings.figureReferenceCaptionPrefix.description": "Префик для ссылки на рисунок",
   "extension.settings.figureReferencePrefix.default": "см. ",
   "extension.settings.figureReferencePrefix.description": "Префикс для ссылок (напр 'см.')",
+  "extension.settings.usePollingForContext.description": "Использовать пулинг для обновления контекстного меню (изменение вступит в силу после перезагрузки vscode)",
   "filename.error.alreadyexists": "Файл с таким именем уже существует",
   "paste.image.error.noactiveeditor": "Нет активного редактора",
   "paste.image.warning.emptybuffer": "В буфере обмена нет изображения (или формат не поддерживается)",

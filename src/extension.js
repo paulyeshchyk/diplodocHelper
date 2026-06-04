@@ -1,8 +1,9 @@
 // src/extension.js
 
 const vscode = require('vscode');
-const { setupDiplodocConfigChangeWatcher } = require('./commands/vscode.config.manager');
+const { setupDiplodocConfigChangeWatcher, DiplodocConfigSharedInstance } = require('./commands/vscode.config.manager');
 const { initNls } = require('../nls_loader');
+// const { PasteImageProvider } = require('./pasteProvider');
 
 const { ux_breadcrumbs_generate } = require('./commands/diplodoc-helper.breadCrumb.Generate');
 const { ux_context_delete } = require('./commands/diplodoc-helper.context.Delete');
@@ -15,7 +16,7 @@ const { ux_helptag_update } = require('./commands/diplodoc-helper.helptag.Update
 const { ux_image_paste_clipboard } = require('./commands/diplodoc-helper.image.PasteFromClipboard');
 const { ux_image_paste_list } = require('./commands/diplodoc-helper.image.PasteFromList');
 const { ux_link_copy } = require('./commands/diplodoc-helper.link.Copy.js');
-const { ux_link_paste } = require('./commands/diplodoc-helper.link.Paste.js');
+const { ux_link_paste, parseClipboardLink } = require('./commands/diplodoc-helper.link.Paste.js');
 const { ux_reindex_directories } = require('./commands/diplodoc-helper.reindex.directories');
 const { ux_reindex_figures } = require('./commands/diplodoc-helper.reindex.figures');
 const { ux_section_create } = require('./commands/diplodoc-helper.section.Create');
@@ -24,11 +25,14 @@ const { ux_section_move } = require('./commands/diplodoc-helper.section.Move');
 const { ux_section_rename } = require('./commands/diplodoc-helper.section.Rename');
 const { CONFIG_KEY } = require('./plugins/constants');
 const { ux_add_anchor } = require('./commands/diplodoc-helper.link.AddAnchor');
+const { ContextManager } = require('./ContextMenuManager');
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+    console.log(`Diplodoc Helper активирован (${context.extension.packageJSON.version})`);
+
     //
     setupDiplodocConfigChangeWatcher();
 
@@ -72,38 +76,23 @@ function activate(context) {
     context.subscriptions.push(cmd21);
     context.subscriptions.push(cmd99);
 
-    context.subscriptions.push(
-        vscode.window.onDidChangeActiveTextEditor(editor => {
-            updateContextMenu(editor);
-        }),
-        vscode.workspace.onDidChangeTextDocument(event => {
-            const activeEditor = vscode.window.activeTextEditor;
-            if (activeEditor && event.document === activeEditor.document) {
-                updateContextMenu(activeEditor);
-            }
-        })
-    );
+    const config = DiplodocConfigSharedInstance();
+    const contextManager = new ContextManager(config.usePollingForContext, 800, context);
 
-    console.log(`Diplodoc Helper активирован (${context.extension.packageJSON.version})`);
+    // Регистрация
+    contextManager.registerContextKey('diplodoc-helper:canPasteMarkdownLink', async () => {
+        try {
+            const clipboardText = await vscode.env.clipboard.readText();
+            const link = parseClipboardLink(clipboardText);
+            return link !== null;
+        } catch (error) {
+            console.error('Ошибка при проверке ссылки:', error);
+            return false;
+        }
+    });
 }
 
 function deactivate() {}
-
-/**
- * @param {vscode.TextEditor | undefined} editor
- */
-function updateContextMenu(editor) {
-    let canPaste = false;
-    if (editor && editor.document) {
-        const doc = editor.document;
-        const text = doc.getText();
-        // Проверяем, есть ли в документе нужный маркер
-        if ((doc.languageId === 'yaml' || doc.languageId === 'markdown') && text.includes('---')) {
-            canPaste = true;
-        }
-    }
-    vscode.commands.executeCommand('setContext', 'diplodoc.canPasteLink', canPaste);
-}
 
 module.exports = {
     activate,

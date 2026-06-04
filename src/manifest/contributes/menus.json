@@ -23,7 +23,7 @@
                 },
                 {
                     "command": "diplodoc-helper.pasteLink",
-                    "when": "editorTextFocus && !editorReadonly",
+                    "when": "editorTextFocus && !editorReadonly && diplodoc-helper:canPasteMarkdownLink",
                     "group": "2diplodoc.section@1"
                 },
                 {

@@ -24,6 +24,11 @@ const configDefinition = {
         enumDescriptions: ['Русский', 'English'],
         description: '%extension.settings.defaultLanguage.description%',
     },
+    usePollingForContext: {
+        type: 'boolean',
+        default: 'true',
+        description: '%extension.settings.usePollingForContext.description%',
+    },
 };
 
 module.exports = {

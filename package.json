@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "0.19.1",
+    "version": "0.20.0",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -16,7 +16,9 @@
     ],
     "changelogUrl": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
     "releaseNotes": "https://github.com/paulyeshchyk/diplodocHelper/blob/main/CHANGELOG.md",
-    "activationEvents": [],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
     "scripts": {
         "generate-manifest": "node scripts/generate-manifest.js",
         "compile": "npm run generate-manifest",
@@ -135,7 +137,7 @@
                 },
                 {
                     "command": "diplodoc-helper.pasteLink",
-                    "when": "editorTextFocus && !editorReadonly",
+                    "when": "editorTextFocus && !editorReadonly && diplodoc-helper:canPasteMarkdownLink",
                     "group": "2diplodoc.section@1"
                 },
                 {
@@ -310,12 +312,18 @@
                         "Русский",
                         "English"
                     ]
+                },
+                "diplodoc-helper.usePollingForContext": {
+                    "type": "boolean",
+                    "default": "true",
+                    "description": "%extension.settings.usePollingForContext.description%"
                 }
             }
         }
     },
     "dependencies": {
         "barrelsby": "^2.8.1",
+        "electron": "^42.3.2",
         "gray-matter": "^4.0.3",
         "js-yaml": "^4.1.1",
         "transliteration": "^2.6.1",

@@ -35,6 +35,7 @@ function DiplodocConfigFromWorkspace(CONFIG_KEY) {
         figureReferenceCaptionPrefix: config.get('figureReferenceCaptionPrefix', 'рис.'),
         figureCaptionPrefix: config.get('figureCaptionPrefix', 'Рисунок'),
         figureReferencePrefix: config.get('figureReferencePrefix', 'см. '),
+        usePollingForContext: config.get('usePollingForContext', true),
     };
 }
 
