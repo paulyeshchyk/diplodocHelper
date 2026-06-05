@@ -1,18 +1,22 @@
 const path = require('path');
 const fs = require('fs');
 
-/** @import {DiplodocConfig} from '../model/diplodocconfig.model' */
+/** @import {DiplodocConfig} from '../../config/model/diplodoc.config.model' */
 
 /**
  * Конфигурация по умолчанию.
  * @returns {DiplodocConfig}
  */
 function DefaultDiplodocConfig() {
-    return {
+    let result = {
         defaultLanguage: 'ru',
         figureCaptionPrefix: 'Рисунок',
         figureReferencePrefix: 'Рис.',
+        figureReferenceCaptionPrefix: 'см. ',
+        usePollingForContext: true,
+        contextPollingInterval: 800,
     };
+    return result;
 }
 
 /**
@@ -94,6 +98,7 @@ function DiplodocConfigFromWorkspace(CONFIG_KEY) {
  */
 function DiplodocConfigFromCli(CONFIG_KEY) {
     // 1. Базовая конфигурация из workspace
+    /**@type {DiplodocConfig} */
     let configObj = DiplodocConfigFromWorkspace(CONFIG_KEY);
     let targetLocale = configObj.defaultLanguage;
 

@@ -1,7 +1,7 @@
 // src/extension.js
 
 const vscode = require('vscode');
-const { setupDiplodocConfigChangeWatcher, DiplodocConfigSharedInstance } = require('./commands/vscode.config.manager');
+const { setupDiplodocConfigChangeWatcher, DiplodocConfigSharedInstance } = require('./config/vscode.config.manager');
 const { initNls } = require('../nls_loader');
 // const { PasteImageProvider } = require('./pasteProvider');
 
@@ -27,6 +27,9 @@ const { CONFIG_KEY } = require('./plugins/constants');
 const { ux_add_anchor } = require('./commands/diplodoc-helper.link.AddAnchor');
 const { ContextManager } = require('./ContextMenuManager');
 
+/** @type {ContextManager | null} */
+let contextManager = null;
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -37,7 +40,7 @@ function activate(context) {
     setupDiplodocConfigChangeWatcher();
 
     //читаем конфиг при загрузке расширения
-    require('./commands/vscode.config.manager').DiplodocConfigSharedInstance();
+    require('./config/vscode.config.manager').DiplodocConfigSharedInstance();
     const locale = vscode.env.language;
     const rootPath = context.extensionPath;
 
@@ -77,7 +80,7 @@ function activate(context) {
     context.subscriptions.push(cmd99);
 
     const config = DiplodocConfigSharedInstance();
-    const contextManager = new ContextManager(config.usePollingForContext, 800, context);
+    contextManager = new ContextManager(config.usePollingForContext, config.contextPollingInterval, context);
 
     // Регистрация
     contextManager.registerContextKey('diplodoc-helper:canPasteMarkdownLink', async () => {
@@ -92,7 +95,11 @@ function activate(context) {
     });
 }
 
-function deactivate() {}
+function deactivate() {
+    if (contextManager !== null) {
+        contextManager.forceStop();
+    }
+}
 
 module.exports = {
     activate,

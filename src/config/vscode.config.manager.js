@@ -3,7 +3,7 @@
 const vscode = require('vscode');
 const { DiplodocConfigFromJson } = require('../plugins/utils/diplodoc.config');
 
-/** @import { DiplodocConfig } from '../plugins/model/diplodocconfig.model' */
+/** @import { DiplodocConfig } from './model/diplodoc.config.model' */
 
 const CONFIG_KEY = 'diplodoc-helper';
 
@@ -22,36 +22,38 @@ function DiplodocConfigSharedInstance() {
 }
 
 /**
- * Читает настройки расширения из VS Code и возвращает только
- * необходимые для реиндексатора параметры.
- * @param {string | undefined} CONFIG_KEY
+ * Читает настройки расширения из VS Code
+ * @param {string} [CONFIG_KEY='diplodoc-helper']
  * @returns {DiplodocConfig}
  */
-function DiplodocConfigFromWorkspace(CONFIG_KEY) {
+function DiplodocConfigFromWorkspace(CONFIG_KEY = 'diplodoc-helper') {
     const config = vscode.workspace.getConfiguration(CONFIG_KEY);
 
-    return {
-        defaultLanguage: config.get('defaultLanguage', 'ru'),
-        figureReferenceCaptionPrefix: config.get('figureReferenceCaptionPrefix', 'рис.'),
+    let result = {
         figureCaptionPrefix: config.get('figureCaptionPrefix', 'Рисунок'),
+        figureReferenceCaptionPrefix: config.get('figureReferenceCaptionPrefix', 'рис.'),
         figureReferencePrefix: config.get('figureReferencePrefix', 'см. '),
+        defaultLanguage: config.get('defaultLanguage', 'ru'),
         usePollingForContext: config.get('usePollingForContext', true),
+        contextPollingInterval: config.get('contextPollingInterval', 1800),
     };
+    return result;
 }
 
 /**
- * Обновить конфиг при изменении настроек
+ * Обновить кэш конфигурации при изменении настроек
  */
 function setupDiplodocConfigChangeWatcher() {
     vscode.workspace.onDidChangeConfiguration(event => {
         if (event.affectsConfiguration(CONFIG_KEY)) {
-            instance = null; // сбрасываем кэш
+            instance = null;
             console.log('Конфигурация Diplodoc Helper обновлена');
         }
     });
 }
 
 /**
+ * Создаёт конфиг из настроек VS Code
  * @param {string} CONFIG_KEY
  * @returns {DiplodocConfig}
  */

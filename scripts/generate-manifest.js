@@ -2,8 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 const contributesDir = path.resolve(__dirname, '../src/manifest/contributes');
-const { generateConfigurationContribute } = require('../src/commands/vscode.config.contribute.generate');
+const { generateConfigurationContribute } = require('../src/config/vscode.config.contribute.generate.js');
 /** @import {ContributesManifest} from '../src/plugins/model/vscode.contributes.model' */
+const { TsConfigParser } = require('../src/config/parser/config.parser.tsconfig.js');
+const { JsdocConfigParser } = require('../src/config/parser/config.parser.jsdocconfig.js');
 
 try {
     console.log('Читаем текущий package.json...');
@@ -26,15 +28,23 @@ try {
 
         if (content.contributes) {
             Object.assign(contributes, content.contributes);
-            console.log(`   ${file}`);
         }
     }
 
-    // Генерируем configuration из config.js
-    const configContribute = generateConfigurationContribute();
+    const tsParser = new TsConfigParser('diplodoc-helper');
+    // const jsParser = new JsdocConfigParser('diplodoc-helper');
+
+    const configContribute = generateConfigurationContribute({
+        modelPath: '../config/model/diplodoc.config.model.ts',
+        typeDefName: 'DiplodocConfig',
+        settingPrefix: 'diplodoc-helper',
+        title: 'Diplodoc Helper',
+        parser: tsParser,
+    });
+
     Object.assign(contributes, configContribute.contributes);
 
-    console.log(`   configuration (сгенерировано из config.js)`);
+    console.log(`   configuration (автоматически сгенерировано из DiplodocConfig)`);
 
     const finalManifest = {
         ...originalPackage,
@@ -44,8 +54,6 @@ try {
     fs.writeFileSync(packageJsonPath, JSON.stringify(finalManifest, null, 4));
 
     console.log('\nManifest успешно собран!');
-    console.log(`   Секций в contributes: ${Object.keys(contributes).length}`);
-    console.log(`   Команд: ${contributes.commands ? contributes.commands.length : 0}`);
 } catch (error) {
     let msg = error instanceof Error ? error.message : String(error);
     console.error(`Ошибка генерации манифеста: \n ${msg}`);

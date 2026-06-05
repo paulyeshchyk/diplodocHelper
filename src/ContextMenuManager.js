@@ -82,7 +82,13 @@ class ContextMenuManager {
         await this.refreshContext();
     }
 
+    forceStop() {
+        //
+    }
+
     dispose() {
+        this.forceStop();
+
         this.disposables.forEach(d => d.dispose());
         this.disposables = [];
     }
@@ -106,6 +112,11 @@ class PollingContextMenuManager extends ContextMenuManager {
         }
     }
 
+    forceStop() {
+        super.forceStop();
+        this.stopPolling();
+    }
+
     startPolling() {
         if (this.pollingInterval) return;
         this.pollingInterval = setInterval(() => {
@@ -121,7 +132,6 @@ class PollingContextMenuManager extends ContextMenuManager {
     }
 
     dispose() {
-        this.stopPolling();
         super.dispose();
     }
 }
@@ -155,7 +165,12 @@ class ContextManager {
         await this.manager.forceRefresh();
     }
 
+    forceStop() {
+        this.manager.forceStop();
+    }
+
     dispose() {
+        this.manager.forceStop();
         this.manager.dispose();
     }
 }
