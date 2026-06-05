@@ -5,7 +5,7 @@ const { showImagePicker } = require('./vscode.prompts.imagePicker');
 const { getRelativeLink } = require('../plugins/utils/path.extract');
 const { ExtractMdLinks, ExtractFigures } = require('../plugins/utils/md.links.extract');
 const { FindMdFiles } = require('./vscode.FindFiles');
-const { DiplodocConfigFromWorkspace } = require('./vscode.config.manager');
+const { DiplodocConfigFromWorkspace } = require('../config/vscode.config.manager');
 const { CONFIG_KEY } = require('../plugins/constants');
 
 /** @import {ImageItem} from '../plugins/model/imageitem.model' */

@@ -5,7 +5,7 @@ const { TocYamlFileLoad } = require('../utils/yaml.toc.file');
 const { DiplodocConfigFromJson } = require('../utils/diplodoc.config');
 
 /**
- * @import { DiplodocConfig } from '../model/diplodocconfig.model'
+ * @import { DiplodocConfig } from '../../config/model/diplodoc.config.model'
  */
 
 /** @param {string} rootDir

@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "0.20.39",
+    "version": "0.20.40",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -287,43 +287,27 @@
             "properties": {
                 "diplodoc-helper.figureCaptionPrefix": {
                     "type": "string",
-                    "default": "%extension.settings.figureCaptionPrefix.default%",
+                    "default": "Рисунок ",
                     "description": "%extension.settings.figureCaptionPrefix.description%",
                     "order": 10
                 },
                 "diplodoc-helper.figureReferenceCaptionPrefix": {
                     "type": "string",
-                    "default": "%extension.settings.figureReferenceCaptionPrefix.default%",
+                    "default": "( рис. {0})",
                     "description": "%extension.settings.figureReferenceCaptionPrefix.description%",
                     "order": 20
-                },
-                "diplodoc-helper.figureReferencePrefix": {
-                    "type": "string",
-                    "default": "%extension.settings.figureReferencePrefix.default%",
-                    "description": "%extension.settings.figureReferencePrefix.description%",
-                    "order": 30
-                },
-                "diplodoc-helper.defaultLanguage": {
-                    "type": "string",
-                    "default": "ru",
-                    "description": "%extension.settings.defaultLanguage.description%",
-                    "order": 40,
-                    "enum": [
-                        "ru",
-                        "en"
-                    ]
                 },
                 "diplodoc-helper.usePollingForContext": {
                     "type": "boolean",
                     "default": true,
                     "description": "%extension.settings.usePollingForContext.description%",
-                    "order": 50
+                    "order": 30
                 },
                 "diplodoc-helper.contextPollingInterval": {
                     "type": "number",
                     "default": 800,
-                    "description": "%extension.settings.contextPollingInterval.description% /",
-                    "order": 60
+                    "description": "%extension.settings.contextPollingInterval.description%",
+                    "order": 40
                 }
             }
         }

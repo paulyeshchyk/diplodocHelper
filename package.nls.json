@@ -11,7 +11,7 @@
   "command.md.image.paste": "Paste figure from clipboard",
   "command.md.link.copy": "Copy link to document",
   "command.md.link.paste.fromClipboard": "Paste link from clipboard",
-  "command.md.link.paste.fromList": "Paste figure from list",
+  "command.md.link.paste.fromList": "Paste figure link from list",
   "command.md.link.rebuild": "Reindex figures",
   "command.md.section.create": "Create section",
   "command.md.section.delete": "Delete section",

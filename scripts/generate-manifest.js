@@ -2,8 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 const contributesDir = path.resolve(__dirname, '../src/manifest/contributes');
-const { generateConfigurationContribute } = require('../src/commands/vscode.config.contribute.generate');
+const { generateConfigurationContribute } = require('../src/config/vscode.config.contribute.generate.js');
 /** @import {ContributesManifest} from '../src/plugins/model/vscode.contributes.model' */
+const { TsConfigParser } = require('../src/config/parser/config.parser.tsconfig.js');
+const { JsdocConfigParser } = require('../src/config/parser/config.parser.jsdocconfig.js');
 
 try {
     console.log('Читаем текущий package.json...');
@@ -29,11 +31,15 @@ try {
         }
     }
 
+    const tsParser = new TsConfigParser('diplodoc-helper');
+    // const jsParser = new JsdocConfigParser('diplodoc-helper');
+
     const configContribute = generateConfigurationContribute({
-        modelPath: '../plugins/model/diplodocconfig.model.js',
+        modelPath: '../config/model/diplodoc.config.model.ts',
         typeDefName: 'DiplodocConfig',
         settingPrefix: 'diplodoc-helper',
         title: 'Diplodoc Helper',
+        parser: tsParser,
     });
 
     Object.assign(contributes, configContribute.contributes);

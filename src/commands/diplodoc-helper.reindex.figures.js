@@ -3,7 +3,7 @@
 const { nls_ts, translate } = require('../../nls_ts.js');
 const vscode = require('vscode');
 const { reindexFigures } = require('../plugins/reindexer/reindexer.figures.js');
-const { DiplodocConfigFromWorkspace } = require('./vscode.config.manager.js');
+const { DiplodocConfigFromWorkspace } = require('../config/vscode.config.manager.js');
 const { CONFIG_KEY } = require('../plugins/constants.js');
 
 /**

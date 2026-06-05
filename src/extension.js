@@ -1,7 +1,7 @@
 // src/extension.js
 
 const vscode = require('vscode');
-const { setupDiplodocConfigChangeWatcher, DiplodocConfigSharedInstance } = require('./commands/vscode.config.manager');
+const { setupDiplodocConfigChangeWatcher, DiplodocConfigSharedInstance } = require('./config/vscode.config.manager');
 const { initNls } = require('../nls_loader');
 // const { PasteImageProvider } = require('./pasteProvider');
 
@@ -40,7 +40,7 @@ function activate(context) {
     setupDiplodocConfigChangeWatcher();
 
     //читаем конфиг при загрузке расширения
-    require('./commands/vscode.config.manager').DiplodocConfigSharedInstance();
+    require('./config/vscode.config.manager').DiplodocConfigSharedInstance();
     const locale = vscode.env.language;
     const rootPath = context.extensionPath;
 

@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
-/** @import {DiplodocConfig} from '../model/diplodocconfig.model' */
+/** @import {DiplodocConfig} from '../../config/model/diplodoc.config.model' */
 
 /**
  * Конфигурация по умолчанию.

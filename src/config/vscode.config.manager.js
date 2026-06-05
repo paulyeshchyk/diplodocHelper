@@ -3,7 +3,7 @@
 const vscode = require('vscode');
 const { DiplodocConfigFromJson } = require('../plugins/utils/diplodoc.config');
 
-/** @import { DiplodocConfig } from '../plugins/model/diplodocconfig.model' */
+/** @import { DiplodocConfig } from './model/diplodoc.config.model' */
 
 const CONFIG_KEY = 'diplodoc-helper';
 
