@@ -20,7 +20,8 @@ async function ux_link_paste() {
         const clipboardText = await vscode.env.clipboard.readText();
         const sourceFilePath = editor.document.uri.fsPath;
 
-        const linkText = await ConvertDocumentPathToLink(clipboardText, sourceFilePath);
+        // Передаем editor, чтобы проанализировать окружение курсора
+        const linkText = await ConvertDocumentPathToLink(clipboardText, sourceFilePath, editor);
 
         await editor.edit(editBuilder => {
             editBuilder.insert(editor.selection.active, linkText);
@@ -30,6 +31,38 @@ async function ux_link_paste() {
         let template = `${translate(nls_ts.plugin.link.paste.error.critical)}: ${msg}`;
         vscode.window.showErrorMessage(template);
     }
+}
+
+/**
+ * Проверяет, находится ли курсор внутри HTML тега (например, <figcaption>)
+ * @param {vscode.TextEditor} editor
+ * @returns {boolean}
+ */
+function isCursorInsideHtmlTag(editor) {
+    const position = editor.selection.active;
+    const lineText = editor.document.lineAt(position.line).text;
+
+    // Текст слева от курсора на текущей строке
+    const textBeforeCursor = lineText.substring(0, position.character);
+    // Текст справа от курсора на текущей строке
+    const textAfterCursor = lineText.substring(position.character);
+
+    // Регулярное выражение ищет незакрытый тег слева (например, <figcaption> или <div class="...">)
+    const hasOpeningTagBefore = /<([a-z1-6]+)(?:\s+[^>]*)*>\s*$/i.test(textBeforeCursor);
+    // Регулярное выражение ищет закрывающий тег сразу справа (например, </figcaption> или </div>)
+    const hasClosingTagAfter = /^\s*<\/([a-z1-6]+)>/i.test(textAfterCursor);
+
+    // Если курсор зажат прямо между <tag> и </tag> на одной строке
+    if (hasOpeningTagBefore && hasClosingTagAfter) {
+        return true;
+    }
+
+    // Дополнительная (более широкая) проверка: если на всей строке есть HTML-контекст
+    // Проверяем, открыт ли какой-то тег ранее на этой строке, который закрывается в конце строки
+    const inlineTagRegex = /<([a-z1-6]+)[^>]*>[^<]*$/i;
+    const inlineCloseRegex = /^[^>]*<\/([a-z1-6]+)>/i;
+
+    return inlineTagRegex.test(textBeforeCursor) && inlineCloseRegex.test(textAfterCursor);
 }
 
 // =============================================================================
@@ -216,13 +249,20 @@ function calculateRelativeMdPath(fromPath, toPath, addIndex) {
 }
 
 /**
- * Строит Markdown-ссылку на документ
+ * Строит Markdown или HTML ссылку на документ в зависимости от контекста
  * @param {string} prefix – префикс (! для изображений, иначе пусто)
  * @param {string} sourceLinkName – текст ссылки
- * @param {string} mdPath – путь к целевому файлу (с возможным якорем)
+ * @param {string} mdPath – путь к целевому файлу
+ * @param {boolean} asHtml – флаг, принуждающий строить HTML-ссылку
  * @returns {string}
  */
-function buildDocumentLink(prefix, sourceLinkName, mdPath) {
+function buildDocumentLink(prefix, sourceLinkName, mdPath, asHtml = false) {
+    if (asHtml) {
+        // Если это изображение внутри HTML тега, возвращаем тег <img>, иначе тег <a>
+        return prefix === '!'
+            ? `<img src="${mdPath}" alt="${sourceLinkName}">`
+            : `<a href="${mdPath}">${sourceLinkName}</a>`;
+    }
     return `${prefix}[${sourceLinkName}](${mdPath})`;
 }
 
@@ -288,12 +328,13 @@ function parseClipboardLink(clipboardText) {
 }
 
 /**
- * Основная логика преобразования пути из буфера в Markdown-ссылку
+ * Основная логика преобразования пути из буфера в Markdown/HTML-ссылку
  * @param {string} clipboardText
  * @param {string} sourceFilePath
+ * @param {vscode.TextEditor} editor
  * @returns {Promise<string>}
  */
-async function ConvertDocumentPathToLink(clipboardText, sourceFilePath) {
+async function ConvertDocumentPathToLink(clipboardText, sourceFilePath, editor) {
     const data = parseClipboardLink(clipboardText);
     if (data === null || !data.sourceLinkPath || !data.sourceLinkName) {
         throw new Error(translate('plugin.link.paste.error.emptybuffer'));
@@ -319,9 +360,16 @@ async function ConvertDocumentPathToLink(clipboardText, sourceFilePath) {
         }
     }
 
-    return isImage
-        ? buildImageLink(data.sourceLinkName, mdPath)
-        : buildDocumentLink(prefix, data.sourceLinkName, mdPath);
+    // Проверяем, находится ли курсор внутри HTML-контекста
+    const shouldRenderAsHtml = isCursorInsideHtmlTag(editor);
+
+    if (isImage) {
+        return shouldRenderAsHtml
+            ? buildDocumentLink('!', data.sourceLinkName, mdPath, true)
+            : buildImageLink(data.sourceLinkName, mdPath);
+    }
+
+    return buildDocumentLink(prefix, data.sourceLinkName, mdPath, shouldRenderAsHtml);
 }
 
 // =============================================================================

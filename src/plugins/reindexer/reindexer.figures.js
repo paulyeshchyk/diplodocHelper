@@ -78,7 +78,7 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
  */
 function readFigureCaptionTemplate(configJsonOrObj, targetLocale) {
     let config = DiplodocConfigFromJson(configJsonOrObj);
-    const activeLocale = targetLocale || config.defaultLanguage || 'ru';
+    const activeLocale = targetLocale || 'ru';
     return GetPrefixOrDefault(config, activeLocale, targetLocale);
 }
 
@@ -88,7 +88,7 @@ function readFigureCaptionTemplate(configJsonOrObj, targetLocale) {
  */
 function readFigureReferenceCaptionTemplate(configJsonOrObj, targetLocale) {
     let config = DiplodocConfigFromJson(configJsonOrObj);
-    const activeLocale = targetLocale || config.defaultLanguage || 'ru';
+    const activeLocale = targetLocale || 'ru';
     return GetReferencePrefixOrDefault(config, activeLocale, targetLocale);
 }
 
