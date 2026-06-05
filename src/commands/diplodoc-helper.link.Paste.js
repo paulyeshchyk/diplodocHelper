@@ -38,31 +38,76 @@ async function ux_link_paste() {
  * @param {vscode.TextEditor} editor
  * @returns {boolean}
  */
+/**
+ * Проверяет, находится ли курсор внутри HTML тега (включая сложные структуры с текстом)
+ * @param {vscode.TextEditor} editor
+ * @returns {boolean}
+ */
 function isCursorInsideHtmlTag(editor) {
     const position = editor.selection.active;
     const lineText = editor.document.lineAt(position.line).text;
 
-    // Текст слева от курсора на текущей строке
+    // Текст слева и справа от курсора на текущей строке
     const textBeforeCursor = lineText.substring(0, position.character);
-    // Текст справа от курсора на текущей строке
     const textAfterCursor = lineText.substring(position.character);
 
-    // Регулярное выражение ищет незакрытый тег слева (например, <figcaption> или <div class="...">)
-    const hasOpeningTagBefore = /<([a-z1-6]+)(?:\s+[^>]*)*>\s*$/i.test(textBeforeCursor);
-    // Регулярное выражение ищет закрывающий тег сразу справа (например, </figcaption> или </div>)
-    const hasClosingTagAfter = /^\s*<\/([a-z1-6]+)>/i.test(textAfterCursor);
+    // 1. Ищем последний открывающий тег СЛЕВА от курсора (игнорируя одиночные теги вроде <br> или <img>)
+    // RegExp ищет теги вида <figcaption>, <div class="...">, <b> и т.д.
+    const openingTags = [...textBeforeCursor.matchAll(/<([a-z1-6]+)(?:\s+[^>]*)*>/gi)];
+    // Ищем закрывающие теги СЛЕВА, чтобы учесть те, которые уже закрылись до курсора
+    const closingTagsBefore = [...textBeforeCursor.matchAll(/<\/([a-z1-6]+)>/gi)];
 
-    // Если курсор зажат прямо между <tag> и </tag> на одной строке
-    if (hasOpeningTagBefore && hasClosingTagAfter) {
-        return true;
+    // 2. Ищем первый закрывающий тег СПРАВА от курсора
+    const nextClosingTagMatch = /<\/([a-z1-6]+)>/i.exec(textAfterCursor);
+
+    // Если справа вообще нет закрывающих HTML-тегов, то мы точно не внутри тега
+    if (!nextClosingTagMatch) {
+        return false;
     }
 
-    // Дополнительная (более широкая) проверка: если на всей строке есть HTML-контекст
-    // Проверяем, открыт ли какой-то тег ранее на этой строке, который закрывается в конце строки
-    const inlineTagRegex = /<([a-z1-6]+)[^>]*>[^<]*$/i;
-    const inlineCloseRegex = /^[^>]*<\/([a-z1-6]+)>/i;
+    const expectedClosingTagName = nextClosingTagMatch[1].toLowerCase();
 
-    return inlineTagRegex.test(textBeforeCursor) && inlineCloseRegex.test(textAfterCursor);
+    // 3. Фильтруем открывающие теги слева: убираем те, которые закрылись ЕЩЕ ДО курсора
+    // Идем с конца массива открывающих тегов
+    let unclosedTagBefore = null;
+
+    /** @type {Record<string, number>} */
+    let closedCount = {};
+
+    // Считаем закрытые теги слева для баланса
+    for (let i = closingTagsBefore.length - 1; i >= 0; i--) {
+        const name = closingTagsBefore[i][1].toLowerCase();
+        closedCount[name] = (closedCount[name] || 0) + 1;
+    }
+
+    for (let i = openingTags.length - 1; i >= 0; i--) {
+        const name = openingTags[i][1].toLowerCase();
+        if (closedCount[name] > 0) {
+            closedCount[name]--; // этот тег уже был закрыт до курсора
+        } else {
+            unclosedTagBefore = name; // нашли ближайший незакрытый тег слева!
+            break;
+        }
+    }
+
+    // Если мы нашли незакрытый тег слева (например, 'figcaption' или 'b')
+    // и он совпадает с тем тегом, который закрывается справа — мы внутри HTML контекста.
+    // Либо если незакрытый тег слева — это инлайновый 'b', но за ним выше по иерархии стоит 'figcaption'.
+    if (unclosedTagBefore) {
+        // Базовая проверка: тег слева совпадает с тегом справа (например, открыт <b> и справа </b>)
+        if (unclosedTagBefore === expectedClosingTagName) {
+            return true;
+        }
+
+        // Продвинутая проверка для вашего случая: слева остался незакрытым <b> (или кавычка после него),
+        // а справа закрывается родительский </figcaption>. Мы проверяем, есть ли вообще figcaption в открытых.
+        const hasParentOpening = openingTags.some(match => match[1].toLowerCase() === expectedClosingTagName);
+        if (hasParentOpening) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // =============================================================================
