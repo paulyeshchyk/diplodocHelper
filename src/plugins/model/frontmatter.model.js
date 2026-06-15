@@ -44,6 +44,12 @@ const FrontMatterSectionTypesIndexed = [
     FrontMatterSectionTypes.PAGE,
 ];
 
+const FrontMatterSectionTypesIndexed2 = [
+    FrontMatterSectionTypes.PART,
+    FrontMatterSectionTypes.SECTION,
+    FrontMatterSectionTypes.CHAPTER,
+];
+
 module.exports = {
     FrontMatterMeta,
     FrontMatterToc,
@@ -51,4 +57,5 @@ module.exports = {
     FrontMatterFilesDefaultList: [FrontMatterFiles.INDEX_MD, FrontMatterFiles.INDEX_YAML, FrontMatterFiles.TOC_YAML],
     FrontMatterSectionTypes,
     FrontMatterSectionTypesIndexed,
+    FrontMatterSectionTypesIndexed2,
 };

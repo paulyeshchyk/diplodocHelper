@@ -7,7 +7,7 @@ const { IndexMdFileCreate } = require('../plugins/utils/md.index.file.js');
 const { IndexYamlFileCreate } = require('../plugins/utils/yaml.index.file.js');
 const { TocYamlFileCreate } = require('../plugins/utils/yaml.toc.file.js');
 const { TocYamlEntryPatchItems } = require('../plugins/utils/yaml.toc.entry.js');
-const { FrontMatterSectionTypesIndexed } = require('../plugins/model/frontmatter.model.js');
+const { FrontMatterSectionTypesIndexed2 } = require('../plugins/model/frontmatter.model.js');
 const { composeFullTitle } = require('../plugins/utils/frontmatter.section.title.js');
 const { ShowSectionNameSelector, ShowSectionTypeSelector, promptSectionIndex } = require('./vscode.prompts.js');
 const { isDiplodocSection, isLanguageRoot } = require('../plugins/utils/path.directory.js');
@@ -31,7 +31,7 @@ async function ux_section_create(uri) {
     const userSectionName = await ShowSectionNameSelector();
     if (!userSectionName) return;
 
-    const hasIndex = FrontMatterSectionTypesIndexed.includes(sectionType.name);
+    const hasIndex = FrontMatterSectionTypesIndexed2.includes(sectionType.name);
 
     const sectionIndexCalculated = calculateNextIndex(targetDir);
 
@@ -48,11 +48,17 @@ async function ux_section_create(uri) {
     const fullTitle = composeFullTitle(sectionIndex, sectionType, userSectionName);
 
     try {
-        IndexMdFileCreate(folderResult.folderPath, fullTitle, sectionType.name, sectionType.value, sectionIndex);
+        IndexMdFileCreate(folderResult.folderPath, userSectionName, sectionType.name, sectionType.value, sectionIndex);
 
-        IndexYamlFileCreate(folderResult.folderPath, fullTitle, sectionType.name, sectionType.value, sectionIndex);
+        IndexYamlFileCreate(
+            folderResult.folderPath,
+            userSectionName,
+            sectionType.name,
+            sectionType.value,
+            sectionIndex
+        );
 
-        TocYamlFileCreate(folderResult.folderPath, fullTitle, sectionType.value, sectionIndex);
+        TocYamlFileCreate(folderResult.folderPath, userSectionName, sectionType.value, sectionIndex);
 
         TocYamlEntryPatchItems(targetDir, fullTitle, sectionType.value, folderResult.folderName, sectionIndex);
 
