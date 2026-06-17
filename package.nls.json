@@ -132,5 +132,6 @@
   "submenu.generators": "Other",
   "submenu.helptag": "Helptag",
   "submenu.reindexier": "Reindex",
-  "extension.settings.contextPollingInterval.description": "polling interval (ms)"
+  "extension.settings.contextPollingInterval.description": "polling interval (ms)",
+  "plugin.section.move.warning.samePosition": "Same position. No move performed."
 }

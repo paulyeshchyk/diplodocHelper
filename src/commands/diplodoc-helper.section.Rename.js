@@ -6,15 +6,22 @@ const fs = require('fs');
 const path = require('path');
 
 const { promptSection } = require('./vscode.prompts.js');
-const { IndexMdEntryReadTitle } = require('../plugins/utils');
 const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
 const { IndexMdEntryPatch } = require('../plugins/utils/diplodoc.flow.js');
-const { IndexMdEntryReadIndex } = require('../plugins/utils/md.index.entry.js');
+const {
+    IndexMdEntryReadIndex,
+    IndexMdEntryReadTitle,
+    IndexMdEntryReadSectionType,
+} = require('../plugins/utils/md.index.entry.js');
 const { updateLinksAfterRename } = require('./vscode.linksUpdater.js');
 const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { sortTocItems } = require('../plugins/utils/yaml.toc.sort.js');
 
-const { TocYamlEntryRemove, TocYamlEntryCreate } = require('../plugins/utils/yaml.toc.entry.js');
+const {
+    TocYamlEntryRemove,
+    TocYamlEntryCreate,
+    TocYamlEntryUpdateOrAppend,
+} = require('../plugins/utils/yaml.toc.entry.js');
 const { renameSectionFolderIfNeeded } = require('../plugins/utils/diplodoc.flow.js');
 
 const {
@@ -40,6 +47,7 @@ async function ux_section_rename(uri) {
 
     const currentIndex = IndexMdEntryReadIndex(oldFolderPath);
     const currentPureTitle = IndexMdEntryReadTitle(oldFolderPath);
+    const currentSectionType = IndexMdEntryReadSectionType(oldFolderPath);
     const newSectionObject = await promptSection(currentPureTitle, currentIndex);
     if (!newSectionObject) {
         console.log(translate(nls_ts.plugin.section.rename.error.interrupted));
@@ -49,6 +57,10 @@ async function ux_section_rename(uri) {
     let finalIndex = newSectionObject.userIndex?.trim() || '';
     const newPureTitle = newSectionObject.newPureTitle;
     const newSectionType = newSectionObject.newSectionType;
+
+    const isIndexChanged = currentIndex !== finalIndex;
+    const isTypeChanged = currentSectionType !== newSectionType.value; // если у тебя есть старый тип секции
+    const needSorting = isIndexChanged || isTypeChanged;
 
     // Нормализация индекса в зависимости от типа
     const isIndexed = isIndexedSectionType(newSectionType);
@@ -68,9 +80,18 @@ async function ux_section_rename(uri) {
     }
 
     // 1. Удаляем старую запись из родительского toc
-    TocYamlEntryRemove(parentDir, oldFolderName);
+    // TocYamlEntryRemove(parentDir, oldFolderName);
 
     let finalFolderName = oldFolderName;
+
+    TocYamlEntryUpdateOrAppend(
+        parentDir,
+        oldFolderName, // кого ищем
+        fullTitle, // новые данные
+        finalFolderName,
+        newSectionObject.newSectionType.value,
+        finalIndex
+    );
 
     try {
         // 2. Переименовываем папку (если нужно)
@@ -93,14 +114,18 @@ async function ux_section_rename(uri) {
         }
 
         // 3. Добавляем новую запись в родительский toc
-        TocYamlEntryCreate(parentDir, fullTitle, finalFolderName, newSectionObject.newSectionType.value, finalIndex);
+        // TocYamlEntryCreate(parentDir, fullTitle, finalFolderName, newSectionObject.newSectionType.value, finalIndex);
 
         // 4. Обновление ссылок
         const projectRoot = getLanguageRoot(parentDir);
         await updateLinksAfterRename(oldFolderPath, newFolderPath, projectRoot);
 
-        // 5. Сортировка родительского toc.yaml по индексам
-        sortTocItems(parentDir); // сортировка по возрастанию, неиндексированные внизу
+        if (needSorting) {
+            console.log('Параметры сортировки изменились. Запускаем sortTocItems...');
+            sortTocItems(parentDir);
+        } else {
+            console.log('Изменилось только имя. Сохраняем авторский порядок техписа, сортировка пропущена.');
+        }
 
         vscode.window.showInformationMessage(
             translate(nls_ts.plugin.section.rename.info.success, oldFolderName, finalFolderName)

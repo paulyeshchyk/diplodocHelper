@@ -11,8 +11,11 @@ const path = require('path');
 const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
 const { getSectionMetadata } = require('../plugins/utils/frontmatter.section.metadata.js');
 const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
-const { reindexDirectory } = require('../plugins/reindexer/reindexer.directories.js');
-const { TocYamlEntryRemove, TocYamlEntryCreate } = require('../plugins/utils/yaml.toc.entry.js');
+const {
+    TocYamlEntryRemove,
+    TocYamlEntryInsertAtPosition,
+    TocYamlEntryMoveWithinSameFile,
+} = require('../plugins/utils/yaml.toc.entry.js');
 const { updateLinksAfterRename } = require('./vscode.linksUpdater.js');
 
 /**
@@ -46,7 +49,7 @@ async function ux_section_move(uri) {
     if (!position) return;
 
     // 3. Выполняем перемещение
-    const success = await performMove(sourcePath, targetDir);
+    const success = await performMove(sourcePath, targetDir, position);
     if (success) {
         vscode.window.showInformationMessage(translate(nls_ts.plugin.section.move.info.success, sourceName));
     }
@@ -116,11 +119,12 @@ async function collectMoveTargets(rootDir) {
  * Выбор позиции вставки
  * @param {string} targetDir
  * @param {string} movingSectionName
+ * @returns {Promise<import('../plugins/utils/yaml.toc.entry.js').InsertTocPosition | null>}
  */
 async function selectInsertPosition(targetDir, movingSectionName) {
     const items = fs
         .readdirSync(targetDir, { withFileTypes: true })
-        .filter(e => e.isDirectory() && isDiplodocSection(path.join(targetDir, e.name)))
+        .filter(e => e.isDirectory() && isDiplodocSection(path.join(targetDir, e.name)) && e.name !== movingSectionName)
         .map(e => ({
             label: translate(nls_ts.plugin.section.move.label.after, e.name),
             description: '',
@@ -151,94 +155,74 @@ async function selectInsertPosition(targetDir, movingSectionName) {
  * Выполняет перемещение раздела
  * @param {string} sourcePath
  * @param {string} targetDir
+ * @param {import('../plugins/utils/yaml.toc.entry.js').InsertTocPosition} position - Принимаем позицию вставки
  */
-async function performMove(sourcePath, targetDir) {
+async function performMove(sourcePath, targetDir, position) {
     const sourceName = path.basename(sourcePath);
     const targetPath = path.join(targetDir, sourceName);
 
-    // === Защита от перемещения в самого себя или своего потомка ===
-    if (sourcePath === targetPath) {
-        vscode.window.showErrorMessage(translate(nls_ts.plugin.section.move.error.self));
-        return false;
-    }
+    const oldParentDir = path.dirname(sourcePath);
+    const newParentDir = targetDir;
 
-    if (targetPath.startsWith(sourcePath + path.sep)) {
+    // Флаг: перемещаем ли мы внутри одной и той же папки?
+    const isSameParent = oldParentDir === newParentDir;
+
+    // === КРИТИЧЕСКАЯ ПРОВЕРКА: Защита от перемещения "после самого себя" ===
+    if (isSameParent && position.position === 'after' && position.afterName === sourceName) {
+        vscode.window.showWarningMessage(translate(nls_ts.plugin.section.move.warning.samePosition, sourceName));
+        console.log(`[Move] Операция отменена: попытка переместить "${sourceName}" после самого себя.`);
+        return false; // Ничего не делаем, выходим
+    }
+    // === Защита от перемещения внутрь самого себя (в подпапки) ===
+    if (!isSameParent && targetPath.startsWith(sourcePath + path.sep)) {
         vscode.window.showErrorMessage(translate(nls_ts.plugin.section.move.error.recursive));
         return false;
     }
 
-    if (fs.existsSync(targetPath)) {
+    // Если папка переезжает в ДРУГОЙ раздел, но там уже есть папка с таким именем
+    if (!isSameParent && fs.existsSync(targetPath)) {
         vscode.window.showErrorMessage(translate(nls_ts.plugin.section.move.error.sectionexists, sourceName));
         return false;
     }
 
     try {
-        const oldParentDir = path.dirname(sourcePath);
-        const newParentDir = targetDir;
+        if (!isSameParent) {
+            // СЦЕНАРИЙ 1: Честный переезд в другую директорию
 
-        // 1. Удаляем запись из старого родителя
-        TocYamlEntryRemove(oldParentDir, sourceName);
+            // 1. Удаляем запись из старого родителя
+            TocYamlEntryRemove(oldParentDir, sourceName);
 
-        // 2. Перемещаем папку
-        fs.renameSync(sourcePath, targetPath);
+            // 2. Физически перемещаем папку на диске
+            fs.renameSync(sourcePath, targetPath);
 
-        // 3. Обновляем ссылки на перемещённый раздел и его содержимое
-        const projectRoot = getLanguageRoot(targetPath);
-        const updatedFiles = await updateLinksAfterRename(sourcePath, targetPath, projectRoot);
-        if (updatedFiles > 0) {
-            vscode.window.showInformationMessage(translate(nls_ts.plugin.section.move.info.success, updatedFiles));
-            vscode.window.showWarningMessage(translate(nls_ts.plugin.section.move.warning.broken));
+            // 3. Обновляем ссылки в проекте
+            const projectRoot = getLanguageRoot(targetPath);
+            await updateLinksAfterRename(sourcePath, targetPath, projectRoot);
+
+            // 4. Получаем заголовок
+            const composedTitle = await getComposedTitle(targetPath);
+
+            // 5. Вставляем в новый родитель на выбранное место
+            TocYamlEntryInsertAtPosition(newParentDir, composedTitle, sourceName, position);
+
+            console.log(`[Move] Раздел перенесен в другую папку: ${sourceName} -> ${newParentDir}`);
+        } else {
+            // СЦЕНАРИЙ 2: Перемещение внутри ТЕГО ЖЕ родителя (меняется только позиция в TOC)
+            console.log(`[Move] Изменение позиции внутри одного родителя для: ${sourceName}`);
+
+            // Читаем заголовок прямо на месте (никуда ничего не перемещали)
+            const composedTitle = await getComposedTitle(sourcePath);
+
+            // Вызываем специальную функцию, которая аккуратно передвинет элемент
+            // внутри одного и того же файла toc.yaml, не ломая данные
+            TocYamlEntryMoveWithinSameFile(newParentDir, composedTitle, sourceName, position);
         }
-
-        // 4. Добавляем запись в новый родитель
-        const composedTitle = await getComposedTitle(targetPath);
-
-        // Получаем метаданные для корректного добавления
-        const sectionInfo = await getSectionInfo(targetPath);
-
-        TocYamlEntryCreate(
-            newParentDir,
-            composedTitle,
-            sourceName,
-            sectionInfo.sectionType || 'Page',
-            sectionInfo.sectionIndex || ''
-        );
-
-        console.log(`Перемещён: ${sourceName} - ${newParentDir}`);
-
-        // 4. Переиндексация обоих родителей
-        reindexDirectory(oldParentDir);
-        reindexDirectory(newParentDir);
 
         return true;
     } catch (err) {
         let msg = err instanceof Error ? err.message : `${err}`;
         vscode.window.showErrorMessage(translate(nls_ts.plugin.section.move.error.critical, msg));
-        console.error(err);
         return false;
-    }
-}
-
-/**
- * Читает основные метаданные раздела
- * @param {string} sectionPath
- */
-async function getSectionInfo(sectionPath) {
-    const indexPath = path.join(sectionPath, 'index.md');
-    if (!fs.existsSync(indexPath)) {
-        return { sectionType: 'Page', sectionIndex: '' };
-    }
-
-    try {
-        const content = fs.readFileSync(indexPath, 'utf8');
-        const metadata = getSectionMetadata(content); // из utils
-
-        return {
-            sectionType: metadata.sectionType || 'Page',
-            sectionIndex: metadata.sectionIndex || '',
-        };
-    } catch {
-        return { sectionType: 'Page', sectionIndex: '' };
     }
 }
 

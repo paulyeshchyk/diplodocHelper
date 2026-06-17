@@ -1,24 +1,9 @@
 // src/utils/toc.js
 const fs = require('fs');
-const path = require('path');
 const yaml = require('js-yaml');
-
-const { FrontMatterFiles } = require('../model/frontmatter.model');
 
 /* ====================== ЭКСПОРТ ====================== */
 
-const { TEMPLATE_TOC_YAML } = require('../model/frontmatter.templates');
-
-/**
- * @param {string} folderPath
- * @param {any} title
- * @param {any} sectionLabel
- * @param {any} sectionIndex
- */
-function TocYamlFileCreate(folderPath, title, sectionLabel, sectionIndex) {
-    const filePath = path.join(folderPath, FrontMatterFiles.TOC_YAML);
-    fs.writeFileSync(filePath, TEMPLATE_TOC_YAML(title, sectionLabel, sectionIndex), 'utf8');
-}
 /** @typedef {Object} TocYamlItemInclude
  * @property {string} path
  */
@@ -52,5 +37,4 @@ function TocYamlFileSave(tocPath, tocDoc) {
 module.exports = {
     TocYamlFileLoad,
     TocYamlFileSave,
-    TocYamlFileCreate,
 };

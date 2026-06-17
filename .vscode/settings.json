@@ -5,5 +5,11 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[yaml]": {
+    "editor.defaultFormatter": null,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
   "js/ts.implicitProjectConfig.checkJs": true
 }

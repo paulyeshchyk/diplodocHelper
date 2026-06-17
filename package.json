@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "0.22.3",
+    "version": "0.22.4",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -318,7 +318,8 @@
         "gray-matter": "^4.0.3",
         "js-yaml": "^4.1.1",
         "transliteration": "^2.6.1",
-        "vscode-nls": "^5.2.0"
+        "vscode-nls": "^5.2.0",
+        "yaml": "^2.9.0"
     },
     "devDependencies": {
         "@eslint/css": "^1.2.0",

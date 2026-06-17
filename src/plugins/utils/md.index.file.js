@@ -2,23 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { FrontMatterFiles } = require('../model/frontmatter.model');
 
-const { TEMPLATE_INDEX_MD } = require('../model/frontmatter.templates');
-
 // === Функции для Rename (обновление метаданных) ===
 
 const { parse, stringify } = require('./frontmatter.utils');
-
-/**
- * @param {string} folderPath
- * @param {any} title
- * @param {any} sectionType
- * @param {any} sectionValue
- * @param {any} sectionIndex
- */
-function IndexMdFileCreate(folderPath, title, sectionType, sectionValue, sectionIndex) {
-    const filePath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
-    fs.writeFileSync(filePath, TEMPLATE_INDEX_MD(title, sectionType, sectionValue, sectionIndex), 'utf8');
-}
 
 /**
  * @param {string} folderPath
@@ -64,7 +50,6 @@ function IndexMdFilePatch(folderPath, pureTitle, sectionTypeName, sectionLabel, 
 }
 
 module.exports = {
-    IndexMdFileCreate,
     IndexMdFileRead,
     IndexMdFilePatch,
 };

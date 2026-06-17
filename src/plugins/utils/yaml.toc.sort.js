@@ -2,10 +2,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const YAML = require('yaml');
 
-const { normalizeEmptyLines, getIndexFromBlock, splitTocIntoBlocks } = require('./yaml.toc.utils');
-
-const { FrontMatterFiles } = require('../model/frontmatter.model');
+const { FrontMatterFiles, FrontMatterToc } = require('../model/frontmatter.model');
+const { IndexMdEntryReadIndex } = require('./md.index.entry');
 
 /**
  * Сортирует элементы toc.yaml, сохраняя форматирование
@@ -15,29 +15,69 @@ function sortTocItems(baseDir, sortOrder = 'ascending', sortKind = 'nonIndexedBo
     const tocPath = path.join(baseDir, FrontMatterFiles.TOC_YAML);
     if (!fs.existsSync(tocPath)) return;
 
-    let content = fs.readFileSync(tocPath, 'utf8');
+    const fileContent = fs.readFileSync(tocPath, 'utf8');
+    const tocData = YAML.parse(fileContent) || {};
 
-    const blocks = splitTocIntoBlocks(content);
-    if (blocks.length === 0) return;
+    if (!tocData.items || !Array.isArray(tocData.items)) return;
 
-    const itemsWithIndex = blocks.map(block => ({
-        block,
-        index: getIndexFromBlock(block, baseDir),
-    }));
+    // Карпируем массив с сохранением исходного порядкового номера (originalIndex)
+    // Это гарантирует, что элементы без индексов не перемешаются между собой!
+    const itemsWithPositions = tocData.items.map((item, idx) => {
+        const href = item[FrontMatterToc.ITEMS_HREF] || '';
+        const folderName = href.split('/')[0];
 
-    const indexed = itemsWithIndex.filter(i => i.index !== null);
-    const nonIndexed = itemsWithIndex.filter(i => i.index === null);
+        let sectionIndex = null;
+        if (folderName) {
+            const childFolderPath = path.join(baseDir, folderName);
+            try {
+                // Читаем индекс из index.md
+                const readIdx = IndexMdEntryReadIndex(childFolderPath);
+                if (readIdx !== undefined && readIdx !== null && readIdx !== '') {
+                    sectionIndex = parseInt(readIdx, 10);
+                }
+            } catch (e) {
+                // Если файла нет или ошибка — оставляем null
+            }
+        }
 
-    indexed.sort((a, b) => compareIndexes(a.index, b.index, sortOrder));
+        return {
+            item,
+            index: isNaN(sectionIndex) ? null : sectionIndex,
+            originalIndex: idx, // сохраняем позицию, которая была в файле ДО сортировки
+        };
+    });
 
-    const sortedBlocks =
-        sortKind === 'nonIndexedTop'
-            ? [...nonIndexed.map(i => i.block), ...indexed.map(i => i.block)]
-            : [...indexed.map(i => i.block), ...nonIndexed.map(i => i.block)];
+    // Разделяем на индексированные и неиндексированные
+    const indexed = itemsWithPositions.filter(i => i.index !== null);
+    const nonIndexed = itemsWithPositions.filter(i => i.index === null);
 
-    const newContent = content.split(/^(\s*items:)/m)[0] + 'items:\n' + sortedBlocks.join('\n');
+    // Сортируем индексированные по их index
+    // Если индексы равны, сохраняем их исходный порядок (originalIndex)
+    indexed.sort((a, b) => {
+        if (a.index === b.index) {
+            return a.originalIndex - b.originalIndex;
+        }
+        return sortOrder === 'ascending' ? a.index - b.index : b.index - a.index;
+    });
 
-    fs.writeFileSync(tocPath, normalizeEmptyLines(newContent), 'utf8');
+    // Неиндексированные элементы мы ВООБЩЕ НЕ СОРТИРУЕМ,
+    // только сохраняем их исходный порядок относительно друг друга
+    nonIndexed.sort((a, b) => a.originalIndex - b.originalIndex);
+
+    // Собираем итоговый массив обратно
+    let finalOrderedEntries = [];
+    if (sortKind === 'nonIndexedTop') {
+        finalOrderedEntries = [...nonIndexed, ...indexed];
+    } else {
+        // Твой случай: индексированные (1, 2, 3) идут наверх, остальные вниз
+        finalOrderedEntries = [...indexed, ...nonIndexed];
+    }
+
+    // Извлекаем чистые объекты обратно в tocData
+    tocData.items = finalOrderedEntries.map(entry => entry.item);
+
+    // Записываем в файл
+    fs.writeFileSync(tocPath, YAML.stringify(tocData), 'utf8');
 }
 
 /**

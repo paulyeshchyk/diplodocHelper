@@ -3,15 +3,17 @@
 const { nls_ts, translate } = require('../../nls_ts.js');
 const vscode = require('vscode');
 const { calculateNextIndex } = require('../plugins/reindexer/reindexer.md.js');
-const { IndexMdFileCreate } = require('../plugins/utils/md.index.file.js');
-const { IndexYamlFileCreate } = require('../plugins/utils/yaml.index.file.js');
-const { TocYamlFileCreate } = require('../plugins/utils/yaml.toc.file.js');
-const { TocYamlEntryPatchItems } = require('../plugins/utils/yaml.toc.entry.js');
 const { FrontMatterSectionTypesIndexed2 } = require('../plugins/model/frontmatter.model.js');
 const { composeFullTitle } = require('../plugins/utils/frontmatter.section.title.js');
 const { ShowSectionNameSelector, ShowSectionTypeSelector, promptSectionIndex } = require('./vscode.prompts.js');
 const { isDiplodocSection, isLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { createSectionFolder } = require('../plugins/utils/diplodoc.flow.js');
+const {
+    IndexYamlFileCreate,
+    TocYamlFileCreate,
+    IndexMdFileCreate,
+    TocYamlEntryPatchItems,
+} = require('../plugins/utils/yaml.base.js');
 
 /**
  * @param {{ fsPath: any; }} uri

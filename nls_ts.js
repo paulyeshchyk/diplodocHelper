@@ -311,6 +311,7 @@ const nls_ts = {
                 },
                 warning: {
                     broken: 'plugin.section.move.warning.broken',
+                    samePosition: 'plugin.section.move.warning.samePosition',
                 },
             },
             reindex: {

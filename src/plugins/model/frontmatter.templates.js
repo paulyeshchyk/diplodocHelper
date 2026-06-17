@@ -104,25 +104,6 @@ function TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex = '') {
     // 4. Нет ни типа, ни индекса
     return cleanName;
 }
-/**
- * Генерирует имя папки раздела
- * @param {SectionTypeOption} sectionType
- * @param {string} sectionName
- * @param {string | undefined} sectionIndex
- */
-function TEMPLATE_SECTION_NAME(sectionType, sectionName, sectionIndex = '') {
-    const cleanName = sectionName; //.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, "");
-
-    if (sectionType.value.trim() !== '') {
-        if (sectionIndex && sectionIndex.trim() !== '') {
-            return `${sectionType.value} ${sectionIndex.trim()}. ${cleanName}`;
-        } else {
-            return `${sectionType.value} ${cleanName}`;
-        }
-    } else {
-        return cleanName;
-    }
-}
 
 module.exports = {
     TEMPLATE_FINAL_TITLE,
@@ -131,5 +112,4 @@ module.exports = {
     TEMPLATE_TOC_YAML,
     TEMPLATE_PARENT_TOC_YAML,
     TEMPLATE_FOLDER_NAME,
-    TEMPLATE_SECTION_NAME,
 };
