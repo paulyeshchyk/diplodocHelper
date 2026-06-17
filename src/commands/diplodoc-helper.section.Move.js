@@ -9,7 +9,6 @@ const fs = require('fs');
 const path = require('path');
 
 const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
-const { getSectionMetadata } = require('../plugins/utils/frontmatter.section.metadata.js');
 const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
 const {
     TocYamlEntryRemove,

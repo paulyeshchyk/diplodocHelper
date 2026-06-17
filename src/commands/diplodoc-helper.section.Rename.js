@@ -17,11 +17,7 @@ const { updateLinksAfterRename } = require('./vscode.linksUpdater.js');
 const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { sortTocItems } = require('../plugins/utils/yaml.toc.sort.js');
 
-const {
-    TocYamlEntryRemove,
-    TocYamlEntryCreate,
-    TocYamlEntryUpdateOrAppend,
-} = require('../plugins/utils/yaml.toc.entry.js');
+const { TocYamlEntryUpdateOrAppend } = require('../plugins/utils/yaml.toc.entry.js');
 const { renameSectionFolderIfNeeded } = require('../plugins/utils/diplodoc.flow.js');
 
 const {

@@ -170,7 +170,7 @@ function TocYamlEntryPatchReference(parentDir, oldFolderName, newFolderName) {
     }
 
     // Обновляем index.yaml родителя
-    IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, ''); // composedTitle не нужен здесь
+    IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, '');
 }
 
 /**

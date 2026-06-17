@@ -20,56 +20,66 @@ function sortTocItems(baseDir, sortOrder = 'ascending', sortKind = 'nonIndexedBo
 
     if (!tocData.items || !Array.isArray(tocData.items)) return;
 
-    // Карпируем массив с сохранением исходного порядкового номера (originalIndex)
+    // Картируем массив с сохранением исходного порядкового номера (originalIndex)
     // Это гарантирует, что элементы без индексов не перемешаются между собой!
-    const itemsWithPositions = tocData.items.map((item, idx) => {
-        const href = item[FrontMatterToc.ITEMS_HREF] || '';
-        const folderName = href.split('/')[0];
+    const itemsWithPositions = tocData.items.map(
+        (/** @type {{ [x: string]: string; }} */ item, /** @type {any} */ idx) => {
+            const href = item[FrontMatterToc.ITEMS_HREF] || '';
+            const folderName = href.split('/')[0];
 
-        let sectionIndex = null;
-        if (folderName) {
-            const childFolderPath = path.join(baseDir, folderName);
-            try {
-                // Читаем индекс из index.md
-                const readIdx = IndexMdEntryReadIndex(childFolderPath);
-                if (readIdx !== undefined && readIdx !== null && readIdx !== '') {
-                    sectionIndex = parseInt(readIdx, 10);
+            let sectionIndex = null;
+            if (folderName) {
+                const childFolderPath = path.join(baseDir, folderName);
+                try {
+                    // Читаем индекс из index.md
+                    const readIdx = IndexMdEntryReadIndex(childFolderPath);
+                    if (readIdx !== undefined && readIdx !== null && readIdx !== '') {
+                        sectionIndex = parseInt(readIdx, 10);
+                    }
+                } catch (e) {
+                    console.error(e);
                 }
-            } catch (e) {
-                // Если файла нет или ошибка — оставляем null
             }
-        }
 
-        return {
-            item,
-            index: isNaN(sectionIndex) ? null : sectionIndex,
-            originalIndex: idx, // сохраняем позицию, которая была в файле ДО сортировки
-        };
-    });
+            return {
+                item,
+                index: sectionIndex ? (isNaN(sectionIndex) ? null : sectionIndex) : null,
+                originalIndex: idx, // сохраняем позицию, которая была в файле ДО сортировки
+            };
+        }
+    );
 
     // Разделяем на индексированные и неиндексированные
-    const indexed = itemsWithPositions.filter(i => i.index !== null);
-    const nonIndexed = itemsWithPositions.filter(i => i.index === null);
+    const indexed = itemsWithPositions.filter((/** @type {{ index: null; }} */ i) => i.index !== null);
+    const nonIndexed = itemsWithPositions.filter((/** @type {{ index: null; }} */ i) => i.index === null);
 
     // Сортируем индексированные по их index
     // Если индексы равны, сохраняем их исходный порядок (originalIndex)
-    indexed.sort((a, b) => {
-        if (a.index === b.index) {
-            return a.originalIndex - b.originalIndex;
+    indexed.sort(
+        (
+            /** @type {{ index: number; originalIndex: number; }} */ a,
+            /** @type {{ index: number; originalIndex: number; }} */ b
+        ) => {
+            if (a.index === b.index) {
+                return a.originalIndex - b.originalIndex;
+            }
+            return sortOrder === 'ascending' ? a.index - b.index : b.index - a.index;
         }
-        return sortOrder === 'ascending' ? a.index - b.index : b.index - a.index;
-    });
+    );
 
     // Неиндексированные элементы мы ВООБЩЕ НЕ СОРТИРУЕМ,
     // только сохраняем их исходный порядок относительно друг друга
-    nonIndexed.sort((a, b) => a.originalIndex - b.originalIndex);
+    nonIndexed.sort(
+        (/** @type {{ originalIndex: number; }} */ a, /** @type {{ originalIndex: number; }} */ b) =>
+            a.originalIndex - b.originalIndex
+    );
 
     // Собираем итоговый массив обратно
     let finalOrderedEntries = [];
     if (sortKind === 'nonIndexedTop') {
         finalOrderedEntries = [...nonIndexed, ...indexed];
     } else {
-        // Твой случай: индексированные (1, 2, 3) идут наверх, остальные вниз
+        // индексированные (1, 2, 3) идут наверх, остальные вниз
         finalOrderedEntries = [...indexed, ...nonIndexed];
     }
 
@@ -101,4 +111,4 @@ function compareIndexes(a, b, order = 'ascending') {
     return 0;
 }
 
-module.exports = { sortTocItems };
+module.exports = { sortTocItems, compareIndexes };
