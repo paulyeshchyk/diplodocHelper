@@ -181,7 +181,7 @@ function collectMdFilesInOrder(entries, rootDir, currentPath = '', visited = new
  */
 function processFigureCaptions(content, startCounter, prefix, mdFilePath) {
     let counter = startCounter;
-    const mapping = new Map(); // Теперь здесь будут составные ключи
+    const mapping = new Map();
 
     const regex =
         /<figure>\s*<figcaption\s+class="imageDescription"([^>]*?)\s+id="([^"]+)"([^>]*?)>([\s\S]*?)<\/figcaption>\s*<\/figure>/gi;

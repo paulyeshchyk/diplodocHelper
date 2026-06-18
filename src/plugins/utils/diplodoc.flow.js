@@ -50,7 +50,7 @@ function IndexMdEntryPatch(folderPath, pureTitle, sectionTypeName, sectionLabel,
     // index.md используем gray-matter (это frontmatter)
     IndexMdFilePatch(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex);
 
-    // index.yaml обычный YAML, gray-matter здесь не нужен!
+    // index.yaml обычный YAML
     IndexYamlEntryPatchSection(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex);
 
     // toc.yaml своего раздела

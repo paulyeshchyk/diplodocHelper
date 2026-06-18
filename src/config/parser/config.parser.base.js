@@ -39,7 +39,7 @@ class ConfigParserBase {
             type,
             description,
             defaultValue,
-            enumValues, // теперь тип совпадает: any[] | undefined
+            enumValues,
             order,
         });
     }
