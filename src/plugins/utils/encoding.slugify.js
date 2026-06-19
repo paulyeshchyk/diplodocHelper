@@ -1,6 +1,6 @@
 // utils/slugify.js
 
-const { transliterate } = require('transliteration');
+const { diplodocTransliterate: transliterate } = require('./transliterate');
 
 /**
  * Заменяет все символы, не являющиеся буквами (любого алфавита), цифрами, дефисом, точкой или подчёркиванием, на подчёркивание.
@@ -10,11 +10,6 @@ const { transliterate } = require('transliteration');
  *
  * @param {string} str - Входная строка (может содержать любые символы)
  * @returns {string} Очищенная строка, пригодная для имени файла (с буквами, цифрами, дефисами, точками, подчёркиваниями)
- * @example
- * slugify_filename('Привет Мир!') // => "Привет_Мир_"
- * slugify_filename('my-file_v2.0 (test)') // => "my-file_v2.0_test_"
- * slugify_filename('...file...') // => "file"
- * slugify_filename('файл №1') // => "файл_1"
  */
 function slugify_filename(str) {
     return str
@@ -68,20 +63,35 @@ function slugify_latin_alphanumeric(text) {
 }
 
 /**
- * @param {string} text
+ * Создает готовую строку ссылки для md-документа.
+ * Очищает заголовок, транслитерирует и склеивает с путем к файлу.
+ *
+ * @param {string} text - Входной текст параграфа (например, "# Действующие лица...")
+ * @returns {string} Готовая ссылка вида "./index.md#dejstvuyushie-..."
  */
 function slugify_diplodoc_reference(text) {
     if (!text || typeof text !== 'string') return '';
 
-    let slug = transliterate(text);
+    // 1. Удаляем маркеры заголовков Markdown (#) и пробелы в самом начале
+    let cleanText = text.replace(/^#+\s*/, '');
+
+    // 2. Прогоняем через транслитератор (& -> and, % -> percent и т.д.)
+    let slug = transliterate(cleanText);
+
+    // 3. Приводим к нижнему регистру
     slug = slug.toLowerCase();
-    slug = slug.replace(/[^a-z0-9]+/g, '-');
+
+    // 4. Заменяем пробелы на дефисы
+    slug = slug.replace(/\s+/g, '-');
+
+    // 5. Очищаем шум.
+    slug = slug.replace(/[^a-z0-9\/=\\ -]/g, '');
+
+    // 6. Схлопываем множественные дефисы в один
     slug = slug.replace(/-+/g, '-');
-    slug = slug.replace(/^-+|-+$/g, '');
 
     return slug;
 }
-
 module.exports = {
     slugify_diplodoc_reference,
     slugify_filename,

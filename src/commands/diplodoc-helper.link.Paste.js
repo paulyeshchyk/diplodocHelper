@@ -170,11 +170,12 @@ async function promptAnchorSelection(anchors) {
  * @returns {string}
  */
 function generateSlug(text) {
-    let slug = text
-        .toLowerCase()
-        .replace(/[^\w\u0400-\u04FF]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-    return slugify_diplodoc_reference(slug);
+    // let slug = text
+    //     .toLowerCase()
+    //     .replace(/[^\w\u0400-\u04FF]+/g, '-')
+    //     .replace(/^-+|-+$/g, '');
+    // return slugify_diplodoc_reference(slug);
+    return slugify_diplodoc_reference(text);
 }
 
 /**
