@@ -68,6 +68,11 @@
                     "group": "2.diplodoc.copy@1"
                 },
                 {
+                    "command": "diplodoc-helper.file.delete",
+                    "when": "explorerResourceIsFolder || resourceExtname != .md",
+                    "group": "3.diplodoc.copy@1"
+                },
+                {
                     "submenu": "diplodoc.context.explorer.context.menu",
                     "when": "explorerResourceIsFolder",
                     "group": "3.diplodoc.context@1"

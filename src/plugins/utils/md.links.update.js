@@ -47,31 +47,6 @@ function splitPathQueryHash(rawPath) {
 }
 
 /**
- * Декодирует URL-encoded путь в строку файловой системы
- * @param {string} encodedPath
- * @returns {string}
- */
-function decodeLinkPath(encodedPath) {
-    try {
-        return decodeURIComponent(encodedPath);
-    } catch {
-        return encodedPath;
-    }
-}
-
-/**
- * Кодирует каждый сегмент пути, сохраняя слеши
- * @param {string} path - нормальный путь (с /)
- * @returns {string}
- */
-function encodePathSegments(path) {
-    return path
-        .split('/')
-        .map(seg => encodeURIComponent(seg))
-        .join('/');
-}
-
-/**
  * Проверяет, лежит ли целевой путь внутри переименовываемой папки
  * @param {string} absoluteTarget - абсолютный путь к цели
  * @param {string} oldFolder - старый абсолютный путь к папке раздела
@@ -111,60 +86,10 @@ function buildMarkdownLink(isImage, text, newRelativePath, query, hash) {
     return `${prefix}[${text}](${fullPath})`;
 }
 
-/**
- * Обновляет ссылки в одном .md файле
- * @param {string} content
- * @param {string} currentFilePath - абсолютный путь к файлу
- * @param {string} oldFolder - старый путь к разделу
- * @param {string} newFolder - новый путь
- * @returns {string}
- */
-function updateLinksInContent(content, currentFilePath, oldFolder, newFolder) {
-    const links = parseMarkdownLinks(content);
-    if (links.length === 0) return content;
-
-    let result = '';
-    let lastIndex = 0;
-
-    for (const link of links) {
-        result += content.slice(lastIndex, link.index);
-
-        // Пропускаем внешние ссылки
-        if (link.rawPath.match(/^(https?:\/\/|#|mailto:|\/)/i)) {
-            result += link.full;
-            lastIndex = link.index + link.full.length;
-            continue;
-        }
-
-        const { pathPart, query, hash } = splitPathQueryHash(link.rawPath);
-        const decodedPath = decodeLinkPath(pathPart);
-        const absoluteTarget = path.resolve(path.dirname(currentFilePath), decodedPath);
-
-        if (isInsideRenamedFolder(absoluteTarget, oldFolder)) {
-            const newAbsoluteTarget = getNewAbsoluteTarget(absoluteTarget, oldFolder, newFolder);
-            let newRelativePath = path.relative(path.dirname(currentFilePath), newAbsoluteTarget);
-            newRelativePath = newRelativePath.split(path.sep).join('/');
-            const encodedRelativePath = encodePathSegments(newRelativePath);
-            const newLink = buildMarkdownLink(link.isImage, link.text, encodedRelativePath, query, hash);
-            result += newLink;
-        } else {
-            result += link.full;
-        }
-
-        lastIndex = link.index + link.full.length;
-    }
-
-    result += content.slice(lastIndex);
-    return result;
-}
-
 module.exports = {
     parseMarkdownLinks,
     splitPathQueryHash,
-    decodeLinkPath,
-    encodePathSegments,
     isInsideRenamedFolder,
     getNewAbsoluteTarget,
     buildMarkdownLink,
-    updateLinksInContent,
 };

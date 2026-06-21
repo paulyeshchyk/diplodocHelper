@@ -23,6 +23,7 @@ const { ux_section_create } = require('./commands/diplodoc-helper.section.Create
 const { ux_section_delete } = require('./commands/diplodoc-helper.section.Delete');
 const { ux_section_move } = require('./commands/diplodoc-helper.section.Move');
 const { ux_section_rename } = require('./commands/diplodoc-helper.section.Rename');
+const { ux_file_delete } = require('./commands/diplodoc-helper.file.Delete');
 const { CONFIG_KEY } = require('./plugins/constants');
 const { ux_add_anchor } = require('./commands/diplodoc-helper.link.AddAnchor');
 const { ContextManager } = require('./ContextMenuManager');
@@ -65,6 +66,7 @@ function activate(context) {
     const cmd15 = vscode.commands.registerCommand('diplodoc-helper.helptag.Update', ux_helptag_update);
     const cmd16 = vscode.commands.registerCommand('diplodoc-helper.helptag.Delete', ux_helptag_delete);
     const cmd21 = vscode.commands.registerCommand('diplodoc-helper.link.addAnchor', ux_add_anchor);
+    const cmd31 = vscode.commands.registerCommand('diplodoc-helper.file.delete', ux_file_delete);
     const cmd99 = vscode.commands.registerCommand('diplodoc-helper.settings', () => {
         vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_KEY);
     });
@@ -77,6 +79,7 @@ function activate(context) {
     context.subscriptions.push(cmd15, cmd16);
     context.subscriptions.push(cmd17, cmd18, cmd19, cmd20);
     context.subscriptions.push(cmd21);
+    context.subscriptions.push(cmd31);
     context.subscriptions.push(cmd99);
 
     const config = DiplodocConfigSharedInstance();

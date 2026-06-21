@@ -133,5 +133,14 @@
   "submenu.helptag": "Helptag",
   "submenu.reindexier": "Прочее",
   "extension.settings.contextPollingInterval.description": "Интервал polling'а контекста в миллисекундах",
-  "plugin.section.move.warning.samePosition": "Позиция не изменилась. В перемещении отказано"
+  "plugin.section.move.warning.samePosition": "Позиция не изменилась. В перемещении отказано",
+  "command.file.delete.wipe_references": "Удалить, очищая ссылки",
+  "crossref.few.files.message": "\n\nБудут удалены ссылки в {0} файлах:\n",
+  "crossref.few.links.message": " ( {0} ссылок)",
+  "crossref.footer.message": "\nСсылки внутри удаляемого раздела и его подразделов игнорируются (они удалятся вместе с разделом).",
+  "crossref.more.files.message": "... и ещё {0} файлов\n",
+  "crossref.none.reference.message": "В проекте не найдено внешних ссылок на этот раздел.",
+  "crossref.plural.file.confirm.header": "Удалить файл \"{0}\"?",
+  "crossref.plural.file.message": "\n\nБудут удалены ссылки в {0} файле:\n",
+  "crossref.plural.links.message": " ( 1 ссылка)"
 }

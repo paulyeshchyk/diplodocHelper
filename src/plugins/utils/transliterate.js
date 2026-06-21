@@ -1,6 +1,7 @@
 /**
  * Словарь для ПРЯМОГО перевода (Кириллица и спецсимволы -> Латиница).
  */
+/** @typedef {Record<string,string>} */
 const cyrToLatLegend = {
     а: 'a',
     б: 'b',
@@ -48,6 +49,7 @@ const cyrToLatLegend = {
 /**
  * Словарь для ОБРАТНОГО перевода (Латиница -> Кириллица).
  */
+/** @typedef {Record<string,string>} */
 const latToCyrLegend = {
     greater: '>',
     percent: '%',
@@ -89,7 +91,7 @@ const latToCyrLegend = {
     y: 'ы',
 };
 
-const escapeRegExp = string => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapeRegExp = (/** @type {string} */ str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const cyrRegex = new RegExp(
     Object.keys(cyrToLatLegend)
@@ -106,11 +108,17 @@ const latRegex = new RegExp(
     'g'
 );
 
+/**
+ * @param {string} text
+ */
 function diplodocTransliterate(text) {
     if (typeof text !== 'string') return '';
     return text.toLowerCase().replace(cyrRegex, match => cyrToLatLegend[match]);
 }
 
+/**
+ * @param {string} text
+ */
 function diplodocReverseTransliterate(text) {
     if (typeof text !== 'string') return '';
     return text.toLowerCase().replace(latRegex, match => latToCyrLegend[match]);

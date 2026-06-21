@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "0.23.7",
+    "version": "0.24.0",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -63,6 +63,10 @@
             {
                 "command": "diplodoc-helper.copyLink",
                 "title": "%command.md.link.copy%"
+            },
+            {
+                "command": "diplodoc-helper.file.delete",
+                "title": "%command.file.delete.wipe_references%"
             },
             {
                 "command": "diplodoc-helper.pasteLink",
@@ -180,6 +184,11 @@
                     "command": "diplodoc-helper.copyLink",
                     "when": "explorerResourceIsFolder || resourceExtname == .md || resourceExtname == .png || resourceExtname == .jpg || resourceExtname == .svg",
                     "group": "2.diplodoc.copy@1"
+                },
+                {
+                    "command": "diplodoc-helper.file.delete",
+                    "when": "explorerResourceIsFolder || resourceExtname != .md",
+                    "group": "3.diplodoc.copy@1"
                 },
                 {
                     "submenu": "diplodoc.context.explorer.context.menu",

@@ -8,14 +8,13 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
-const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
+const { isDiplodocSection, getLanguageRoot } = require('../plugins/utils/path.directory.js');
 const {
     TocYamlEntryRemove,
     TocYamlEntryInsertAtPosition,
     TocYamlEntryMoveWithinSameFile,
 } = require('../plugins/utils/yaml.toc.entry.js');
-const { updateLinksAfterRename } = require('./vscode.linksUpdater.js');
+const { updateLinksAfterRename } = require('./diplodoc-helper.links.md.js');
 
 /**
  * @typedef {Object} MoveTarget
@@ -196,7 +195,7 @@ async function performMove(sourcePath, targetDir, position) {
 
             // 3. Обновляем ссылки в проекте
             const projectRoot = getLanguageRoot(targetPath);
-            await updateLinksAfterRename(sourcePath, targetPath, projectRoot);
+            await updateLinksAfterRename(sourcePath, targetPath, projectRoot, '**удалено**');
 
             // 4. Получаем заголовок
             const composedTitle = await getComposedTitle(targetPath);

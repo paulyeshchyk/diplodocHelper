@@ -34,6 +34,10 @@
                 "title": "%command.md.link.copy%"
             },
             {
+                "command": "diplodoc-helper.file.delete",
+                "title": "%command.file.delete.wipe_references%"
+            },
+            {
                 "command": "diplodoc-helper.pasteLink",
                 "title": "%command.md.link.paste.fromClipboard%"
             },

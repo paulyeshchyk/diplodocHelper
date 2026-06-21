@@ -13,7 +13,6 @@ const {
     IndexMdEntryReadTitle,
     IndexMdEntryReadSectionType,
 } = require('../plugins/utils/md.index.entry.js');
-const { updateLinksAfterRename } = require('./vscode.linksUpdater.js');
 const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { sortTocItems } = require('../plugins/utils/yaml.toc.sort.js');
 
@@ -25,6 +24,7 @@ const {
     isIndexedSectionType,
     composeFolderName,
 } = require('../plugins/utils/frontmatter.section.title.js');
+const { updateLinksAfterRename } = require('./diplodoc-helper.links.md.js');
 
 /**
  * @param {{ fsPath: any; }} uri
@@ -44,6 +44,7 @@ async function ux_section_rename(uri) {
     const currentIndex = IndexMdEntryReadIndex(oldFolderPath);
     const currentPureTitle = IndexMdEntryReadTitle(oldFolderPath);
     const currentSectionType = IndexMdEntryReadSectionType(oldFolderPath);
+
     const newSectionObject = await promptSection(currentPureTitle, currentIndex);
     if (!newSectionObject) {
         console.log(translate(nls_ts.plugin.section.rename.error.interrupted));
@@ -52,83 +53,74 @@ async function ux_section_rename(uri) {
 
     let finalIndex = newSectionObject.userIndex?.trim() || '';
     const newPureTitle = newSectionObject.newPureTitle;
-    const newSectionType = newSectionObject.newSectionType;
+    const newSectionTypeObj = newSectionObject.newSectionType; // более понятное имя
 
     const isIndexChanged = currentIndex !== finalIndex;
-    const isTypeChanged = currentSectionType !== newSectionType.value; // если у тебя есть старый тип секции
+    const isTypeChanged = currentSectionType !== newSectionTypeObj.value;
     const needSorting = isIndexChanged || isTypeChanged;
 
     // Нормализация индекса в зависимости от типа
-    const isIndexed = isIndexedSectionType(newSectionType);
-    if (!isIndexed) finalIndex = ''; // игнорируем индекс для неиндексируемых типов
+    if (!isIndexedSectionType(newSectionTypeObj)) {
+        finalIndex = '';
+    }
 
     // Единое формирование полного заголовка
-    const fullTitle = composeFullTitle(finalIndex, newSectionType, newPureTitle);
+    const fullTitle = composeFullTitle(finalIndex, newSectionTypeObj, newPureTitle);
 
     // Имя папки
-    const newFolderName = composeFolderName(finalIndex, newSectionType, newPureTitle);
-
+    const newFolderName = composeFolderName(finalIndex, newSectionTypeObj, newPureTitle);
     const newFolderPath = path.join(parentDir, newFolderName);
 
+    // Проверка конфликта имени
     if (fs.existsSync(newFolderPath) && newFolderName !== oldFolderName) {
         vscode.window.showErrorMessage(translate(nls_ts.plugin.section.rename.error.folderexists, newFolderName));
         return;
     }
 
-    // 1. Удаляем старую запись из родительского toc
-    // TocYamlEntryRemove(parentDir, oldFolderName);
-
     let finalFolderName = oldFolderName;
 
-    TocYamlEntryUpdateOrAppend(
-        parentDir,
-        oldFolderName, // кого ищем
-        fullTitle, // новые данные
-        finalFolderName,
-        newSectionObject.newSectionType.value,
-        finalIndex
-    );
-
     try {
-        // 2. Переименовываем папку (если нужно)
+        // 1. Обновляем/добавляем запись в TOC (до физического изменения)
+        TocYamlEntryUpdateOrAppend(
+            parentDir,
+            oldFolderName,
+            fullTitle,
+            finalFolderName,
+            newSectionTypeObj.value,
+            finalIndex
+        );
+
+        // 2. Переименовываем папку + обновляем index.md (если нужно)
         if (newFolderName !== oldFolderName) {
-            finalFolderName = renameSectionFolderIfNeeded(
-                oldFolderPath,
-                newPureTitle,
-                newSectionObject.newSectionType,
-                finalIndex
-            );
+            finalFolderName = renameSectionFolderIfNeeded(oldFolderPath, newPureTitle, newSectionTypeObj, finalIndex);
+            finalFolderName = path.basename(finalFolderName); // на всякий случай
         } else {
-            // Просто обновляем содержимое без переименования папки
-            IndexMdEntryPatch(
-                oldFolderPath,
-                newPureTitle,
-                newSectionObject.newSectionType.name,
-                newSectionObject.newSectionType.value,
-                finalIndex
-            );
+            IndexMdEntryPatch(oldFolderPath, newPureTitle, newSectionTypeObj.name, newSectionTypeObj.value, finalIndex);
         }
 
-        // 3. Добавляем новую запись в родительский toc
-        // TocYamlEntryCreate(parentDir, fullTitle, finalFolderName, newSectionObject.newSectionType.value, finalIndex);
-
-        // 4. Обновление ссылок
+        // 3. Обновляем ссылки после физического переименования
         const projectRoot = getLanguageRoot(parentDir);
-        await updateLinksAfterRename(oldFolderPath, newFolderPath, projectRoot);
+        const effectiveOldPath = oldFolderPath; // для обновления ссылок
+        const effectiveNewPath = path.join(parentDir, finalFolderName);
 
+        await updateLinksAfterRename(effectiveOldPath, effectiveNewPath, projectRoot, '**удалено**');
+
+        // 4. Сортировка при необходимости
         if (needSorting) {
             console.log('Параметры сортировки изменились. Запускаем sortTocItems...');
             sortTocItems(parentDir);
         } else {
-            console.log('Изменилось только имя. Сохраняем авторский порядок техписа, сортировка пропущена.');
+            console.log('Изменилось только имя. Сортировка пропущена.');
         }
 
         vscode.window.showInformationMessage(
             translate(nls_ts.plugin.section.rename.info.success, oldFolderName, finalFolderName)
         );
     } catch (err) {
-        let msg = err instanceof Error ? err.message : `${err}`;
+        const msg = err instanceof Error ? err.message : String(err);
         vscode.window.showErrorMessage(translate(nls_ts.plugin.section.rename.error.critical, msg));
+
+        console.error('[Rename] Критическая ошибка:', err);
     }
 }
 

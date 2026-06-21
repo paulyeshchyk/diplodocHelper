@@ -1,6 +1,7 @@
 {
   "command.fe.context.generate": "Generate contexts",
   "command.fe.helptag.generate": "Generate help map for frontend",
+  "command.file.delete.wipe_references": "Delete and wipe references",
   "command.fs.empty.wipe": "Delete empty folders after reindexing",
   "command.fs.naming.update": "Reindex everything",
   "command.html.breadcrumbs.generate": "Generate breadcrumbs",
@@ -133,5 +134,13 @@
   "submenu.helptag": "Helptag",
   "submenu.reindexier": "Reindex",
   "extension.settings.contextPollingInterval.description": "polling interval (ms)",
-  "plugin.section.move.warning.samePosition": "Same position. No move performed."
+  "plugin.section.move.warning.samePosition": "Same position. No move performed.",
+  "crossref.few.files.message": "\n\nLinks will be deleted in {0} files:\n",
+  "crossref.few.links.message": " ({0} links)",
+  "crossref.footer.message": "\nLinks inside the section being deleted and its subsections are ignored (they will be deleted with the section).",
+  "crossref.more.files.message": "... and {0} more files\n",
+  "crossref.none.reference.message": "No external links found for this section.",
+  "crossref.plural.file.confirm.header": "Delete the file \"{0}\"?",
+  "crossref.plural.file.message": "\n\nLinks will be deleted in {0} file:\n",
+  "crossref.plural.links.message": " (1 link)"
 }
