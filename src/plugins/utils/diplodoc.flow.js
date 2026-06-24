@@ -9,7 +9,7 @@ const { TEMPLATE_FOLDER_NAME } = require('../model/frontmatter.templates');
 
 const { TocYamlEntryPatchReference } = require('./yaml.toc.entry');
 const { IndexMdFilePatch, IndexMdUpsert } = require('./md.index.file');
-const { IndexYamlEntryPatchSection } = require('./yaml.index.entry');
+const { IndexYamlEntryPatchSection } = require('./yaml.index.flow');
 const { TocYamlEntryPatchTitle } = require('./yaml.toc.entry');
 const { composeFullTitle } = require('./frontmatter.section.title');
 

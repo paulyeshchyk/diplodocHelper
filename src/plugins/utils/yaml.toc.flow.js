@@ -1,12 +1,11 @@
-// toc.yaml.entry.js
-
 const fs = require('fs');
 const path = require('path');
 const YAML = require('yaml');
+const yaml = require('js-yaml');
 
-const { IndexYamlEntryPatchHRef } = require('./yaml.index.entry');
-
+const { IndexYamlEntryPatchHRef } = require('./yaml.index.flow');
 const { FrontMatterFiles, FrontMatterToc } = require('../model/frontmatter.model');
+const frontMatterBuilder = require('./frontmatter.builder');
 
 /**
  * @param {string} parentDir
@@ -36,6 +35,38 @@ function TocYamlEntryRemove(parentDir, folderName) {
 }
 
 /**
+ * @param {{ items: any; }} tocDoc
+ * @param {any} folderName
+ * @param {any} newName
+ */
+function TocYamlEntryPatch(tocDoc, folderName, newName) {
+    if (!tocDoc?.items) return;
+    for (const item of tocDoc.items) {
+        if (item.href && item.href.includes(folderName)) {
+            item.name = newName;
+        }
+    }
+}
+/**
+ * Обновляет все ссылки на папку в родительском toc.yaml и index.yaml
+ * @param {string} parentDir
+ * @param {string | RegExp} oldFolderName
+ * @param {string} newFolderName
+ */
+function TocYamlEntryPatchReference(parentDir, oldFolderName, newFolderName) {
+    // Обновляем toc.yaml родителя
+    const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
+    if (fs.existsSync(tocPath)) {
+        let content = fs.readFileSync(tocPath, 'utf8');
+        content = content.replace(new RegExp(oldFolderName, 'g'), newFolderName);
+        fs.writeFileSync(tocPath, content, 'utf8');
+    }
+
+    // Обновляем index.yaml родителя
+    IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, '');
+}
+
+/**
  * @param {string} parentDir
  * @param {string} composedTitle
  * @param {string} folderName
@@ -55,23 +86,13 @@ function TocYamlEntryCreate(parentDir, composedTitle, folderName, sectionType, s
     }
 
     // Собираем объект новой записи
-    const newEntry = {
-        [FrontMatterToc.ITEMS_NAME]: composedTitle,
-        [FrontMatterToc.ITEMS_HREF]: `${folderName}/${FrontMatterFiles.INDEX_MD}`,
-        [FrontMatterToc.ITEMS_INCLUDE]: {
-            [FrontMatterToc.ITEMS_INCLUDE_PATH]: `${folderName}/${FrontMatterFiles.TOC_YAML}`,
-            [FrontMatterToc.ITEMS_INCLUDE_MODE]: 'link',
-        },
-        // Необязательно: сохраняем скрытый маркер индекса для удобной сортировки в будущем,
-        // чтобы не лезть в дочерние файлы при каждой сортировке.
-        // Если Diplodoc ругается на лишние поля, этот шаг можно пропустить и читать из index.md, как раньше.
-        _sectionIndex: sectionIndex ? parseInt(sectionIndex, 10) : null,
-    };
+    const newEntry = frontMatterBuilder.GET_INDEX_YAML_OBJECT_EXTENDED(composedTitle, folderName, sectionIndex);
 
     tocData.items.push(newEntry);
 
     fs.writeFileSync(tocPath, YAML.stringify(tocData), 'utf8');
 }
+
 /**
  * Ищет старую запись в TOC и заменяет её на новую на том же месте.
  * Если старая запись не найдена, добавляет в конец.
@@ -94,14 +115,7 @@ function TocYamlEntryUpdateOrAppend(parentDir, oldFolderName, composedTitle, new
     }
 
     // Собираем объект обновленной/новой записи
-    const updatedEntry = {
-        [FrontMatterToc.ITEMS_NAME]: composedTitle,
-        [FrontMatterToc.ITEMS_HREF]: `${newFolderName}/${FrontMatterFiles.INDEX_MD}`,
-        [FrontMatterToc.ITEMS_INCLUDE]: {
-            [FrontMatterToc.ITEMS_INCLUDE_PATH]: `${newFolderName}/${FrontMatterFiles.TOC_YAML}`,
-            [FrontMatterToc.ITEMS_INCLUDE_MODE]: 'link',
-        },
-    };
+    const updatedEntry = frontMatterBuilder.GET_TOC_YAML_OBJECT_EXT(composedTitle, newFolderName);
 
     // Строка, по которой мы идентифицируем старую запись в массиве
     const oldTargetHref = `${oldFolderName}/${FrontMatterFiles.INDEX_MD}`;
@@ -126,20 +140,6 @@ function TocYamlEntryUpdateOrAppend(parentDir, oldFolderName, composedTitle, new
 }
 
 /**
- * @param {{ items: any; }} tocDoc
- * @param {any} folderName
- * @param {any} newName
- */
-function TocYamlEntryPatch(tocDoc, folderName, newName) {
-    if (!tocDoc?.items) return;
-    for (const item of tocDoc.items) {
-        if (item.href && item.href.includes(folderName)) {
-            item.name = newName;
-        }
-    }
-}
-
-/**
  * Обновляет заголовок в toc.yaml раздела
  * @param {string} folderPath
  * @param {any} composedTitle
@@ -155,37 +155,11 @@ function TocYamlEntryPatchTitle(folderPath, composedTitle) {
 }
 
 /**
- * Обновляет все ссылки на папку в родительском toc.yaml и index.yaml
- * @param {string} parentDir
- * @param {string | RegExp} oldFolderName
- * @param {string} newFolderName
- */
-function TocYamlEntryPatchReference(parentDir, oldFolderName, newFolderName) {
-    // Обновляем toc.yaml родителя
-    const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
-    if (fs.existsSync(tocPath)) {
-        let content = fs.readFileSync(tocPath, 'utf8');
-        content = content.replace(new RegExp(oldFolderName, 'g'), newFolderName);
-        fs.writeFileSync(tocPath, content, 'utf8');
-    }
-
-    // Обновляем index.yaml родителя
-    IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, '');
-}
-
-/**
- * @typedef {Object} InsertTocPosition
- * @property {string} label - Текст для QuickPick
- * @property {string} position - Куда именно вставляем
- * @property {string} [afterName] - Имя папки, ПОСЛЕ которой нужно вставить (если position === 'after')
- */
-
-/**
  * Вставляет запись в toc.yaml на строго указанную пользователем позицию
  * @param {string} targetDir - Куда перемещаем
  * @param {string} composedTitle - Сформированный заголовок
  * @param {string} folderName - Имя папки перемещаемой секции
- * @param {InsertTocPosition} positionObj - Выбранная позиция из QuickPick
+ * @param {import('./yaml.base').YamlTocInsertPosition} positionObj - Выбранная позиция из QuickPick
  */
 function TocYamlEntryInsertAtPosition(targetDir, composedTitle, folderName, positionObj) {
     const tocPath = path.join(targetDir, FrontMatterFiles.TOC_YAML);
@@ -199,14 +173,7 @@ function TocYamlEntryInsertAtPosition(targetDir, composedTitle, folderName, posi
     }
 
     // Создаем объект новой записи
-    const newEntry = {
-        [FrontMatterToc.ITEMS_NAME]: composedTitle,
-        [FrontMatterToc.ITEMS_HREF]: `${folderName}/${FrontMatterFiles.INDEX_MD}`,
-        [FrontMatterToc.ITEMS_INCLUDE]: {
-            [FrontMatterToc.ITEMS_INCLUDE_PATH]: `${folderName}/${FrontMatterFiles.TOC_YAML}`,
-            [FrontMatterToc.ITEMS_INCLUDE_MODE]: 'link',
-        },
-    };
+    const newEntry = frontMatterBuilder.GET_TOC_YAML_OBJECT_EXTEND_2(composedTitle, folderName);
 
     const pos = positionObj.position;
 
@@ -221,7 +188,9 @@ function TocYamlEntryInsertAtPosition(targetDir, composedTitle, folderName, posi
         // Целевой href в структуре выглядит как "ИмяПапки/index.md"
         const targetHref = `${positionObj.afterName}/${FrontMatterFiles.INDEX_MD}`;
 
-        const targetIndex = tocData.items.findIndex(item => item[FrontMatterToc.ITEMS_HREF] === targetHref);
+        const targetIndex = tocData.items.findIndex(
+            (/** @type {{ [x: string]: string; }} */ item) => item[FrontMatterToc.ITEMS_HREF] === targetHref
+        );
 
         if (targetIndex !== -1) {
             // Вставляем НА СЛЕДУЮЩУЮ позицию после найденной (targetIndex + 1)
@@ -242,7 +211,7 @@ function TocYamlEntryInsertAtPosition(targetDir, composedTitle, folderName, posi
  * @param {string} targetDir
  * @param {string} composedTitle
  * @param {string} folderName
- * @param {InsertTocPosition} positionObj
+ * @param {import('./yaml.base').YamlTocInsertPosition} positionObj
  */
 function TocYamlEntryMoveWithinSameFile(targetDir, composedTitle, folderName, positionObj) {
     const tocPath = path.join(targetDir, FrontMatterFiles.TOC_YAML);
@@ -256,7 +225,9 @@ function TocYamlEntryMoveWithinSameFile(targetDir, composedTitle, folderName, po
     const targetHref = `${folderName}/${FrontMatterFiles.INDEX_MD}`;
 
     // 1. Находим, где элемент лежит СЕЙЧАС, и извлекаем его из массива
-    const currentIndex = tocData.items.findIndex(item => item[FrontMatterToc.ITEMS_HREF] === targetHref);
+    const currentIndex = tocData.items.findIndex(
+        (/** @type {{ [x: string]: string; }} */ item) => item[FrontMatterToc.ITEMS_HREF] === targetHref
+    );
 
     if (currentIndex === -1) {
         console.error('Элемент не найден в текущем TOC для перемещения');
@@ -279,7 +250,9 @@ function TocYamlEntryMoveWithinSameFile(targetDir, composedTitle, folderName, po
     } else if (pos === 'after' && positionObj.afterName) {
         // Ищем индекс элемента, ПОСЛЕ которого нужно встать (уже в уменьшенном массиве!)
         const afterHref = `${positionObj.afterName}/${FrontMatterFiles.INDEX_MD}`;
-        const afterIndex = tocData.items.findIndex(item => item[FrontMatterToc.ITEMS_HREF] === afterHref);
+        const afterIndex = tocData.items.findIndex(
+            (/** @type {{ [x: string]: string; }} */ item) => item[FrontMatterToc.ITEMS_HREF] === afterHref
+        );
 
         if (afterIndex !== -1) {
             tocData.items.splice(afterIndex + 1, 0, movingEntry);
@@ -293,13 +266,46 @@ function TocYamlEntryMoveWithinSameFile(targetDir, composedTitle, folderName, po
     fs.writeFileSync(tocPath, YAML.stringify(tocData), 'utf8');
 }
 
+/**
+ * @param {string} absoluteTocPath
+ * @returns {import('./yaml.base').TocYamlItem[]}
+ */
+function getTocYamlItems(absoluteTocPath) {
+    try {
+        const tocDoc = TocYamlFileLoad(absoluteTocPath);
+        return tocDoc.items || [];
+    } catch (err) {
+        console.error(`Ошибка загрузки ${absoluteTocPath}:`, err);
+        return [];
+    }
+}
+
+/**
+ * @param {fs.PathOrFileDescriptor} tocPath
+ * @returns {import('./yaml.base').TocYaml}
+ */
+function TocYamlFileLoad(tocPath) {
+    const content = fs.readFileSync(tocPath, 'utf8');
+    return /** @type {import('./yaml.base').TocYaml} */ (yaml.load(content));
+}
+
+/**
+ * @param {fs.PathOrFileDescriptor} tocPath
+ * @param {any} tocDoc
+ */
+function TocYamlFileSave(tocPath, tocDoc) {
+    fs.writeFileSync(tocPath, yaml.dump(tocDoc, { lineWidth: -1, noArrayIndent: true }));
+}
+
 module.exports = {
+    getTocYamlItems,
+    TocYamlEntryRemove,
+    TocYamlEntryPatchReference,
     TocYamlEntryCreate,
     TocYamlEntryUpdateOrAppend,
-    TocYamlEntryRemove,
     TocYamlEntryPatch,
     TocYamlEntryPatchTitle,
-    TocYamlEntryPatchReference,
     TocYamlEntryInsertAtPosition,
     TocYamlEntryMoveWithinSameFile,
+    TocYamlFileSave,
 };

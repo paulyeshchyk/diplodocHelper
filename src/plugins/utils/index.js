@@ -15,7 +15,7 @@ module.exports = {
     ...require('./path.extract'),
     ...require('./encoding.slugify'),
     ...require('./walk'),
-    ...require('./yaml.index.entry'),
+    ...require('./yaml.index.flow'),
     ...require('./yaml.toc.collector'),
     ...require('./yaml.toc.entry'),
     ...require('./yaml.toc.file'),

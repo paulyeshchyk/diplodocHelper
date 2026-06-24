@@ -1,7 +1,7 @@
 // toc.collector.js
 const fs = require('fs');
 const path = require('path');
-const { TocYamlFileLoad } = require('./yaml.toc.file');
+const { getTocYamlItems } = require('./yaml.toc.flow');
 
 /**
  * Рекурсивно собирает все пути к index.md, следуя порядку в toc.yaml
@@ -76,23 +76,6 @@ function getAllIndexMdFiles(rootDir) {
         return [];
     }
     return collectIndexMdFiles(rootDir, rootTocPath);
-}
-
-/** @typedef {import("./yaml.toc.file").TocYaml} TocYaml */
-/** @typedef {import("./yaml.toc.file").TocYamlItem} TocYamlItem */
-
-/**
- * @param {string} absoluteTocPath
- * @returns {TocYamlItem[]}
- */
-function getTocYamlItems(absoluteTocPath) {
-    try {
-        const tocDoc = TocYamlFileLoad(absoluteTocPath);
-        return tocDoc.items || [];
-    } catch (err) {
-        console.error(`Ошибка загрузки ${absoluteTocPath}:`, err);
-        return [];
-    }
 }
 
 module.exports = {

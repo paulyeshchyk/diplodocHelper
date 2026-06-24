@@ -21,6 +21,7 @@ function IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, compos
 
     fs.writeFileSync(indexPath, content, 'utf8');
 }
+
 /**
  * Обновляет index.yaml
  * @param {string} folderPath
