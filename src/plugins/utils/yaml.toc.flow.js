@@ -159,7 +159,7 @@ function TocYamlEntryPatchTitle(folderPath, composedTitle) {
  * @param {string} targetDir - Куда перемещаем
  * @param {string} composedTitle - Сформированный заголовок
  * @param {string} folderName - Имя папки перемещаемой секции
- * @param {import('./yaml.base').YamlTocInsertPosition} positionObj - Выбранная позиция из QuickPick
+ * @param {YamlTocInsertPosition} positionObj - Выбранная позиция из QuickPick
  */
 function TocYamlEntryInsertAtPosition(targetDir, composedTitle, folderName, positionObj) {
     const tocPath = path.join(targetDir, FrontMatterFiles.TOC_YAML);
@@ -211,7 +211,7 @@ function TocYamlEntryInsertAtPosition(targetDir, composedTitle, folderName, posi
  * @param {string} targetDir
  * @param {string} composedTitle
  * @param {string} folderName
- * @param {import('./yaml.base').YamlTocInsertPosition} positionObj
+ * @param {YamlTocInsertPosition} positionObj
  */
 function TocYamlEntryMoveWithinSameFile(targetDir, composedTitle, folderName, positionObj) {
     const tocPath = path.join(targetDir, FrontMatterFiles.TOC_YAML);
@@ -267,10 +267,23 @@ function TocYamlEntryMoveWithinSameFile(targetDir, composedTitle, folderName, po
 }
 
 /**
- * @param {string} absoluteTocPath
- * @returns {import('./yaml.base').TocYamlItem[]}
+ * @param {string} folderPath
+ * @param {any} title
+ * @param {any} sectionLabel
+ * @param {any} sectionIndex
  */
-function getTocYamlItems(absoluteTocPath) {
+function TocYamlFileCreate(folderPath, title, sectionLabel, sectionIndex) {
+    const filePath = path.join(folderPath, FrontMatterFiles.TOC_YAML);
+    const obj = frontMatterBuilder.GET_TOC_YAML_OBJECT(title, sectionLabel, sectionIndex);
+
+    fs.writeFileSync(filePath, YAML.stringify(obj), 'utf8');
+}
+
+/**
+ * @param {string} absoluteTocPath
+ * @returns {TocYamlItem[]}
+ */
+function TocYamlGetItems(absoluteTocPath) {
     try {
         const tocDoc = TocYamlFileLoad(absoluteTocPath);
         return tocDoc.items || [];
@@ -282,11 +295,11 @@ function getTocYamlItems(absoluteTocPath) {
 
 /**
  * @param {fs.PathOrFileDescriptor} tocPath
- * @returns {import('./yaml.base').TocYaml}
+ * @returns {TocYaml}
  */
 function TocYamlFileLoad(tocPath) {
     const content = fs.readFileSync(tocPath, 'utf8');
-    return /** @type {import('./yaml.base').TocYaml} */ (yaml.load(content));
+    return /** @type {TocYaml} */ (yaml.load(content));
 }
 
 /**
@@ -297,8 +310,42 @@ function TocYamlFileSave(tocPath, tocDoc) {
     fs.writeFileSync(tocPath, yaml.dump(tocDoc, { lineWidth: -1, noArrayIndent: true }));
 }
 
+/**
+ * @param {string} parentDir
+ * @param {string} sectionTitle
+ * @param {string} sectionTypeLabel
+ * @param {string} folderName
+ * @param {string | undefined} sectionIndex
+ */
+function TocYamlEntryPatchItems(parentDir, sectionTitle, sectionTypeLabel, folderName, sectionIndex) {
+    const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
+    if (!fs.existsSync(tocPath)) return;
+
+    // 1. Читаем старый файл
+    const fileContent = fs.readFileSync(tocPath, 'utf8');
+
+    // 2. Парсим его в JS-объект. Если файл пустой, создаем пустой объект
+    let tocData = YAML.parse(fileContent) || {};
+
+    // 3. Проверяем, есть ли уже поле items и является ли оно массивом
+    if (!tocData.items || !Array.isArray(tocData.items)) {
+        tocData.items = [];
+    }
+
+    // 4. Генерируем новый элемент и просто пушим его в массив
+    const newItem = frontMatterBuilder.GET_PARENT_TOC_ITEM_OBJECT(
+        sectionTitle,
+        sectionTypeLabel,
+        folderName,
+        sectionIndex
+    );
+    tocData.items.push(newItem);
+
+    // 5. Перезаписываем файл. Библиотека сама сделает правильные отступы (- name:)
+    fs.writeFileSync(tocPath, YAML.stringify(tocData), 'utf8');
+}
 module.exports = {
-    getTocYamlItems,
+    TocYamlGetItems,
     TocYamlEntryRemove,
     TocYamlEntryPatchReference,
     TocYamlEntryCreate,
@@ -308,4 +355,7 @@ module.exports = {
     TocYamlEntryInsertAtPosition,
     TocYamlEntryMoveWithinSameFile,
     TocYamlFileSave,
+    TocYamlFileLoad,
+    TocYamlFileCreate,
+    TocYamlEntryPatchItems,
 };

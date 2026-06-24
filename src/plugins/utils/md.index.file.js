@@ -1,11 +1,15 @@
 const fs = require('fs');
 const path = require('path');
+const YAML = require('yaml');
+const yaml = require('js-yaml');
+
 const { FrontMatterFiles, FrontMatterMeta } = require('../model/frontmatter.model');
 
 // === Функции для Rename (обновление метаданных) ===
 
 const { parse, stringify } = require('./frontmatter.utils');
 const { TEMPLATE_FINAL_TITLE } = require('../model/frontmatter.templates');
+const { GET_INDEX_MD_OBJECT } = require('./frontmatter.builder');
 
 /**
  * @param {string} folderPath
@@ -56,13 +60,14 @@ function IndexMdFilePatch(folderPath, pureTitle, sectionTypeName, sectionLabel, 
  * @param {string} pureTitle - чистое название
  * @param {string} sectionTypeName - например "Chapter"
  * @param {string} sectionLabel - например "Глава"
- * @param {string|number} [sectionIndex] - например "14"
+ * @param {string} [sectionIndex] - например "14"
  */
 function IndexMdUpsert(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex = '') {
     const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
 
     const composedTitle = TEMPLATE_FINAL_TITLE(sectionLabel, sectionIndex, pureTitle);
 
+    /** @type {Record<string, string>} */
     let data = {};
     let body = '';
 
@@ -98,7 +103,25 @@ function IndexMdUpsert(folderPath, pureTitle, sectionTypeName, sectionLabel, sec
     fs.writeFileSync(indexPath, output, 'utf8');
 }
 
+/**
+ * @param {string} folderPath
+ * @param {any} title
+ * @param {any} sectionType
+ * @param {any} sectionValue
+ * @param {any} sectionIndex
+ */
+function IndexMdFileCreate(folderPath, title, sectionType, sectionValue, sectionIndex) {
+    const filePath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
+
+    // Создаем JS-объект для метаданных
+    const metaObj = GET_INDEX_MD_OBJECT(sectionValue, sectionIndex, title, sectionType);
+
+    const frontMatter = `---\n${YAML.stringify(metaObj)}---`;
+
+    fs.writeFileSync(filePath, frontMatter, 'utf8');
+}
 module.exports = {
+    IndexMdFileCreate,
     IndexMdUpsert,
     IndexMdFileRead,
     IndexMdFilePatch,

@@ -3,8 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const { TocYamlFileLoad } = require('../utils/yaml.toc.file');
 const { DiplodocConfigFromJson } = require('../manifest/config/diplodoc.config');
+const { TocYamlFileLoad } = require('../utils/yaml.toc.flow');
 
 /**
  * @import { DiplodocConfig } from '../manifest/config/diplodoc.config.model'

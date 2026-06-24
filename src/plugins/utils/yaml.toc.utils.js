@@ -66,13 +66,6 @@ function getIndexFromBlock(block, baseDir) {
 }
 
 /**
- * @typedef {Object} TocBlocksAccumulator
- * @property {string} header
- * @property {string[]} blocks
- * @property {string[] | null} current
- */
-
-/**
  * Разбивает toc.yaml на отдельные блоки элементов
  * @param {string} content
  * @returns {string[]}

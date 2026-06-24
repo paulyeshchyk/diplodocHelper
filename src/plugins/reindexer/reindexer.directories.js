@@ -8,10 +8,7 @@ const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require('../model/f
 const { getSectionMetadata } = require('../utils/frontmatter.section.metadata');
 const { sectionTypes } = require('../model/section.model');
 const { DiplodocSectionPatch } = require('../utils/diplodoc.flow');
-const { TocYamlFileLoad } = require('../utils/yaml.toc.file');
-
-const { TocYamlEntryPatch } = require('../utils/yaml.toc.entry');
-
+const tocFlow = require('../utils/yaml.toc.flow');
 const { sortTocItems } = require('../utils/yaml.toc.sort');
 const { IndexMdUpsert } = require('../utils/md.index.file');
 
@@ -47,7 +44,7 @@ function reindexDirectory(dir, parentIndex = '', sortOrder = 'ascending', sortKi
 
     if (fs.existsSync(tocPath)) {
         try {
-            tocDoc = TocYamlFileLoad(tocPath);
+            tocDoc = tocFlow.TocYamlFileLoad(tocPath);
         } catch (e) {
             let msg = e instanceof Error ? e.message : String(e);
             console.error(`Ошибка загрузки toc.yaml в ${dir} \n ${msg}`);
@@ -159,7 +156,7 @@ function reindexAndRenameSection({ dir, sectionName, localCounter, parentIndex =
         const newSectionPath = path.join(dir, newFolderName);
 
         if (tocDoc?.items) {
-            TocYamlEntryPatch(tocDoc, sectionName, newTitle);
+            tocFlow.TocYamlEntryPatch(tocDoc, sectionName, newTitle);
         }
 
         console.log(`   ${hadManualIndex ? 'manual' : 'auto'} index ${currentIndex} - ${newFolderName}`);

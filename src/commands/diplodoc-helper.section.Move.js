@@ -7,14 +7,14 @@ const fs = require('fs');
 const path = require('path');
 const { nls_ts, translate } = require('../nls_ts.js');
 const { isDiplodocSection, getLanguageRoot } = require('../plugins/utils/path.directory.js');
+const { updateLinksAfterRename } = require('./diplodoc-helper.links.md.js');
+const { selectTargetDirectory } = require('./vscode.quickpick.mdhierarchy.js');
+const { selectInsertPosition } = require('./vscode.quickpick.mdanchor.js');
 const {
     TocYamlEntryRemove,
     TocYamlEntryInsertAtPosition,
     TocYamlEntryMoveWithinSameFile,
-} = require('../plugins/utils/yaml.toc.entry.js');
-const { updateLinksAfterRename } = require('./diplodoc-helper.links.md.js');
-const { selectTargetDirectory } = require('./vscode.quickpick.mdhierarchy.js');
-const { selectInsertPosition } = require('./vscode.quickpick.mdanchor.js');
+} = require('../plugins/utils/yaml.toc.flow.js');
 
 /**
  * Главная команда перемещения
@@ -50,7 +50,7 @@ async function ux_section_move(uri) {
  * Выполняет перемещение раздела
  * @param {string} sourcePath
  * @param {string} targetDir
- * @param {import('../plugins/utils/yaml.toc.entry.js').InsertTocPosition} position - Принимаем позицию вставки
+ * @param {YamlTocInsertPosition} position - Принимаем позицию вставки
  */
 async function performMove(sourcePath, targetDir, position) {
     const sourceName = path.basename(sourcePath);

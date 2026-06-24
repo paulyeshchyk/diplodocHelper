@@ -8,12 +8,9 @@ const { composeFullTitle } = require('../plugins/utils/frontmatter.section.title
 const { ShowSectionNameSelector, ShowSectionTypeSelector, promptSectionIndex } = require('./vscode.prompts.js');
 const { isDiplodocSection, isLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { createSectionFolder } = require('../plugins/utils/diplodoc.flow.js');
-const {
-    IndexYamlFileCreate,
-    TocYamlFileCreate,
-    IndexMdFileCreate,
-    TocYamlEntryPatchItems,
-} = require('../plugins/utils/yaml.base.js');
+const { IndexMdFileCreate } = require('../plugins/utils/md.index.file.js');
+const { IndexYamlFileCreate } = require('../plugins/utils/yaml.index.flow.js');
+const { TocYamlFileCreate, TocYamlEntryPatchItems } = require('../plugins/utils/yaml.toc.flow.js');
 
 /**
  * @param {{ fsPath: any; }} uri

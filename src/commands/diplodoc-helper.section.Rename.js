@@ -16,7 +16,6 @@ const {
 const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { sortTocItems } = require('../plugins/utils/yaml.toc.sort.js');
 
-const { TocYamlEntryUpdateOrAppend } = require('../plugins/utils/yaml.toc.entry.js');
 const { DiplodocSectionPatch } = require('../plugins/utils/diplodoc.flow.js');
 
 const {
@@ -25,6 +24,7 @@ const {
     composeFolderName,
 } = require('../plugins/utils/frontmatter.section.title.js');
 const { updateLinksAfterRename } = require('./diplodoc-helper.links.md.js');
+const { TocYamlEntryUpdateOrAppend } = require('../plugins/utils/yaml.toc.flow.js');
 
 /**
  * @param {{ fsPath: any; }} uri

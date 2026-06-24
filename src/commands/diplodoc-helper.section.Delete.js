@@ -5,11 +5,11 @@ const vscode = require('vscode');
 const path = require('path');
 
 const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
-const { TocYamlEntryRemove } = require('../plugins/utils/yaml.toc.entry.js');
 const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { updateLinksAfterDelete } = require('./diplodoc-helper.links.md.js');
 const { findReferencesToMdSection } = require('./diplodoc-helper.file.md.js');
 const { SectionDeleteMessageBuilder } = require('./vscode.message.builder.js');
+const { TocYamlEntryRemove } = require('../plugins/utils/yaml.toc.flow.js');
 
 /** @import {Reference} from './diplodoc-helper.files.js' */
 

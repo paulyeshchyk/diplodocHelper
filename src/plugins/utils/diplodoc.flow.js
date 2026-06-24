@@ -7,14 +7,12 @@ const path = require('path');
 /** @import { CreateFolderResult } from './path.directory' */
 const { TEMPLATE_FOLDER_NAME } = require('../model/frontmatter.templates');
 
-const { TocYamlEntryPatchReference } = require('./yaml.toc.entry');
 const { IndexMdFilePatch, IndexMdUpsert } = require('./md.index.file');
 const { IndexYamlEntryPatchSection } = require('./yaml.index.flow');
-const { TocYamlEntryPatchTitle } = require('./yaml.toc.entry');
 const { composeFullTitle } = require('./frontmatter.section.title');
 
 const { canCreateFolder, createDirectory } = require('./path.directory');
-const { IndexYamlFileCreate, IndexYamlEntryPatch } = require('./yaml.base');
+const { TocYamlEntryPatchReference, TocYamlEntryPatchTitle } = require('./yaml.toc.flow');
 
 /**
  * @param {string} targetDir
@@ -92,7 +90,7 @@ function DiplodocSectionPatch(folderPath, pureTitle, sectionType, sectionIndex =
 
         const composedTitle = composeFullTitle(sectionIndex, sectionType, pureTitle);
         TocYamlEntryPatchTitle(newFolderPath, composedTitle);
-        IndexYamlEntryPatch(newFolderPath, pureTitle, sectionType, sectionIndex);
+        IndexYamlEntryPatchSection(newFolderPath, pureTitle, sectionType, sectionIndex);
         IndexMdUpsert(newFolderPath, pureTitle, sectionType.name, sectionType.value, sectionIndex);
 
         return newFolderName;

@@ -1,6 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const YAML = require('yaml');
+const yaml = require('js-yaml');
+
 const { FrontMatterFiles } = require('../model/frontmatter.model');
+const frontmatterBuilder = require('./frontmatter.builder');
 
 /**
  * @param {string} parentDir
@@ -23,36 +27,95 @@ function IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, compos
 }
 
 /**
- * Обновляет index.yaml
  * @param {string} folderPath
- * @param {any} pureTitle
- * @param {any} sectionTypeName
+ * @param {any} title
+ * @param {any} sectionType
  * @param {any} sectionLabel
  * @param {any} sectionIndex
  */
-function IndexYamlEntryPatchSection(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex = '') {
-    const yamlPath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
-    if (!fs.existsSync(yamlPath)) return;
+function IndexYamlFileCreate(folderPath, title, sectionType, sectionLabel, sectionIndex) {
+    const filePath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
+    const obj = frontmatterBuilder.GET_INDEX_YAML_OBJECT(title, sectionType, sectionLabel, sectionIndex);
 
-    let content = fs.readFileSync(yamlPath, 'utf8');
-
-    const composedTitle =
-        sectionIndex && sectionIndex.trim() !== '' ? `${sectionLabel} ${sectionIndex}. ${pureTitle}` : pureTitle;
-
-    // Простая замена по ключам
-    content = content.replace(/^title:.*/m, `title: ${composedTitle}`);
-
-    content = content.replace(/^pureTitle:.*/m, `pureTitle: ${pureTitle}`);
-
-    content = content.replace(/^sectionType:.*/m, `sectionType: ${sectionTypeName}`);
-
-    if (sectionIndex && sectionIndex.trim() !== '') {
-        content = content.replace(/^sectionIndex:.*/m, `sectionIndex: ${sectionIndex}`);
-    } else {
-        content = content.replace(/^sectionIndex:.*\r?\n?/m, '');
-    }
-
-    fs.writeFileSync(yamlPath, content, 'utf8');
+    // Переводим объект в YAML-строку
+    fs.writeFileSync(filePath, YAML.stringify(obj), 'utf8');
 }
 
-module.exports = { IndexYamlEntryPatchHRef, IndexYamlEntryPatchSection };
+/**
+ * Загружает toc.yaml и возвращает объект
+ * @param {string} tocPath
+ * @returns {IndexYaml}
+ */
+function loadIndexYaml(tocPath) {
+    const content = fs.readFileSync(tocPath, 'utf8');
+    return /** @type {IndexYaml} */ (yaml.load(content));
+}
+
+/**
+ * Обновляет index.yaml (переписывает title, pureTitle, sectionType и sectionIndex)
+ * @param {string} folderPath
+ * @param {any} pureTitle
+ * @param {any} sectionTypeName  – например, "Chapter"
+ * @param {any} sectionLabel     – например, "Глава"
+ * @param {any} sectionIndex     – номер раздела (строка)
+ */
+function IndexYamlEntryPatchSection(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex = '') {
+    const yamlPath = path.join(folderPath, FrontMatterFiles.INDEX_YAML);
+    if (!fs.existsSync(yamlPath)) {
+        console.warn(`index.yaml не найден: ${yamlPath}`);
+        return;
+    }
+
+    // Загружаем существующий объект
+    let data = loadIndexYaml(yamlPath);
+    if (data === null) return;
+
+    // Формируем объект, совместимый с updateIndexYaml
+    /** @type {import('../model/section.model').SectionTypeOption} */
+    const newSectionType = {
+        value: sectionLabel,
+        name: sectionTypeName,
+        label: '',
+        description: '',
+    };
+
+    // Применяем обновление
+    updateIndexYaml(data, sectionIndex, newSectionType, pureTitle);
+
+    // Сохраняем с теми же настройками, что и в IndexYamlEntryPatch
+    const updatedContent = yaml.dump(data, {
+        lineWidth: -1,
+        noRefs: true,
+        sortKeys: false,
+        quotingType: '"',
+    });
+
+    fs.writeFileSync(yamlPath, updatedContent, 'utf8');
+}
+
+/**
+ * @param {IndexYaml} data
+ * @param {string} userIndex
+ * @param {import('../model/section.model').SectionTypeOption} newSectionType
+ * @param {string} newPureTitle
+ */
+function updateIndexYaml(data, userIndex, newSectionType, newPureTitle) {
+    const sectionIndex = userIndex?.trim() || '';
+    const composedTitle = sectionIndex ? `${newSectionType.value} ${sectionIndex}. ${newPureTitle}` : newPureTitle;
+
+    // Обновляем корневые поля
+    data.title = composedTitle;
+    data.description = `Описывает ${composedTitle}`;
+    data.pureTitle = newPureTitle;
+
+    // Обновляем meta
+    /** @type {IndexYamlMeta} */
+    let meta = data.meta || {};
+    meta.title = composedTitle;
+    meta.sectionType = newSectionType.name;
+    meta.noIndex = true;
+    meta.sectionIndex = sectionIndex;
+    data.meta = meta;
+}
+
+module.exports = { IndexYamlEntryPatchHRef, IndexYamlEntryPatchSection, IndexYamlFileCreate };

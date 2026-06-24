@@ -7,7 +7,7 @@ const path = require('path');
  * Выбор позиции вставки
  * @param {string} targetDir
  * @param {string} movingSectionName
- * @returns {Promise<import('../plugins/utils/yaml.toc.entry.js').InsertTocPosition | null>}
+ * @returns {Promise<YamlTocInsertPosition | null>}
  */
 async function selectInsertPosition(targetDir, movingSectionName) {
     const items = fs
