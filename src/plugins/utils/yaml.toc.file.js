@@ -1,4 +1,4 @@
-// src/utils/toc.js
+// src/plugins/utils/toc.js
 const fs = require('fs');
 const yaml = require('js-yaml');
 

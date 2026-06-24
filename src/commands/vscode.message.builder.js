@@ -1,4 +1,4 @@
-const { translate, nls_ts } = require('../../nls_ts');
+const { translate, nls_ts } = require('../nls_ts');
 const { truncateMiddle } = require('./diplodoc-helper.string');
 
 /** @import {Reference} from './diplodoc-helper.files.js' */

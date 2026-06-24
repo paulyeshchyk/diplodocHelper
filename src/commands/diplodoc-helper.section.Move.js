@@ -1,13 +1,11 @@
 // src/commands/diplodoc-helper.section.Move.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
-
 ('use strict');
 
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
-
+const { nls_ts, translate } = require('../nls_ts.js');
 const { isDiplodocSection, getLanguageRoot } = require('../plugins/utils/path.directory.js');
 const {
     TocYamlEntryRemove,
@@ -15,13 +13,8 @@ const {
     TocYamlEntryMoveWithinSameFile,
 } = require('../plugins/utils/yaml.toc.entry.js');
 const { updateLinksAfterRename } = require('./diplodoc-helper.links.md.js');
-
-/**
- * @typedef {Object} MoveTarget
- * @property {string} path
- * @property {string} label
- * @property {number} level
- */
+const { selectTargetDirectory } = require('./vscode.quickpick.mdhierarchy.js');
+const { selectInsertPosition } = require('./vscode.quickpick.mdanchor.js');
 
 /**
  * Главная команда перемещения
@@ -51,102 +44,6 @@ async function ux_section_move(uri) {
     if (success) {
         vscode.window.showInformationMessage(translate(nls_ts.plugin.section.move.info.success, sourceName));
     }
-}
-
-/**
- * Выбор целевой папки внутри языка (пока ru)
- * @param {string} sourcePath
- */
-async function selectTargetDirectory(sourcePath) {
-    const languageRoot = getLanguageRoot(sourcePath); // пока ru
-
-    const targets = await collectMoveTargets(languageRoot);
-
-    const items = targets.map(t => ({
-        label: '  '.repeat(t.level) + t.label,
-        description: t.path,
-        targetPath: t.path,
-    }));
-
-    const selected = await vscode.window.showQuickPick(items, {
-        placeHolder: translate(nls_ts.plugin.section.move.placeholder.targetfolder),
-        matchOnDescription: true,
-    });
-
-    return selected?.targetPath || null;
-}
-
-/**
- * Собирает все возможные целевые папки
- * @param {string} rootDir
- */
-async function collectMoveTargets(rootDir) {
-    /** @type {MoveTarget[]} */
-    const targets = [];
-
-    /**
-     * @param {string} dir
-     */
-    function walk(dir, level = 0) {
-        if (!fs.existsSync(dir)) return;
-
-        const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-        for (const entry of entries) {
-            if (!entry.isDirectory()) continue;
-
-            const fullPath = path.join(dir, entry.name);
-            if (isDiplodocSection(fullPath)) {
-                targets.push({
-                    path: fullPath,
-                    label: entry.name,
-                    level: level,
-                });
-            }
-
-            // Рекурсия
-            walk(fullPath, level + 1);
-        }
-    }
-
-    walk(rootDir);
-    return targets;
-}
-
-/**
- * Выбор позиции вставки
- * @param {string} targetDir
- * @param {string} movingSectionName
- * @returns {Promise<import('../plugins/utils/yaml.toc.entry.js').InsertTocPosition | null>}
- */
-async function selectInsertPosition(targetDir, movingSectionName) {
-    const items = fs
-        .readdirSync(targetDir, { withFileTypes: true })
-        .filter(e => e.isDirectory() && isDiplodocSection(path.join(targetDir, e.name)) && e.name !== movingSectionName)
-        .map(e => ({
-            label: translate(nls_ts.plugin.section.move.label.after, e.name),
-            description: '',
-            position: 'after',
-            afterName: e.name,
-        }));
-
-    const options = [
-        {
-            label: translate(nls_ts.plugin.section.move.placeholder.start),
-            position: 'start',
-        },
-        ...items,
-        {
-            label: translate(nls_ts.plugin.section.move.placeholder.end),
-            position: 'end',
-        },
-    ];
-
-    const selected = await vscode.window.showQuickPick(options, {
-        placeHolder: translate(nls_ts.plugin.section.move.placeholder.target, movingSectionName),
-    });
-
-    return selected || null;
 }
 
 /**

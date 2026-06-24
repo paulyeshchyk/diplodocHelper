@@ -1,13 +1,13 @@
 // src/commands/diplodoc-helper.section.Rename.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
 const { promptSection } = require('./vscode.prompts.js');
 const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
-const { IndexMdEntryPatch } = require('../plugins/utils/diplodoc.flow.js');
+const { DiplodocSectionRefresh } = require('../plugins/utils/diplodoc.flow.js');
 const {
     IndexMdEntryReadIndex,
     IndexMdEntryReadTitle,
@@ -17,7 +17,7 @@ const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { sortTocItems } = require('../plugins/utils/yaml.toc.sort.js');
 
 const { TocYamlEntryUpdateOrAppend } = require('../plugins/utils/yaml.toc.entry.js');
-const { renameSectionFolderIfNeeded } = require('../plugins/utils/diplodoc.flow.js');
+const { DiplodocSectionPatch } = require('../plugins/utils/diplodoc.flow.js');
 
 const {
     composeFullTitle,
@@ -92,10 +92,16 @@ async function ux_section_rename(uri) {
 
         // 2. Переименовываем папку + обновляем index.md (если нужно)
         if (newFolderName !== oldFolderName) {
-            finalFolderName = renameSectionFolderIfNeeded(oldFolderPath, newPureTitle, newSectionTypeObj, finalIndex);
+            finalFolderName = DiplodocSectionPatch(oldFolderPath, newPureTitle, newSectionTypeObj, finalIndex);
             finalFolderName = path.basename(finalFolderName); // на всякий случай
         } else {
-            IndexMdEntryPatch(oldFolderPath, newPureTitle, newSectionTypeObj.name, newSectionTypeObj.value, finalIndex);
+            DiplodocSectionRefresh(
+                oldFolderPath,
+                newPureTitle,
+                newSectionTypeObj.name,
+                newSectionTypeObj.value,
+                finalIndex
+            );
         }
 
         // 3. Обновляем ссылки после физического переименования

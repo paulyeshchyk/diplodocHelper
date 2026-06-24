@@ -1,7 +1,7 @@
 {
   "command.fe.context.generate": "Generate contexts",
   "command.fe.helptag.generate": "Generate help map for frontend",
-  "command.file.delete.wipe_references": "Delete and wipe references",
+  "command.file.delete.wipe_references": "Delete file and wipe references",
   "command.fs.empty.wipe": "Delete empty folders after reindexing",
   "command.fs.naming.update": "Reindex everything",
   "command.html.breadcrumbs.generate": "Generate breadcrumbs",
@@ -129,8 +129,8 @@
   "screenshot.name.prompt": "{0}_Screenshot",
   "screenshot.saved.info": "Image was saved: {0}",
   "submenu.context": "Context",
-  "submenu.diplodoc": "Diplodoc",
-  "submenu.generators": "Other",
+  "submenu.diplodoc": "Diplodoc-Helper",
+  "submenu.generators": "Generator",
   "submenu.helptag": "Helptag",
   "submenu.reindexier": "Reindex",
   "extension.settings.contextPollingInterval.description": "polling interval (ms)",
@@ -142,5 +142,11 @@
   "crossref.none.reference.message": "No external links found for this section.",
   "crossref.plural.file.confirm.header": "Delete the file \"{0}\"?",
   "crossref.plural.file.message": "\n\nLinks will be deleted in {0} file:\n",
-  "crossref.plural.links.message": " (1 link)"
+  "crossref.plural.links.message": " (1 link)",
+  "command.linter.links.check": "Validate links",
+  "command.md.anchor.add": "Set anchor",
+  "command.html.breadcrumbs": "Breadcrumbs",
+  "submenu.other": "Other",
+  "submenu.lint": "Lint",
+  "command.smart.delete": "Delete and wipe references"
 }

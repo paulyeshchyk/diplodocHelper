@@ -1,6 +1,6 @@
 // src/commands/diplodoc-helper.section.ReindexDirectories.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 
 const { reindexDirectory } = require('../plugins/reindexer/reindexer.directories.js');

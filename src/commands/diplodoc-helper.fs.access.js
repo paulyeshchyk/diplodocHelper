@@ -26,24 +26,13 @@ async function computeUpdatedLinks(projectRoot, transformTarget, stubText = '**�
 }
 
 /**
- * @param {string} parentDir
- * @param {string} folderName
- */
-function computeTocAfterRemove(parentDir, folderName) {
-    const tocPath = path.join(parentDir, 'toc.yaml');
-    const content = fs.readFileSync(tocPath, 'utf8');
-    // ... парсим, удаляем запись, сериализуем обратно
-    // return newContent;
-}
-
-/**
  * @param {Array<string>} filePaths
  */
 function checkWriteAccess(filePaths) {
     for (const p of filePaths) {
         try {
             fs.accessSync(p, fs.constants.W_OK);
-        } catch (err) {
+        } catch {
             throw new Error(`Нет прав на запись в ${p}`);
         }
     }
@@ -58,10 +47,10 @@ function checkDeleteAccess(paths) {
         const parent = path.dirname(p);
         try {
             fs.accessSync(parent, fs.constants.W_OK);
-        } catch (err) {
+        } catch {
             throw new Error(`Нет прав на удаление ${p} (нет прав в родительской папке)`);
         }
     }
 }
 
-module.exports = { checkDeleteAccess, checkWriteAccess, computeTocAfterRemove, computeUpdatedLinks };
+module.exports = { checkDeleteAccess, checkWriteAccess, computeUpdatedLinks };

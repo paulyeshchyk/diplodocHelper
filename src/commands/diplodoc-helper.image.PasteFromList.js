@@ -5,8 +5,8 @@ const { showImagePicker } = require('./vscode.prompts.imagePicker');
 const { getRelativeLink } = require('../plugins/utils/path.extract');
 const { ExtractMdLinks, ExtractFigures } = require('../plugins/utils/md.links.extract');
 const { FindMdFiles } = require('./vscode.FindFiles');
-const { DiplodocConfigFromWorkspace } = require('../config/vscode.config.manager');
-const { CONFIG_KEY } = require('../plugins/constants');
+const { DiplodocConfigFromWorkspace } = require('../plugins/manifest/config/vscode.config.manager');
+const { CONFIG_KEY } = require('../plugins/manifest/constants');
 
 /** @import {ImageItem} from '../plugins/model/imageitem.model' */
 
@@ -42,8 +42,7 @@ async function ux_image_paste_list() {
     if (!selectedImage) return;
 
     const relativeLink = getRelativeLink(currentFilePath, selectedImage);
-    const figureReferencePrefix = DiplodocConfigFromWorkspace(CONFIG_KEY).figureReferencePrefix;
-    const markdownLink = `${figureReferencePrefix}[*${selectedImage.caption}*](${relativeLink})`;
+    const markdownLink = `![*${selectedImage.caption}*](${relativeLink})`;
 
     await editor.edit(editBuilder => {
         editBuilder.insert(editor.selection.active, markdownLink);
@@ -80,7 +79,21 @@ async function collectAllImages(rootDir) {
 
     // Сортировка
     images.sort((a, b) => {
-        if (a.type !== b.type) return a.type === 'figure' ? -1 : 1;
+        // 1. Сначала по типу (figure раньше остальных)
+        if (a.type !== b.type) {
+            return a.type === 'figure' ? -1 : 1;
+        }
+
+        // 2. Извлекаем номер рисунка
+        const numA = extractFigureNumber(a.caption);
+        const numB = extractFigureNumber(b.caption);
+
+        // 3. Если номера отличаются — сортируем по ним численно
+        if (numA !== numB) {
+            return numA - numB;
+        }
+
+        // 4. Если номера одинаковые или не найдены — сортируем по тексту подписи
         const captionA = a.caption ?? '';
         const captionB = b.caption ?? '';
         return captionA.localeCompare(captionB);
@@ -89,4 +102,13 @@ async function collectAllImages(rootDir) {
     return images;
 }
 
+/**
+ * @param {string | undefined} caption
+ */
+function extractFigureNumber(caption) {
+    if (!caption) return 0;
+
+    const match = caption.match(/(?:Рисунок|Figure)\s*(\d+)/i);
+    return match ? parseInt(match[1], 10) : 0;
+}
 module.exports = { ux_image_paste_list };

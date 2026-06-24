@@ -4,8 +4,8 @@ const { runGeneration: generateContexts } = require('./contexts/сontexts.js');
 const { runGeneration: generateBreadcrumb } = require('./breadcrumb/breadcrumb.js');
 const { injectCleanMode: generateTocCleanMode } = require('./tocCleanMode/post-build.js');
 const { reindexFigures } = require('./reindexer/reindexer.figures.js');
-const { DiplodocConfigFromCli } = require('./utils/diplodoc.config.js');
-const { CONFIG_KEY } = require('./constants.js');
+const { DiplodocConfigFromCli } = require('../plugins/manifest/config/diplodoc.config.js');
+const { CONFIG_KEY } = require('../plugins/manifest/constants.js');
 
 // Если запускают как cli
 if (require.main === module) {

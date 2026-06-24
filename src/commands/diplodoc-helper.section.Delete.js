@@ -1,6 +1,6 @@
 // src/commands/diplodoc-helper.section.Delete.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const path = require('path');
 

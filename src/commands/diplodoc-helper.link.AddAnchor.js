@@ -1,6 +1,6 @@
 //diplodoc-helper.link.AddAnchor.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 
 const vscode = require('vscode');
 const { slugify_latin_alphanumeric } = require('../plugins/utils/encoding.slugify.js');

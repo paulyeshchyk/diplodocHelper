@@ -1,6 +1,6 @@
 // src/commands/generateHelpmap.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const path = require('path');
 const vscode = require('vscode');
 

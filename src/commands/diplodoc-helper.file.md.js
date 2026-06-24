@@ -52,7 +52,7 @@ async function findReferencesToMdFile(targetFilePath, projectRoot) {
                         linkCount: count,
                     });
                 }
-            } catch (err) {
+            } catch {
                 console.warn(`Ошибка анализа ${filePath}`);
             }
         }
@@ -105,7 +105,7 @@ async function findReferencesToMdSection(targetFolderPath, projectRoot) {
                         linkCount: count,
                     });
                 }
-            } catch (err) {
+            } catch {
                 console.warn(`Ошибка анализа ${filePath}`);
             }
         }

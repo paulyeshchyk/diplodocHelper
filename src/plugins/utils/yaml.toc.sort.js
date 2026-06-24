@@ -75,19 +75,27 @@ function sortTocItems(baseDir, sortOrder = 'ascending', sortKind = 'nonIndexedBo
     );
 
     // Собираем итоговый массив обратно
-    let finalOrderedEntries = [];
-    if (sortKind === 'nonIndexedTop') {
-        finalOrderedEntries = [...nonIndexed, ...indexed];
-    } else {
-        // индексированные (1, 2, 3) идут наверх, остальные вниз
-        finalOrderedEntries = [...indexed, ...nonIndexed];
-    }
+    let finalOrderedEntries = buildOrderedArray(sortKind, nonIndexed, indexed);
 
     // Извлекаем чистые объекты обратно в tocData
     tocData.items = finalOrderedEntries.map(entry => entry.item);
 
     // Записываем в файл
     fs.writeFileSync(tocPath, YAML.stringify(tocData), 'utf8');
+}
+
+/**
+ * @param {string} sortKind
+ * @param {any} nonIndexed
+ * @param {any} indexed
+ */
+function buildOrderedArray(sortKind, nonIndexed, indexed) {
+    if (sortKind === 'nonIndexedTop') {
+        return [...nonIndexed, ...indexed];
+    } else {
+        // индексированные (1, 2, 3) идут наверх, остальные вниз
+        return [...indexed, ...nonIndexed];
+    }
 }
 
 /**

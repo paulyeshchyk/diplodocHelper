@@ -25,9 +25,7 @@ const nls_ts = {
       }
     },
     html: {
-      breadcrumbs: {
-        generate: "command.html.breadcrumbs.generate"
-      }
+      breadcrumbs: "command.html.breadcrumbs"
     },
     md: {
       context: {
@@ -54,9 +52,20 @@ const nls_ts = {
         delete: "command.md.section.delete",
         move: "command.md.section.move",
         update: "command.md.section.update"
+      },
+      anchor: {
+        add: "command.md.anchor.add"
       }
     },
-    settings: "command.settings"
+    settings: "command.settings",
+    linter: {
+      links: {
+        check: "command.linter.links.check"
+      }
+    },
+    smart: {
+      delete: "command.smart.delete"
+    }
   },
   description: "description",
   displayName: "displayName",
@@ -368,7 +377,9 @@ const nls_ts = {
     diplodoc: "submenu.diplodoc",
     generators: "submenu.generators",
     helptag: "submenu.helptag",
-    reindexier: "submenu.reindexier"
+    reindexier: "submenu.reindexier",
+    other: "submenu.other",
+    lint: "submenu.lint"
   },
   crossref: {
     few: {
@@ -379,28 +390,28 @@ const nls_ts = {
         message: "crossref.few.links.message"
       }
     },
+    footer: {
+      message: "crossref.footer.message"
+    },
     more: {
       files: {
         message: "crossref.more.files.message"
       }
     },
-    plural: {
-      file: {
-        message: "crossref.plural.file.message",
-        confirm: {
-          header: "crossref.plural.file.confirm.header"
-        }
-      },
-      links: {
-        message: "crossref.plural.links.message"
-      }
-    },
-    footer: {
-      message: "crossref.footer.message"
-    },
     none: {
       reference: {
         message: "crossref.none.reference.message"
+      }
+    },
+    plural: {
+      file: {
+        confirm: {
+          header: "crossref.plural.file.confirm.header"
+        },
+        message: "crossref.plural.file.message"
+      },
+      links: {
+        message: "crossref.plural.links.message"
       }
     }
   }

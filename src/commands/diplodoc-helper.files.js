@@ -1,10 +1,7 @@
-const { nls_ts, translate } = require('../../nls_ts.js');
 // src/commands/diplodoc-helper.files.js
 
 const fs = require('fs');
 const path = require('path');
-const { truncateMiddle } = require('./diplodoc-helper.string');
-const { MessageBuilder } = require('./vscode.message.builder.js');
 
 /**
  * @param {string} absoluteTarget
@@ -46,8 +43,8 @@ function findDirectories(rootDir, filter) {
                     tree.add(fullPath);
                 }
             }
-        } catch (e) {
-            // ignore
+        } catch (err) {
+            console.error(`findDirectories error: ${err}`);
         }
     }
     return tree;

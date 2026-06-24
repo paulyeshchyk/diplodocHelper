@@ -1,6 +1,6 @@
 // diplodoc-helper.context.WipeEmptyDirectories.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 
 const { cleanupEmptyDirectories, getLanguageRoot } = require('../plugins/utils/path.directory.js');

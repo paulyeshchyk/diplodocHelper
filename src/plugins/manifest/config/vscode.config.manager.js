@@ -1,11 +1,12 @@
 // DiplodocConfigManager.js
 
 const vscode = require('vscode');
-const { DiplodocConfigFromJson } = require('../plugins/utils/diplodoc.config');
+const { DiplodocConfigFromJson } = require('./diplodoc.config');
+const constants = require('../constants');
 
-/** @import { DiplodocConfig } from './model/diplodoc.config.model' */
+/** @import { DiplodocConfig } from './diplodoc.config.model' */
 
-const CONFIG_KEY = 'diplodoc-helper';
+const CONFIG_KEY = constants.CONFIG_KEY;
 
 /** @type {DiplodocConfig | null} */
 let instance = null;
@@ -23,10 +24,10 @@ function DiplodocConfigSharedInstance() {
 
 /**
  * Читает настройки расширения из VS Code
- * @param {string} [CONFIG_KEY='diplodoc-helper']
+ * @param {string} CONFIG_KEY
  * @returns {DiplodocConfig}
  */
-function DiplodocConfigFromWorkspace(CONFIG_KEY = 'diplodoc-helper') {
+function DiplodocConfigFromWorkspace(CONFIG_KEY) {
     const config = vscode.workspace.getConfiguration(CONFIG_KEY);
 
     let result = {

@@ -4,7 +4,7 @@ const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs');
 const { IndexMdFileRead } = require('../plugins/utils/md.index.file');
-const { translate } = require('../../nls_loader');
+const { translate } = require('../nls_loader');
 
 /**
  * @param {vscode.Uri} uri

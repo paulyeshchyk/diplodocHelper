@@ -17,6 +17,7 @@ class ConfigParserBase {
      * @param {string} typeName
      * @returns {Record<string, any>}
      */
+    // eslint-disable-next-line no-unused-vars
     parse(source, typeName) {
         throw new Error('Method parse() must be implemented in subclass');
     }

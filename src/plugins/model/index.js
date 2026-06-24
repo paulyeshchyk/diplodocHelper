@@ -9,5 +9,4 @@ module.exports = {
     ...require('./vscode.configdefinition.model'),
     ...require('./vscode.configfield.model'),
     ...require('./vscode.contributes.model'),
-    ...require('../../config/model/diplodoc.config.model'),
 };

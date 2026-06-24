@@ -7,13 +7,13 @@ const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require('../model/f
 
 const { getSectionMetadata } = require('../utils/frontmatter.section.metadata');
 const { sectionTypes } = require('../model/section.model');
-const { renameSectionFolderIfNeeded } = require('../utils/diplodoc.flow');
+const { DiplodocSectionPatch } = require('../utils/diplodoc.flow');
 const { TocYamlFileLoad } = require('../utils/yaml.toc.file');
 
 const { TocYamlEntryPatch } = require('../utils/yaml.toc.entry');
 
-const { IndexMdEntryPatch } = require('../utils/diplodoc.flow');
 const { sortTocItems } = require('../utils/yaml.toc.sort');
+const { IndexMdUpsert } = require('../utils/md.index.file');
 
 /** @import {SectionTypeOption} from '../model/section.model' */
 
@@ -152,9 +152,9 @@ function reindexAndRenameSection({ dir, sectionName, localCounter, parentIndex =
         const sectionLabel = sectionTypeObj.label || '';
         const newTitle = `${sectionLabel} ${currentIndex}. ${pureTitle}`;
 
-        IndexMdEntryPatch(oldSectionPath, pureTitle, sectionType, sectionLabel, currentIndex);
+        IndexMdUpsert(oldSectionPath, pureTitle, sectionType, sectionLabel, currentIndex);
 
-        const newFolderName = renameSectionFolderIfNeeded(oldSectionPath, pureTitle, sectionTypeObj, currentIndex);
+        const newFolderName = DiplodocSectionPatch(oldSectionPath, pureTitle, sectionTypeObj, currentIndex);
 
         const newSectionPath = path.join(dir, newFolderName);
 

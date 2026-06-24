@@ -1,6 +1,6 @@
 // src/commands/diplodoc-helper.section.Create.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const { calculateNextIndex } = require('../plugins/reindexer/reindexer.md.js');
 const { FrontMatterSectionTypesIndexed2 } = require('../plugins/model/frontmatter.model.js');

@@ -1,6 +1,6 @@
 // diplodoc-helper.breadCrumb.Generate.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const { runGeneration } = require('../plugins/breadcrumb/breadcrumb');
 const path = require('path');
 const vscode = require('vscode');

@@ -1,11 +1,13 @@
+// src/plugins/reindexer/reindexer.figures.js
+
 const fs = require('fs');
 const path = require('path');
 
 const { TocYamlFileLoad } = require('../utils/yaml.toc.file');
-const { DiplodocConfigFromJson } = require('../utils/diplodoc.config');
+const { DiplodocConfigFromJson } = require('../manifest/config/diplodoc.config');
 
 /**
- * @import { DiplodocConfig } from '../../config/model/diplodoc.config.model'
+ * @import { DiplodocConfig } from '../manifest/config/diplodoc.config.model'
  */
 
 /** @param {string} rootDir
@@ -44,7 +46,6 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
     for (const mdFilePath of allMdFiles) {
         try {
             const content = fs.readFileSync(mdFilePath, 'utf8');
-            // ПЕРЕДАЕМ mdFilePath четвертым параметром:
             const { newContent, newCounter, figureMapping } = processFigureCaptions(
                 content,
                 figureCounter,
@@ -177,7 +178,7 @@ function collectMdFilesInOrder(entries, rootDir, currentPath = '', visited = new
  * @param {number} startCounter
  * @param {string} prefix
  * @returns {{newContent: string;newCounter: number;figureMapping: Map<string, number>;}}
- * @param {string | undefined} [mdFilePath]
+ * @param {string} mdFilePath
  */
 function processFigureCaptions(content, startCounter, prefix, mdFilePath) {
     let counter = startCounter;

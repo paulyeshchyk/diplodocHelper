@@ -2,7 +2,7 @@
 const vscode = require('vscode');
 const { isValidName } = require('../plugins/utils/path.directory');
 const { sectionTypes } = require('../plugins/model/section.model');
-const { FrontMatterSectionTypesIndexed } = require('../plugins/model/frontmatter.model');
+const { FrontMatterSectionTypesIndexed2 } = require('../plugins/model/frontmatter.model');
 
 /**
  * @typedef {Object} PromptResult
@@ -24,7 +24,7 @@ async function promptSection(currentPureTitle = '', currentIndex = '') {
     const newPureTitle = await promptSectionName(currentPureTitle);
     if (!newPureTitle) return null;
 
-    const isIndexed = FrontMatterSectionTypesIndexed.includes(newSectionType.name);
+    const isIndexed = FrontMatterSectionTypesIndexed2.includes(newSectionType.name);
     let userIndex = '';
     if (isIndexed) {
         userIndex = (await promptSectionIndex(currentIndex)) ?? '';

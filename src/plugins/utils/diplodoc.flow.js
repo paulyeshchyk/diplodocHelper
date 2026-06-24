@@ -8,12 +8,13 @@ const path = require('path');
 const { TEMPLATE_FOLDER_NAME } = require('../model/frontmatter.templates');
 
 const { TocYamlEntryPatchReference } = require('./yaml.toc.entry');
-const { IndexMdFilePatch } = require('./md.index.file');
+const { IndexMdFilePatch, IndexMdUpsert } = require('./md.index.file');
 const { IndexYamlEntryPatchSection } = require('./yaml.index.entry');
 const { TocYamlEntryPatchTitle } = require('./yaml.toc.entry');
 const { composeFullTitle } = require('./frontmatter.section.title');
 
 const { canCreateFolder, createDirectory } = require('./path.directory');
+const { IndexYamlFileCreate, IndexYamlEntryPatch } = require('./yaml.base');
 
 /**
  * @param {string} targetDir
@@ -38,7 +39,7 @@ function createSectionFolder(targetDir, sectionType, sectionName, sectionIndex, 
  * @param {any} sectionLabel
  * @param {string} sectionIndex
  */
-function IndexMdEntryPatch(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex = '') {
+function DiplodocSectionRefresh(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex = '') {
     const sectionTypeOpt = {
         value: sectionLabel,
         name: sectionTypeName,
@@ -65,10 +66,10 @@ function IndexMdEntryPatch(folderPath, pureTitle, sectionTypeName, sectionLabel,
  * @param {string} sectionIndex
  * @returns {string} новое имя папки
  */
-function renameSectionFolderIfNeeded(folderPath, pureTitle, sectionType, sectionIndex = '') {
+function DiplodocSectionPatch(folderPath, pureTitle, sectionType, sectionIndex = '') {
     const oldFolderName = path.basename(folderPath);
     const newFolderName = TEMPLATE_FOLDER_NAME(sectionType, pureTitle, sectionIndex);
-    console.log(`renameSectionFolderIfNeeded:\n from: ${oldFolderName}\n   to: ${newFolderName}`);
+    console.log(`DiplodocSectionPatch:\n from: ${oldFolderName}\n   to: ${newFolderName}`);
 
     if (oldFolderName === newFolderName) {
         return oldFolderName;
@@ -89,6 +90,11 @@ function renameSectionFolderIfNeeded(folderPath, pureTitle, sectionType, section
         // Обновляем ссылки в родителе
         TocYamlEntryPatchReference(parentDir, oldFolderName, newFolderName);
 
+        const composedTitle = composeFullTitle(sectionIndex, sectionType, pureTitle);
+        TocYamlEntryPatchTitle(newFolderPath, composedTitle);
+        IndexYamlEntryPatch(newFolderPath, pureTitle, sectionType, sectionIndex);
+        IndexMdUpsert(newFolderPath, pureTitle, sectionType.name, sectionType.value, sectionIndex);
+
         return newFolderName;
     } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
@@ -99,6 +105,6 @@ function renameSectionFolderIfNeeded(folderPath, pureTitle, sectionType, section
 
 module.exports = {
     createSectionFolder,
-    IndexMdEntryPatch,
-    renameSectionFolderIfNeeded,
+    DiplodocSectionRefresh,
+    DiplodocSectionPatch,
 };

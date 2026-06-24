@@ -1,6 +1,6 @@
-//diplodoc-helper.link.Paste.js
+// src/commands/diplodoc-helper.link.Paste.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs').promises;

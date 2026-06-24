@@ -1,6 +1,6 @@
 //diplodoc-helper.image.PasteFromClipboard.js
 
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');

@@ -11,7 +11,8 @@
     "strictNullChecks": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "src/extension.js"
   ],
   "exclude": [
     "dist",

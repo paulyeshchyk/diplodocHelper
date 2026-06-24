@@ -1,3 +1,5 @@
+// src/config/model/diplodoc.config.model.ts
+
 export interface DiplodocConfig {
     /**
      * %extension.settings.figureCaptionPrefix.description%
@@ -22,4 +24,9 @@ export interface DiplodocConfig {
      * @default 800
      */
     contextPollingInterval?: number;
+
+    /**
+     * @default ru
+     */
+    defaultLanguage: string
 }
