@@ -34,7 +34,7 @@ async function pickAndReplace(document, diagnostic, candidates) {
 
     // Извлекаем якоря
     const anchors = await extractAnchorsFromMdFile(targetFile);
-    let selectedAnchor = getSelectedAnchor(anchors);
+    let selectedAnchor = await getSelectedAnchor(anchors);
     if (selectedAnchor === undefined) return;
 
     // Строим относительный путь
