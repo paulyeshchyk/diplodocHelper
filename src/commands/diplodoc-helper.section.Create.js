@@ -59,7 +59,7 @@ async function ux_section_create(uri) {
 
         TocYamlFileCreate(folderResult.folderPath, userSectionName, sectionType.value, sectionIndex);
 
-        TocYamlEntryPatchItems(targetDir, fullTitle, sectionType.value, folderResult.folderName, sectionIndex);
+        TocYamlEntryPatchItems(targetDir, fullTitle, sectionType.value, folderResult.folderName);
 
         vscode.window.showInformationMessage(
             translate(nls_ts.plugin.section.create.info.success, fullTitle, sectionType.label)

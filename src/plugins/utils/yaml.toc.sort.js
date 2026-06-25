@@ -98,25 +98,4 @@ function buildOrderedArray(sortKind, nonIndexed, indexed) {
     }
 }
 
-/**
- * Сравнивает два индекса (например "1.2.3" и "1.10")
- * @param {string} a
- * @param {string} b
- */
-function compareIndexes(a, b, order = 'ascending') {
-    if (!a || !b) return 0;
-    const aParts = a.split('.').map(Number);
-    const bParts = b.split('.').map(Number);
-    const maxLen = Math.max(aParts.length, bParts.length);
-
-    for (let i = 0; i < maxLen; i++) {
-        const ai = (i < aParts.length ? aParts[i] : 0) || 0;
-        const bi = (i < bParts.length ? bParts[i] : 0) || 0;
-        if (ai !== bi) {
-            return order === 'ascending' ? ai - bi : bi - ai;
-        }
-    }
-    return 0;
-}
-
-module.exports = { sortTocItems, compareIndexes };
+module.exports = { sortTocItems };

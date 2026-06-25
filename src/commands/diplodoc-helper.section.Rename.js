@@ -81,14 +81,7 @@ async function ux_section_rename(uri) {
 
     try {
         // 1. Обновляем/добавляем запись в TOC (до физического изменения)
-        TocYamlEntryUpdateOrAppend(
-            parentDir,
-            oldFolderName,
-            fullTitle,
-            finalFolderName,
-            newSectionTypeObj.value,
-            finalIndex
-        );
+        TocYamlEntryUpdateOrAppend(parentDir, oldFolderName, fullTitle, finalFolderName);
 
         // 2. Переименовываем папку + обновляем index.md (если нужно)
         if (newFolderName !== oldFolderName) {

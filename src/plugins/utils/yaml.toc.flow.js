@@ -3,7 +3,6 @@ const path = require('path');
 const YAML = require('yaml');
 const yaml = require('js-yaml');
 
-const { IndexYamlEntryPatchHRef } = require('./yaml.index.flow');
 const { FrontMatterFiles, FrontMatterToc } = require('../model/frontmatter.model');
 const frontMatterBuilder = require('./frontmatter.builder');
 
@@ -61,9 +60,6 @@ function TocYamlEntryPatchReference(parentDir, oldFolderName, newFolderName) {
         content = content.replace(new RegExp(oldFolderName, 'g'), newFolderName);
         fs.writeFileSync(tocPath, content, 'utf8');
     }
-
-    // Обновляем index.yaml родителя
-    IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, '');
 }
 
 /**
@@ -100,10 +96,8 @@ function TocYamlEntryCreate(parentDir, composedTitle, folderName, sectionType, s
  * @param {string} oldFolderName
  * @param {string} composedTitle
  * @param {string} newFolderName
- * @param {string} sectionType
- * @param {any} sectionIndex
  */
-function TocYamlEntryUpdateOrAppend(parentDir, oldFolderName, composedTitle, newFolderName, sectionType, sectionIndex) {
+function TocYamlEntryUpdateOrAppend(parentDir, oldFolderName, composedTitle, newFolderName) {
     const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
     if (!fs.existsSync(tocPath)) return;
 
@@ -126,7 +120,7 @@ function TocYamlEntryUpdateOrAppend(parentDir, oldFolderName, composedTitle, new
     );
 
     if (oldEntryIndex !== -1) {
-        // НАШЛИ! Заменяем старый элемент новым прямо на его позиции
+        // Заменяем старый элемент новым прямо на его позиции
         tocData.items[oldEntryIndex] = updatedEntry;
         console.log(`Запись успешно обновлена на позиции: ${oldEntryIndex}`);
     } else {
@@ -315,9 +309,8 @@ function TocYamlFileSave(tocPath, tocDoc) {
  * @param {string} sectionTitle
  * @param {string} sectionTypeLabel
  * @param {string} folderName
- * @param {string | undefined} sectionIndex
  */
-function TocYamlEntryPatchItems(parentDir, sectionTitle, sectionTypeLabel, folderName, sectionIndex) {
+function TocYamlEntryPatchItems(parentDir, sectionTitle, sectionTypeLabel, folderName) {
     const tocPath = path.join(parentDir, FrontMatterFiles.TOC_YAML);
     if (!fs.existsSync(tocPath)) return;
 
@@ -333,12 +326,7 @@ function TocYamlEntryPatchItems(parentDir, sectionTitle, sectionTypeLabel, folde
     }
 
     // 4. Генерируем новый элемент и просто пушим его в массив
-    const newItem = frontMatterBuilder.GET_PARENT_TOC_ITEM_OBJECT(
-        sectionTitle,
-        sectionTypeLabel,
-        folderName,
-        sectionIndex
-    );
+    const newItem = frontMatterBuilder.GET_PARENT_TOC_ITEM_OBJECT(sectionTitle, sectionTypeLabel, folderName);
     tocData.items.push(newItem);
 
     // 5. Перезаписываем файл. Библиотека сама сделает правильные отступы (- name:)

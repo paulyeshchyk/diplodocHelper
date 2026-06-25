@@ -8,7 +8,7 @@ const path = require('path');
 const { TEMPLATE_FOLDER_NAME } = require('../model/frontmatter.templates');
 
 const { IndexMdFilePatch, IndexMdUpsert } = require('./md.index.file');
-const { IndexYamlEntryPatchSection } = require('./yaml.index.flow');
+const { IndexYamlEntryPatchSection, IndexYamlEntryPatchHRef } = require('./yaml.index.flow');
 const { composeFullTitle } = require('./frontmatter.section.title');
 
 const { canCreateFolder, createDirectory } = require('./path.directory');
@@ -87,6 +87,8 @@ function DiplodocSectionPatch(folderPath, pureTitle, sectionType, sectionIndex =
 
         // Обновляем ссылки в родителе
         TocYamlEntryPatchReference(parentDir, oldFolderName, newFolderName);
+        // Обновляем index.yaml родителя
+        IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, '');
 
         const composedTitle = composeFullTitle(sectionIndex, sectionType, pureTitle);
         TocYamlEntryPatchTitle(newFolderPath, composedTitle);

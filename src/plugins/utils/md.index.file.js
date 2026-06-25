@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const YAML = require('yaml');
-const yaml = require('js-yaml');
 
 const { FrontMatterFiles, FrontMatterMeta } = require('../model/frontmatter.model');
 

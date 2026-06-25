@@ -60,9 +60,8 @@ function GET_INDEX_MD_OBJECT(sectionValue, sectionIndex, title, sectionType) {
  * @param {string} name
  * @param {string} sectionLabel
  * @param {string} folderName
- * @param {string | undefined} sectionIndex
  */
-function GET_PARENT_TOC_ITEM_OBJECT(name, sectionLabel, folderName, sectionIndex) {
+function GET_PARENT_TOC_ITEM_OBJECT(name, sectionLabel, folderName) {
     // Структура элемента внутри массива items
     return {
         [FrontMatterToc.ITEMS_NAME]: name,
