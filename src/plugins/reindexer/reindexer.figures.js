@@ -5,6 +5,7 @@ const path = require('path');
 
 const { DiplodocConfigFromJson } = require('../manifest/config/diplodoc.config');
 const { TocYamlFileLoad } = require('../utils/yaml.toc.flow');
+const tocWalker = require('../utils/yaml.toc.walker');
 
 /**
  * @import { DiplodocConfig } from '../manifest/config/diplodoc.config.model'
@@ -25,15 +26,16 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
         return { success: false, reason: 'no_toc', total: 0 };
     }
 
-    let tocDoc;
-    try {
-        tocDoc = TocYamlFileLoad(tocPath);
-    } catch {
-        return { success: false, reason: 'parse_error', total: 0 };
-    }
-
+    /** @type {TocYaml?} */
+    let tocDoc = TocYamlFileLoad(tocPath);
+    if (!tocDoc) return { success: false, reason: 'parse_error', total: 0 };
+    const options = {
+        indexFiles: ['index.md', 'readme.md', 'index.en.md', 'README.md'],
+        contentExtensions: ['.md', '.markdown'],
+        skipFilenames: ['toc.yaml', 'index.yaml', '_sidebar.md'],
+    };
     const entries = Array.isArray(tocDoc) ? tocDoc : tocDoc?.items || [];
-    const allMdFiles = collectMdFilesInOrder(entries, rootDir);
+    const allMdFiles = tocWalker.collectFilesInOrder(entries, rootDir, '', new Set(), options);
 
     if (allMdFiles.length === 0) {
         return { success: true, total: 0, reason: 'no md-file found' };
@@ -110,67 +112,6 @@ function GetReferencePrefixOrDefault(config, activeLocale, targetLocale) {
  */
 function GetPrefixOrDefault(config, activeLocale, targetLocale) {
     return activeLocale !== targetLocale ? 'Figure' : config.figureCaptionPrefix || 'Figure';
-}
-
-/**
- * Рекурсивный сбор md-файлов
- * @param {any[] | any} entries - массив элементов или один элемент
- * @param {string} rootDir
- * @returns {string[]}
- */
-function collectMdFilesInOrder(entries, rootDir, currentPath = '', visited = new Set()) {
-    if (!entries) return [];
-
-    const items = Array.isArray(entries) ? entries : [entries];
-    let files = [];
-
-    for (const entry of items) {
-        // 1. Сначала добавляем файл текущего элемента (href)
-        if (entry.href) {
-            const href = entry.href.trim();
-            if (href.endsWith('toc.yaml') || href.endsWith('index.yaml')) continue;
-
-            let mdPath = path.join(rootDir, currentPath, href);
-            if (!href.endsWith('.md')) {
-                mdPath = path.join(mdPath, 'index.md');
-            }
-
-            if (fs.existsSync(mdPath)) {
-                files.push(mdPath);
-            } else {
-                console.warn(`Файл не найден: ${mdPath}`);
-            }
-        }
-
-        // 2. Затем обрабатываем include (подключаемый toc.yaml) – его файлы встают после текущего
-        if (entry.include?.path) {
-            const includeRelPath = entry.include.path;
-            const absIncludePath = path.join(rootDir, currentPath, includeRelPath);
-            const canonical = path.resolve(absIncludePath);
-
-            if (!visited.has(canonical)) {
-                visited.add(canonical);
-                try {
-                    const toc = TocYamlFileLoad(absIncludePath);
-                    const subItems = toc.items;
-                    const includeDir = path.join(currentPath, path.dirname(includeRelPath));
-                    const includeFiles = collectMdFilesInOrder(subItems, rootDir, includeDir, visited);
-                    files.push(...includeFiles);
-                } catch (err) {
-                    let msg = err instanceof Error ? err.message : String(err);
-                    console.error(`Не удалось загрузить include ${absIncludePath}:`, msg);
-                }
-            }
-        }
-
-        // 3. И только потом – вложенные подразделы (items) – они идут после всего вышеперечисленного
-        if (Array.isArray(entry.items)) {
-            const subFiles = collectMdFilesInOrder(entry.items, rootDir, currentPath, visited);
-            files.push(...subFiles);
-        }
-    }
-
-    return files;
 }
 
 /**

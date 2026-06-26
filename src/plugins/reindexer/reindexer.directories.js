@@ -7,7 +7,7 @@ const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require('../model/f
 
 const { getSectionMetadata } = require('../utils/frontmatter.section.metadata');
 const { sectionTypes } = require('../model/section.model');
-const { DiplodocSectionPatch } = require('../utils/diplodoc.flow');
+const diplodocFlow = require('../utils/diplodoc.flow');
 const tocFlow = require('../utils/yaml.toc.flow');
 const { sortTocItems } = require('../utils/yaml.toc.sort');
 const { IndexMdUpsert } = require('../utils/md.index.file');
@@ -40,16 +40,9 @@ function reindexDirectory(dir, parentIndex = '', sortOrder = 'ascending', sortKi
     let localCounter = 0;
 
     const tocPath = path.join(dir, FrontMatterFiles.TOC_YAML);
-    let tocDoc = null;
 
-    if (fs.existsSync(tocPath)) {
-        try {
-            tocDoc = tocFlow.TocYamlFileLoad(tocPath);
-        } catch (e) {
-            let msg = e instanceof Error ? e.message : String(e);
-            console.error(`Ошибка загрузки toc.yaml в ${dir} \n ${msg}`);
-        }
-    }
+    /** @type {TocYaml?} */
+    let tocDoc = tocFlow.TocYamlFileLoad(tocPath);
 
     for (const section of sections) {
         const result = reindexAndRenameSection({
@@ -91,7 +84,7 @@ function reindexDirectory(dir, parentIndex = '', sortOrder = 'ascending', sortKi
  * @param {number} params.localCounter
  * @param {string} [params.parentIndex]
  * @param {SectionTypeOption[]} params.localSectionTypes
- * @param {any} [params.tocDoc]
+ * @param {TocYaml?} [params.tocDoc]
  * @returns {ReindexResult}
  */
 function reindexAndRenameSection({ dir, sectionName, localCounter, parentIndex = '', localSectionTypes, tocDoc }) {
@@ -114,7 +107,6 @@ function reindexAndRenameSection({ dir, sectionName, localCounter, parentIndex =
     /** @type {ReindexWarning[]} */
     const warnings = [];
 
-    // === Новые проверки ===
     checkMissingSectionType(metadata, oldSectionPath, warnings);
     checkTitleHasPrefix(metadata, oldSectionPath, warnings);
 
@@ -151,7 +143,12 @@ function reindexAndRenameSection({ dir, sectionName, localCounter, parentIndex =
 
         IndexMdUpsert(oldSectionPath, pureTitle, sectionType, sectionLabel, currentIndex);
 
-        const newFolderName = DiplodocSectionPatch(oldSectionPath, pureTitle, sectionTypeObj, currentIndex);
+        const newFolderName = diplodocFlow.DiplodocSectionPatch(
+            oldSectionPath,
+            pureTitle,
+            sectionTypeObj,
+            currentIndex
+        );
 
         const newSectionPath = path.join(dir, newFolderName);
 

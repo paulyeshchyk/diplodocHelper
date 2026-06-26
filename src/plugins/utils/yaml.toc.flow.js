@@ -280,7 +280,7 @@ function TocYamlFileCreate(folderPath, title, sectionLabel, sectionIndex) {
 function TocYamlGetItems(absoluteTocPath) {
     try {
         const tocDoc = TocYamlFileLoad(absoluteTocPath);
-        return tocDoc.items || [];
+        return tocDoc?.items || [];
     } catch (err) {
         console.error(`Ошибка загрузки ${absoluteTocPath}:`, err);
         return [];
@@ -288,12 +288,21 @@ function TocYamlGetItems(absoluteTocPath) {
 }
 
 /**
- * @param {fs.PathOrFileDescriptor} tocPath
- * @returns {TocYaml}
+ * @param {fs.PathLike} tocPath
+ * @returns {TocYaml?}
  */
 function TocYamlFileLoad(tocPath) {
-    const content = fs.readFileSync(tocPath, 'utf8');
-    return /** @type {TocYaml} */ (yaml.load(content));
+    if (!fs.existsSync(tocPath)) {
+        return null;
+    }
+    try {
+        const content = fs.readFileSync(tocPath, 'utf8');
+        return /** @type {TocYaml} */ (yaml.load(content));
+    } catch (e) {
+        let msg = e instanceof Error ? e.message : String(e);
+        console.error(`Ошибка загрузки toc.yaml: ${msg}`);
+        return null;
+    }
 }
 
 /**

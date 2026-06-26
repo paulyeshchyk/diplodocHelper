@@ -5,10 +5,20 @@
 /** @typedef {Object} TocYamlItem
  * @property {string | undefined} href
  * @property {TocYamlItemInclude | undefined} include
+ * @property {TocYamlItem[] | undefined} items
  */
 
 /** @typedef {Object} TocYaml
  * @property {TocYamlItem[] | undefined} items
+ */
+
+/**
+ * @param {TocYamlItem[] | TocYamlItem | null | undefined} entries
+ * @param {string} rootDir
+ * @param {string} [currentPath='']
+ * @param {Set<string>} [visited]
+ * @param {string[]} [defaultIndexFiles=['index.md']]
+ * @returns {string[]}
  */
 
 /**

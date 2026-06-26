@@ -3,7 +3,7 @@
 const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const { calculateNextIndex } = require('../plugins/reindexer/reindexer.md.js');
-const { FrontMatterSectionTypesIndexed2 } = require('../plugins/model/frontmatter.model.js');
+const { FrontMatterSectionTypesIndexed } = require('../plugins/model/frontmatter.model.js');
 const { composeFullTitle } = require('../plugins/utils/frontmatter.section.title.js');
 const { ShowSectionNameSelector, ShowSectionTypeSelector, promptSectionIndex } = require('./vscode.prompts.js');
 const { isDiplodocSection, isLanguageRoot } = require('../plugins/utils/path.directory.js');
@@ -30,7 +30,7 @@ async function ux_section_create(uri) {
     const userSectionName = await ShowSectionNameSelector();
     if (!userSectionName) return;
 
-    const hasIndex = FrontMatterSectionTypesIndexed2.includes(sectionType.name);
+    const hasIndex = FrontMatterSectionTypesIndexed.includes(sectionType.name);
 
     const sectionIndexCalculated = calculateNextIndex(targetDir);
 
