@@ -26,7 +26,6 @@
 const fs = require('fs');
 const path = require('path');
 
-// ========== ПАРСИНГ АРГУМЕНТОВ ==========
 const args = process.argv.slice(2);
 let rootDir = '.';
 let outputDir = null;
@@ -91,7 +90,6 @@ if (outputDir) {
 const ignoreDirs = ['node_modules', '.git', 'coverage', 'dist', 'build', 'test'];
 const ignoreFilesSuffix = ['.test.js', '.spec.js'];
 
-// ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
 /**
  * @param {string} fileName
  */
@@ -252,7 +250,6 @@ describe('${moduleName} (browser script)', () => {
 `;
 }
 
-// ========== ОСНОВНОЙ ЦИКЛ ==========
 function generateTests() {
     const files = getAllJSFiles(absoluteRoot);
     console.log(`Найдено ${files.length} JS-файлов.`);
