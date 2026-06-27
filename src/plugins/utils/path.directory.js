@@ -5,12 +5,6 @@ const path = require('path');
 const { FrontMatterFiles, FrontMatterFilesDefaultList } = require('../model/frontmatter.model');
 
 /**
- * @typedef {Object} CreateFolderResult
- * @property {string} folderPath
- * @property {string} folderName
- */
-
-/**
  * Проверяет, является ли папка полноценным разделом Diplodoc
  * @param {string} folderPath
  */

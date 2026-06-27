@@ -62,7 +62,7 @@ const latToCyrLegend = {
     ye: 'э',
     yu: 'ю',
     ya: 'я',
-    sh: 'щ', // Ваше условие: sh -> щ
+    sh: 'щ',
 
     a: 'а',
     b: 'б',
@@ -110,6 +110,7 @@ const latRegex = new RegExp(
  */
 function diplodocTransliterate(text) {
     if (typeof text !== 'string') return '';
+    // @ts-ignore
     return text.toLowerCase().replace(cyrRegex, match => cyrToLatLegend[match]);
 }
 
@@ -118,6 +119,7 @@ function diplodocTransliterate(text) {
  */
 function diplodocReverseTransliterate(text) {
     if (typeof text !== 'string') return '';
+    // @ts-ignore
     return text.toLowerCase().replace(latRegex, match => latToCyrLegend[match]);
 }
 

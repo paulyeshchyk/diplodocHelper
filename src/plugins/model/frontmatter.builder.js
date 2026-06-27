@@ -1,5 +1,5 @@
-const { FrontMatterMeta, FrontMatterToc, FrontMatterFiles } = require('../model/frontmatter.model');
-const { TEMPLATE_FINAL_TITLE } = require('../model/frontmatter.templates');
+const { FrontMatterMeta, FrontMatterToc, FrontMatterFiles } = require('./frontmatter.model');
+const { TEMPLATE_FINAL_TITLE } = require('./frontmatter.templates');
 
 /**
  * @param {string} title

@@ -5,14 +5,7 @@ const path = require('path');
 
 const { TocYamlFileLoad } = require('../utils/yaml.toc.flow');
 
-/**
- * @typedef {Object} TocWalkerOptions
- * @property {string[]} indexFiles - список имён индексных файлов в порядке приоритета (index.md, README.md и т.д.)
- * @property {string[]} contentExtensions - расширения файлов, которые считаются контентом (например ['.md', '.markdown'])
- * @property {string[]} skipFilenames - имена файлов, которые нужно полностью пропускать (toc.yaml, index.yaml и др.)
- */
-
-/** @type {TocWalkerOptions} */
+/** @type {TocYamlWalkerOptions} */
 const DEFAULT_OPTIONS = {
     indexFiles: ['index.md'],
     contentExtensions: ['.md'],
@@ -26,7 +19,7 @@ const DEFAULT_OPTIONS = {
  * @param {string} rootDir - корневая директория проекта
  * @param {string} [currentPath='']
  * @param {Set<string>} [visited]
- * @param {Partial<TocWalkerOptions>} [options]
+ * @param {Partial<TocYamlWalkerOptions>} [options]
  * @returns {string[]}
  */
 function collectFilesInOrder(entries, rootDir, currentPath = '', visited = new Set(), options = {}) {

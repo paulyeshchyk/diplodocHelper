@@ -7,7 +7,8 @@ const fs = require('fs');
  * @returns {{ data: Record<string, any>, content: string }}
  */
 function parse(content) {
-    return matter(content);
+    // @ts-ignore
+    return matter(content, {});
 }
 
 /**
@@ -17,7 +18,7 @@ function parse(content) {
  * @returns {string}
  */
 function stringify(data, content = '') {
-    return matter.stringify(content, data);
+    return matter.stringify(content, data, {});
 }
 
 /**

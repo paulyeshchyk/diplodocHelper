@@ -4,7 +4,7 @@ const YAML = require('yaml');
 const yaml = require('js-yaml');
 
 const { FrontMatterFiles } = require('../model/frontmatter.model');
-const frontmatterBuilder = require('./frontmatter.builder');
+const frontmatterBuilder = require('../model/frontmatter.builder');
 
 /**
  * @param {string} parentDir

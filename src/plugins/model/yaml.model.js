@@ -2,6 +2,13 @@
  * @property {string} path
  */
 
+/**
+ * @typedef {Object} TocYamlWalkerOptions
+ * @property {string[]} indexFiles - список имён индексных файлов в порядке приоритета (index.md, README.md и т.д.)
+ * @property {string[]} contentExtensions - расширения файлов, которые считаются контентом (например ['.md', '.markdown'])
+ * @property {string[]} skipFilenames - имена файлов, которые нужно полностью пропускать (toc.yaml, index.yaml и др.)
+ */
+
 /** @typedef {Object} TocYamlItem
  * @property {string | undefined} href
  * @property {TocYamlItemInclude | undefined} include

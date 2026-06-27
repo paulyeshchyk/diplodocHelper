@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 /** @import { SectionTypeOption } from '../model/section.model' */
-/** @import { CreateFolderResult } from './path.directory' */
+
 const { TEMPLATE_FOLDER_NAME } = require('../model/frontmatter.templates');
 
 const { IndexMdFilePatch, IndexMdUpsert } = require('./md.index.file');

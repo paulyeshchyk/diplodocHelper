@@ -8,7 +8,7 @@ const { FrontMatterFiles, FrontMatterMeta } = require('../model/frontmatter.mode
 
 const { parse, stringify } = require('./frontmatter.utils');
 const { TEMPLATE_FINAL_TITLE } = require('../model/frontmatter.templates');
-const { GET_INDEX_MD_OBJECT } = require('./frontmatter.builder');
+const { GET_INDEX_MD_OBJECT } = require('../model/frontmatter.builder');
 
 /**
  * @param {string} folderPath
