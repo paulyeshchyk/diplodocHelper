@@ -23,7 +23,7 @@ const {
     composeFullTitle,
     isIndexedSectionType,
     composeFolderName,
-} = require('../plugins/utils/frontmatter.section.title.js');
+} = require('../shared/context/frontmatter/frontmatter.facade.section.title.js');
 const { updateLinksAfterRename } = require('./diplodoc-helper.links.md.js');
 
 /**

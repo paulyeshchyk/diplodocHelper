@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
-const { parse, remove } = require('../plugins/utils/frontmatter.utils.js');
+const { frontmatterRemove, frontmatterParse } = require('../shared/context/frontmatter/frontmatter.facade.js');
 
 /**
  * @param {{ fsPath: string }} uri
@@ -38,7 +38,7 @@ async function ux_helptag_delete(uri) {
 
     try {
         let content = fs.readFileSync(indexMdPath, 'utf8');
-        content = remove(content, 'helptag');
+        content = frontmatterRemove(content, 'helptag');
 
         fs.writeFileSync(indexMdPath, content, 'utf8');
 
@@ -56,7 +56,7 @@ async function ux_helptag_delete(uri) {
 function readHelpTag(indexMdPath) {
     try {
         const content = fs.readFileSync(indexMdPath, 'utf8');
-        const { data } = parse(content);
+        const { data } = frontmatterParse(content);
         return data.helptag || '';
     } catch {
         return '';

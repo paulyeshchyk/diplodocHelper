@@ -2,7 +2,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { extractContextTagValue } = require('./contexts.extractor');
+const {
+    diplodocFrontmatterExtractContextTagValue,
+} = require('../../shared/services/diplodoc.frontmatter.service.context');
 
 /** @import {ContextMap} from '../model/contextmap.model' */
 
@@ -31,7 +33,7 @@ function walkMdFilesGetContexts(langDir) {
                     walk(fullPath);
                 }
             } else if (file.endsWith('.md')) {
-                extractContextTagValue(fullPath, langDir, contextMap);
+                diplodocFrontmatterExtractContextTagValue(fullPath, langDir, contextMap);
             }
         }
     }

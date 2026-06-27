@@ -4,8 +4,8 @@ const { FrontMatterFiles, FrontMatterMeta } = require('../model/frontmatter.mode
 
 // === Функции для Rename (обновление метаданных) ===
 
-const { parse, stringify } = require('./frontmatter.utils');
 const { TEMPLATE_FINAL_TITLE } = require('../model/frontmatter.templates');
+const { frontmatterParse, frontmatterStringify } = require('../../shared/context/frontmatter/frontmatter.facade');
 
 /**
  * @param {string} folderPath
@@ -16,7 +16,7 @@ function IndexMdFileRead(folderPath) {
     if (!fs.existsSync(indexPath)) return null;
 
     const content = fs.readFileSync(indexPath, 'utf8');
-    const data = parse(content);
+    const data = frontmatterParse(content);
     return data.data;
 }
 
@@ -34,7 +34,7 @@ function IndexMdFilePatch(folderPath, pureTitle, sectionTypeName, sectionLabel, 
     if (!fs.existsSync(indexPath)) return;
 
     const content = fs.readFileSync(indexPath, 'utf8');
-    let { data, content: body } = parse(content);
+    let { data, content: body } = frontmatterParse(content);
 
     const composedTitle = sectionIndex ? `${sectionLabel} ${sectionIndex}. ${pureTitle}` : pureTitle;
 
@@ -47,7 +47,7 @@ function IndexMdFilePatch(folderPath, pureTitle, sectionTypeName, sectionLabel, 
         delete data.sectionIndex;
     }
 
-    fs.writeFileSync(indexPath, stringify(data, body), 'utf8');
+    fs.writeFileSync(indexPath, frontmatterStringify(data, body), 'utf8');
 }
 
 /**
@@ -56,7 +56,7 @@ function IndexMdFilePatch(folderPath, pureTitle, sectionTypeName, sectionLabel, 
  * @param {string} pureTitle - чистое название
  * @param {string} sectionTypeName - например "Chapter"
  * @param {string} sectionLabel - например "Глава"
- * @param {string|number} [sectionIndex] - например "14"
+ * @param {string} [sectionIndex] - например "14"
  */
 function IndexMdUpsert(folderPath, pureTitle, sectionTypeName, sectionLabel, sectionIndex = '') {
     const indexPath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
@@ -70,7 +70,7 @@ function IndexMdUpsert(folderPath, pureTitle, sectionTypeName, sectionLabel, sec
         // === Обновление существующего файла ===
         console.log(`IndexMdUpsert (update): ${folderPath}`);
         const content = fs.readFileSync(indexPath, 'utf8');
-        const parsed = parse(content);
+        const parsed = frontmatterParse(content);
 
         data = parsed.data || {};
         body = parsed.content || '';
@@ -80,20 +80,25 @@ function IndexMdUpsert(folderPath, pureTitle, sectionTypeName, sectionLabel, sec
     }
 
     // === Обновляем / заполняем метаданные ===
+    // @ts-ignore
     data[FrontMatterMeta.TITLE] = composedTitle;
+    // @ts-ignore
     data[FrontMatterMeta.PURETITLE] = pureTitle;
+    // @ts-ignore
     data[FrontMatterMeta.SECTIONTYPE] = sectionTypeName;
 
     if (sectionIndex && String(sectionIndex).trim() !== '') {
+        // @ts-ignore
         data[FrontMatterMeta.SECTIONINDEX] = String(sectionIndex).trim();
     } else {
+        // @ts-ignore
         delete data[FrontMatterMeta.SECTIONINDEX];
     }
 
     // Можно добавить description по аналогии с index.yaml, если нужно:
     // data.description = `Описывает ${composedTitle}`;
 
-    const output = stringify(data, body);
+    const output = frontmatterStringify(data, body);
 
     fs.writeFileSync(indexPath, output, 'utf8');
 }

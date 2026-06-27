@@ -11,7 +11,7 @@ const { TocYamlEntryPatchReference } = require('./yaml.toc.entry');
 const { IndexMdFilePatch, IndexMdUpsert } = require('./md.index.file');
 const { IndexYamlEntryPatchSection } = require('./yaml.index.entry');
 const { TocYamlEntryPatchTitle } = require('./yaml.toc.entry');
-const { composeFullTitle } = require('./frontmatter.section.title');
+const { composeFullTitle } = require('../../shared/context/frontmatter/frontmatter.facade.section.title');
 
 const { canCreateFolder, createDirectory } = require('./path.directory');
 const { IndexYamlFileCreate, IndexYamlEntryPatch } = require('./yaml.base');

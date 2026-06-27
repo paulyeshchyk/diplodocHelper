@@ -1,85 +1,97 @@
 // src/commands/diplodoc-helper.context.Delete.js
-
 const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
 const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
-const { parse, stringify, remove } = require('../plugins/utils/frontmatter.utils.js');
+const { frontmatterReadContexts } = require('../shared/context/frontmatter/frontmatter.facade.js');
+const { diplodocFrontmatterDeleteContexts } = require('../shared/services/diplodoc.frontmatter.service.context.js');
 
 /**
- * @param {{ fsPath: string }} uri
+ * Получает путь к index.md раздела, если раздел валидный.
+ * @param {string} sectionPath - путь к папке раздела
+ * @returns {string|null} путь к index.md или null, если раздел невалидный или файл отсутствует
  */
-async function ux_context_delete(uri) {
-    if (!uri) return;
-
-    const sectionPath = uri.fsPath;
-    if (!isDiplodocSection(sectionPath)) return;
-
+function getIndexMdPathIfValid(sectionPath) {
+    if (!sectionPath || !isDiplodocSection(sectionPath)) return null;
     const indexMdPath = path.join(sectionPath, 'index.md');
-    if (!fs.existsSync(indexMdPath)) return;
+    if (!fs.existsSync(indexMdPath)) return null;
+    return indexMdPath;
+}
 
-    let contexts = readContexts(indexMdPath);
-
-    if (contexts.length === 0) return; // ничего не делаем
-
-    let toDelete;
-
+/**
+ * Запрашивает у пользователя выбор контекста для удаления, если их несколько.
+ * @param {string[]} contexts - все доступные контексты
+ * @returns {Promise<string | undefined>} выбранный контекст или undefined при отмене
+ */
+async function askUserToPickContext(contexts) {
     if (contexts.length === 1) {
-        toDelete = contexts[0];
-    } else {
-        toDelete = await vscode.window.showQuickPick(contexts, {
-            placeHolder: translate(nls_ts.plugin.context.delete.dialog.placeholder),
-        });
-        if (!toDelete) return;
+        return contexts[0];
     }
+    const picked = await vscode.window.showQuickPick(contexts, {
+        placeHolder: translate(nls_ts.plugin.context.delete.dialog.placeholder),
+    });
+    return picked; // может быть undefined
+}
 
-    const confirm = await vscode.window.showWarningMessage(
-        translate(nls_ts.plugin.context.delete.confirm.prompt, toDelete),
+/**
+ * Запрашивает у пользователя подтверждение удаления.
+ * @param {string} contextName - имя удаляемого контекста
+ * @returns {Promise<boolean>} true – подтверждено, false – отменено
+ */
+async function askUserToConfirmDeletion(contextName) {
+    const confirmText = translate(nls_ts.plugin.context.delete.confirm.button);
+    const result = await vscode.window.showWarningMessage(
+        translate(nls_ts.plugin.context.delete.confirm.prompt, contextName),
         { modal: true },
-        translate(nls_ts.plugin.context.delete.confirm.button)
+        confirmText
     );
+    return result === confirmText;
+}
 
-    if (confirm !== translate(nls_ts.plugin.context.delete.confirm.button)) return;
-
-    try {
-        let content = fs.readFileSync(indexMdPath, 'utf8');
-        const { data, content: body } = parse(content);
-
-        const remaining = contexts.filter((/** @type {any} */ c) => c !== toDelete);
-
-        if (remaining.length === 0) {
-            content = remove(content, 'context');
-        } else {
-            data.context = remaining.join(', ');
-            content = stringify(data, body);
-        }
-
-        fs.writeFileSync(indexMdPath, content, 'utf8');
-
-        vscode.window.showInformationMessage(translate(nls_ts.plugin.context.delete.info.success, toDelete));
-    } catch (err) {
-        let msg = err instanceof Error ? err.message : `${err}`;
+/**
+ * Показывает уведомление об успехе или ошибке.
+ * @param {boolean} success
+ * @param {string} contextName - имя контекста
+ * @param {unknown} [error] - объект ошибки, если неудача
+ */
+function notifyUser(success, contextName, error) {
+    if (success) {
+        vscode.window.showInformationMessage(translate(nls_ts.plugin.context.delete.info.success, contextName));
+    } else {
+        const msg = error instanceof Error ? error.message : String(error);
         vscode.window.showErrorMessage(translate(nls_ts.plugin.context.delete.error.critical, msg));
     }
 }
 
 /**
- * @param {fs.PathOrFileDescriptor} indexMdPath
- * @returns string[]
+ * Команда для удаления контекста из раздела diplodoc.
+ * @param {{ fsPath: string }} uri
  */
-function readContexts(indexMdPath) {
+async function ux_context_delete(uri) {
+    // 1. Проверка пути
+    const indexMdPath = getIndexMdPathIfValid(uri?.fsPath);
+    if (!indexMdPath) return;
+
+    // 2. Чтение контекстов
+    let contexts = frontmatterReadContexts(indexMdPath);
+    if (contexts.length === 0) return;
+
+    // 3. Выбор контекста (UI)
+    const toDelete = await askUserToPickContext(contexts);
+    if (!toDelete) return;
+
+    // 4. Подтверждение (UI)
+    const confirmed = await askUserToConfirmDeletion(toDelete);
+    if (!confirmed) return;
+
+    // 5. Выполнение операции (основная логика)
     try {
-        const content = fs.readFileSync(indexMdPath, 'utf8');
-        const { data } = parse(content);
-        const current = data.context || '';
-        return current
-            .split(',')
-            .map((/** @type {string} */ s) => s.trim())
-            .filter(Boolean);
-    } catch {
-        return [];
+        diplodocFrontmatterDeleteContexts(indexMdPath, contexts, toDelete);
+        notifyUser(true, toDelete);
+    } catch (err) {
+        notifyUser(false, toDelete, err);
     }
 }
 

@@ -2,9 +2,11 @@
 
 const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
-const { calculateNextIndex } = require('../plugins/reindexer/reindexer.md.js');
+const {
+    frontmatterCalculateNextIndex: calculateNextIndex,
+} = require('../shared/context/frontmatter/frontmatter.facade.index.js');
 const { FrontMatterSectionTypesIndexed2 } = require('../plugins/model/frontmatter.model.js');
-const { composeFullTitle } = require('../plugins/utils/frontmatter.section.title.js');
+const { composeFullTitle } = require('../shared/context/frontmatter/frontmatter.facade.section.title.js');
 const { ShowSectionNameSelector, ShowSectionTypeSelector, promptSectionIndex } = require('./vscode.prompts.js');
 const { isDiplodocSection, isLanguageRoot } = require('../plugins/utils/path.directory.js');
 const { createSectionFolder } = require('../plugins/utils/diplodoc.flow.js');

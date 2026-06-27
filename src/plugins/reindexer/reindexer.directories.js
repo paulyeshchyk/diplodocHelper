@@ -5,7 +5,7 @@ const path = require('path');
 
 const { FrontMatterFiles, FrontMatterSectionTypesIndexed } = require('../model/frontmatter.model');
 
-const { getSectionMetadata } = require('../utils/frontmatter.section.metadata');
+const { getSectionMetadata } = require('../../shared/context/frontmatter/frontmatter.facade.section.metadata');
 const { sectionTypes } = require('../model/section.model');
 const { DiplodocSectionPatch } = require('../utils/diplodoc.flow');
 const { TocYamlFileLoad } = require('../utils/yaml.toc.file');

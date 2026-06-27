@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
-const { parse, update } = require('../plugins/utils/frontmatter.utils.js');
+const { frontmatterParse, frontmatterUpdate } = require('../shared/context/frontmatter/frontmatter.facade.js');
 
 /**
  * @param {{ fsPath: string }} uri
@@ -25,7 +25,7 @@ async function ux_helptag_update(uri) {
 
     if (fs.existsSync(indexMdPath)) {
         const content = fs.readFileSync(indexMdPath, 'utf8');
-        const { data } = parse(content);
+        const { data } = frontmatterParse(content);
         currentHelptag = data.helptag || '';
     }
 
@@ -45,7 +45,7 @@ async function ux_helptag_update(uri) {
 
     try {
         let content = fs.readFileSync(indexMdPath, 'utf8');
-        content = update(content, 'helptag', newHelptag.trim());
+        content = frontmatterUpdate(content, 'helptag', newHelptag.trim());
 
         fs.writeFileSync(indexMdPath, content, 'utf8');
 

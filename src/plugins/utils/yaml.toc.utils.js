@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const { get } = require('./frontmatter.utils');
 
 const { FrontMatterFiles, FrontMatterMeta, FrontMatterSectionTypesIndexed } = require('../model/frontmatter.model');
+const { frontmatterGet } = require('../../shared/context/frontmatter/frontmatter.facade');
 
 /**
  * @param {string} indent
@@ -56,13 +56,13 @@ function getIndexFromBlock(block, baseDir) {
     if (!fs.existsSync(indexPath)) return null;
 
     const content = fs.readFileSync(indexPath, 'utf8');
-    const sectionType = get(content, FrontMatterMeta.SECTIONTYPE);
+    const sectionType = frontmatterGet(content, FrontMatterMeta.SECTIONTYPE);
 
     if (!sectionType || !FrontMatterSectionTypesIndexed.includes(sectionType)) {
         return null;
     }
 
-    return get(content, FrontMatterMeta.SECTIONINDEX) || null;
+    return frontmatterGet(content, FrontMatterMeta.SECTIONINDEX) || null;
 }
 
 /**

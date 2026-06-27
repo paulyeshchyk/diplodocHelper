@@ -1,10 +1,10 @@
 // utils/sectionTitle.js
 
-const { FrontMatterSectionTypesIndexed } = require('../model/frontmatter.model');
-const { TEMPLATE_FOLDER_NAME } = require('../model/frontmatter.templates');
+const { FrontMatterSectionTypesIndexed } = require('../../../plugins/model/frontmatter.model');
+const { TEMPLATE_FOLDER_NAME } = require('../../../plugins/model/frontmatter.templates');
 
 /**
- * @param {import("../model/section.model").SectionTypeOption} sectionType
+ * @param {import("../../../plugins/model/section.model").SectionTypeOption} sectionType
  */
 function isIndexedSectionType(sectionType) {
     return FrontMatterSectionTypesIndexed.includes(sectionType.name);
@@ -13,7 +13,7 @@ function isIndexedSectionType(sectionType) {
 /**
  * Формирует префикс заголовка (тип + индекс)
  * @param {string | undefined} index
- * @param {import("../model/section.model").SectionTypeOption} sectionType
+ * @param {import("../../../plugins/model/section.model").SectionTypeOption} sectionType
  * @returns {string}
  */
 function composeTitlePrefix(index, sectionType) {
@@ -29,7 +29,7 @@ function composeTitlePrefix(index, sectionType) {
 /**
  * Полный заголовок раздела (для index.md, index.yaml, toc.yaml)
  * @param {string | undefined} index
- * @param {import("../model/section.model").SectionTypeOption} sectionType
+ * @param {import("../../../plugins/model/section.model").SectionTypeOption} sectionType
  * @param {string} pureTitle - "чистое" название (без префикса)
  * @returns {string}
  */
@@ -43,7 +43,7 @@ function composeFullTitle(index, sectionType, pureTitle) {
  * Имя папки (нормализованное: транслит, lower case, замена пробелов и т.д.)
  * Использует composeFullTitle или отдельную логику, если требуется отличие.
  * @param {string} index
- * @param {import("../model/section.model").SectionTypeOption} sectionType
+ * @param {import("../../../plugins/model/section.model").SectionTypeOption} sectionType
  * @param {string} pureTitle
  * @returns {string}
  */
