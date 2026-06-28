@@ -23,7 +23,8 @@ const vscode = require('vscode');
 const outputFolderName = 'build';
 const docsFolderName = 'docs';
 
-const { runGeneration } = require('../plugins/helpMap/helpmap.js');
+const { runGeneration, buildGenerationOptions } = require('../plugins/helpMap/helpmap.js');
+const { getProjectRoot } = require('./vscode.FindFiles.js');
 
 /**
  * Вызов из VS Code (Команда расширения)
@@ -31,23 +32,14 @@ const { runGeneration } = require('../plugins/helpMap/helpmap.js');
 async function ux_helpmap_generate() {
     if (!vscode) return;
 
-    // Если нажали в меню проводника, берем путь папки, иначе корень проекта
-    const projectRoot = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '';
-    const selectedPath = projectRoot; //uri ? uri.fsPath : projectRoot;
+    const projectRoot = getProjectRoot();
 
-    if (!selectedPath) {
+    if (!projectRoot) {
         vscode.window.showErrorMessage(translate(nls_ts.plugin.helpmap.generate.error.emptypath));
         return;
     }
 
-    const options = {
-        // Если вы хотите всегда сканировать /docs от корня проекта:
-        docsDir: path.join(projectRoot, docsFolderName),
-        // Или если хотите сканировать именно ту папку, на которой нажали ПКМ:
-        // docsDir: selectedPath,
-        outputDir: path.join(projectRoot, outputFolderName),
-        segregation: false,
-    };
+    const options = buildGenerationOptions(projectRoot);
 
     try {
         const results = runGeneration(options);

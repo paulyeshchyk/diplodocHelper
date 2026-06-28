@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "0.28.0",
+    "version": "0.28.13",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -28,6 +28,9 @@
         "onStartupFinished"
     ],
     "scripts": {
+        "precompile": "npm run lint && npm run type-check",
+        "type-check": "tsc --noEmit",
+        "validate": "npm run lint-check && npm run type-check",
         "generate-manifest": "node scripts/generate-manifest.js",
         "compile": "npm run generate-manifest && node build.js",
         "build": "npm run compile",
@@ -379,20 +382,25 @@
     },
     "devDependencies": {
         "@eslint/css": "^1.2.0",
-        "@eslint/js": "^10.0.1",
+        "@eslint/js": "^9.39.4",
         "@eslint/json": "^1.2.0",
         "@eslint/markdown": "^8.0.2",
+        "@types/js-yaml": "^4.0.9",
+        "@types/node": "^26.0.1",
         "@types/vscode": "^1.125.0",
         "cross-env": "^10.1.0",
         "esbuild": "^0.28.1",
-        "eslint": "^10.4.0",
+        "eslint": "^9.39.4",
         "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-jsdoc": "^63.0.10",
         "eslint-plugin-prettier": "^5.5.5",
-        "globals": "^17.6.0",
+        "globals": "^17.7.0",
         "postcss": "^8.5.15",
         "postcss-sorting": "^10.0.0",
         "prettier-plugin-css-order": "^2.2.0",
         "prettier-plugin-organize-imports": "^4.3.0",
-        "typescript": "^6.0.3"
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.62.0"
     }
 }

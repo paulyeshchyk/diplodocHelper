@@ -23,6 +23,18 @@ function runGeneration({ docsDir, outputDir = outputFolderName, segregation = fa
     return results;
 }
 
+/**
+ * @param {string} projectRoot
+ */
+function buildGenerationOptions(projectRoot) {
+    return {
+        docsDir: path.join(projectRoot, docsFolderName),
+        // Или если хотите сканировать именно ту папку, на которой нажали ПКМ:
+        // docsDir: selectedPath,
+        outputDir: path.join(projectRoot, outputFolderName),
+        segregation: false,
+    };
+}
 // CLI запуск
 if (require.main === module) {
     const projectRoot = process.cwd();
@@ -34,5 +46,5 @@ if (require.main === module) {
     // при необходимости можно обработать код возврата
     if (results.failed.length > 0) process.exitCode = 1;
 } else {
-    module.exports = { runGeneration };
+    module.exports = { runGeneration, buildGenerationOptions };
 }

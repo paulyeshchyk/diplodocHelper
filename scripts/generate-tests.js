@@ -140,6 +140,7 @@ function getExportedNames(modulePath) {
             return { type: 'other' };
         }
     } catch (err) {
+        console.error(`getExportedNames error: ${err}`);
         return { type: 'browser' };
     }
 }
@@ -264,7 +265,8 @@ function generateTests() {
             shouldGenerate = true;
         } else if (isBrowser && generateIIFE) {
             shouldGenerate = true;
-        } else {
+        }
+        if (!shouldGenerate) {
             console.log(`Пропускаем ${filePath} (не модуль, флаг --iife не указан)`);
             return;
         }

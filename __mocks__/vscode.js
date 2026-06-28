@@ -1,4 +1,6 @@
 // __mocks__/vscode.js
+
+/* eslint-disable */
 const vscode = {
     window: {
         showInformationMessage: jest.fn(),

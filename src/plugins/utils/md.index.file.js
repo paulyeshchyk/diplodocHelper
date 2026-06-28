@@ -5,7 +5,7 @@ const { FrontMatterFiles, FrontMatterMeta } = require('../model/frontmatter.mode
 // === Функции для Rename (обновление метаданных) ===
 
 const { TEMPLATE_FINAL_TITLE } = require('../model/frontmatter.templates');
-const { frontmatterParse, frontmatterStringify } = require('../../shared/context/frontmatter/frontmatter.facade');
+const { frontmatterParse, frontmatterStringify } = require('../shared/context/frontmatter/frontmatter.facade');
 
 /**
  * @param {string} folderPath

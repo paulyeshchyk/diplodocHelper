@@ -9,7 +9,7 @@ const { initNls } = require('./nls_loader');
 const { commandHandlers } = require('./commands'); // импортируем реестр
 const { ContextManager } = require('./ContextMenuManager');
 const { BrokenLinkCodeActionProvider } = require('./commands/vscode.linter.links.brokenLinkCodeActionProvider');
-const { parseClipboardLink } = require('./commands/diplodoc-helper.link.Paste');
+const { buildClipboardLink } = require('./plugins/shared/builders/clipboardLinkBuilder');
 
 /** @type {ContextManager | null} */
 let contextManager = null;
@@ -45,7 +45,7 @@ function activate(context) {
     contextManager.registerContextKey('diplodoc-helper:canPasteMarkdownLink', async () => {
         try {
             const clipboardText = await vscode.env.clipboard.readText();
-            const link = parseClipboardLink(clipboardText);
+            const link = buildClipboardLink(clipboardText);
             return link !== null;
         } catch (error) {
             console.error('Ошибка при проверке ссылки:', error);

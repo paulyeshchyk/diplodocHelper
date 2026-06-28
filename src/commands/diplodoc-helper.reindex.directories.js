@@ -3,7 +3,7 @@
 const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 
-const { reindexDirectory } = require('../plugins/reindexer/reindexer.directories.js');
+const { reindexDirectory } = require('../plugins/shared/builders/reindexer/reindexer.directories.js');
 
 /**
  * @param {{ fsPath: string }} uri

@@ -4,9 +4,11 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
-const { frontmatterReadContexts } = require('../shared/context/frontmatter/frontmatter.facade.js');
-const { diplodocFrontmatterDeleteContexts } = require('../shared/services/diplodoc.frontmatter.service.context.js');
+const { isDiplodocSection } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
+const { frontmatterReadContexts } = require('../plugins/shared/context/frontmatter/frontmatter.facade.js');
+const {
+    diplodocFrontmatterDeleteContexts,
+} = require('../plugins/shared/services/frontmatter/diplodoc.frontmatter.service.context.js');
 
 /**
  * Получает путь к index.md раздела, если раздел валидный.

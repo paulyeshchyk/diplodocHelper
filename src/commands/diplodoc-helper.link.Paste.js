@@ -1,13 +1,9 @@
 // src/commands/diplodoc-helper.link.Paste.js
-
 const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
-const path = require('path');
-const fs = require('fs').promises;
-const { buildImageLink } = require('../plugins/utils/md.links.figure.js');
-const { slugify_diplodoc_reference } = require('../plugins/utils/encoding.slugify.js');
-
-const INDEX_MD = 'index.md';
+const { ConvertDocumentPathToLink } = require('../plugins/shared/converters/documentLinkConverter.js');
+const { getDocsRoot } = require('../plugins/utils/index.js');
+const { getProjectRoot } = require('./vscode.FindFiles.js');
 
 // =============================================================================
 // ГЛАВНАЯ ЭКСПОРТИРУЕМАЯ ФУНКЦИЯ
@@ -19,95 +15,29 @@ async function ux_link_paste() {
     try {
         const clipboardText = await vscode.env.clipboard.readText();
         const sourceFilePath = editor.document.uri.fsPath;
+        const position = editor.selection.active;
+        const lineText = editor.document.lineAt(position.line).text;
+        const documentTextBefore = editor.document.getText(new vscode.Range(new vscode.Position(0, 0), position));
 
-        // Передаем editor, чтобы проанализировать окружение курсора
-        const linkText = await ConvertDocumentPathToLink(clipboardText, sourceFilePath, editor);
+        const workspacePath = getProjectRoot();
+        const docsRoot = getDocsRoot(workspacePath);
+
+        const linkText = await ConvertDocumentPathToLink(
+            clipboardText,
+            sourceFilePath,
+            position,
+            lineText,
+            promptAnchorSelection,
+            docsRoot,
+            documentTextBefore
+        );
 
         await editor.edit(editBuilder => {
             editBuilder.insert(editor.selection.active, linkText);
         });
     } catch (error) {
-        let msg = error instanceof Error ? error.message : String(error);
-        let template = `${translate(nls_ts.plugin.link.paste.error.critical)}: ${msg}`;
-        vscode.window.showErrorMessage(template);
+        console.error(`ux_link_paste error: ${error}`);
     }
-}
-
-/**
- * Проверяет, находится ли курсор внутри HTML тега (например, <figcaption>)
- * @param {vscode.TextEditor} editor
- * @returns {boolean}
- */
-/**
- * Проверяет, находится ли курсор внутри HTML тега (включая сложные структуры с текстом)
- * @param {vscode.TextEditor} editor
- * @returns {boolean}
- */
-function isCursorInsideHtmlTag(editor) {
-    const position = editor.selection.active;
-    const lineText = editor.document.lineAt(position.line).text;
-
-    // Текст слева и справа от курсора на текущей строке
-    const textBeforeCursor = lineText.substring(0, position.character);
-    const textAfterCursor = lineText.substring(position.character);
-
-    // 1. Ищем последний открывающий тег СЛЕВА от курсора (игнорируя одиночные теги вроде <br> или <img>)
-    // RegExp ищет теги вида <figcaption>, <div class="...">, <b> и т.д.
-    const openingTags = [...textBeforeCursor.matchAll(/<([a-z1-6]+)(?:\s+[^>]*)*>/gi)];
-    // Ищем закрывающие теги СЛЕВА, чтобы учесть те, которые уже закрылись до курсора
-    const closingTagsBefore = [...textBeforeCursor.matchAll(/<\/([a-z1-6]+)>/gi)];
-
-    // 2. Ищем первый закрывающий тег СПРАВА от курсора
-    const nextClosingTagMatch = /<\/([a-z1-6]+)>/i.exec(textAfterCursor);
-
-    // Если справа вообще нет закрывающих HTML-тегов, то мы точно не внутри тега
-    if (!nextClosingTagMatch) {
-        return false;
-    }
-
-    const expectedClosingTagName = nextClosingTagMatch[1].toLowerCase();
-
-    // 3. Фильтруем открывающие теги слева: убираем те, которые закрылись ЕЩЕ ДО курсора
-    // Идем с конца массива открывающих тегов
-    let unclosedTagBefore = null;
-
-    /** @type {Record<string, number>} */
-    let closedCount = {};
-
-    // Считаем закрытые теги слева для баланса
-    for (let i = closingTagsBefore.length - 1; i >= 0; i--) {
-        const name = closingTagsBefore[i][1].toLowerCase();
-        closedCount[name] = (closedCount[name] || 0) + 1;
-    }
-
-    for (let i = openingTags.length - 1; i >= 0; i--) {
-        const name = openingTags[i][1].toLowerCase();
-        if (closedCount[name] > 0) {
-            closedCount[name]--; // этот тег уже был закрыт до курсора
-        } else {
-            unclosedTagBefore = name; // нашли ближайший незакрытый тег слева!
-            break;
-        }
-    }
-
-    // Если мы нашли незакрытый тег слева (например, 'figcaption' или 'b')
-    // и он совпадает с тем тегом, который закрывается справа — мы внутри HTML контекста.
-    // Либо если незакрытый тег слева — это инлайновый 'b', но за ним выше по иерархии стоит 'figcaption'.
-    if (unclosedTagBefore) {
-        // Базовая проверка: тег слева совпадает с тегом справа (например, открыт <b> и справа </b>)
-        if (unclosedTagBefore === expectedClosingTagName) {
-            return true;
-        }
-
-        // Продвинутая проверка для вашего случая: слева остался незакрытым <b> (или кавычка после него),
-        // а справа закрывается родительский </figcaption>. Мы проверяем, есть ли вообще figcaption в открытых.
-        const hasParentOpening = openingTags.some(match => match[1].toLowerCase() === expectedClosingTagName);
-        if (hasParentOpening) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 // =============================================================================
@@ -160,265 +90,4 @@ async function promptAnchorSelection(anchors) {
     return selected.anchor;
 }
 
-// =============================================================================
-// БЛОК ФУНКЦИЙ ДЛЯ РАБОТЫ С MARKDOWN И ЯКОРЯМИ
-// =============================================================================
-
-/**
- * Преобразует заголовок в slug для якоря
- * @param {string} text
- * @returns {string}
- */
-function generateSlug(text) {
-    // let slug = text
-    //     .toLowerCase()
-    //     .replace(/[^\w\u0400-\u04FF]+/g, '-')
-    //     .replace(/^-+|-+$/g, '');
-    // return slugify_diplodoc_reference(slug);
-    return slugify_diplodoc_reference(text);
-}
-
-/**
- * Извлекает якоря из Markdown-файла (заголовки, {#якоря}, HTML id)
- * @param {string} filePath – абсолютный путь к .md файлу
- * @returns {Promise<Array<{label: string, anchor: string}>>}
- */
-async function extractAnchorsFromMdFile(filePath) {
-    try {
-        const content = await fs.readFile(filePath, 'utf8');
-        const anchors = [];
-        const seenAnchors = new Set();
-
-        // 1. Заголовки Markdown (с учётом возможных пробелов в начале)
-        const headingRegex = /^\s*(#{1,6})\s+(.+?)(?:\s*\{#([^}]+)\})?\s*$/gm;
-        let match;
-        while ((match = headingRegex.exec(content)) !== null) {
-            const level = match[1].length;
-            let title = match[2].trim();
-            let explicitAnchor = match[3]?.trim();
-
-            let anchor;
-            if (explicitAnchor) {
-                anchor = explicitAnchor;
-            } else {
-                anchor = generateSlug(title);
-            }
-
-            if (!seenAnchors.has(anchor)) {
-                seenAnchors.add(anchor);
-                anchors.push({
-                    label: `${'#'.repeat(level)} ${title}`,
-                    anchor: anchor,
-                });
-            }
-        }
-
-        // 2. HTML-атрибуты id (регистронезависимо, с кавычками или без)
-        const idRegex = /\bid\s*=\s*(["']?)([^"'\s>]+)\1/gi;
-        let idMatch;
-        while ((idMatch = idRegex.exec(content)) !== null) {
-            const idValue = idMatch[2];
-            if (!seenAnchors.has(idValue)) {
-                seenAnchors.add(idValue);
-                anchors.push({
-                    label: `id: ${idValue}`,
-                    anchor: idValue,
-                });
-            }
-        }
-
-        // 3. Дополнительно: якоря, определённые через <a name="value"> (legacy)
-        const nameRegex = /<a\s+name\s*=\s*(["']?)([^"'\s>]+)\1/gi;
-        let nameMatch;
-        while ((nameMatch = nameRegex.exec(content)) !== null) {
-            const nameValue = nameMatch[2];
-            if (!seenAnchors.has(nameValue)) {
-                seenAnchors.add(nameValue);
-                anchors.push({
-                    label: `name: ${nameValue}`,
-                    anchor: nameValue,
-                });
-            }
-        }
-
-        return anchors;
-    } catch {
-        return [];
-    }
-}
-
-/**
- * Возвращает путь к целевому MD-файлу для извлечения якорей (если применимо)
- * @param {string} targetFilePath – абсолютный путь к объекту (файл или папка)
- * @param {boolean} isDirectory – является ли объект папкой
- * @returns {string | null} – путь к .md файлу или null
- */
-function getTargetMdFile(targetFilePath, isDirectory) {
-    if (isDirectory) {
-        return path.join(targetFilePath, INDEX_MD);
-    }
-    if (targetFilePath.endsWith('.md')) {
-        return targetFilePath;
-    }
-    return null;
-}
-
-// =============================================================================
-// БЛОК ФУНКЦИЙ ДЛЯ РАБОТЫ СО ССЫЛКАМИ
-// =============================================================================
-
-/**
- * Вычисляет относительный путь с кодированием
- * @param {string} fromPath – путь к исходному файлу (директория, относительно которой строим путь)
- * @param {string} toPath – целевой путь (файл или папка)
- * @param {boolean} addIndex – нужно ли добавить index.md (для ссылок на папки)
- * @returns {string}
- */
-function calculateRelativeMdPath(fromPath, toPath, addIndex) {
-    let targetFile = toPath;
-
-    if (addIndex) {
-        if (!targetFile.endsWith('.md')) {
-            targetFile = path.join(targetFile, INDEX_MD);
-        }
-    }
-
-    let relPath = path.relative(path.dirname(fromPath), targetFile);
-    relPath = relPath.split(path.sep).join('/');
-
-    const encodedPath = relPath
-        .split('/')
-        .map(segment => encodeURIComponent(segment))
-        .join('/');
-
-    return encodedPath.startsWith('.') ? encodedPath : './' + encodedPath;
-}
-
-/**
- * Строит Markdown или HTML ссылку на документ в зависимости от контекста
- * @param {string} prefix – префикс (! для изображений, иначе пусто)
- * @param {string} sourceLinkName – текст ссылки
- * @param {string} mdPath – путь к целевому файлу
- * @param {boolean} asHtml – флаг, принуждающий строить HTML-ссылку
- * @returns {string}
- */
-function buildDocumentLink(prefix, sourceLinkName, mdPath, asHtml = false) {
-    if (asHtml) {
-        // Если это изображение внутри HTML тега, возвращаем тег <img>, иначе тег <a>
-        return prefix === '!'
-            ? `<img src="${mdPath}" alt="${sourceLinkName}">`
-            : `<a href="${mdPath}">${sourceLinkName}</a>`;
-    }
-    return `${prefix}[${sourceLinkName}](${mdPath})`;
-}
-
-// =============================================================================
-// БЛОК ФУНКЦИЙ ДЛЯ РАБОТЫ С ФАЙЛОВОЙ СИСТЕМОЙ
-// =============================================================================
-
-/**
- * Определяет тип целевого объекта (папка, изображение, обычный файл)
- * @param {string} targetFilePath – абсолютный путь
- * @returns {Promise<{isDirectory: boolean, isImage: boolean}>}
- */
-async function getFileTypeInfo(targetFilePath) {
-    let isDirectory = false;
-    let isImage = false;
-
-    const ext = path.extname(targetFilePath);
-
-    try {
-        const stat = await fs.stat(targetFilePath);
-        isDirectory = stat.isDirectory();
-        if (!isDirectory) {
-            isImage = ext !== 'md';
-        }
-    } catch {
-        if (!ext) {
-            isDirectory = true; // нет расширения — считаем папкой
-        }
-    }
-    return { isDirectory, isImage };
-}
-
-/**
- * Определяет, нужно ли добавлять index.md и какой префикс использовать
- * @param {string} targetFilePath
- * @param {boolean} isDirectory
- * @returns {{addIndex: boolean, prefix: string}}
- */
-function getLinkOptions(targetFilePath, isDirectory) {
-    if (isDirectory) {
-        return { addIndex: true, prefix: '' };
-    }
-    if (targetFilePath.endsWith('.md')) {
-        return { addIndex: false, prefix: '' };
-    }
-    return { addIndex: false, prefix: '!' };
-}
-
-// =============================================================================
-// БЛОК ВСПОМОГАТЕЛЬНЫХ ФУНКЦИЙ (парсинг буфера, конвертация)
-// =============================================================================
-
-/**
- * @param {string} clipboardText
- * @returns {ClipboardLink | null}
- */
-function parseClipboardLink(clipboardText) {
-    try {
-        return JSON.parse(clipboardText);
-    } catch {
-        return null;
-    }
-}
-
-/**
- * Основная логика преобразования пути из буфера в Markdown/HTML-ссылку
- * @param {string} clipboardText
- * @param {string} sourceFilePath
- * @param {vscode.TextEditor} editor
- * @returns {Promise<string>}
- */
-async function ConvertDocumentPathToLink(clipboardText, sourceFilePath, editor) {
-    const data = parseClipboardLink(clipboardText);
-    if (data === null || !data.sourceLinkPath || !data.sourceLinkName) {
-        throw new Error(translate('plugin.link.paste.error.emptybuffer'));
-    }
-
-    const targetFilePath = data.sourceLinkPath;
-    const { isDirectory, isImage } = await getFileTypeInfo(targetFilePath);
-    const { addIndex, prefix } = getLinkOptions(targetFilePath, isDirectory);
-
-    let mdPath = calculateRelativeMdPath(sourceFilePath, targetFilePath, addIndex);
-
-    // Предлагаем выбор якоря только для MD-документов или папок с index.md (не для изображений)
-    if (!isImage) {
-        const targetMdFile = getTargetMdFile(targetFilePath, isDirectory);
-        if (targetMdFile) {
-            const anchors = await extractAnchorsFromMdFile(targetMdFile);
-            if (anchors.length > 0) {
-                const selectedAnchor = await promptAnchorSelection(anchors);
-                if (selectedAnchor) {
-                    mdPath += `#${selectedAnchor}`;
-                }
-            }
-        }
-    }
-
-    // Проверяем, находится ли курсор внутри HTML-контекста
-    const shouldRenderAsHtml = isCursorInsideHtmlTag(editor);
-
-    if (isImage) {
-        return shouldRenderAsHtml
-            ? buildDocumentLink('!', data.sourceLinkName, mdPath, true)
-            : buildImageLink(data.sourceLinkName, mdPath);
-    }
-
-    return buildDocumentLink(prefix, data.sourceLinkName, mdPath, shouldRenderAsHtml);
-}
-
-// =============================================================================
-// ЭКСПОРТ
-// =============================================================================
-module.exports = { ux_link_paste, parseClipboardLink };
+module.exports = { ux_link_paste };

@@ -4,8 +4,8 @@ const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
-const { getImageFromClipboard } = require('../plugins/utils/clipboard.image');
-const { buildFigure, buildFigureId } = require('../plugins/utils/md.links.figure.js');
+const { getImageFromClipboard } = require('../plugins/shared/extractors/clipboard.image.js');
+const { buildFigure, buildFigureId } = require('../plugins/shared/builders/link/md.links.figure.js');
 const { slugify_latin_alphanumeric } = require('../plugins/utils/encoding.slugify.js');
 
 const imageExtension = '.png';

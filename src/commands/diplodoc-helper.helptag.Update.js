@@ -5,8 +5,8 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
-const { frontmatterParse, frontmatterUpdate } = require('../shared/context/frontmatter/frontmatter.facade.js');
+const { isDiplodocSection } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
+const { frontmatterParse, frontmatterUpdate } = require('../plugins/shared/context/frontmatter/frontmatter.facade.js');
 
 /**
  * @param {{ fsPath: string }} uri

@@ -4,9 +4,9 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
-const { updateLinksAfterDelete } = require('./diplodoc-helper.links.md.js');
-const { buildMdFileReferences } = require('./diplodoc-helper.file.md.js');
+const { getLanguageRoot } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
+const { updateLinksAfterDelete } = require('../plugins/shared/builders/link/diplodoc-helper.links.md.js');
+const { buildMdFileReferences } = require('../plugins/shared/services/files/diplodoc-helper.file.md.js');
 const { FileDeleteMessageBuilder } = require('./vscode.message.builder.js');
 
 /**

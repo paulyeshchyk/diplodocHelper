@@ -3,12 +3,10 @@ const path = require('path');
 
 const { nls_ts, translate } = require('../nls_ts.js');
 const {
-    diplodocFrontmatterReadContexts,
     diplodocFrontmatterParseContexts,
+    diplodocFrontmatterReadContexts,
     diplodocFrontmatterUpdateContext,
-} = require('../shared/services/diplodoc.frontmatter.service.context.js');
-
-// ========== Вспомогательные UI-функции ==========
+} = require('../plugins/shared/services/frontmatter/diplodoc.frontmatter.service.context.js');
 
 /**
  * Запрашивает ввод нового контекста.

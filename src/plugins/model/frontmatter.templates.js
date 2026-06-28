@@ -63,7 +63,7 @@ const TEMPLATE_PARENT_TOC_YAML = (
     /** @type {string} */ name,
     /** @type {string} */ sectionLabel,
     /** @type {any} */ folderName,
-    // eslint-disable-next-line no-unused-vars
+     
     /** @type {string} */ sectionIndex
 ) =>
     [

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const {
     diplodocFrontmatterExtractContextTagValue,
-} = require('../../shared/services/diplodoc.frontmatter.service.context');
+} = require('../shared/services/frontmatter/diplodoc.frontmatter.service.context');
 
 /** @import {ContextMap} from '../model/contextmap.model' */
 

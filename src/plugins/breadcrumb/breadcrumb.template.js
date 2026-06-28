@@ -1,5 +1,4 @@
-// src/plugins/breadcrumb/inject-breadcrumb-body.js
-
+// @ts-nocheck
 (function() {
     var titles = {{TITLES_MAP}};
     var separator = {{SEPARATOR}};

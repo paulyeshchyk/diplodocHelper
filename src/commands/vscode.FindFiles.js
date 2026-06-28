@@ -7,4 +7,14 @@ const vscode = require('vscode');
 async function FindMdFiles(rootDir) {
     return await vscode.workspace.findFiles(new vscode.RelativePattern(rootDir, '**/*.md'), '**/node_modules/**');
 }
-module.exports = { FindMdFiles };
+
+/**
+ *
+ * @returns {string | undefined}
+ */
+function getProjectRoot() {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    return !workspaceFolders ? undefined : workspaceFolders[0].uri.fsPath;
+}
+
+module.exports = { FindMdFiles, getProjectRoot };

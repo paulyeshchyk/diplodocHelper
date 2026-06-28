@@ -4,17 +4,23 @@ const fs = require('fs');
 const path = require('path');
 
 /** @import { SectionTypeOption } from '../model/section.model' */
-/** @import { CreateFolderResult } from './path.directory' */
+/** @import { CreateFolderResult } from '../shared/validators/diplodocDirectoryValidator' */
 const { TEMPLATE_FOLDER_NAME } = require('../model/frontmatter.templates');
 
 const { TocYamlEntryPatchReference } = require('./yaml.toc.entry');
 const { IndexMdFilePatch, IndexMdUpsert } = require('./md.index.file');
 const { IndexYamlEntryPatchSection } = require('./yaml.index.entry');
 const { TocYamlEntryPatchTitle } = require('./yaml.toc.entry');
-const { composeFullTitle } = require('../../shared/context/frontmatter/frontmatter.facade.section.title');
 
-const { canCreateFolder, createDirectory } = require('./path.directory');
-const { IndexYamlFileCreate, IndexYamlEntryPatch } = require('./yaml.base');
+const { canCreateFolder, createDirectory } = require('../shared/validators/diplodocDirectoryValidator');
+const {
+    IndexYamlEntryPatch,
+    TocYamlEntryPatchItems,
+    TocYamlFileCreate,
+    IndexYamlFileCreate,
+    IndexMdFileCreate,
+} = require('./yaml.base');
+const { composeFullTitle } = require('../shared/context/frontmatter/frontmatter.facade.section.title');
 
 /**
  * @param {string} targetDir
@@ -103,7 +109,25 @@ function DiplodocSectionPatch(folderPath, pureTitle, sectionType, sectionIndex =
     }
 }
 
+/**
+ * @param {CreateFolderResult} folderResult
+ * @param {string} userSectionName
+ * @param {SectionTypeOption} sectionType
+ * @param {string | undefined} sectionIndex
+ * @param {string} targetDir
+ */
+function diplodocCreateSection(folderResult, userSectionName, sectionType, sectionIndex, targetDir) {
+    IndexMdFileCreate(folderResult.folderPath, userSectionName, sectionType.name, sectionType.value, sectionIndex);
+
+    IndexYamlFileCreate(folderResult.folderPath, userSectionName, sectionType.name, sectionType.value, sectionIndex);
+
+    TocYamlFileCreate(folderResult.folderPath, userSectionName, sectionType.value, sectionIndex);
+
+    const fullTitle = composeFullTitle(sectionIndex, sectionType, userSectionName);
+    TocYamlEntryPatchItems(targetDir, fullTitle, sectionType.value, folderResult.folderName, sectionIndex);
+}
 module.exports = {
+    diplodocCreateSection,
     createSectionFolder,
     DiplodocSectionRefresh,
     DiplodocSectionPatch,

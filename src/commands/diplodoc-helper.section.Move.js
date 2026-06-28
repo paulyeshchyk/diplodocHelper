@@ -6,13 +6,13 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 const { nls_ts, translate } = require('../nls_ts.js');
-const { isDiplodocSection, getLanguageRoot } = require('../plugins/utils/path.directory.js');
+const { isDiplodocSection, getLanguageRoot } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
 const {
     TocYamlEntryRemove,
     TocYamlEntryInsertAtPosition,
     TocYamlEntryMoveWithinSameFile,
 } = require('../plugins/utils/yaml.toc.entry.js');
-const { updateLinksAfterRename } = require('./diplodoc-helper.links.md.js');
+const { updateLinksAfterRename } = require('../plugins/shared/builders/link/diplodoc-helper.links.md.js');
 const { selectTargetDirectory } = require('./vscode.quickpick.mdhierarchy.js');
 const { selectInsertPosition } = require('./vscode.quickpick.mdanchor.js');
 

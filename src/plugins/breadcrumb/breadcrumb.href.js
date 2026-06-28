@@ -10,7 +10,7 @@ function buildBreadcrumbHref(lang, parentSegments, level) {
 
     if (isFileProtocol()) {
         // Для открытия из файловой системы — используем относительные пути
-        // eslint-disable-next-line no-undef
+         
         const currentPath = window.location.pathname.replace(/\\/g, '/');
         const currentDirSegments = currentPath.split('/').filter(Boolean);
 
@@ -33,7 +33,7 @@ function buildBreadcrumbHref(lang, parentSegments, level) {
  * @returns {boolean}
  */
 function isFileProtocol() {
-    // eslint-disable-next-line no-undef
+     
     return typeof window !== 'undefined' && window.location?.protocol === 'file:';
 }
 

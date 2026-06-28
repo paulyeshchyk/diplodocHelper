@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 const { runGeneration: generateHelpMap } = require('./helpMap/helpmap.js');
-const { runGeneration: generateContexts } = require('./contexts/сontexts.js');
+const { runGeneration: generateContexts } = require('./shared/builders/contexts/сontexts.js');
 const { runGeneration: generateBreadcrumb } = require('./breadcrumb/breadcrumb.js');
-const { injectCleanMode: generateTocCleanMode } = require('./tocCleanMode/post-build.js');
-const { reindexFigures } = require('./reindexer/reindexer.figures.js');
+const { injectCleanMode: generateTocCleanMode } = require('./shared/builders/tocCleanMode/post-build.js');
+const { reindexFigures } = require('./shared/builders/reindexer/reindexer.figures.js');
 const { DiplodocConfigFromCli } = require('../plugins/manifest/config/diplodoc.config.js');
 const { CONFIG_KEY } = require('../plugins/manifest/constants.js');
 

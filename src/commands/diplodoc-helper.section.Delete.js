@@ -4,14 +4,14 @@ const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
+const { isDiplodocSection } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
 const { TocYamlEntryRemove } = require('../plugins/utils/yaml.toc.entry.js');
-const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
-const { updateLinksAfterDelete } = require('./diplodoc-helper.links.md.js');
-const { findReferencesToMdSection } = require('./diplodoc-helper.file.md.js');
+const { getLanguageRoot } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
+const { updateLinksAfterDelete } = require('../plugins/shared/builders/link/diplodoc-helper.links.md.js');
+const { findReferencesToMdSection } = require('../plugins/shared/services/files/diplodoc-helper.file.md.js');
 const { SectionDeleteMessageBuilder } = require('./vscode.message.builder.js');
 
-/** @import {Reference} from './diplodoc-helper.files.js' */
+/** @import {Reference} from '../plugins/shared/services/files/diplodoc-helper.files.js' */
 
 /**
  * @param {{ fsPath: string }} uri

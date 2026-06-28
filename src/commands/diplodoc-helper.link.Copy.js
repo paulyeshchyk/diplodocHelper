@@ -1,48 +1,18 @@
 //diplodoc-helper.link.Copy.js
 
 const vscode = require('vscode');
-const path = require('path');
-const fs = require('fs');
-const { IndexMdFileRead } = require('../plugins/utils/md.index.file');
 const { translate } = require('../nls_loader');
+const { buildClipboardLink } = require('../plugins/shared/builders/link/cliboardLinkBuilder');
 
 /**
  * @param {vscode.Uri} uri
  */
 async function ux_link_copy(uri) {
     if (!uri) return;
+    var { cl, title } = buildClipboardLink(uri.fsPath);
 
-    const fsPath = uri.fsPath;
-    const stats = fs.statSync(fsPath);
-
-    let targetPath = fsPath;
-
-    let title = buildTitle(stats, fsPath);
-
-    /** @type {ClipboardLink}*/
-    const data = {
-        sourceLinkName: title,
-        sourceLinkPath: targetPath,
-        isImage: /\.(png|jpe?g|gif|svg|webp)$/i.test(fsPath), // Пометка, если это картинка
-    };
-
-    await vscode.env.clipboard.writeText(JSON.stringify(data));
+    await vscode.env.clipboard.writeText(JSON.stringify(cl));
     vscode.window.showInformationMessage(translate('plugin.link.copy.info.success', title));
-}
-
-/**
- * @param {fs.Stats} stats
- * @param {string} fsPath
- */
-function buildTitle(stats, fsPath) {
-    if (stats.isDirectory()) {
-        // Логика для раздела (папки)
-        const section = IndexMdFileRead(fsPath);
-        return section?.pureTitle || path.basename(fsPath);
-    } else {
-        // Логика для файла (картинки, документы)
-        return path.basename(fsPath);
-    }
 }
 
 module.exports = { ux_link_copy };

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { FrontMatterFiles, FrontMatterMeta, FrontMatterSectionTypesIndexed } = require('../model/frontmatter.model');
-const { frontmatterGet } = require('../../shared/context/frontmatter/frontmatter.facade');
+const { frontmatterGet } = require('../shared/context/frontmatter/frontmatter.facade');
 
 /**
  * @param {string} indent

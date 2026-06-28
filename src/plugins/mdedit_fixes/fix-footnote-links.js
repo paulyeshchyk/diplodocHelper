@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 (function () {
     function fixFootnoteLinks() {
         var currentPath = window.location.pathname;

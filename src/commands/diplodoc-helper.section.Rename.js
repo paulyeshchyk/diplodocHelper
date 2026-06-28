@@ -6,14 +6,14 @@ const fs = require('fs');
 const path = require('path');
 
 const { promptSection } = require('./vscode.prompts.js');
-const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
+const { isDiplodocSection } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
 const { DiplodocSectionRefresh } = require('../plugins/utils/diplodoc.flow.js');
 const {
     IndexMdEntryReadIndex,
     IndexMdEntryReadTitle,
     IndexMdEntryReadSectionType,
 } = require('../plugins/utils/md.index.entry.js');
-const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
+const { getLanguageRoot } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
 const { sortTocItems } = require('../plugins/utils/yaml.toc.sort.js');
 
 const { TocYamlEntryUpdateOrAppend } = require('../plugins/utils/yaml.toc.entry.js');
@@ -23,8 +23,8 @@ const {
     composeFullTitle,
     isIndexedSectionType,
     composeFolderName,
-} = require('../shared/context/frontmatter/frontmatter.facade.section.title.js');
-const { updateLinksAfterRename } = require('./diplodoc-helper.links.md.js');
+} = require('../plugins/shared/context/frontmatter/frontmatter.facade.section.title.js');
+const { updateLinksAfterRename } = require('../plugins/shared/builders/link/diplodoc-helper.links.md.js');
 
 /**
  * @param {{ fsPath: any; }} uri

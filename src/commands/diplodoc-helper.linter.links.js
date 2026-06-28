@@ -1,7 +1,7 @@
 // src/commands/diplodoc-helper.linter.links.js
 
 const vscode = require('vscode');
-const { lintInternalLinks } = require('../plugins/linter/linter.links.js');
+const { lintInternalLinks } = require('../plugins/shared/validators/linter.links.js');
 const path = require('path');
 const fs = require('fs');
 

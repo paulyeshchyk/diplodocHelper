@@ -46,6 +46,7 @@ function collectHelpData(docsDir) {
 function mdFlow(fullPath, docsDir, success, failed) {
     try {
         const content = fs.readFileSync(fullPath, 'utf8');
+        // @ts-ignore
         const { data } = matter(content);
         let title = '';
         if (data.pureTitle && String(data.pureTitle).trim() !== '') {

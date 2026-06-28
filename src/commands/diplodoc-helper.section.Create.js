@@ -2,20 +2,11 @@
 
 const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
-const {
-    frontmatterCalculateNextIndex: calculateNextIndex,
-} = require('../shared/context/frontmatter/frontmatter.facade.index.js');
+const { frontmatterCalculateNextIndex } = require('../plugins/shared/context/frontmatter/frontmatter.facade.index.js');
 const { FrontMatterSectionTypesIndexed2 } = require('../plugins/model/frontmatter.model.js');
-const { composeFullTitle } = require('../shared/context/frontmatter/frontmatter.facade.section.title.js');
 const { ShowSectionNameSelector, ShowSectionTypeSelector, promptSectionIndex } = require('./vscode.prompts.js');
-const { isDiplodocSection, isLanguageRoot } = require('../plugins/utils/path.directory.js');
-const { createSectionFolder } = require('../plugins/utils/diplodoc.flow.js');
-const {
-    IndexYamlFileCreate,
-    TocYamlFileCreate,
-    IndexMdFileCreate,
-    TocYamlEntryPatchItems,
-} = require('../plugins/utils/yaml.base.js');
+const { isDiplodocSection, isLanguageRoot } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
+const { createSectionFolder, diplodocCreateSection } = require('../plugins/utils/diplodoc.flow.js');
 
 /**
  * @param {{ fsPath: any; }} uri
@@ -35,13 +26,9 @@ async function ux_section_create(uri) {
     const userSectionName = await ShowSectionNameSelector();
     if (!userSectionName) return;
 
-    const hasIndex = FrontMatterSectionTypesIndexed2.includes(sectionType.name);
+    const sectionIndex = await AskSectionIndex(sectionType, targetDir);
 
-    const sectionIndexCalculated = calculateNextIndex(targetDir);
-
-    const sectionIndex = hasIndex ? await promptSectionIndex(sectionIndexCalculated) : '';
-
-    /** @import {CreateFolderResult} from '../plugins/utils/path.directory.js' */
+    /** @import {CreateFolderResult} from '../plugins/shared/validators/diplodocDirectoryValidator.js' */
 
     /** @type {CreateFolderResult?} */
     const folderResult = createSectionFolder(targetDir, sectionType, userSectionName, sectionIndex, message => {
@@ -49,30 +36,29 @@ async function ux_section_create(uri) {
     });
     if (!folderResult) return;
 
-    const fullTitle = composeFullTitle(sectionIndex, sectionType, userSectionName);
-
     try {
-        IndexMdFileCreate(folderResult.folderPath, userSectionName, sectionType.name, sectionType.value, sectionIndex);
-
-        IndexYamlFileCreate(
-            folderResult.folderPath,
-            userSectionName,
-            sectionType.name,
-            sectionType.value,
-            sectionIndex
-        );
-
-        TocYamlFileCreate(folderResult.folderPath, userSectionName, sectionType.value, sectionIndex);
-
-        TocYamlEntryPatchItems(targetDir, fullTitle, sectionType.value, folderResult.folderName, sectionIndex);
+        diplodocCreateSection(folderResult, userSectionName, sectionType, sectionIndex, targetDir);
 
         vscode.window.showInformationMessage(
-            translate(nls_ts.plugin.section.create.info.success, fullTitle, sectionType.label)
+            translate(nls_ts.plugin.section.create.info.success, '', sectionType.label)
         );
     } catch (err) {
         let msg = err instanceof Error ? err.message : String(err);
         vscode.window.showErrorMessage(translate(nls_ts.plugin.section.create.error.critical, msg));
     }
+}
+
+/**
+ * @param {import('../plugins/model/section.model.js').SectionTypeOption} sectionType
+ * @param {string} targetDir
+ */
+async function AskSectionIndex(sectionType, targetDir) {
+    const hasIndex = FrontMatterSectionTypesIndexed2.includes(sectionType.name);
+
+    const sectionIndexCalculated = frontmatterCalculateNextIndex(targetDir);
+
+    const sectionIndex = hasIndex ? await promptSectionIndex(sectionIndexCalculated) : '';
+    return sectionIndex;
 }
 
 module.exports = { ux_section_create };

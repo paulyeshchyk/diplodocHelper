@@ -139,7 +139,7 @@ function IndexMdFileCreate(folderPath, title, sectionType, sectionValue, section
  * Полностью обновляет index.yaml согласно новым данным от техписа
  * @param {string} folderPath - путь к папке с index.yaml
  * @param {string} newPureTitle - чистое название
- * @param {Object} newSectionType - объект с label и name
+ * @param {import('../model/section.model').SectionTypeOption} newSectionType - объект с label и name
  * @param {string|undefined} userIndex - индекс (например "14")
  */
 function IndexYamlEntryPatch(folderPath, newPureTitle, newSectionType, userIndex = '') {
@@ -150,37 +150,32 @@ function IndexYamlEntryPatch(folderPath, newPureTitle, newSectionType, userIndex
     }
 
     let content = fs.readFileSync(yamlPath, 'utf8');
-    let data;
-
-    try {
-        data = yaml.load(content);
-    } catch (e) {
-        console.error(`Ошибка парсинга YAML: ${yamlPath}`, e.message);
-        return;
-    }
+    /** @type {IndexYamlData | undefined} */
+    let indexYaml = loadIndexYaml(content);
+    if (!indexYaml) return;
 
     // === 1. Формируем composed title ===
     const sectionIndex = userIndex?.trim() || '';
     const composedTitle = sectionIndex ? `${newSectionType.value} ${sectionIndex}. ${newPureTitle}` : newPureTitle;
 
     // === 2. Обновляем корневые поля ===
-    data.title = composedTitle;
+    indexYaml.title = composedTitle;
 
     // Обновляем description (по твоему примеру)
-    data.description = `Описывает ${composedTitle}`;
+    indexYaml.description = `Описывает ${composedTitle}`;
 
     // === 3. Обновляем meta ===
-    if (!data.meta) data.meta = {};
+    if (!indexYaml.meta) indexYaml.meta = {};
 
-    data.meta.title = composedTitle; // или newPureTitle — как нужно
-    data.meta.sectionType = newSectionType.name; // "Chapter"
-    data.meta.sectionIndex = sectionIndex;
+    indexYaml.meta.title = composedTitle; // или newPureTitle — как нужно
+    indexYaml.meta.sectionType = newSectionType.name; // "Chapter"
+    indexYaml.meta.sectionIndex = sectionIndex;
 
     // pureTitle тоже сохраняем (полезно)
-    data.pureTitle = newPureTitle;
+    indexYaml.pureTitle = newPureTitle;
 
     // === 4. Сохраняем с сохранением порядка и форматирования ===
-    const updatedContent = yaml.dump(data, {
+    const updatedContent = yaml.dump(indexYaml, {
         lineWidth: -1, // не переносить длинные строки
         noRefs: true,
         sortKeys: false, // сохраняем порядок ключей
@@ -188,8 +183,24 @@ function IndexYamlEntryPatch(folderPath, newPureTitle, newSectionType, userIndex
     });
 
     fs.writeFileSync(yamlPath, updatedContent, 'utf8');
-    console.log(`✅ index.yaml обновлён: ${composedTitle}`);
+    console.log(`index.yaml обновлён: ${composedTitle}`);
 }
+
+/**
+ * Загружает и парсит содержимое index.yaml
+ * @param {string} content - содержимое файла yaml
+ * @returns {any | undefined}
+ */
+function loadIndexYaml(content) {
+    let indexYaml;
+    try {
+        indexYaml = yaml.load(content);
+    } catch (e) {
+        console.error(`Ошибка парсинга YAML`, String(e));
+    }
+    return indexYaml;
+}
+
 module.exports = {
     TocYamlEntryPatchItems,
     TocYamlFileCreate,

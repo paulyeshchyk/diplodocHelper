@@ -3,10 +3,8 @@ const vscode = require('vscode');
 const path = require('path');
 const { showImagePicker } = require('./vscode.prompts.imagePicker');
 const { getRelativeLink } = require('../plugins/utils/path.extract');
-const { ExtractMdLinks, ExtractFigures } = require('../plugins/utils/md.links.extract');
-const { FindMdFiles } = require('./vscode.FindFiles');
-const { DiplodocConfigFromWorkspace } = require('../plugins/manifest/config/vscode.config.manager');
-const { CONFIG_KEY } = require('../plugins/manifest/constants');
+const { ExtractMdLinks, ExtractFigures } = require('../plugins/shared/extractors/figuresExtractor');
+const { FindMdFiles, getProjectRoot } = require('./vscode.FindFiles');
 
 /** @import {ImageItem} from '../plugins/model/imageitem.model' */
 
@@ -17,11 +15,9 @@ async function ux_image_paste_list() {
         return;
     }
 
-    const currentFilePath = editor.document.uri.fsPath;
-    const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (!workspaceFolders) return;
+    const rootDir = getProjectRoot();
+    if (!rootDir) return;
 
-    const rootDir = workspaceFolders[0].uri.fsPath;
     const images = await collectAllImages(rootDir);
 
     if (images.length === 0) {
@@ -41,6 +37,7 @@ async function ux_image_paste_list() {
 
     if (!selectedImage) return;
 
+    const currentFilePath = editor.document.uri.fsPath;
     const relativeLink = getRelativeLink(currentFilePath, selectedImage);
     const markdownLink = `![*${selectedImage.caption}*](${relativeLink})`;
 

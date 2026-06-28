@@ -1,6 +1,6 @@
 // src/utils/prompts.js
 const vscode = require('vscode');
-const { isValidName } = require('../plugins/utils/path.directory');
+const { isValidName } = require('../plugins/shared/validators/diplodocDirectoryValidator');
 const { sectionTypes } = require('../plugins/model/section.model');
 const { FrontMatterSectionTypesIndexed2 } = require('../plugins/model/frontmatter.model');
 

@@ -1,5 +1,5 @@
 const { translate, nls_ts } = require('../nls_ts');
-const { isDiplodocSection } = require('../plugins/utils/path.directory');
+const { isDiplodocSection } = require('../plugins/shared/validators/diplodocDirectoryValidator');
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');

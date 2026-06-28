@@ -3,7 +3,10 @@
 const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 
-const { cleanupEmptyDirectories, getLanguageRoot } = require('../plugins/utils/path.directory.js');
+const {
+    cleanupEmptyDirectories,
+    getLanguageRoot,
+} = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
 
 /**
  * Очистка пустых папок после реиндексации

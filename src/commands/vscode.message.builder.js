@@ -1,7 +1,7 @@
 const { translate, nls_ts } = require('../nls_ts');
-const { truncateMiddle } = require('./diplodoc-helper.string');
+const { truncateMiddle } = require('../plugins/shared/extractors/stringExtractor');
 
-/** @import {Reference} from './diplodoc-helper.files.js' */
+/** @import {Reference} from '../plugins/shared/services/files/diplodoc-helper.files.js' */
 
 class MessageBuilder {
     /**

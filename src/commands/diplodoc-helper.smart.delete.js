@@ -1,10 +1,8 @@
 // src/commands/diplodoc-helper.smart.delete.js
 
-const vscode = require('vscode');
 const fs = require('fs');
-const path = require('path');
 
-const { isDiplodocSection } = require('../plugins/utils/path.directory.js');
+const { isDiplodocSection } = require('../plugins/shared/validators/diplodocDirectoryValidator.js');
 const { ux_section_delete } = require('./diplodoc-helper.section.Delete.js');
 const { ux_file_delete } = require('./diplodoc-helper.file.Delete.js');
 
