@@ -221,7 +221,9 @@ function TocYamlEntryInsertAtPosition(targetDir, composedTitle, folderName, posi
         // Целевой href в структуре выглядит как "ИмяПапки/index.md"
         const targetHref = `${positionObj.afterName}/${FrontMatterFiles.INDEX_MD}`;
 
-        const targetIndex = tocData.items.findIndex(item => item[FrontMatterToc.ITEMS_HREF] === targetHref);
+        const targetIndex = tocData.items.findIndex(
+            (/** @type {{ [x: string]: string; }} */ item) => item[FrontMatterToc.ITEMS_HREF] === targetHref
+        );
 
         if (targetIndex !== -1) {
             // Вставляем НА СЛЕДУЮЩУЮ позицию после найденной (targetIndex + 1)
@@ -256,7 +258,9 @@ function TocYamlEntryMoveWithinSameFile(targetDir, composedTitle, folderName, po
     const targetHref = `${folderName}/${FrontMatterFiles.INDEX_MD}`;
 
     // 1. Находим, где элемент лежит СЕЙЧАС, и извлекаем его из массива
-    const currentIndex = tocData.items.findIndex(item => item[FrontMatterToc.ITEMS_HREF] === targetHref);
+    const currentIndex = tocData.items.findIndex(
+        (/** @type {{ [x: string]: string; }} */ item) => item[FrontMatterToc.ITEMS_HREF] === targetHref
+    );
 
     if (currentIndex === -1) {
         console.error('Элемент не найден в текущем TOC для перемещения');
@@ -279,7 +283,9 @@ function TocYamlEntryMoveWithinSameFile(targetDir, composedTitle, folderName, po
     } else if (pos === 'after' && positionObj.afterName) {
         // Ищем индекс элемента, ПОСЛЕ которого нужно встать (уже в уменьшенном массиве!)
         const afterHref = `${positionObj.afterName}/${FrontMatterFiles.INDEX_MD}`;
-        const afterIndex = tocData.items.findIndex(item => item[FrontMatterToc.ITEMS_HREF] === afterHref);
+        const afterIndex = tocData.items.findIndex(
+            (/** @type {{ [x: string]: string; }} */ item) => item[FrontMatterToc.ITEMS_HREF] === afterHref
+        );
 
         if (afterIndex !== -1) {
             tocData.items.splice(afterIndex + 1, 0, movingEntry);

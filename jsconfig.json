@@ -12,7 +12,8 @@
   },
   "include": [
     "src/**/*",
-    "src/extension.js"
+    "src/extension.js",
+    "global.d.ts"
   ],
   "exclude": [
     "dist",

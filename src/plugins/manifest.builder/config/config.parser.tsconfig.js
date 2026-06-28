@@ -38,7 +38,7 @@ class TsConfigParser extends ConfigParserBase {
 
             const propMatch = line.match(/^\s*(\w+)(\?)?\s*:\s*([^;]+);?/);
             if (propMatch) {
-                // eslint-disable-next-line no-unused-vars
+                 
                 const [, name, optional, rawType] = propMatch;
                 const typeStr = rawType.trim();
 

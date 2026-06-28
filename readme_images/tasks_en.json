@@ -321,4 +321,8 @@
       "command": "node .vscode/scripts/stop-docker-container.js ${config:docbuilder.imageName}",
       "problemMatcher": [],
       "presentation": {
-        "close": false,
+        "close": false
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-unused-vars
+ 
 const ContributionMenuItem = require('./ContributionMenuItem');
 
 class ContributionSubmenu {

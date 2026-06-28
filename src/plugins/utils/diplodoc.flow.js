@@ -14,7 +14,7 @@ const { TocYamlEntryPatchTitle } = require('./yaml.toc.entry');
 const { composeFullTitle } = require('./frontmatter.section.title');
 
 const { canCreateFolder, createDirectory } = require('./path.directory');
-const { IndexYamlFileCreate, IndexYamlEntryPatch } = require('./yaml.base');
+const { IndexYamlEntryPatch } = require('./yaml.base');
 
 /**
  * @param {string} targetDir

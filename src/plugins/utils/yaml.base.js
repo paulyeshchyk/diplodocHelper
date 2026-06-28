@@ -139,7 +139,7 @@ function IndexMdFileCreate(folderPath, title, sectionType, sectionValue, section
  * Полностью обновляет index.yaml согласно новым данным от техписа
  * @param {string} folderPath - путь к папке с index.yaml
  * @param {string} newPureTitle - чистое название
- * @param {Object} newSectionType - объект с label и name
+ * @param {import('../model/section.model').SectionTypeOption} newSectionType - объект с label и name
  * @param {string|undefined} userIndex - индекс (например "14")
  */
 function IndexYamlEntryPatch(folderPath, newPureTitle, newSectionType, userIndex = '') {
@@ -150,14 +150,8 @@ function IndexYamlEntryPatch(folderPath, newPureTitle, newSectionType, userIndex
     }
 
     let content = fs.readFileSync(yamlPath, 'utf8');
-    let data;
-
-    try {
-        data = yaml.load(content);
-    } catch (e) {
-        console.error(`Ошибка парсинга YAML: ${yamlPath}`, e.message);
-        return;
-    }
+    let data = loadIndexYaml(content);
+    if (!data) return;
 
     // === 1. Формируем composed title ===
     const sectionIndex = userIndex?.trim() || '';
@@ -197,3 +191,16 @@ module.exports = {
     IndexYamlEntryPatch,
     IndexMdFileCreate,
 };
+
+/**
+ * @param {string} content
+ * @returns {IndexYamlData | undefined}
+ */
+function loadIndexYaml(content) {
+    try {
+        return /** @type {IndexYamlData} */ (yaml.load(content));
+    } catch (err) {
+        console.error(`error loading index.yaml`, err);
+        return undefined;
+    }
+}

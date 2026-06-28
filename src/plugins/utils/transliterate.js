@@ -1,7 +1,7 @@
 /**
  * Словарь для ПРЯМОГО перевода (Кириллица и спецсимволы -> Латиница).
  */
-/** @typedef {Record<string,string>} */
+/** @type {Record<string,string>} */
 const cyrToLatLegend = {
     а: 'a',
     б: 'b',
@@ -47,7 +47,7 @@ const cyrToLatLegend = {
 /**
  * Словарь для ОБРАТНОГО перевода (Латиница -> Кириллица).
  */
-/** @typedef {Record<string,string>} */
+/** @type {Record<string,string>} */
 const latToCyrLegend = {
     greater: '>',
     percent: '%',
