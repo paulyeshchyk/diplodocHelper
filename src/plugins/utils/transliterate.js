@@ -62,7 +62,7 @@ const latToCyrLegend = {
     ye: 'э',
     yu: 'ю',
     ya: 'я',
-    sh: 'щ', // Ваше условие: sh -> щ
+    sh: 'щ',
 
     a: 'а',
     b: 'б',

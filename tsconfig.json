@@ -18,6 +18,7 @@
         "global.d.ts"
     ],
     "exclude": [
-        "**/*breadcrumb.template.js"
+        "**/*breadcrumb.template.js",
+        "**/*.test.js"
     ]
 }
