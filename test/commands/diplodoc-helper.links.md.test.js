@@ -21,8 +21,4 @@ describe('diplodoc-helper.links.md', () => {
         expect(diplodoc_helper_links_md.splitMdPathQueryHash).toBeDefined();
     });
     test.todo('splitMdPathQueryHash should work correctly');
-    test('isExternalLink should be defined', () => {
-        expect(diplodoc_helper_links_md.isExternalLink).toBeDefined();
-    });
-    test.todo('isExternalLink should work correctly');
 });

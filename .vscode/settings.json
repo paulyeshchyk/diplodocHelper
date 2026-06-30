@@ -11,5 +11,10 @@
     "editor.insertSpaces": true,
     "editor.detectIndentation": false
   },
-  "js/ts.implicitProjectConfig.checkJs": true
+  "js/ts.implicitProjectConfig.checkJs": true,
+  "generateTests.defaultRootDir": "d:\\projects\\ascon\\GULF_Diplodochelper\\src",
+  "generateTests.defaultOutputDir": "d:\\projects\\ascon\\GULF_Diplodochelper\\test",
+  "generateTests.overwrite": false,
+  "generateTests.skipIndexJs": true,
+  "generateTests.iife": false
 }

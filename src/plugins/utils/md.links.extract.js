@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { decodeImagePath, normalizePathForKey } = require('./path.extract');
+const { isRemoteOrDataUrl } = require('../shared/parser/md/mdLinks');
 
 /** @import {ImageItem} from '../model/imageitem.model' */
 
@@ -14,15 +15,6 @@ const IMAGE_DETECTION_CONFIG = {
 };
 
 // ----- Вспомогательные функции -----
-
-/**
- * Проверяет, является ли ссылка внешним ресурсом или data URL.
- * @param {string} rawLink
- * @returns {boolean}
- */
-function isRemoteOrDataUrl(rawLink) {
-    return /^(https?:\/\/|#|mailto:|data:)/i.test(rawLink);
-}
 
 /**
  * Преобразует относительный путь из markdown в абсолютный.

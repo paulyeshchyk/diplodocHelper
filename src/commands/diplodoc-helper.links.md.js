@@ -5,6 +5,7 @@ const fs = require('fs');
 
 const { decodeLinkPath, encodePathSegments } = require('./diplodoc-helper.links.coder');
 const { isTargetInDeletedTree, findFiles, findDirectories, removeFileOrDirectory } = require('./diplodoc-helper.files');
+const { isExternalLink } = require('../plugins/shared/parser/md/mdLinks');
 
 /** @import {Reference} from './diplodoc-helper.files.js' */
 
@@ -175,13 +176,6 @@ async function updateLinksAfterFolderDelete(deletedPath, projectRoot, stubText) 
 }
 
 /**
- * @param {MdLink} link
- */
-function isExternalLink(link) {
-    return link.rawPath.match(/^(https?:\/\/|#|mailto:|\/)/i);
-}
-
-/**
  * Обновление ссылок после удаления одиночного файла
  * @param {string} deletedFilePath
  * @param {string} projectRoot
@@ -220,5 +214,4 @@ module.exports = {
     updateLinksInContent,
     parseMarkdownLinks,
     splitMdPathQueryHash,
-    isExternalLink,
 };

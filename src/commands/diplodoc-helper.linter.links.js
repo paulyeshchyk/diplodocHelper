@@ -102,8 +102,6 @@ async function ux_linter_links(uri) {
     }
 }
 
-module.exports = { ux_linter_links, getLinterCachedMdFiles, getLinterCachedRootDir };
-
 /** @type {vscode.DiagnosticCollection | null} */
 let diagnosticCollection = null;
 function getDiagnosticCollection() {
@@ -112,3 +110,5 @@ function getDiagnosticCollection() {
     }
     return diagnosticCollection;
 }
+
+module.exports = { ux_linter_links, getLinterCachedMdFiles, getLinterCachedRootDir };

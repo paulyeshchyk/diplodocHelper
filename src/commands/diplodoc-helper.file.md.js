@@ -4,8 +4,9 @@ const fs = require('fs');
 const path = require('path');
 
 const { findFiles, isTargetInDeletedTree, findDirectories } = require('./diplodoc-helper.files');
-const { parseMarkdownLinks, splitMdPathQueryHash, isExternalLink } = require('./diplodoc-helper.links.md.js');
+const { parseMarkdownLinks, splitMdPathQueryHash } = require('./diplodoc-helper.links.md.js');
 const { decodeLinkPath } = require('./diplodoc-helper.links.coder.js');
+const { isExternalLink } = require('../plugins/shared/parser/md/mdLinks');
 
 /**
  * @typedef {Object} FileReference
