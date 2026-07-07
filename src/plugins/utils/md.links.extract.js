@@ -75,10 +75,25 @@ function extractFigcaptions(content) {
         figcaptions.push({
             pos: match.index,
             id: match[1].trim(),
-            caption: match[2].trim(),
+            caption: cleanCaption(match[2].trim()),
         });
     }
     return figcaptions;
+}
+
+/**
+ * @param {string} text
+ */
+function cleanCaption(text) {
+    // Удаляем Markdown-ссылки
+    text = text.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1');
+    // Удаляем HTML-теги <a>...</a>
+    text = text.replace(/<a[^>]*>([^<]*)<\/a>/g, '$1');
+    // Удаляем оставшиеся HTML-теги
+    text = text.replace(/<[^>]+>/g, '');
+    // Убираем лишние пробелы
+    text = text.replace(/\s+/g, ' ').trim();
+    return text;
 }
 
 // ----- Сопоставление подписей и изображений -----
