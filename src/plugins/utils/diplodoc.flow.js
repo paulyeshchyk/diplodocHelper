@@ -14,7 +14,7 @@ const { TocYamlEntryPatchTitle } = require('./yaml.toc.entry');
 const { composeFullTitle } = require('./frontmatter.section.title');
 
 const { canCreateFolder, createDirectory } = require('./path.directory');
-const { IndexYamlEntryPatch } = require('./yaml.base');
+const { IndexYamlFileCreate, IndexYamlEntryPatch } = require('./yaml.base');
 
 /**
  * @param {string} targetDir
@@ -98,7 +98,7 @@ function DiplodocSectionPatch(folderPath, pureTitle, sectionType, sectionIndex =
         return newFolderName;
     } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error(`Не удалось переименовать ${oldFolderName}:`, msg);
+        console.error(`❌ Не удалось переименовать ${oldFolderName}:`, msg);
         return oldFolderName;
     }
 }

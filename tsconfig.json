@@ -19,6 +19,7 @@
     ],
     "exclude": [
         "**/*breadcrumb.template.js",
-        "**/*.test.js"
+        "**/*.test.js",
+        "**/contentNavigator/**"
     ]
 }

@@ -15,9 +15,9 @@ function buildFigure(url, altText, customId = null) {
 
     const figureId = customId || buildFigureId(altText);
 
-    const figureBlock = `<figure><figcaption class="imageDescription" id="${figureId}">${altText}</figcaption></figure>`;
+    const figureBlock = `<figure>\n\n${linkBlock}\n\n<figcaption class="imageDescription" id="${figureId}">${altText}</figcaption>\n\n</figure>\n\n`;
 
-    return `${linkBlock}\n${figureBlock}\n`;
+    return `${figureBlock}`;
 }
 
 /**

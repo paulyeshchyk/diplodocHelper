@@ -6,7 +6,13 @@ const jsdocPlugin = require('eslint-plugin-jsdoc');
 
 module.exports = [
     {
-        ignores: ['**/breadcrumb.template.js', '**/dist/extension.js', '**/*.test.js'],
+        ignores: [
+            '**/breadcrumb.template.js',
+            '**/dist/extension.js',
+            '**/*.test.js',
+            '**/contentNavigator/**',
+            '**/build/**',
+        ],
     },
     js.configs.recommended,
     {

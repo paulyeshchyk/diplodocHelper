@@ -27,6 +27,10 @@ const nls_ts = {
         html: {
             breadcrumbs: 'command.html.breadcrumbs',
         },
+        linter: {
+            links: { check: 'command.linter.links.check' },
+            abbrs: { check: 'command.linter.abbrs.check' },
+        },
         md: {
             context: {
                 delete: 'command.md.context.delete',
@@ -58,11 +62,6 @@ const nls_ts = {
             },
         },
         settings: 'command.settings',
-        linter: {
-            links: {
-                check: 'command.linter.links.check',
-            },
-        },
     },
     description: 'description',
     displayName: 'displayName',
@@ -108,6 +107,127 @@ const nls_ts = {
         },
     },
     plugin: {
+        linter: {
+            links: {
+                check: 'command.linter.links.check',
+            },
+            abbrs: {
+                progress: {
+                    title: 'plugin.linter.abbrs.progress.title',
+                },
+                info: {
+                    clean: 'plugin.linter.abbrs.info.clean',
+                },
+                pick: {
+                    placeholder: 'plugin.linter.abbrs.pick.placeholder',
+                },
+                error: {
+                    noDocsRoot: 'plugin.linter.abbrs.error.noDocsRoot',
+                    openFile: 'plugin.linter.abbrs.error.openFile',
+                },
+            },
+            terms: {
+                progress: { title: 'plugin.linter.terms.progress.title' },
+                info: { clean: 'plugin.linter.terms.info.clean' },
+                pick: { placeholder: 'plugin.linter.terms.pick.placeholder' },
+                error: {
+                    noDocsRoot: 'plugin.linter.terms.error.noDocsRoot',
+                    openFile: 'plugin.linter.terms.error.openFile',
+                },
+            }
+        },
+        term: {
+            add: {
+                error: {
+                    noEditor: 'plugin.term.add.error.noEditor',
+                    notMarkdown: 'plugin.term.add.error.notMarkdown',
+                    noSelection: 'plugin.term.add.error.noSelection',
+                    notInLanguageFolder: 'plugin.term.add.error.notInLanguageFolder',
+                },
+                pick: {
+                    placeholder: 'plugin.term.add.pick.placeholder',
+                    createNew: 'plugin.term.add.pick.createNew',
+                    createWithCase: 'plugin.term.add.pick.createWithCase',
+                    caseInsensitiveHint: 'plugin.term.add.pick.caseInsensitiveHint',
+                    removeMarkup: 'plugin.term.add.pick.removeMarkup',
+                },
+                definition: {
+                    prompt: 'plugin.term.add.definition.prompt',
+                    placeholder: 'plugin.term.add.definition.placeholder',
+                    error: { empty: 'plugin.term.add.definition.error.empty' },
+                },
+                category: {
+                    prompt: 'plugin.term.add.category.prompt',
+                    placeholder: 'plugin.term.add.category.placeholder',
+                },
+                warning: {
+                    emptyDictionary: 'plugin.term.add.warning.emptyDictionary',
+                    alreadyInDictionary: 'plugin.term.add.warning.alreadyInDictionary',
+                    saveFailed: 'plugin.term.add.warning.saveFailed',
+                    indexFailed: 'plugin.term.add.warning.indexFailed',
+                },
+                info: {
+                    success: 'plugin.term.add.info.success',
+                    dictUpdated: 'plugin.term.add.info.dictUpdated',
+                    dictUpdatedAndIndex: 'plugin.term.add.info.dictUpdatedAndIndex',
+                    usedAndIndex: 'plugin.term.add.info.usedAndIndex',
+                    refreshNow: 'plugin.term.add.info.refreshNow',
+                },
+            },
+            codeAction: {
+                showFull: 'plugin.term.codeAction.showFull',
+                addToDict: 'plugin.term.codeAction.addToDict',
+                removeMarkup: 'plugin.term.codeAction.removeMarkup',
+                wrap: 'plugin.term.codeAction.wrap',
+                wrapWord: 'plugin.term.codeAction.wrapWord',
+            },
+        },
+        abbr: {
+            add: {
+                error: {
+                    noEditor: 'plugin.abbr.add.error.noEditor',
+                    notMarkdown: 'plugin.abbr.add.error.notMarkdown',
+                    noSelection: 'plugin.abbr.add.error.noSelection',
+                    notInLanguageFolder: 'plugin.abbr.add.error.notInLanguageFolder',
+                },
+                pick: {
+                    placeholder: 'plugin.abbr.add.pick.placeholder',
+                    createNew: 'plugin.abbr.add.pick.createNew',
+                    createWithCase: 'plugin.abbr.add.pick.createWithCase',
+                    caseInsensitiveHint: 'plugin.abbr.add.pick.caseInsensitiveHint',
+                    removeMarkup: 'plugin.abbr.add.pick.removeMarkup',
+                },
+                full: {
+                    prompt: 'plugin.abbr.add.full.prompt',
+                    placeholder: 'plugin.abbr.add.full.placeholder',
+                    error: { empty: 'plugin.abbr.add.full.error.empty' },
+                },
+                category: {
+                    prompt: 'plugin.abbr.add.category.prompt',
+                    placeholder: 'plugin.abbr.add.category.placeholder',
+                },
+                warning: {
+                    emptyDictionary: 'plugin.abbr.add.warning.emptyDictionary',
+                    alreadyInDictionary: 'plugin.abbr.add.warning.alreadyInDictionary',
+                    saveFailed: 'plugin.abbr.add.warning.saveFailed',
+                    indexFailed: 'plugin.abbr.add.warning.indexFailed',
+                },
+                info: {
+                    success: 'plugin.abbr.add.info.success',
+                    dictUpdated: 'plugin.abbr.add.info.dictUpdated',
+                    dictUpdatedAndIndex: 'plugin.abbr.add.info.dictUpdatedAndIndex',
+                    usedAndIndex: 'plugin.abbr.add.info.usedAndIndex',
+                    refreshNow: 'plugin.abbr.add.info.refreshNow',
+                },
+            },
+            codeAction: {
+                showFull: 'plugin.abbr.codeAction.showFull',
+                addToDict: 'plugin.abbr.codeAction.addToDict',
+                removeMarkup: 'plugin.abbr.codeAction.removeMarkup',
+                wrap: 'plugin.abbr.codeAction.wrap',
+                wrapWord: 'plugin.abbr.codeAction.wrapWord',
+            },
+        },
         breadcrumb: {
             generate: {
                 error: {
@@ -117,6 +237,23 @@ const nls_ts = {
                 info: {
                     success: 'plugin.breadcrumb.generate.info.success',
                 },
+            },
+        },
+        footnote: {
+            add: {
+                error: {
+                    noEditor: 'plugin.footnote.add.error.noEditor',
+                    notMarkdown: 'plugin.footnote.add.error.notMarkdown',
+                    noSelection: 'plugin.footnote.add.error.noSelection',
+                    emptySelection: 'plugin.footnote.add.error.emptySelection',
+                    failed: 'plugin.footnote.add.error.failed',
+                },
+                input: {
+                    prompt: 'plugin.footnote.add.input.prompt',
+                    placeHolder: 'plugin.footnote.add.input.placeHolder',
+                    error: { empty: 'plugin.footnote.add.input.error.empty' },
+                },
+                info: { success: 'plugin.footnote.add.info.success' },
             },
         },
         context: {
@@ -269,6 +406,12 @@ const nls_ts = {
             },
         },
         reindex: {
+            footnotes: {
+                info: {
+                    successDetailed: 'plugin.reindex.footnotes.info.successDetailed',
+                    failDetailed: 'plugin.reindex.footnotes.info.failDetailed',
+                },
+            },
             figures: {
                 info: {
                     failDetailed: 'plugin.reindex.figures.info.failDetailed',

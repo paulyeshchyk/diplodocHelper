@@ -263,7 +263,7 @@ function TocYamlEntryMoveWithinSameFile(targetDir, composedTitle, folderName, po
     );
 
     if (currentIndex === -1) {
-        console.error('Элемент не найден в текущем TOC для перемещения');
+        console.error('❌ Элемент не найден в текущем TOC для перемещения');
         return;
     }
 

@@ -33,8 +33,12 @@ function isLanguageRoot(folderPath) {
 }
 
 /**
- * Надёжно определяет корень языка
+ * Надёжно определяет корень языка (docs/ru, docs/en).
+ * Корень языка — это первый подкаталог внутри docs/ на пути к sourcePath.
+ * Это устойчиво к тому, есть ли в языке index.md / index.yaml.
+ *
  * @param {string} sourcePath
+ * @returns {string}
  */
 function getLanguageRoot(sourcePath) {
     let current = path.dirname(sourcePath);
@@ -43,9 +47,15 @@ function getLanguageRoot(sourcePath) {
         const basename = path.basename(current).toLowerCase();
 
         if (basename === 'docs') {
-            const langCandidate = path.join(current, path.basename(path.dirname(sourcePath)));
-            if (fs.existsSync(langCandidate) && isLanguageRoot(langCandidate)) {
-                return langCandidate;
+            // Первый сегмент относительного пути от docs к sourcePath — это язык.
+            const rel = path.relative(current, sourcePath);
+            const firstSegment = rel.split(path.sep)[0];
+
+            if (firstSegment && firstSegment !== '..' && firstSegment !== '') {
+                const langCandidate = path.join(current, firstSegment);
+                if (fs.existsSync(langCandidate) && fs.statSync(langCandidate).isDirectory()) {
+                    return langCandidate;
+                }
             }
             return current;
         }
@@ -57,11 +67,11 @@ function getLanguageRoot(sourcePath) {
         current = path.dirname(current);
     }
 
-    // Fallback
+    // Фоллбек: ищем docs/<lang> по сегментам пути.
     const parts = sourcePath.split(path.sep);
     const docsIndex = parts.findIndex(p => p.toLowerCase() === 'docs');
     if (docsIndex !== -1 && docsIndex + 1 < parts.length) {
-        const langFolder = path.join(...parts.slice(0, docsIndex + 2));
+        const langFolder = parts.slice(0, docsIndex + 2).join(path.sep);
         if (fs.existsSync(langFolder)) return langFolder;
     }
 

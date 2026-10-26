@@ -58,7 +58,7 @@ function contributionInject(packageJsonPath, configPath, contributionData, confi
         console.log('\nManifest успешно собран!');
     } catch (error) {
         const msg = error instanceof Error ? error.message : String(error);
-        console.error(`Ошибка генерации манифеста: \n ${msg}`);
+        console.error(`❌ Ошибка генерации манифеста: \n ${msg}`);
         process.exit(1);
     }
 }

@@ -10,6 +10,10 @@ const { commandHandlers } = require('./commands'); // импортируем р�
 const { ContextManager } = require('./ContextMenuManager');
 const { BrokenLinkCodeActionProvider } = require('./commands/vscode.linter.links.brokenLinkCodeActionProvider');
 const { parseClipboardLink } = require('./commands/diplodoc-helper.link.Paste');
+const { AbbrCodeActionProvider } = require('./commands/vscode.abbr.CodeActionProvider');
+const { AbbrHighlighter } = require('./commands/vscode.abbr.Highlighter');
+const { TermCodeActionProvider } = require('./commands/vscode.term.CodeActionProvider');
+const { TermHighlighter } = require('./commands/vscode.term.Highlighter');
 
 /** @type {ContextManager | null} */
 let contextManager = null;
@@ -38,6 +42,18 @@ function activate(context) {
     context.subscriptions.push(
         vscode.languages.registerCodeActionsProvider({ language: 'markdown' }, new BrokenLinkCodeActionProvider())
     );
+    context.subscriptions.push(
+        vscode.languages.registerCodeActionsProvider({ language: 'markdown' }, new AbbrCodeActionProvider())
+    );
+    context.subscriptions.push(
+        vscode.languages.registerCodeActionsProvider({ language: 'markdown' }, new TermCodeActionProvider())
+    );
+
+    // Подсветка <abbr>…</abbr> в markdown-редакторе
+    const abbrHighlighter = new AbbrHighlighter(context);
+    context.subscriptions.push(abbrHighlighter);
+    const termHighlighter = new TermHighlighter(context);
+    context.subscriptions.push(termHighlighter);
 
     // Настройка контекстного менеджера
     const config = DiplodocConfigSharedInstance();

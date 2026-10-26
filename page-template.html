@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{TITLE}}</title>
+
+    {{CSS_LINK}}
+    {{DATA_LINK}}
+    {{JS_LINK}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof renderAll === 'function') {
+                renderAll(periodicData.matrixData, periodicData.navLinks);
+                if (typeof renderLegend === 'function') {
+                    renderLegend(periodicData.legendItems);
+                }
+            } else {
+                console.error('renderAll function not found');
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+    <!-- Первая горизонтальная линия -->
+    <div class="top-header">
+        <div class="title-and-nav">
+            <h5>{{TITLE}}</h5>
+            <div id="nav-links"></div>
+        </div>
+        <div id="lang-selector"></div>
+    </div>
+
+    <!-- Вторая горизонтальная линия -->
+    <div class="sub-header">
+        <div id="stats" class="stats"></div>
+        <div id="legend-container"></div>
+    </div>
+
+    <!-- Область таблицы -->
+    <div id="table-container" class="table-wrapper"></div>
+
+</body>
+</html>

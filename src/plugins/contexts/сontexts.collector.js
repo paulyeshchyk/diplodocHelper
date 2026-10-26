@@ -1,4 +1,4 @@
-// src/plugins/contexts/generateContexts.collector.js
+// contexts/generateContexts.collector.js
 
 const fs = require('fs');
 const path = require('path');

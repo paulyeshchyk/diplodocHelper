@@ -16,14 +16,14 @@ function runGeneration(buildDir) {
     const results = { success: [], failed: [] };
 
     if (!fs.existsSync(buildDir)) {
-        console.error(`[Breadcrumb] Папка сборки не найдена: ${buildDir}`);
+        console.error(`❌ [Breadcrumb] Папка сборки не найдена: ${buildDir}`);
         results.failed.push(buildDir);
         return results;
     }
 
     const config = { ...DEFAULT_CONFIG, buildDir: buildDir };
 
-    console.log(`[Breadcrumb] Запуск генерации. buildDir = ${buildDir}`);
+    // console.log(`[Breadcrumb] Запуск генерации. buildDir = ${buildDir}`);
 
     const titleMap = walkHtmlFilesBuildTitleMap(buildDir);
 
@@ -35,7 +35,7 @@ function runGeneration(buildDir) {
         injectScriptIntoFile(htmlPath, config, script);
     });
 
-    console.log(`[Breadcrumb] Процесс завершён.`);
+    // console.log(`[Breadcrumb] Процесс завершён.`);
     results.success.push(buildDir);
 
     return results;

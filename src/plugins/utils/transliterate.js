@@ -62,7 +62,7 @@ const latToCyrLegend = {
     ye: 'э',
     yu: 'ю',
     ya: 'я',
-    sh: 'щ',
+    sh: 'ш',
 
     a: 'а',
     b: 'б',
@@ -82,6 +82,7 @@ const latToCyrLegend = {
     r: 'р',
     s: 'с',
     t: 'т',
+    u: 'у',
     f: 'ф',
     h: 'х',
     c: 'ц',

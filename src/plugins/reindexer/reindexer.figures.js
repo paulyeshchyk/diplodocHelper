@@ -5,6 +5,7 @@ const path = require('path');
 
 const { TocYamlFileLoad } = require('../utils/yaml.toc.file');
 const { DiplodocConfigFromJson } = require('../manifest/config/diplodoc.config');
+const { collectMdFilesInOrder } = require('../utils/toc.order');
 
 /**
  * @import { DiplodocConfig } from '../manifest/config/diplodoc.config.model'
@@ -15,13 +16,13 @@ const { DiplodocConfigFromJson } = require('../manifest/config/diplodoc.config')
  * @param {string | object | undefined} configJsonOrObj
  */
 function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
-    console.log('Переиндексация рисунков...');
+    // console.log('Переиндексация рисунков...');
     const figureCaptionTemplate = readFigureCaptionTemplate(configJsonOrObj, targetLocale);
     const figureReferenceCaptionTemplate = readFigureReferenceCaptionTemplate(configJsonOrObj, targetLocale);
 
     const tocPath = path.join(rootDir, 'toc.yaml');
     if (!fs.existsSync(tocPath)) {
-        console.warn('toc.yaml не найден');
+        console.warn('⚠️ toc.yaml не найден');
         return { success: false, reason: 'no_toc', total: 0 };
     }
 
@@ -63,7 +64,7 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
             }
             figureCounter = newCounter;
         } catch (err) {
-            console.error(`Ошибка обработки ${mdFilePath}:`, err);
+            console.error(`❌ Ошибка обработки ${mdFilePath}:`, err);
         }
     }
 
@@ -113,67 +114,6 @@ function GetPrefixOrDefault(config, activeLocale, targetLocale) {
 }
 
 /**
- * Рекурсивный сбор md-файлов
- * @param {any[] | any} entries - массив элементов или один элемент
- * @param {string} rootDir
- * @returns {string[]}
- */
-function collectMdFilesInOrder(entries, rootDir, currentPath = '', visited = new Set()) {
-    if (!entries) return [];
-
-    const items = Array.isArray(entries) ? entries : [entries];
-    let files = [];
-
-    for (const entry of items) {
-        // 1. Сначала добавляем файл текущего элемента (href)
-        if (entry.href) {
-            const href = entry.href.trim();
-            if (href.endsWith('toc.yaml') || href.endsWith('index.yaml')) continue;
-
-            let mdPath = path.join(rootDir, currentPath, href);
-            if (!href.endsWith('.md')) {
-                mdPath = path.join(mdPath, 'index.md');
-            }
-
-            if (fs.existsSync(mdPath)) {
-                files.push(mdPath);
-            } else {
-                console.warn(`Файл не найден: ${mdPath}`);
-            }
-        }
-
-        // 2. Затем обрабатываем include (подключаемый toc.yaml) – его файлы встают после текущего
-        if (entry.include?.path) {
-            const includeRelPath = entry.include.path;
-            const absIncludePath = path.join(rootDir, currentPath, includeRelPath);
-            const canonical = path.resolve(absIncludePath);
-
-            if (!visited.has(canonical)) {
-                visited.add(canonical);
-                try {
-                    const toc = TocYamlFileLoad(absIncludePath);
-                    const subItems = toc.items;
-                    const includeDir = path.join(currentPath, path.dirname(includeRelPath));
-                    const includeFiles = collectMdFilesInOrder(subItems, rootDir, includeDir, visited);
-                    files.push(...includeFiles);
-                } catch (err) {
-                    let msg = err instanceof Error ? err.message : String(err);
-                    console.error(`Не удалось загрузить include ${absIncludePath}:`, msg);
-                }
-            }
-        }
-
-        // 3. И только потом – вложенные подразделы (items) – они идут после всего вышеперечисленного
-        if (Array.isArray(entry.items)) {
-            const subFiles = collectMdFilesInOrder(entry.items, rootDir, currentPath, visited);
-            files.push(...subFiles);
-        }
-    }
-
-    return files;
-}
-
-/**
  * @param {string} content
  * @param {number} startCounter
  * @param {string} prefix
@@ -184,8 +124,7 @@ function processFigureCaptions(content, startCounter, prefix, mdFilePath) {
     let counter = startCounter;
     const mapping = new Map();
 
-    const regex =
-        /<figure>\s*<figcaption\s+class="imageDescription"([^>]*?)\s+id="([^"]+)"([^>]*?)>([\s\S]*?)<\/figcaption>\s*<\/figure>/gi;
+    const regex = /<figcaption\s+class="imageDescription"([^>]*?)\s+id="([^"]+)"([^>]*?)>([\s\S]*?)<\/figcaption>/gi;
 
     const newContent = content.replace(regex, (match, beforeId, id, afterId, captionText) => {
         let cleaned = captionText
@@ -194,7 +133,7 @@ function processFigureCaptions(content, startCounter, prefix, mdFilePath) {
             .trim();
 
         const newCaption = `${prefix} ${counter}. ${cleaned}`;
-        const replacement = `<figure><figcaption class="imageDescription" id="${id}"${afterId}>${newCaption}</figcaption></figure>`;
+        const replacement = `<figcaption class="imageDescription" id="${id}"${afterId}>${newCaption}</figcaption>`;
 
         // Формируем уникальный ключ для глобальной карты
         const uniqueKey = `${path.resolve(mdFilePath)}::${id}`;
@@ -268,7 +207,7 @@ function updateFigureLinksInFile(filePath, figureNumberMap, defaultTemplate) {
 
     if (updated) {
         fs.writeFileSync(filePath, newContent, 'utf8');
-        console.log(`Обновлены ссылки в ${path.relative(process.cwd(), filePath)}`);
+        // console.log(`Обновлены ссылки в ${path.relative(process.cwd(), filePath)}`);
     }
 }
 
@@ -282,7 +221,7 @@ function updateAllLinks(files, figureNumberMap, defaultPrefix) {
         try {
             updateFigureLinksInFile(file, figureNumberMap, defaultPrefix);
         } catch (err) {
-            console.error(`Ошибка обновления ссылок в ${file}:`, err);
+            console.error(`❌ Ошибка обновления ссылок в ${file}:`, err);
         }
     }
 }

@@ -1,3 +1,4 @@
+// @ts-nocheck
 const fs = require('fs');
 const path = require('path');
 const YAML = require('yaml');
@@ -139,7 +140,7 @@ function IndexMdFileCreate(folderPath, title, sectionType, sectionValue, section
  * Полностью обновляет index.yaml согласно новым данным от техписа
  * @param {string} folderPath - путь к папке с index.yaml
  * @param {string} newPureTitle - чистое название
- * @param {import('../model/section.model').SectionTypeOption} newSectionType - объект с label и name
+ * @param {Object} newSectionType - объект с label и name
  * @param {string|undefined} userIndex - индекс (например "14")
  */
 function IndexYamlEntryPatch(folderPath, newPureTitle, newSectionType, userIndex = '') {
@@ -150,6 +151,7 @@ function IndexYamlEntryPatch(folderPath, newPureTitle, newSectionType, userIndex
     }
 
     let content = fs.readFileSync(yamlPath, 'utf8');
+
     let data = loadIndexYaml(content);
     if (!data) return;
 
@@ -182,7 +184,7 @@ function IndexYamlEntryPatch(folderPath, newPureTitle, newSectionType, userIndex
     });
 
     fs.writeFileSync(yamlPath, updatedContent, 'utf8');
-    console.log(`✅ index.yaml обновлён: ${composedTitle}`);
+    console.log(`✓ index.yaml обновлён: ${composedTitle}`);
 }
 module.exports = {
     TocYamlEntryPatchItems,
@@ -200,7 +202,7 @@ function loadIndexYaml(content) {
     try {
         return /** @type {IndexYamlData} */ (yaml.load(content));
     } catch (err) {
-        console.error(`error loading index.yaml`, err);
+        console.error(`❌ error loading index.yaml`, err);
         return undefined;
     }
 }

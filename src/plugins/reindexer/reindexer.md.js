@@ -40,7 +40,7 @@ function calculateNextIndex(targetDir) {
                 }
             }
         } catch (e) {
-            console.error(`Ошибка при чтении ${indexPath}:`, e);
+            console.error(`❌ Ошибка при чтении ${indexPath}:`, e);
             continue; // Пропускаем проблемный файл вместо падения
         }
     }

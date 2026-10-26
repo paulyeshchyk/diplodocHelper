@@ -72,7 +72,7 @@ function collectIndexMdFiles(rootDir, currentTocPath, visited = new Set()) {
 function getAllIndexMdFiles(rootDir) {
     const rootTocPath = path.join(rootDir, 'toc.yaml');
     if (!fs.existsSync(rootTocPath)) {
-        console.error(`Корневой toc.yaml не найден: ${rootTocPath}`);
+        console.error(`❌ Корневой toc.yaml не найден: ${rootTocPath}`);
         return [];
     }
     return collectIndexMdFiles(rootDir, rootTocPath);
@@ -90,7 +90,7 @@ function getTocYamlItems(absoluteTocPath) {
         const tocDoc = TocYamlFileLoad(absoluteTocPath);
         return tocDoc.items || [];
     } catch (err) {
-        console.error(`Ошибка загрузки ${absoluteTocPath}:`, err);
+        console.error(`❌ Ошибка загрузки ${absoluteTocPath}:`, err);
         return [];
     }
 }

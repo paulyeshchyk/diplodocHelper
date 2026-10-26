@@ -47,7 +47,7 @@ async function getImageFromClipboard() {
                     resolve(null);
                 }
             } catch (e) {
-                console.error('Ошибка при чтении временного файла картинки:', e);
+                console.error('❌ Ошибка при чтении временного файла картинки:', e);
                 resolve(null);
             }
         });

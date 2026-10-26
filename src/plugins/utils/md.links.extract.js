@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const { decodeImagePath, normalizePathForKey } = require('./path.extract');
-const { isRemoteOrDataUrl } = require('../shared/parser/md/mdLinks');
 
 /** @import {ImageItem} from '../model/imageitem.model' */
 
@@ -15,6 +14,12 @@ const IMAGE_DETECTION_CONFIG = {
 };
 
 // ----- Вспомогательные функции -----
+/**
+ * @param {string} rawLink
+ */
+function isRemoteOrDataUrl(rawLink) {
+    return /^(https?:\/\/|#|mailto:|data:)/i.test(rawLink);
+}
 
 /**
  * Преобразует относительный путь из markdown в абсолютный.
@@ -179,7 +184,7 @@ async function ExtractMdLinks(filePath, delegate) {
 }
 
 /**
- * Извлекает изображения, связанные с <figure><figcaption>...</figcaption></figure>.
+ * Извлекает изображения, связанные с <figcaption>...</figcaption>.
  * @param {string} filePath - Путь к .md файлу
  * @param {(key: string, image: ImageItem) => void} delegate
  */

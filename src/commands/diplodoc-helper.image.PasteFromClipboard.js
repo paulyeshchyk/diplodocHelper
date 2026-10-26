@@ -7,6 +7,7 @@ const path = require('path');
 const { getImageFromClipboard } = require('../plugins/utils/clipboard.image');
 const { buildFigure, buildFigureId } = require('../plugins/utils/md.links.figure.js');
 const { slugify_latin_alphanumeric } = require('../plugins/utils/encoding.slugify.js');
+const { getCursorContext, indentMultilinedText } = require('./diplodoc-helper.cursor.Context.js');
 
 const imageExtension = '.png';
 
@@ -83,6 +84,8 @@ async function ux_image_paste_clipboard() {
             relativePath = './' + relativePath;
         }
 
+        const cursorContext = getCursorContext(editor);
+
         // Alt-текст – введённое пользователем имя (оригинал, не очищенный)
         const altText = userInput.trim();
 
@@ -91,9 +94,7 @@ async function ux_image_paste_clipboard() {
 
         const figureBlock = buildFigure(relativePath, altText, customId);
 
-        await editor.edit(editBuilder => {
-            editBuilder.insert(editor.selection.active, figureBlock);
-        });
+        await insertIndentedBlock(editor, figureBlock, cursorContext.listIndent);
 
         vscode.window.showInformationMessage(translate(nls_ts.screenshot.saved.info, fileName));
     } catch (err) {
@@ -102,4 +103,26 @@ async function ux_image_paste_clipboard() {
     }
 }
 
+/**
+ * @param {vscode.TextEditor} editor
+ * @param {string} textToInsert
+ * @param {number} targetIndentSize
+ */
+async function insertIndentedBlock(editor, textToInsert, targetIndentSize) {
+    const position = editor.selection.active;
+    const line = editor.document.lineAt(position.line);
+
+    // 1. Форматируем наш текст под нужный отступ (каждую строку!)
+    const formattedText = indentMultilinedText(textToInsert, targetIndentSize);
+
+    // 2. Диапазон от начала строки до текущего положения курсора
+    // (или вся строка, если правее курсора ничего нет)
+    const rangeToReplace = new vscode.Range(new vscode.Position(position.line, 0), position);
+
+    // 3. Используем replace вместо insert
+    await editor.edit(editBuilder => {
+        // Мы "съедаем" автоматически созданные пробелы техписа
+        editBuilder.replace(rangeToReplace, formattedText);
+    });
+}
 module.exports = { ux_image_paste_clipboard };

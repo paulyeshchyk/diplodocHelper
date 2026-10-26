@@ -1,0 +1,261 @@
+:root {
+    --page-backgound-color: #fafbfc5b;
+    --table-th-background-color: #f6f6f6;
+    --table-th-first-backround-color: #f6f6f6;
+    --table-td-first-backround-color: #f2f2f2;
+    --table-td-empty-background-color: #f3f4f6;
+    --table-border-color: #ccc;
+    --table-th-border-color: #ccc;
+    --table-td-border-color: #dce0e5;
+}
+
+/* Базовые настройки страницы */
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: var(--page-backgound-color);
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------- */
+/* ПЕРВАЯ ЛИНИЯ: Заголовок + Ссылки (Слева) и RU/EN (Справа) */
+/* ---------------------------------------------------- */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    /* Толкает языки вправо */
+    align-items: center;
+    /* Идеальный центр по вертикали */
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.title-and-nav {
+    display: flex;
+    align-items: center;
+    /* Выравнивает H5 и ссылки между собой */
+    gap: 24px;
+    /* Промежуток между заголовком и ссылками */
+}
+
+.title-and-nav h5 {
+    margin: 0;
+    /* Сбрасываем дефолтные отступы браузера */
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+#nav-links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#nav-links a {
+    text-decoration: none;
+    color: #007acc;
+    font-size: 14px;
+}
+
+#nav-links a:hover {
+    text-decoration: underline;
+}
+
+#lang-selector {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    /* Убрали старый margin-bottom */
+}
+
+#lang-selector button {
+    padding: 6px 16px;
+    margin-left: 8px;
+    /* Отступ между кнопками RU/EN */
+    border: 1px solid #888;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+#lang-selector button.active {
+    background: #007acc;
+    color: white;
+    border-color: #007acc;
+}
+
+/* ---------------------------------------------------- */
+/* ВТОРАЯ ЛИНИЯ: Статистика (Слева) и Легенда (Справа) */
+/* ---------------------------------------------------- */
+.sub-header {
+    display: flex;
+    justify-content: space-between;
+    /* Толкает легенду вправо */
+    align-items: flex-end;
+    /* Выравнивание СТРОГО ПО НИЗУ */
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.stats {
+    margin: 0;
+    font-size: 12px;
+    color: #555;
+    padding-bottom: 2px;
+}
+
+.stats span {
+    font-weight: 600;
+    color: #111;
+}
+
+.legend {
+    display: flex;
+    gap: 12px;
+    background: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    border: 1px solid #ddd;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    font-size: 11px;
+    color: #444;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #666;
+    border-radius: 3px;
+}
+
+/* ---------------------------------------------------- */
+/* ТАБЛИЦА: Ограничение по правой стороне */
+/* ---------------------------------------------------- */
+.rowHeader {
+    text-align: center !important;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+    /* Не даёт таблице растягивать экран наружу */
+    box-sizing: border-box;
+}
+
+table {
+    width: 100%;
+    /* Таблица занимает всё доступное пространство */
+    border-collapse: collapse;
+    font-size: 13px;
+    border: 1px solid var(--table-border-color);
+    background: white;
+}
+
+th,
+td {
+    border: 1px solid var(--table-td-border-color);
+    padding: 8px;
+    vertical-align: middle;
+    text-align: center;
+    min-width: 40px;
+}
+
+th {
+    border: 1px solid var(--table-th-border-color);
+    background: var(--table-th-background-color);
+    font-weight: normal;
+    position: sticky;
+    top: 0;
+    padding: 8px; /* Паддинги остаются на самой ячейке */
+    vertical-align: top;
+}
+
+.th-text-clamp {
+    --line-count: 2;
+    --font-lh: 1.2em;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    line-height: var(--font-lh);
+
+    -webkit-line-clamp: var(--line-count);
+    /* line-clamp: var(--line-count); */
+
+    /* Рассчитываем максимальную высоту */
+    max-height: calc(var(--line-count) * var(--font-lh));
+    overflow: hidden;
+}
+
+/* Безопасный сброс для валидатора, если --line-count задан как 0 через инлайн-стили */
+.th-text-clamp[style*="--line-count: 0"],
+.th-text-clamp[style*="--line-count:0"] {
+    display: block;
+    max-height: none;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    /* line-clamp: unset; */
+}
+
+th:first-child {
+    position: sticky;
+    left: 0;
+    /*z-index: 3;*/
+    background: var(--table-th-first-backround-color);
+}
+
+td:first-child {
+    border: 1px solid var(--table-th-border-color);
+    position: sticky;
+    left: 0;
+    /*z-index: 1;*/
+    background: var(--table-td-first-backround-color);
+    font-weight: normal;
+    /*500*/
+    text-align: left;
+
+    width: 1px;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.empty-cell {
+    background: var(--table-td-empty-background-color);
+    color: #999;
+}
+
+.article-block {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #666;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.article-block:hover {
+    transform: scale(1.3);
+    border-color: #000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.chapter-article {
+    border: 1px solid red !important;
+    background-image: repeating-linear-gradient(-45deg, paleturquoise 0, transparent 2px, transparent 1px, transparent 5px) !important;
+}

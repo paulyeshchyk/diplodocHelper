@@ -50,7 +50,7 @@ function reindexDirectory(dir, parentIndex = '', sortOrder = 'ascending', sortKi
             tocDoc = TocYamlFileLoad(tocPath);
         } catch (e) {
             let msg = e instanceof Error ? e.message : String(e);
-            console.error(`Ошибка загрузки toc.yaml в ${dir} \n ${msg}`);
+            console.error(`❌ Ошибка загрузки toc.yaml в ${dir} \n ${msg}`);
         }
     }
 
@@ -117,7 +117,6 @@ function reindexAndRenameSection({ dir, sectionName, localCounter, parentIndex =
     /** @type {ReindexWarning[]} */
     const warnings = [];
 
-    // === Новые проверки ===
     checkMissingSectionType(metadata, oldSectionPath, warnings);
     checkTitleHasPrefix(metadata, oldSectionPath, warnings);
 

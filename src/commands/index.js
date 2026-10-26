@@ -3,6 +3,7 @@ const { CONFIG_KEY } = require('../plugins/manifest/constants');
 
 // Импортируем все обработчики
 const { ux_breadcrumbs_generate } = require('./diplodoc-helper.breadCrumb.Generate');
+const { ux_contextmap_generate } = require('./diplodoc-helper.contextmap.Generate');
 const { ux_context_delete } = require('./diplodoc-helper.context.Delete');
 const { ux_context_update } = require('./diplodoc-helper.context.Update');
 const { ux_context_run_generation } = require('./diplodoc-helper.context.Generate');
@@ -25,6 +26,14 @@ const { ux_add_anchor } = require('./diplodoc-helper.link.AddAnchor');
 const { ux_linter_links } = require('./diplodoc-helper.linter.links');
 const { pickAndReplace } = require('./vscode.linter.links.picker');
 const { ux_smart_delete } = require('./diplodoc-helper.smart.delete');
+const { ux_footnote_add } = require('./diplodoc-helper.footnote.Add');
+const { ux_reindex_footnotes } = require('./diplodoc-helper.footnote.Reindex');
+const { ux_abbrs_generate } = require('./diplodoc-helper.abbr.Generate');
+const { ux_abbr_add, ux_abbr_show_full } = require('./diplodoc-helper.abbr.Add');
+const { ux_linter_abbrs } = require('./diplodoc-helper.linter.abbrs');
+const { ux_term_add, ux_term_show_full } = require('./diplodoc-helper.term.Add');
+const { ux_terms_generate } = require('./diplodoc-helper.term.Generate');
+const { ux_linter_terms } = require('./diplodoc-helper.linter.terms');
 
 /**
  * Реестр всех команд расширения.
@@ -44,6 +53,7 @@ const commandHandlers = {
     'diplodoc-helper.generateContexts': ux_context_run_generation,
     'diplodoc-helper.generateHelpMaps': ux_helpmap_generate,
     'diplodoc-helper.generateBreadcrumbs': ux_breadcrumbs_generate,
+    'diplodoc-helper.generateContextmap': ux_contextmap_generate,
     'diplodoc-helper.reindexDirectories': ux_reindex_directories,
     'diplodoc-helper.reindexFigures': ux_reindex_figures,
     'diplodoc-helper.wipeEmptyDirectories': ux_directories_wipe,
@@ -53,6 +63,16 @@ const commandHandlers = {
     'diplodoc-helper.file.delete': ux_file_delete,
     'diplodoc-helper.smart.delete': ux_smart_delete,
     'diplodoc-helper.linter.links': ux_linter_links,
+    'diplodoc-helper.footnote.add': ux_footnote_add,
+    'diplodoc-helper.reindexFootnotes': ux_reindex_footnotes,
+    'diplodoc-helper.generateAbbrs': ux_abbrs_generate,
+    'diplodoc-helper.abbr.Add': ux_abbr_add,
+    'diplodoc-helper.abbr.showFull': ux_abbr_show_full,
+    'diplodoc-helper.linter.abbrs': ux_linter_abbrs,
+    'diplodoc-helper.generateTerms': ux_terms_generate,
+    'diplodoc-helper.term.Add': ux_term_add,
+    'diplodoc-helper.term.showFull': ux_term_show_full,
+    'diplodoc-helper.linter.terms': ux_linter_terms,
     'diplodoc-helper.settings': () => {
         vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_KEY);
     },

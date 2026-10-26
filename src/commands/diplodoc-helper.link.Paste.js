@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const { buildImageLink } = require('../plugins/utils/md.links.figure.js');
 const { slugify_diplodoc_reference } = require('../plugins/utils/encoding.slugify.js');
+const { getCursorContext, indentMultilinedText } = require('./diplodoc-helper.cursor.Context.js');
 
 const INDEX_MD = 'index.md';
 
@@ -17,15 +18,41 @@ async function ux_link_paste() {
     if (!editor) return;
 
     try {
+        // --- 1. Фиксируем ВСЁ состояние редактора ДО любого await ---
+        const doc = editor.document;
+        const selection = editor.selection;
+        const selectionRange = new vscode.Range(selection.start, selection.end);
+        const selectedText = selection.isEmpty ? '' : doc.getText(selectionRange);
+        const hasSelection = selectedText.length > 0;
+        const insertPosition = selection.active;
+        const sourceFilePath = doc.uri.fsPath;
+        const cursorContext = getCursorContext(editor); // <-- теперь до чтения буфера
+
+        // --- 2. Асинхронные операции ---
         const clipboardText = await vscode.env.clipboard.readText();
-        const sourceFilePath = editor.document.uri.fsPath;
 
-        // Передаем editor, чтобы проанализировать окружение курсора
-        const linkText = await ConvertDocumentPathToLink(clipboardText, sourceFilePath, editor);
+        // overrideLinkName влияет ТОЛЬКО на отображаемое имя ссылки.
+        // Логика выбора якоря внутри отработает в обоих случаях.
+        const linkText = await ConvertDocumentPathToLink(
+            clipboardText,
+            sourceFilePath,
+            cursorContext.isHtml,
+            hasSelection ? selectedText : null
+        );
 
-        await editor.edit(editBuilder => {
-            editBuilder.insert(editor.selection.active, linkText);
+        // --- 3. Применяем правку и проверяем результат ---
+        const applied = await editor.edit(editBuilder => {
+            if (hasSelection) {
+                editBuilder.replace(selectionRange, linkText);
+            } else {
+                const indentedText = indentMultilinedText(linkText, cursorContext.listIndent);
+                editBuilder.insert(insertPosition, indentedText);
+            }
         });
+
+        if (!applied) {
+            vscode.window.showWarningMessage(translate(nls_ts.plugin.link.paste.error.critical));
+        }
     } catch (error) {
         let msg = error instanceof Error ? error.message : String(error);
         let template = `${translate(nls_ts.plugin.link.paste.error.critical)}: ${msg}`;
@@ -38,6 +65,7 @@ async function ux_link_paste() {
  * @param {vscode.TextEditor} editor
  * @returns {boolean}
  */
+
 /**
  * Проверяет, находится ли курсор внутри HTML тега (включая сложные структуры с текстом)
  * @param {vscode.TextEditor} editor
@@ -136,6 +164,7 @@ async function promptAnchorSelection(anchors) {
     const selected = await vscode.window.showQuickPick(quickPickItems, {
         placeHolder: translate(nls_ts.plugin.link.paste.anchor.select),
         matchOnDescription: true,
+        ignoreFocusOut: true,
     });
 
     if (!selected) return undefined;
@@ -144,6 +173,7 @@ async function promptAnchorSelection(anchors) {
         const customAnchor = await vscode.window.showInputBox({
             prompt: translate(nls_ts.plugin.link.paste.anchor.input.prompt),
             placeHolder: translate(nls_ts.plugin.link.paste.anchor.input.placeHolder),
+            ignoreFocusOut: true, // <-- и здесь
             validateInput: value => {
                 if (!value || value.trim() === '') {
                     return translate(nls_ts.plugin.link.paste.anchor.input.validate.error.emptyAnchor);
@@ -377,22 +407,55 @@ function parseClipboardLink(clipboardText) {
  * Основная логика преобразования пути из буфера в Markdown/HTML-ссылку
  * @param {string} clipboardText
  * @param {string} sourceFilePath
- * @param {vscode.TextEditor} editor
+ * @param {boolean} shouldRenderAsHtml
+ * @param {string?} overrideLinkName
  * @returns {Promise<string>}
  */
-async function ConvertDocumentPathToLink(clipboardText, sourceFilePath, editor) {
+async function ConvertDocumentPathToLink(clipboardText, sourceFilePath, shouldRenderAsHtml, overrideLinkName = null) {
     const data = parseClipboardLink(clipboardText);
     if (data === null || !data.sourceLinkPath || !data.sourceLinkName) {
         throw new Error(translate('plugin.link.paste.error.emptybuffer'));
     }
 
+    // overrideLinkName используется ТОЛЬКО как текст ссылки.
+    // Он НЕ должен влиять на выбор якоря.
+    const linkName = overrideLinkName ?? data.sourceLinkName;
+
     const targetFilePath = data.sourceLinkPath;
     const { isDirectory, isImage } = await getFileTypeInfo(targetFilePath);
     const { addIndex, prefix } = getLinkOptions(targetFilePath, isDirectory);
 
-    let mdPath = calculateRelativeMdPath(sourceFilePath, targetFilePath, addIndex);
+    // ---- ВЫЧИСЛЕНИЕ ПУТИ ----
+    let mdPath;
+    if (shouldRenderAsHtml) {
+        const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+        if (workspaceRoot) {
+            let relativeFromRoot = path.relative(workspaceRoot, targetFilePath);
 
-    // Предлагаем выбор якоря только для MD-документов или папок с index.md (не для изображений)
+            const docsPrefix = 'docs' + path.sep;
+            if (relativeFromRoot.startsWith(docsPrefix)) {
+                relativeFromRoot = relativeFromRoot.slice(docsPrefix.length);
+            } else if (relativeFromRoot === 'docs') {
+                relativeFromRoot = '';
+            }
+
+            if (isDirectory) {
+                relativeFromRoot = path.join(relativeFromRoot, 'index.html');
+            } else if (targetFilePath.endsWith('.md')) {
+                relativeFromRoot = relativeFromRoot.replace(/\.md$/, '.html');
+            }
+            const segments = relativeFromRoot.split(path.sep);
+            const encodedSegments = segments.map(s => encodeURIComponent(s));
+            mdPath = encodedSegments.join('/');
+        } else {
+            mdPath = calculateRelativeMdPath(sourceFilePath, targetFilePath, addIndex);
+        }
+    } else {
+        mdPath = calculateRelativeMdPath(sourceFilePath, targetFilePath, addIndex);
+    }
+
+    // Предлагаем выбор якоря для MD-документов или папок с index.md (не для изображений)
+    // Работает независимо от того, переопределён ли текст ссылки
     if (!isImage) {
         const targetMdFile = getTargetMdFile(targetFilePath, isDirectory);
         if (targetMdFile) {
@@ -406,16 +469,11 @@ async function ConvertDocumentPathToLink(clipboardText, sourceFilePath, editor) 
         }
     }
 
-    // Проверяем, находится ли курсор внутри HTML-контекста
-    const shouldRenderAsHtml = isCursorInsideHtmlTag(editor);
-
     if (isImage) {
-        return shouldRenderAsHtml
-            ? buildDocumentLink('!', data.sourceLinkName, mdPath, true)
-            : buildImageLink(data.sourceLinkName, mdPath);
+        return shouldRenderAsHtml ? buildDocumentLink('!', linkName, mdPath, true) : buildImageLink(linkName, mdPath);
     }
 
-    return buildDocumentLink(prefix, data.sourceLinkName, mdPath, shouldRenderAsHtml);
+    return buildDocumentLink(prefix, linkName, mdPath, shouldRenderAsHtml);
 }
 
 // =============================================================================

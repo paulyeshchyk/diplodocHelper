@@ -1,4 +1,5 @@
-// src/utils/frontmatter.js
+// /utils/frontmatter.js
+
 const matter = require('gray-matter');
 const fs = require('fs');
 /**
@@ -64,10 +65,16 @@ function remove(fileContent, key) {
 function getTitleFromMetadata(filePath) {
     if (!fs.existsSync(filePath)) return null;
 
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(filePath, 'utf8').replace(/^\uFEFF/, '');
 
-    const metaMatch = content.match(/^---[\s\S]*?title:\s*(.*?)[\s\S]*?---/m);
-    if (metaMatch?.[1]) return metaMatch[1].trim();
+    // Явно берём блок между --- ... --- и ищем title только внутри него.
+    const fmMatch = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+    if (fmMatch) {
+        const titleMatch = fmMatch[1].match(/^\s*title:\s*(.+?)\s*$/m);
+        if (titleMatch) {
+            return titleMatch[1].replace(/^["']|["']$/g, '').trim();
+        }
+    }
 
     const h1Match = content.match(/^#\s+(.*)/m);
     return h1Match ? h1Match[1].trim() : null;

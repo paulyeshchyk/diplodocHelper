@@ -1,0 +1,20 @@
+.color-excess {
+    background: green;
+}
+
+.color-full {
+    background: greenyellow;
+}
+
+.color-partial {
+    background: yellow;
+}
+
+.color-minimum {
+    background: palegoldenrod;
+}
+
+.color-empty {
+    background: #f5f5f5;
+    border-color: #bbb;
+}
