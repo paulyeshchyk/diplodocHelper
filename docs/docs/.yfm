@@ -1,0 +1,42 @@
+allowHtml: true
+lang: "ru"
+langs: ["en", "ru"]
+lint: false
+interface:
+    gallery: true # Set to true (default) to enable the lightbox gallery, or false to disable it.
+    favicon-src: _assets/images/diplodocus.ico
+
+docs-viewer:
+    lang: "ru"
+    langs: ["en", "ru"]
+    disableLanguagePersistence: true
+
+# выводит текст "Обновлена 7 мая 2026 г."
+mtimes: true
+
+
+# staticContent: true
+resources:
+    script:
+        #исправляет проблему `<base href="../../">`
+        - ../plugins/mdedit_fixes/fix-footnote-links.js
+        - ./_assets/scripts/flash.js
+        - ./_assets/scripts/no-cache.js
+        - ./_assets/scripts/context-search.js
+        - ./_assets/scripts/lightbox.js
+    style:
+        - _assets/style/custom.css
+        - _assets/style/breadcrumb.css
+        - _assets/style/context-search.css
+        - _assets/style/tableautoincrement.css
+        - _assets/style/lightbox.css
+
+extensions:
+    - name: mdit-plugins
+      plugins:
+          - name: markdown-it-footnote
+            module: markdown-it-footnote # или полный путь
+search:
+    provider: local
+    tolerance: 2
+    confidense: phrased

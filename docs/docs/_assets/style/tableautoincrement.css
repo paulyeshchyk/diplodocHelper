@@ -1,0 +1,65 @@
+/* Базовый класс для включения автонумерации */
+.autonum {
+    counter-reset: rowNumber;
+}
+
+/* Нумеруем строки тела таблицы */
+.autonum tbody tr {
+    counter-increment: rowNumber;
+}
+
+/* Вставляем номер в первую ячейку */
+.autonum tbody tr td:first-child::before {
+    content: counter(rowNumber) ".";
+    font-weight: normal; /* по умолчанию обычный */
+    font-style: normal;
+    margin-right: 8px;
+}
+
+/* Скрываем оригинальное содержимое первой ячейки */
+.autonum tbody tr td:first-child {
+    font-size: 0;
+}
+.autonum tbody tr td:first-child::before {
+    font-size: 1rem;
+}
+
+/* ---------- Модификаторы формата ---------- */
+/* Скобки вместо точки: "1)" */
+.autonum.paren tbody tr td:first-child::before {
+    content: counter(rowNumber) ")";
+}
+
+/* Только число, без точки и скобок: "1" */
+.autonum.plain tbody tr td:first-child::before {
+    content: counter(rowNumber);
+}
+
+/* С ведущим нулём (две цифры): "01." */
+.autonum.leadzero tbody tr td:first-child::before {
+    content: counter(rowNumber, decimal-leading-zero) ".";
+}
+
+/* ---------- Модификаторы стиля шрифта ---------- */
+.autonum.bold tbody tr td:first-child::before {
+    font-weight: bold;
+}
+
+.autonum.italic tbody tr td:first-child::before {
+    font-style: italic;
+}
+
+.autonum.bold-italic tbody tr td:first-child::before {
+    font-weight: bold;
+    font-style: italic;
+}
+
+figure
+{
+    margin-top: 0 !important;
+}
+
+.imageDescription {
+    font-weight: normal;
+    font-style: italic;
+}

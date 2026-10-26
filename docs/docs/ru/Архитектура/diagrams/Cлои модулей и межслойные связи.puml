@@ -1,0 +1,94 @@
+@startuml
+title Diplodoc Helper — слои модулей и межслойные связи
+left to right direction
+skinparam packageStyle rectangle
+skinparam ArrowColor #555555
+skinparam defaultFontSize 12
+
+package "Триггеры" as TRIG {
+  [VS Code UI\ncommands / context-menu /\ncode-actions / prompts] as VSCUI
+  [CLI / Build orchestrator\ndiplodoc-helper-cli ·\ndocs-build.js · build.js] as CLI
+}
+
+package "Pre-processing (.md → .md)" as PRE {
+  [reindexer]
+  [sections]
+  [contexts gen]
+  [helptags gen]
+  [abbrs gen]
+  [terms gen]
+  [gosts gen]
+  [figures list]
+  [helpMap]
+  [roadmap gen]
+  [manifest / installer]
+}
+
+package "Сборка" as BUILD {
+  [@diplodoc/cli]
+}
+
+package "Post-processing (.html → .html)" as POST {
+  [breadcrumb]
+  [context-tags]
+  [abbrs injector]
+  [terms injector]
+  [gosts injector]
+  [footnoteAnchors / footnoteNumbering]
+  [contentNavigator]
+  [tocCleanMode]
+  [roadmap patchers]
+}
+
+package "Client runtime (браузер)" as CLIENT {
+  [abbrs.client]
+  [terms.client]
+  [context-tags.client]
+  [context-search.client]
+  [gosts.js]
+  [footnoteList.js]
+  [core-renderer + configs]
+  [gantt clients (mermaid / plantuml)]
+  [inject-clean-mode.js]
+  [fix-footnote-links.js]
+}
+
+package "Shared core" as CORE {
+  [utils\npath · yaml · frontmatter · slugify]
+  [model\nfrontmatter · section]
+  [shared parser]
+}
+
+package "Внешние" as EXT {
+  [VS Code API] as VSCAPI
+  [FS] as FS
+}
+
+' — VS Code UI —
+VSCUI --> PRE  : команды
+VSCUI --> POST : команды
+VSCUI --> CORE
+VSCUI <--> VSCAPI
+
+' — CLI —
+CLI --> PRE
+CLI --> POST
+CLI --> BUILD
+CLI --> CORE
+CLI --> FS
+
+' — Пайплайн данных —
+PRE  ..> BUILD  : исходные .md
+BUILD ..> POST  : собранные .html
+POST ..> CLIENT : инжектит клиентские скрипты
+
+' — Shared core —
+PRE  --> CORE
+POST --> CORE
+CLIENT --> CORE
+
+' — ФС / браузер —
+PRE  --> FS
+POST --> FS
+
+@enduml

@@ -1,0 +1,58 @@
+/* ===== Хлебные крошки ===== */
+.dc-breadcrumb {
+    margin: 0 0 1rem 0;
+    padding: 0.5rem 0;
+    font-size: 0.8rem;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    line-height: 1.4;
+}
+
+.dc-breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dc-breadcrumb__item {
+    display: inline-flex;
+    align-items: center;
+}
+
+.dc-breadcrumb__link {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: normal;
+}
+
+.dc-breadcrumb__link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* Разделитель – настраивается через переменную или прямые стили */
+.dc-breadcrumb__separator {
+    margin: 0 0.5rem;
+    color: #6c757d;
+    font-weight: normal;
+    /* Если разделитель – картинка, можно задать background-image */
+    /* content: none; */
+}
+
+/* Если хотите изменить разделитель '>' на что-то другое – правим в JS (параметр separator) */
+/* Но цвет и размер можно менять здесь: */
+.dc-breadcrumb__separator {
+    color: #888;
+    font-size: 1em;
+}
+
+.dc-nav-toc-panel__content {
+  max-width: none; !important;
+}
+
+/* Активный элемент (текущая страница) – отсутствует, так как мы её не выводим.
+   Но если вам нужен стиль для последнего родителя, он ничем не отличается от остальных ссылок,
+   потому что текущая страница не показана. */

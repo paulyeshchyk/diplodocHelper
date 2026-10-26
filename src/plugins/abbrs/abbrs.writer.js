@@ -86,7 +86,7 @@ function writeAbbrsIndex(outputDir, abbrMap, lang, options = {}) {
                 renderTemplate('entry.md', {
                     ANCHOR_ID: anchorId,
                     ABBR: escapeHtml(entry.abbr),
-                    FULL: escapeHtml(entry.full),
+                    FULL: entry.full,
                 })
             );
         } else {

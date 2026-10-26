@@ -1,0 +1,5 @@
+[
+  { "id": "g-1", "type": "group", "name": "Планирование", "start": "01-2024", "end": "03-2024" },
+  { "id": "m-1", "type": "module", "name": "Модуль «Бюджет»", "dependencies": ["g-1"], "start": "01-2024", "end": "02-2024" },
+  { "id": "f-1", "type": "function", "name": "Бюджетирование", "dependencies": ["m-1"], "start": "01-2024", "end": "02-2024" }
+]

@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "2. Открыть (локальный файл)",
+      "preLaunchTask": "2. Открыть (локальный файл)",
+      "program": "${workspaceFolder}/.vscode/scripts/noop.js",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "2. Открыть (локальный сервер)",
+      "preLaunchTask": "2. Открыть (локальный сервер)",
+      "program": "${workspaceFolder}/.vscode/scripts/noop.js",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "8. Открыть (docker)",
+      "preLaunchTask": "8. Открыть (docker)",
+      "program": "${workspaceFolder}/.vscode/scripts/noop.js",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}

@@ -50,7 +50,7 @@ function resolveData(dataSource) {
         const raw = fs.readFileSync(DEFAULT_DATA_PATH, 'utf8');
         return JSON.parse(raw);
     }
-
+    console.warn(`[Roadmap] Данные не переданы и DEFAULT_DATA_PATH не найден: ${DEFAULT_DATA_PATH}`);
     return null;
 }
 
@@ -102,7 +102,11 @@ function cleanupRoadmapPages(docsRoot) {
  */
 async function runGeneration(options) {
     const docsRoot = typeof options === 'string' ? options : options?.docsRoot || './docs';
-    const dataSource = typeof options === 'object' ? options.data : null;
+
+    const dataSource =
+        typeof options === 'object'
+            ? options.data ?? options.dataPath ?? options.dataRaw ?? null
+            : null;
     const engine = (typeof options === 'object' && options.engine) || CURRENT_ENGINE;
 
     let data = null;

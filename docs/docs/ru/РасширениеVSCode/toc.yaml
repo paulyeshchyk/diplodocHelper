@@ -1,0 +1,23 @@
+title: Расширение VS Code
+href: index.yaml
+items:
+  - name: package.json (manifest)
+    href: packagejsonmanifest/index.md
+    include:
+      path: packagejsonmanifest/toc.yaml
+      mode: link
+  - name: Команды и меню
+    href: Командыименю/index.md
+    include:
+      path: Командыименю/toc.yaml
+      mode: link
+  - name: Context keys
+    href: Contextkeys/index.md
+    include:
+      path: Contextkeys/toc.yaml
+      mode: link
+  - name: Локализация (NLS)
+    href: ЛокализацияNLS/index.md
+    include:
+      path: ЛокализацияNLS/toc.yaml
+      mode: link

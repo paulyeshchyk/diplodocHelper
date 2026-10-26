@@ -1,0 +1,33 @@
+href: index.yaml
+navigation:
+  logo:
+    url: https://github.com/paulyeshchyk/diplodocHelper
+    dark:
+      icon: _assets/images/Logo.png
+    light:
+      icon: _assets/images/Logo.png
+  header:
+    leftItems:
+      - text: Diplodoc helper
+        type: link
+        url: index.html
+    rightItems:
+      - type: controls
+      - type: link
+        icon: _assets/images/mindmap.png
+        url: en/contexts/index.html
+      - type: link
+        icon: _assets/images/info.png
+        url: en/About/index.html
+items:
+  - name: Intro
+    href: Intro/index.md
+    include:
+      path: Intro/toc.yaml
+      mode: link
+  - name: ""
+  - name: Contexts
+    href: contexts/index.md
+    include:
+      path: contexts/toc.yaml
+      mode: link

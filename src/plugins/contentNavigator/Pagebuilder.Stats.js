@@ -140,7 +140,7 @@ function generateStat({ outputDir, docsDir }) {
         }
 
         // Стабы для авторов и версий
-        const stubAuthor = '[Вавренюк Виктор Андреевич](mailto:vavrenyuk@ascon.by)';
+        const stubAuthor = '[paul.yestchick](mailto:paul.yestchick@gmail.com)';
         const stubVersion = '1.4';
 
         // 3. Формируем структуру пресетов

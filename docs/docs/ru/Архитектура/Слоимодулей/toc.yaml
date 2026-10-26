@@ -1,0 +1,33 @@
+title: Слои модулей
+href: index.yaml
+items:
+  - name: VS Code UI
+    href: VSCodeUI/index.md
+    include:
+      path: VSCodeUI/toc.yaml
+      mode: link
+  - name: CLI / Build orchestrator
+    href: CLIBuildorchestrator/index.md
+    include:
+      path: CLIBuildorchestrator/toc.yaml
+      mode: link
+  - name: Pre-processing
+    href: Preprocessing/index.md
+    include:
+      path: Preprocessing/toc.yaml
+      mode: link
+  - name: Post-processing
+    href: Postprocessing/index.md
+    include:
+      path: Postprocessing/toc.yaml
+      mode: link
+  - name: Client runtime
+    href: Clientruntime/index.md
+    include:
+      path: Clientruntime/toc.yaml
+      mode: link
+  - name: Shared core
+    href: Sharedcore/index.md
+    include:
+      path: Sharedcore/toc.yaml
+      mode: link

@@ -60,7 +60,7 @@ const WHEN = {
     EXPLORER_IS_FOLDER_OR_NOT_MD: 'explorerResourceIsFolder || resourceExtname != .md',
     EDITOR_LANG_MD_AND_SELECTION: 'editorLangId == markdown && editorHasSelection',
     EDITOR_TEXT_FOCUS_READONLY_AND_CAN_PASTE:
-        'editorTextFocus && !editorReadonly && (diplodoc-helper:canPasteMarkdownLink || resourceFilename =~ /^(terms|abbreviations)\\.yaml$/)',
+        'editorTextFocus && !editorReadonly && (diplodoc-helper:canPasteMarkdownLink || resourceFilename =~ /^(gosts|abbreviations)\\.yaml$/)',
     EDITOR_TEXT_FOCUS_AND_EXTNAME_MD: 'editorTextFocus && resourceExtname == .md',
     EDITOR_TEXT_FOCUS_AND_NOT_READONLY: 'editorTextFocus && !editorReadonly',
 };
@@ -146,8 +146,7 @@ editorSubmenu
         menuItem(
             'diplodoc-helper.link.addAnchor',
             WHEN.EDITOR_LANG_MD_AND_SELECTION,
-            GROUP.DIPLODOC_SECTION,
-            GROUP_ORDER.NAVIGATION,
+            GROUP.DIPLODOC_SECTION, GROUP_ORDER.NAVIGATION,
             1
         )
     )
@@ -215,8 +214,25 @@ editorSubmenu
             GROUP_ORDER.NAVIGATION,
             7
         )
+    )
+    .addItem(
+        menuItem(
+            'diplodoc-helper.gost.Insert',
+            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY,
+            GROUP.DIPLODOC_SECTION,
+            GROUP_ORDER.NAVIGATION,
+            8 // Следующий порядковый номер
+        )
+    )
+    .addItem(
+        menuItem(
+            'diplodoc-helper.gost.Add',
+            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY,
+            GROUP.DIPLODOC_SECTION,
+            GROUP_ORDER.NAVIGATION,
+            9
+        )
     );
-
 const otherSubmenu = new ManifestSubmenu(SUBMENU.OTHER, '%submenu.other%');
 
 otherSubmenu
@@ -224,7 +240,8 @@ otherSubmenu
     .addItem(submenuItem(SUBMENU.HELPTAG, WHEN.EXPLORER_IS_FOLDER, GROUP.DIPLODOC_OTHER, GROUP_ORDER.OTHER, 2))
     .addItem(submenuItem(SUBMENU.REINDEXIER, WHEN.EXPLORER_IS_FOLDER, GROUP.DIPLODOC_OTHER, GROUP_ORDER.OTHER, 3))
     .addItem(submenuItem(SUBMENU.ABBR, WHEN.EXPLORER_IS_FOLDER, GROUP.DIPLODOC_OTHER, GROUP_ORDER.OTHER, 4))
-    .addItem(submenuItem(SUBMENU.TERMS, WHEN.EXPLORER_IS_FOLDER, GROUP.DIPLODOC_OTHER, GROUP_ORDER.OTHER, 5));
+    .addItem(submenuItem(SUBMENU.TERMS, WHEN.EXPLORER_IS_FOLDER, GROUP.DIPLODOC_OTHER, GROUP_ORDER.OTHER, 5))
+    .addItem(menuItem('diplodoc-helper.installScripts', WHEN.EXPLORER_IS_FOLDER, GROUP.DIPLODOC_GENERATORS, GROUP_ORDER.GENERATORS, 6));
 
 const debugSubmenu = new ManifestSubmenu(SUBMENU.DEBUG, '%submenu.debug%');
 
@@ -481,6 +498,9 @@ const commands = [
     new ManifestCommand('diplodoc-helper.generateTerms', '%command.fe.terms.generate%'),
     new ManifestCommand('diplodoc-helper.term.Add', '%command.md.term.add%'),
     new ManifestCommand('diplodoc-helper.linter.terms', '%command.linter.terms.check%'),
+    new ManifestCommand('diplodoc-helper.installScripts', 'Установить скрипты сборки'),
+    new ManifestCommand('diplodoc-helper.gost.Insert', 'Вставить из списка ГОСТ'),
+    new ManifestCommand('diplodoc-helper.gost.Add', 'Добавить ГОСТ'),
 ];
 
 module.exports = { commands, rootMenus, allSubmenus };

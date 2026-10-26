@@ -119,8 +119,13 @@ function getArticleStatus(size, avg) {
 function buildMatrix(data, lang) {
   const filtered = data.filter((item) => item.lang === lang && item.title && item.title.trim() !== "");
 
-  const sizes = filtered.map((item) => item.size || 0);
-  const avg = sizes.length ? sizes.reduce((a, b) => a + b, 0) / sizes.length : 0;
+  // «Средний размер» считаем только по наполненным статьям,
+  // дополнительно исключая выбросы по IQR (Тьюки, k = 1.5).
+  // Пустые (< MIN_SIZE) и аномально большие — в среднее не входят.
+  const nonEmptySizes = filtered
+    .map((item) => item.size || 0)
+    .filter((size) => size >= STATUS_THRESHOLDS.MIN_SIZE);
+  const avg = computeRobustAverage(nonEmptySizes);
 
   const articles = filtered.map((item) => {
     const size = item.size || 0;
@@ -145,6 +150,34 @@ function buildMatrix(data, lang) {
     avgSize: avg,
     totalArticles: articles.length,
   };
+}
+
+// Линейная интерполяция (метод numpy.percentile по умолчанию).
+function percentile(sortedArr, p) {
+  if (sortedArr.length === 0) return 0;
+  const idx = (sortedArr.length - 1) * p;
+  const lower = Math.floor(idx);
+  const upper = Math.ceil(idx);
+  if (lower === upper) return sortedArr[lower];
+  return sortedArr[lower] + (sortedArr[upper] - sortedArr[lower]) * (idx - lower);
+}
+
+// Среднее по «нормальной» части выборки: без выбросов по IQR (Тьюки, k = 1.5).
+// При малой выборке (< 5) IQR нестабилен — считаем обычное среднее по непустым.
+function computeRobustAverage(sizes) {
+  if (sizes.length === 0) return 0;
+  if (sizes.length < 5) {
+    return sizes.reduce((a, b) => a + b, 0) / sizes.length;
+  }
+
+  const sorted = [...sizes].sort((a, b) => a - b);
+  const q1 = percentile(sorted, 0.25);
+  const q3 = percentile(sorted, 0.75);
+  const iqr = q3 - q1;
+  const upperFence = q3 + 1.5 * iqr;
+
+  const inliers = sorted.filter((s) => s <= upperFence);
+  return inliers.reduce((a, b) => a + b, 0) / inliers.length;
 }
 
 function calculateChapterOrder(sectionData) {

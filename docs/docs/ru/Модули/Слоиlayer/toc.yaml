@@ -1,0 +1,33 @@
+title: Слои (layer)
+href: index.yaml
+items:
+  - name: CLI
+    href: Cli/index.md
+    include:
+      path: Cli/toc.yaml
+      mode: link
+  - name: Клиентский runtime
+    href: ClientRuntime/index.md
+    include:
+      path: ClientRuntime/toc.yaml
+      mode: link
+  - name: Post-processing
+    href: PostProcessing/index.md
+    include:
+      path: PostProcessing/toc.yaml
+      mode: link
+  - name: Pre-processing
+    href: PreProcessing/index.md
+    include:
+      path: PreProcessing/toc.yaml
+      mode: link
+  - name: Общее ядро
+    href: SharedCore/index.md
+    include:
+      path: SharedCore/toc.yaml
+      mode: link
+  - name: VsCodeUi
+    href: VsCodeUi/index.md
+    include:
+      path: VsCodeUi/toc.yaml
+      mode: link

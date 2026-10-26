@@ -1,0 +1,222 @@
+.gost-table-wrapper {
+    overflow-x: auto;
+    margin-top: 1.5rem;
+}
+
+.gost-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: auto; /* Позволяем колонкам расширяться */
+}
+
+.gost-table th,
+.gost-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 14px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.gost-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    user-select: none;
+}
+
+.gost-table th[data-col] {
+    cursor: pointer;
+}
+
+.gost-table th[data-col]:hover {
+    background-color: #e9ecef;
+}
+
+.gost-table th.is-active {
+    background-color: #e2e8f0;
+}
+
+/* Индикатор сортировки */
+.sort-indicator {
+    display: inline-block;
+    margin-left: 6px;
+    opacity: 0.5;
+    font-size: 12px;
+}
+
+.gost-table th.is-active .sort-indicator {
+    opacity: 1;
+    color: #0055cc;
+}
+
+/* === КОЛОНКА № П/П === */
+.gost-table .col-num {
+    width: 4ch;
+    text-align: center;
+    white-space: nowrap;
+    color: #666;
+}
+
+/* === КОЛОНКА ОБОЗНАЧЕНИЕ (ДОМИНИРУЕТ) === */
+.gost-table .col-code {
+    white-space: nowrap; /* Запрещаем перенос строк */
+    min-width: 150px;    /* Задаем минимальную ширину */
+    font-weight: bold;
+    font-size: 14px;     /* Шрифт не уменьшается */
+}
+
+/* === ЗАГОЛОВКИ И ПОДВАЛЫ ГРУПП === */
+.gost-group-header td {
+    background-color: #e2e8f0;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: left;
+    color: #1a1a1a;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.gost-group-footer td {
+    background-color: #f4f6f8;
+    font-weight: 600;
+    text-align: right;
+    border-top: 2px solid #cbd5e1;
+    color: #333;
+}
+
+/* === ОБЩИЙ ПОДВАЛ ТАБЛИЦЫ === */
+.gost-total-footer {
+    background-color: #e2e8f0;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: right;
+    border-top: 2px solid #94a3b8;
+    color: #000;
+}
+
+.gost-table tr:hover:not(.gost-group-header):not(.gost-group-footer) {
+    background-color: #f8f9fa;
+}
+
+.gost-table tr:target {
+    background-color: #fff3cd;
+    outline: 2px solid #ffeeba;
+}
+/* === КЛИКАБЕЛЬНЫЕ СТРОКИ === */
+.gost-main-row {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.gost-main-row:hover {
+    background-color: #f1f5f9;
+}
+
+.gost-main-row.is-expanded {
+    background-color: #e2e8f0;
+    border-bottom: none; /* Сливаем с карточкой */
+}
+
+/* === КАРТОЧКА (ВЫПАДАЮЩАЯ СТРОКА) === */
+.gost-card-row td {
+    padding: 0; /* Убираем отступы, чтобы анимация была бесшовной */
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* CSS-трюк для плавной анимации высоты */
+.gost-card-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-in-out;
+}
+
+.gost-card-row.is-open .gost-card-wrapper {
+    grid-template-rows: 1fr;
+}
+
+.gost-card-inner {
+    overflow: hidden; /* Обязательно для работы анимации */
+}
+
+.gost-card-content {
+    padding: 16px 20px;
+    background-color: #f8fafc;
+    border-left: 4px solid #cbd5e1;
+    margin: 0;
+}
+
+/* Сетка внутри карточки (Ключ - Значение) */
+.gost-card-item {
+    display: flex;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.gost-card-item:last-child {
+    margin-bottom: 0;
+}
+
+.gost-card-label {
+    flex: 0 0 140px; /* Фиксированная ширина для названия поля */
+    font-weight: 600;
+    color: #475569;
+    padding-right: 12px;
+}
+
+.gost-card-value {
+    flex: 1;
+    color: #1e293b;
+    word-wrap: break-word; /* Перенос слов на новую строку */
+    white-space: pre-wrap;
+}
+
+/* Адаптив для мобильных устройств */
+@media (max-width: 768px) {
+    .gost-card-item {
+        flex-direction: column;
+    }
+    .gost-card-label {
+        margin-bottom: 4px;
+    }
+}
+
+.gost-table a,
+.gost-card-content a {
+    color: #0055cc;
+    text-decoration: none;
+}
+
+.gost-table a:hover,
+.gost-card-content a:hover {
+    text-decoration: underline;
+}
+
+.gost-flash {
+    animation: gost-flash-highlight 2s ease-in-out forwards;
+}
+
+@keyframes gost-flash-highlight {
+    0% {
+        background-color: #e2e8f0; /* Исходный цвет */
+    }
+    15% {
+        background-color: #fef08a; /* Яркий желтый (моргание) */
+        box-shadow: inset 0 0 10px rgba(234, 179, 8, 0.3);
+    }
+    50% {
+        background-color: #fef08a; /* Держим цвет */
+        box-shadow: inset 0 0 10px rgba(234, 179, 8, 0.3);
+    }
+    100% {
+        background-color: #e2e8f0; /* Плавно возвращаем к цвету раскрытой карточки */
+        box-shadow: none;
+    }
+}
+
+/* Если карточка открыта, она имеет класс is-expanded, 
+   поэтому анимация должна перекрывать его фон */
+.gost-main-row.is-expanded {
+    background-color: #e2e8f0;
+    border-bottom: none;
+}

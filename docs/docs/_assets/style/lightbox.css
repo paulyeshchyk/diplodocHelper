@@ -1,0 +1,281 @@
+/* =========================================================
+   Lightbox: оверлей, панель управления, скрим
+   ========================================================= */
+
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 9999;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  touch-action: none; /* отключаем нативный скролл/зум на тач */
+}
+
+.lightbox-overlay.active {
+  display: block;
+}
+
+.lightbox-overlay.dragging {
+  cursor: grabbing;
+}
+
+/* Скрим (вариант 3): затемнение сверху, чтобы контролы
+   всегда читались поверх светлых картинок */
+.lightbox-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.15) 60%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Сама картинка */
+.lightbox-overlay .lightbox-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+  pointer-events: none;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* ---------- Панель управления ---------- */
+
+.lightbox-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+/* Общая стилизация всех элементов панели — и кнопок, и счётчика.
+   Так они гарантированно совпадают по высоте, радиусу и шрифту. */
+.lightbox-controls button,
+.lightbox-controls .zoom-level {
+  height: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+
+  color: #fff;
+  background: rgba(20, 20, 20, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  transition: background 0.15s, transform 0.1s;
+}
+
+/* Кнопки — фиксированной ширины */
+.lightbox-controls button {
+  width: 44px;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.lightbox-controls button:hover {
+  background: rgba(40, 40, 40, 0.92);
+}
+
+.lightbox-controls button:active {
+  transform: scale(0.95);
+}
+
+/* Счётчик процентов — фиксированная ширина, чтобы панель
+   не дёргалась при изменении "5%" → "305%" */
+.lightbox-controls .zoom-level {
+  min-width: 72px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: 0.02em;
+  cursor: default;
+}
+
+/* ---------- Глобальный лок скролла ---------- */
+
+body.lightbox-open {
+  overflow: hidden;
+}
+
+/* =========== Таблица (list view) =========== */
+
+.figures-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.figures-table th,
+.figures-table td {
+  border: 1px solid #dce0e5;
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+.figures-table thead th {
+  background: #f6f6f6;
+  font-weight: 600;
+  text-align: left;
+  position: sticky;
+  top: 0;
+}
+
+.figures-table .fig-num { width: 70px; text-align: center; white-space: nowrap; }
+.figures-table .fig-preview { width: 240px; text-align: center; }
+
+/* Фиксированный бокс превью, чтобы высота строки не «плясала» */
+.figures-table .fig-preview-img {
+  max-width: 200px;
+  max-height: 120px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  cursor: zoom-in;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fafafa;
+  padding: 4px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.figures-table .fig-preview-img:hover {
+  transform: scale(1.04);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.figures-table .fig-preview-empty { color: #999; font-size: 1.2em; }
+
+/* =========== Переключатель =========== */
+
+.figures-view-switch {
+  display: inline-flex;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.figures-view-switch button {
+  padding: 6px 16px;
+  background: #fff;
+  color: #24292f;
+  border: 0;
+  border-right: 1px solid #d0d7de;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+  transition: background 0.15s, color 0.15s;
+}
+.figures-view-switch button:last-child { border-right: 0; }
+.figures-view-switch button:hover { background: #f3f4f6; }
+.figures-view-switch button.active {
+  background: #1a73e8;
+  color: #fff;
+}
+
+/* =========== Грид =========== */
+
+.figures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 0.25rem;
+}
+
+.fig-grid-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.fig-grid-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+}
+
+.fig-grid-preview {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  overflow: hidden;
+}
+
+.fig-grid-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  cursor: zoom-in;
+  transition: transform 0.18s;
+}
+.fig-grid-img:hover { transform: scale(1.06); }
+
+.fig-grid-placeholder { color: #bbb; font-size: 2em; }
+
+.fig-grid-meta {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.fig-grid-num {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  background: #f0f4f8;
+  color: #555;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.fig-grid-title {
+  color: #1a73e8;
+  text-decoration: none;
+  word-break: break-word;
+}
+.fig-grid-title:hover { text-decoration: underline; }
+
+/* =========== Переключение вида =========== */
+
+.figures-container[data-view="list"] .figures-grid { display: none; }
+.figures-container[data-view="grid"] .figures-table { display: none; }

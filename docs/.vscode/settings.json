@@ -1,0 +1,67 @@
+{
+  "docbuilder.port": 5051,
+  "docbuilder.imageName": "gulf-help-img",
+  "docbuilder.containerName": "gulf-help",
+  "commands.commands": [
+    {
+      "command": "extension.createDiplodocSection",
+      "label": "Создать подраздел",
+      "action": "workbench.action.tasks.runTask",
+      "args": "Создать подраздел Diplodoc"
+    }
+  ],
+  "commands.menus": {
+    "explorer/context": [
+      {
+        "command": "extension.createDiplodocSection",
+        "when": "explorerResourceIsFolder"
+      }
+    ]
+  },
+  "chat.agent.enabled": false,
+  "workbench.editorAssociations": {
+    "*.md": "default"
+  },
+  "explorerExcludedFiles.patterns": [
+    "*.7z",
+    ".vsix",
+    "package-lock.json"
+  ],
+  "workbench.view.showQuietly": {
+    "workbench.panel.output": true
+  },
+  "markdown.preview.openMarkdownLinks": "inEditor",
+  "diplodoc-helper.autoReindex": false,
+  "diplodoc-helper.figurePrefix": "Figure ",
+  "diplodoc-helper.figureReferencePrefix": "",
+  "diplodoc-helper.figureCaptionPrefix": "Рисунок",
+  "diplodoc-helper.figureReferenceCaptionPrefix": "(рис. {0})",
+  "notebook.find.filters": {
+    "markupSource": true,
+    "markupPreview": true,
+    "codeSource": true,
+    "codeOutput": true
+  },
+  "editor.codeActionsOnSave": {},
+  "files.exclude": {
+    "**/build": true,
+    "**/.temp_convert": true,
+    "**/.azure-pipelines": true,
+    "**/.git": true,
+    "**/.gitignore": true,
+    "**/.npmrc": true,
+    "**/package.json": true,
+    "**/Dockerfile": true,
+    "**/.dockerignore": true,
+    "**/app-config.json": true,
+    "**/package-lock.json": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/*.js.map": true,
+  },
+  "[markdown]": {
+    "editor.wordWrap": "off",
+  },
+  "cmake.ignoreCMakeListsMissing": true,
+  "markdown.extension.orderedList.autoRenumber": true
+}

@@ -1,0 +1,8 @@
+title: Модуль. Аббревиатуры. Клиент
+href: index.yaml
+items:
+  - name: KnownIssues
+    href: KnownIssues/index.md
+    include:
+      path: KnownIssues/toc.yaml
+      mode: link

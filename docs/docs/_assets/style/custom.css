@@ -1,0 +1,450 @@
+/* ========== 1. Хедер - красный фон, белый текст, ссылки тоже белые ========== */
+:root {
+    --brand-color: #737C3E; /* болотный — оливково-зелёный */
+    --brand-deep:  #343B20; /* тёмный — глубокий болотный, для контраста */
+    --brand-tint:  #E8EBD8; /* светлый — мягкий шалфейно-оливковый */
+}
+
+.Layout_full-header {
+    --dc-header-height: 58px;
+}
+
+.yfm {
+    font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+}
+
+.g-root {
+    font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Блок навигации целиком */
+.pc-navigation,
+.pc-desktop-navigation__wrapper,
+.pc-desktop-navigation__left,
+.pc-desktop-navigation__right,
+.pc-desktop-navigation__navigation-container {
+    background-color: var(--brand-deep) !important;
+}
+
+.dc-doc-layout__toc {
+    padding-left: 29px;
+}
+.dc-toc__top {
+    padding-top: 0px;
+    margin-bottom: 0px;
+}
+
+/* Все тексты, иконки, ссылки внутри хедера делаем белыми */
+.pc-navigation > *,
+.pc-desktop-navigation__wrapper > *,
+.pc-logo,
+.pc-logo__text,
+.pc-navigation-link,
+.pc-navigation-link span,
+.g-icon,
+.g-button__icon,
+.pc-control svg {
+    color: #ffffff;
+    fill: #ffffff;
+}
+
+.g-root_theme_light .dc-doc-page {
+    --dc-color-mini-toc-active: #1565c0;
+    --dc-color-mini-toc-active-border: #1565c0;
+}
+
+.dc-toc-item__text_active {
+    color: #1565c0;
+}
+
+.dc-doc-layout,
+.container-fluid {
+    max-width: none;
+}
+
+.g-root .pc-Grid.pc-navigation > .container-fluid {
+    max-width: none;
+}
+
+.pc-Grid .container-fluid,
+.pc-Grid .container {
+    max-width: none;
+}
+
+.dc-doc-page {
+    width: auto;
+}
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* оформление поиска */
+.g-text-input__content {
+    border: 1px solid var(--brand-tint);
+    background-color: var(--brand-deep);
+}
+
+/* цвет текста поиска */
+.g-text-input__control {
+    color: var(--brand-on-dark);
+}
+
+/* цвет плейсхолдера поиска */
+.dc-search-suggest {
+    --g-text-input-border-color:        var(--brand-tint);   /* база  */
+    --g-text-input-border-color-hover:  #ffffff;             /* hover — максимально явно */
+    --g-text-input-border-color-active: #ffffff;             /* focus */
+    --g-text-input-placeholder-color:   var(--brand-tint);
+}
+
+/* Цвет бордюра поиска при активации (общий для обеих тем) */
+.g-root_theme_light,
+.g-root_theme_dark {
+    --g-color-line-generic-active: var(--brand-dark);
+}
+
+/* Иконка ноды для светлой темы */
+.g-root_theme_light .dc-toc-item__arrow,
+.g-root_theme_light .dc-toggle-arrow {
+    color: #212121 !important;
+}
+
+/* Иконка ноды для тёмной темы */
+.g-root_theme_dark .dc-toc-item__arrow,
+.g-root_theme_dark .dc-toggle-arrow {
+    color: #fff !important;
+}
+
+.pc-logo.pc-desktop-navigation__logo {
+    display: flex;
+    /* Включаем гибкую модель */
+    align-items: center;
+    /* Центрируем по вертикали */
+    justify-content: center;
+    /* Центрируем по горизонтали */
+}
+
+.pc-logo.pc-desktop-navigation__logo svg {
+    max-width: 100%;
+    /* Запрещаем вылезать за пределы родителя по ширине */
+    max-height: 100%;
+    /* Запрещаем вылезать за пределы родителя по высоте */
+    width: auto;
+    /* Ширина автоматическая, чтобы сохранить пропорции */
+    height: auto;
+    /* Высота автоматическая, чтобы сохранить пропорции */
+}
+
+/* пустая область между лого и Diplodoc helper */
+.pc-desktop-navigation__wrapper {
+    gap: 0px;
+}
+
+.pc-desktop-navigation__logo {
+    margin-right: 0px;
+}
+
+.pc-logo__icon {
+    width: auto;
+    height: 26px;
+}
+
+.pc-navigation-item {
+    font-size: 20px;
+}
+
+/* Контейнер поля поиска — относительное позиционирование */
+.dc-search-suggest {
+    position: relative;
+}
+
+/* Псевдоэлемент с иконкой лупы, показывается только при фокусе */
+.dc-search-suggest .g-text-input__control:focus {
+    padding-left: 36px;
+    /* отступ для иконки */
+}
+
+/* ========== Иконка лупы в поле поиска ========== */
+.dc-search-suggest {
+    position: relative;
+}
+
+.dc-search-suggest .g-text-input__control:focus {
+    padding-left: 36px;
+}
+
+.dc-search-suggest .g-text-input__content:focus-within::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E6D5D0'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+/* Стили для хлебных крошек */
+.dc-breadcrumb {
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+}
+
+.dc-breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dc-breadcrumb__item + .dc-breadcrumb__item::before {
+    content: "/";
+    margin: 0 0.5rem;
+    color: #6c757d;
+}
+
+.dc-breadcrumb__link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.dc-breadcrumb__item--active .dc-breadcrumb__link {
+    color: #6c757d;
+    cursor: default;
+}
+
+.dc-breadcrumb__link:hover {
+    text-decoration: underline;
+}
+
+.yfm a,
+.g-link,
+.yfm a em,
+.yfm a i {
+    font-style: normal !important;
+}
+
+.footnote-item {
+    font-size: small;
+}
+
+/* 
+.footnote-item::marker {
+    font-weight: bold;
+} 
+*/
+
+/*image inside paragraph*/
+
+/* 1. Убираем рамку и фон у контейнера p */
+.yfm p:has(> img) {
+    margin-block: 0;
+}
+
+/* 2. Стиль для рамки вокруг самого изображения */
+.yfm p:has(> img) > img {
+    border: 1px solid #e0e0e0;
+    padding: 7px;
+    background-color: #fff;
+    display: block;
+}
+.yfm p:has(> img) > figure {
+    display: block; /* Занимает всю ширину, переносит на новую строку */
+    text-align: center; /* ★ Выравнивание по центру */
+    font-style: normal; /* Убираем курсив по умолчанию (ГОСТ не требует) */
+    font-weight: normal; /* Убираем жирное начертание */
+    margin-top: 1.5em; /* ★ Отступ сверху от картинки: одна пустая строка */
+    margin-bottom: 0; /* Или нужный отступ от подписи до текста */
+}
+/* 1. Убираем нижний отступ у <p>, который содержит только img (чтобы figure прижался) */
+.yfm p:has(> img:only-child) {
+    margin-bottom: 0;
+}
+
+/* 2. Настройка figure - отступ сверху и снизу, центрирование содержимого */
+.yfm figure {
+    margin-top: 1.5em; /* Один межстрочный интервал от картинки */
+    margin-bottom: 0; /* Убираем лишний отступ снизу, если нужно */
+    text-align: left; /* Подпись слева */
+}
+
+/* 3. Оформление подписи (figcaption) по ГОСТ */
+.yfm figure figcaption {
+    font-style: normal;
+    font-weight: normal;
+}
+
+/* 4. Дополнительно: убираем возможный зазор под img внутри p */
+.yfm p:has(> img) > img {
+    display: block;
+}
+
+.yfm figure figcaption > a {
+    font-style: italic !important;
+}
+
+.yfm figcaption[id] {
+    scroll-margin-top: 350px; /* отступ сверху, чтобы картинка оказалась видимой */
+}
+.yfm .imageDescription {
+    scroll-margin-top: 350px;
+    font-style: italic;
+}
+.yfm figure figcaption[id] {
+    scroll-margin-top: 350px; /* подберите значение под свою картинку */
+}
+
+/* flash */
+
+.flash-figure {
+    animation: flash-highlight 0.6s ease-in-out;
+}
+
+@keyframes flash-highlight {
+    0% {
+        box-shadow: 0 0 0 0 rgba(245, 245, 245, 0.7);
+        outline: none;
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(210, 210, 210, 0.9);
+        background-color: rgba(255, 245, 200, 0.3); /* лёгкая подсветка фона */
+    }
+    100% {
+        box-shadow: none;
+        background-color: transparent;
+    }
+}
+
+.dc-nav-toc-panel {
+    margin-top: 40px;
+}
+
+/* Контейнер карточки-превью */
+figure.zoom-card {
+  display: inline-block;
+  margin: 1em 0;
+  padding: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+figure.zoom-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Ограничиваем размер превью картинки */
+figure.zoom-card img {
+  width: 320px;
+  height: 180px;
+  object-fit: cover;
+  object-position: top left;
+  border-radius: 4px;
+  cursor: zoom-in;
+  display: block;
+}
+
+/* Оформление подписи */
+figure.zoom-card figcaption {
+  margin-top: 6px;
+  font-size: 0.85em;
+  color: #64748b;
+}
+
+/* --- ПОЛНОЭКРАННЫЙ РЕЖИМ ПРИ КЛИКЕ И УДЕРЖАНИИ/ФОКУСЕ --- */
+/* Работает за счет клика по картинке (через `:active` или `:focus`) */
+
+figure.zoom-card img:focus {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  object-fit: contain;
+  background: rgba(15, 23, 42, 0.92);
+  z-index: 99999;
+  padding: 24px;
+  box-sizing: border-box;
+  cursor: zoom-out;
+  outline: none;
+}
+
+
+
+/* Принудительный четкий рендеринг шрифтов и векторов в SVG */
+.yfm img[src$=".svg"],
+.yfm svg {
+  /* Отключает размытие тонких линий при субпиксельном рендеринге */
+  shape-rendering: crispEdges;
+  
+  /* Четкое отображение текста на векторах */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Гарантирует, что SVG сохраняет векторную четкость при любом масштабе */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.page-legend {
+    font-size: 0.82rem;
+    line-height: 1.35;
+    margin: 0.75rem 0 1.5rem;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 720px;
+}
+
+/* без заголовка */
+.page-legend thead { display: none; }
+
+.page-legend {
+    border: none !important;
+}
+
+/* минимальные паддинги */
+.page-legend th,
+.page-legend td {
+    padding: 0.15rem 0.55rem !important;
+    border: 1px solid #e3e6eb;
+    vertical-align: top;
+    text-align: left;
+    border: none !important;
+}
+
+/* первая колонка — метка */
+.page-legend td:first-child {
+    font-weight: 600;
+    color: #4a5568;
+    white-space: nowrap;
+    width: 1%;
+}
+
+/* запрет чередующихся полос */
+.page-legend tbody tr,
+.page-legend tbody tr:nth-child(even),
+.page-legend tbody tr:nth-child(odd) {
+    background: transparent !important;
+}
+
+/* код в ячейках чуть компактнее */
+.page-legend code {
+    font-size: 0.78rem;
+    padding: 0 0.15rem;
+}
+
+/* без внешней рамки по умолчанию у некоторых тем */
+.page-legend.table-wrapper { border: none; }

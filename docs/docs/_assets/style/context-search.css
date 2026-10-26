@@ -1,0 +1,188 @@
+/* Контейнер поиска */
+.context-search-container {
+}
+
+/* Поле ввода */
+.search-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Блок результатов */
+.search-results {
+    margin-top: 10px;
+}
+
+/* Подсказка (хинты) */
+.search-hint {
+    min-height: 28px;
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+/* Строка с количеством найденных */
+.search-summary {
+    min-height: 1.5em;
+    font-size: 0.95em;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Чипсы в подсказках */
+.hint-chip {
+    display: inline-block;
+    background: #e8f0fe;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin: 2px;
+    font-size: 0.85em;
+    cursor: pointer;
+    border: 1px solid #a0c4e8;
+    transition: background 0.15s;
+}
+.hint-chip:hover {
+    background: #d0e2f7;
+}
+
+/* Элемент результата (строка) */
+.result-item {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0; /* визуальное разделение */
+    list-style: none;
+}
+.result-item:last-child {
+    border-bottom: none;
+}
+
+/* Заголовок результата + размер */
+.result-title {
+    font-size: 1em;
+}
+.result-title a {
+    text-decoration: none;
+    color: #1a73e8;
+}
+.result-title a:hover {
+    text-decoration: underline;
+}
+.result-size {
+    color: #666;
+    font-size: 0.8em;
+    margin-left: 4px;
+}
+
+/* Блок с контекстными тегами */
+.result-tags {
+    margin-top: 4px;
+}
+
+/* Контекстные чипсы (теги) – уменьшены */
+.context-chip {
+    display: inline-block;
+    background: #f5f5f5;
+    padding: 1px 6px; /* уменьшенный паддинг */
+    border-radius: 10px;
+    margin: 2px 4px 2px 0;
+    font-size: 0.75em; /* мельче, чем раньше (было 0.8em) */
+    cursor: pointer;
+    border: 1px solid #ddd;
+    transition: background 0.15s;
+    line-height: 1.4;
+}
+.context-chip:hover {
+    background: #e8e8e8;
+}
+/* Активный контекстный чипс (уже введён) */
+.context-chip-active {
+    background: #e8f0fe; /*#1a73e8;*/
+    color: #333; /*#ffffff;*/
+    border-color: #1a73e8;
+    cursor: pointer;
+}
+.context-chip-active:hover {
+    background: #1557b0;
+    border-color: #1557b0;
+    color: #ffffff;
+}
+
+.context-chip-active::after {
+    content: " ✕";
+    font-size: 0.7em;
+    opacity: 0.7;
+}
+
+/* ============ Легенда к heatmap-карте контекстов ============ */
+
+.heatmap-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0 16px;
+  padding: 12px 16px;
+  background: #fafbfc;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  color: #444;
+}
+
+.heatmap-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.heatmap-legend-edge {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.heatmap-legend-bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+.heatmap-legend-notes {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  color: #666;
+}
+
+.heatmap-legend-sep { color: #ccc; }
+
+.heatmap-legend-swatch {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+/* размер — намёк на разные габариты ячейки */
+.heatmap-legend-swatch-size {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #999;
+  width: 16px; height: 10px;
+  border-radius: 2px;
+}
+
+/* цвет — мини-градиент */
+.heatmap-legend-swatch-color {
+  background: linear-gradient(135deg,
+    rgb(253,231,37) 0%,
+    rgb(33,145,140) 50%,
+    rgb(68,1,84) 100%);
+}

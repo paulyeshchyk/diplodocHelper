@@ -1,0 +1,13 @@
+.git/
+.vscode/
+node_modules/
+scripts/
+.svn/
+.svn/**
+.git/
+build/
+package-lock.json
+package.json
+.yfm
+.yfmignore
+.yfmlint

@@ -1,0 +1,57 @@
+href: index.yaml
+navigation:
+  logo:
+    url: https://github.com/paulyeshchyk/diplodocHelper
+    dark:
+      icon: _assets/images/Logo.png
+    light:
+      icon: _assets/images/Logo.png
+  header:
+    leftItems:
+      - text: Diplodoc helper
+        type: link
+        url: index.html
+    rightItems:
+      - type: controls
+      - type: link
+        icon: _assets/images/mindmap.png
+        url: ru/contexts/index.html
+      - type: link
+        icon: _assets/images/info.png
+        url: ru/ОПрограмме/index.html
+items:
+  - name: Введение
+    href: Введение/index.md
+    include:
+      path: Введение/toc.yaml
+      mode: link
+  - name: Архитектура
+    href: Архитектура/index.md
+    include:
+      path: Архитектура/toc.yaml
+      mode: link
+  - name: Модули
+    href: Модули/index.md
+    include:
+      path: Модули/toc.yaml
+      mode: link
+  - name: Расширение VS Code
+    href: РасширениеVSCode/index.md
+    include:
+      path: РасширениеVSCode/toc.yaml
+      mode: link
+  - name: Пайплайн сборки
+    href: Пайплайнсборки/index.md
+    include:
+      path: Пайплайнсборки/toc.yaml
+      mode: link
+  - name: Приложения
+    href: Приложения/index.md
+    include:
+      path: Приложения/toc.yaml
+      mode: link
+  - name: Дополнительная информация
+    href: Дополнительнаяинформация/index.md
+    include:
+      path: Дополнительнаяинформация/toc.yaml
+      mode: link

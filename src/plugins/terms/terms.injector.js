@@ -33,7 +33,7 @@ function extractDataTerm(attrs, jsonEscaped = false) {
 function renderTooltipHtml(p) {
   let content = renderTemplate('tooltip.title.html', {
     TERM: escapeHtml(p.term),
-    DEFINITION: escapeHtml(p.definition),
+    DEFINITION: p.definition,
   });
   if (p.description) {
     content += renderTemplate('tooltip.description.html', {

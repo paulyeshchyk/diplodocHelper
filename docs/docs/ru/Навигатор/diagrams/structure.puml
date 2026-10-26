@@ -1,0 +1,66 @@
+@startmindmap
+title Diplodoc Helper — структура руководства
+<style>
+mindmapDiagram {
+  node {
+    BackgroundColor #eef4fb
+    LineColor #4a72a8
+  }
+  :depth(1) {
+    BackgroundColor #d6e4f5
+  }
+  :depth(2) {
+    BackgroundColor #ffffff
+  }
+}
+</style>
+
+* Diplodoc Helper
+** Введение
+*** Назначение
+*** Установка
+*** Быстрый старт
+** Архитектура
+*** Слои модулей
+**** VS Code UI
+**** CLI / Build orchestrator
+**** Pre-processing
+**** Post-processing
+**** Client runtime
+**** Shared core
+*** Поток данных (.md → build → .html → браузер)
+** Модули
+*** Секции и оглавления (section)
+*** Ссылки (link)
+*** Изображения (image)
+*** Сноски (footnotes)
+*** Контексты (contexts)
+*** Helptags
+*** Аббревиатуры (abbrs)
+*** Термины (terms)
+*** ГОСТы (gosts)
+*** Рисунки (figures)
+*** HelpMap
+*** Breadcrumb
+*** Context-tags
+*** TOC Clean Mode
+*** RoadMap
+*** Linter
+*** Content Navigator
+*** Manifest builder
+*** Installer
+left side
+** Расширение VS Code
+*** package.json (manifest)
+*** Команды и меню
+*** Context keys
+*** Локализация (NLS)
+** Пайплайн сборки
+*** docs-build.js
+*** build.js (esbuild)
+*** diplodoc-helper-cli
+** Приложения
+*** Терминология проекта
+*** Справочник команд
+*** Рекомендуемые сценарии
+@endmindmap

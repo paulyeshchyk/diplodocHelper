@@ -1,0 +1,35 @@
+title: Дополнительная информация
+href: index.yaml
+items:
+  - name: Соглашения
+    href: ../Соглашения/index.md
+    include:
+      path: ../Соглашения/toc.yaml
+      mode: link
+  - name: Перечень иллюстраций
+    href: ../figures/index.md
+    include:
+      path: ../figures/toc.yaml
+      mode: link
+  - name: Контексты
+    href: ../contexts/index.md
+    hidden: false
+    include:
+      path: ../contexts/toc.yaml
+      mode: link
+  - name: Перечень сносок
+    href: Переченьсносок/index.md
+    include:
+      path: Переченьсносок/toc.yaml
+      mode: link
+  - name: Дорожная карта
+    href: ../roadmap/index.md
+    hidden: false
+    include:
+      path: ../roadmap/toc.yaml
+      mode: link
+  - name: О Программе
+    href: ../ОПрограмме/index.md
+    include:
+      path: ../ОПрограмме/toc.yaml
+      mode: link

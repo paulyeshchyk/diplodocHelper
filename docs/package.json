@@ -1,0 +1,35 @@
+{
+  "engines": {
+    "node": ">=22",
+    "npm": ">=11.5.1"
+  },
+  "dependencies": {
+    "@diplodoc/cli": "^5.44.0",
+    "@diplodoc/latex-extension": "^1.4.1",
+    "@diplodoc/transform": "^4.74.0",
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.2.0",
+    "markdown-it": "^13.0.2",
+    "markdown-it-emoji": "^3.0.0",
+    "markdown-it-footnote": "^4.0.0",
+    "markdown-it-katex": "^2.0.3",
+    "markdown-it-sub": "^2.0.0",
+    "markdown-it-sup": "^2.0.0",
+    "ripgrep": "^0.3.1",
+    "sharp": "^0.35.5",
+    "transliteration": "^2.6.1"
+  },
+  "devDependencies": {
+    "@diplodoc/folding-headings-extension": "^0.2.0",
+    "@diplodoc/mermaid-extension": "^1.4.2",
+    "@diplodoc/utils": "^2.2.2",
+    "html-export-pdf-cli": "^1.2.0",
+    "i": "^0.3.7"
+  },
+  "contributes": {
+    "markdown.markdownItPlugins": true
+  },
+  "allowScripts": {
+    "puppeteer@22.15.0": true
+  }
+}

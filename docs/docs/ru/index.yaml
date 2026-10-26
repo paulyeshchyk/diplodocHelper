@@ -1,0 +1,10 @@
+title: Diplodoc helper
+
+meta:
+  title: Diplodoc helper
+  noIndex: true
+
+links:
+  - title: Onboarding
+    description: Краткое введение в проект
+    href: ./Раздел0.Onboarding

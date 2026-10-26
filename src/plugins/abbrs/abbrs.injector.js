@@ -32,7 +32,7 @@ function extractDataAbbr(attrs, jsonEscaped = false) {
 function renderTooltipHtml(p) {
     let content = renderTemplate('tooltip.title.html', {
         ABBR: escapeHtml(p.abbr),
-        FULL: escapeHtml(p.full),
+        FULL: p.full,
     });
     if (p.description) {
         content += renderTemplate('tooltip.description.html', {

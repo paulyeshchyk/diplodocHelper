@@ -1,0 +1,13 @@
+title: Пайплайн сборки
+href: index.yaml
+items:
+  - name: docs-build.js
+    href: docsbuildjs/index.md
+    include:
+      path: docsbuildjs/toc.yaml
+      mode: link
+  - name: diplodoc-helper-cli
+    href: diplodochelpercli/index.md
+    include:
+      path: diplodochelpercli/toc.yaml
+      mode: link

@@ -1,0 +1,23 @@
+title: Введение
+href: index.yaml
+items:
+  - name: Навигатор
+    href: ../Навигатор/index.md
+    include:
+      path: ../Навигатор/toc.yaml
+      mode: link
+  - name: Назначение
+    href: Назначение/index.md
+    include:
+      path: Назначение/toc.yaml
+      mode: link
+  - name: Установка
+    href: Установка/index.md
+    include:
+      path: Установка/toc.yaml
+      mode: link
+  - name: Быстрый старт
+    href: Быстрыйстарт/index.md
+    include:
+      path: Быстрыйстарт/toc.yaml
+      mode: link

@@ -1,0 +1,215 @@
+title: Контексты
+href: index.md
+items:
+  - name: abbr
+    href: abbr.md
+  - name: abbrs
+    href: abbrs.md
+  - name: abbrs.client
+    href: abbrs.client.md
+  - name: anchor
+    href: anchor.md
+  - name: breadcrumb
+    href: breadcrumb.md
+  - name: browser
+    href: browser.md
+  - name: build
+    href: build.md
+  - name: build.js
+    href: build.js.md
+  - name: bytescounter
+    href: bytescounter.md
+  - name: capability
+    href: capability.md
+  - name: catalog
+    href: catalog.md
+  - name: clean-mode
+    href: clean-mode.md
+  - name: cli
+    href: cli.md
+  - name: client-runtime
+    href: client-runtime.md
+  - name: clipboard
+    href: clipboard.md
+  - name: context
+    href: context.md
+  - name: context-search.client
+    href: context-search.client.md
+  - name: context-tags
+    href: context-tags.md
+  - name: context-tags.client
+    href: context-tags.client.md
+  - name: contextmap
+    href: contextmap.md
+  - name: contexts
+    href: contexts.md
+  - name: conventions
+    href: conventions.md
+  - name: core-renderer
+    href: core-renderer.md
+  - name: diplodoc-helper-cli
+    href: diplodoc-helper-cli.md
+  - name: docs-build
+    href: docs-build.md
+  - name: esbuild
+    href: esbuild.md
+  - name: family
+    href: family.md
+  - name: figure
+    href: figure.md
+  - name: figures
+    href: figures.md
+  - name: file
+    href: file.md
+  - name: file.delete
+    href: file.delete.md
+  - name: footnote
+    href: footnote.md
+  - name: footnoteanchors
+    href: footnoteanchors.md
+  - name: footnotelist
+    href: footnotelist.md
+  - name: footnotelist.client
+    href: footnotelist.client.md
+  - name: footnotenumbering
+    href: footnotenumbering.md
+  - name: footnotes
+    href: footnotes.md
+  - name: gantt
+    href: gantt.md
+  - name: gost
+    href: gost.md
+  - name: gosts
+    href: gosts.md
+  - name: gosts.client
+    href: gosts.client.md
+  - name: guide
+    href: guide.md
+  - name: helpmap
+    href: helpmap.md
+  - name: helptag
+    href: helptag.md
+  - name: helptagmap
+    href: helptagmap.md
+  - name: helptags
+    href: helptags.md
+  - name: html
+    href: html.md
+  - name: image
+    href: image.md
+  - name: image.pastefromclipboard
+    href: image.pastefromclipboard.md
+  - name: image.pastefromlist
+    href: image.pastefromlist.md
+  - name: images
+    href: images.md
+  - name: index
+    href: index.md
+  - name: infrastructure
+    href: infrastructure.md
+  - name: installer
+    href: installer.md
+  - name: known-issues
+    href: known-issues.md
+  - name: layer
+    href: layer.md
+  - name: link
+    href: link.md
+  - name: link.addanchor
+    href: link.addanchor.md
+  - name: link.copy
+    href: link.copy.md
+  - name: link.paste
+    href: link.paste.md
+  - name: lint
+    href: lint.md
+  - name: linter.abbrs
+    href: linter.abbrs.md
+  - name: linter.links
+    href: linter.links.md
+  - name: linter.terms
+    href: linter.terms.md
+  - name: manifest
+    href: manifest.md
+  - name: markdown
+    href: markdown.md
+  - name: meta
+    href: meta.md
+  - name: modules
+    href: modules.md
+  - name: orchestrator
+    href: orchestrator.md
+  - name: package.json
+    href: package.json.md
+  - name: post-processing
+    href: post-processing.md
+  - name: pre-processing
+    href: pre-processing.md
+  - name: presetsstat
+    href: presetsstat.md
+  - name: registry
+    href: registry.md
+  - name: reindexer
+    href: reindexer.md
+  - name: reindexer.directories
+    href: reindexer.directories.md
+  - name: reindexer.figures
+    href: reindexer.figures.md
+  - name: reindexer.md
+    href: reindexer.md.md
+  - name: report
+    href: report.md
+  - name: roadmap
+    href: roadmap.md
+  - name: roadmap.patcher
+    href: roadmap.patcher.md
+  - name: section
+    href: section.md
+  - name: section.create
+    href: section.create.md
+  - name: section.delete
+    href: section.delete.md
+  - name: section.move
+    href: section.move.md
+  - name: section.rename
+    href: section.rename.md
+  - name: sections.core
+    href: sections.core.md
+  - name: shared-core
+    href: shared-core.md
+  - name: smart.delete
+    href: smart.delete.md
+  - name: term
+    href: term.md
+  - name: terms
+    href: terms.md
+  - name: terms.client
+    href: terms.client.md
+  - name: toccleanmode
+    href: toccleanmode.md
+  - name: vscode-ui
+    href: vscode-ui.md
+  - name: yaml
+    href: yaml.md
+  - name: "Прочее (70 терм.)"
+    href: prochee.md
+navigation:
+  logo:
+    url: https://ascon.ru/products/gulfstream/
+    dark:
+      icon: _assets/images/Гольфстрим@2x.png
+    light:
+      icon: _assets/images/Гольфстрим@2x.png
+  header:
+    leftItems:
+      - text: "ГОЛЬФСТРИМ: Справка"
+        type: link
+        url: /ru/index.html
+    rightItems:
+      - type: controls
+      - type: link
+        icon: _assets/images/mindmap.png
+        url: /ru/contexts/index.html
+      - type: link
+        icon: _assets/images/info.png
+        url: /ru/ОРуководствепользователя/index.html

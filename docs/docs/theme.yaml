@@ -1,0 +1,12 @@
+# base-brand: '#bf360c'
+
+light:
+  link: "#1E88E5"
+  mini-toc-active-border: "#1E88E5"
+  mini-toc-active: "#1E88E5"
+
+dark:
+  link: "#1E88E5"
+  mini-toc-active-border: "#1E88E5"
+  mini-toc-active: "#1E88E5"
+  

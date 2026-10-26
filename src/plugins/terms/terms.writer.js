@@ -61,7 +61,7 @@ function writeTermsIndex(outputDir, termMap, lang, options = {}) {
         renderTemplate('entry.md', {
           ANCHOR_ID: anchorId,
           TERM: escapeHtml(entry.term),
-          DEFINITION: escapeHtml(entry.definition),
+          DEFINITION: entry.definition,
         })
       );
     } else {

@@ -24,7 +24,9 @@ const { runGeneration: generateAbbrs } = require('./abbrs/abbrs.js');
 const { runGeneration: injectAbbrTitles } = require('./abbrs/abbrs.injector.js');
 const { runGeneration: generateTerms } = require('./terms/terms.js');
 const { runGeneration: injectTermTitles } = require('./terms/terms.injector.js');
+const { runGeneration: generateGosts } = require('./gosts/gosts.js');
 
+const { injectGostsTable } = require('./gosts/gosts.injector.js');
 // Если запускают как cli
 if (require.main === module) {
     const args = process.argv.slice(2);
@@ -59,6 +61,33 @@ if (require.main === module) {
         injectAbbrTitles({ buildDir: outputDir, docsRoot: docsDir });
     } else if (command === 'terms') {
         generateTerms(docsDir);
+    } else if (command === 'gosts') {
+        generateGosts(docsDir);
+    } else if (command === 'gostsInject' || command === 'injectGosts') {
+        const sectionIdx = args.indexOf('--section');
+        const section = sectionIdx !== -1 ? args[sectionIdx + 1] : 'ГОСТы';
+        let targetHtml = null;
+        const targetHtmlIdx = args.indexOf('--targetHtml');
+        if (targetHtmlIdx !== -1) {
+            targetHtml = path.resolve(args[targetHtmlIdx + 1]);
+        } else {
+            targetHtml = findSectionIndexHtml(outputDir, section);
+        }
+        if (!targetHtml || !fs.existsSync(targetHtml)) {
+            console.error(`❌ [gosts] HTML файл не найден (секция: "${section}") под ${outputDir}`);
+            process.exitCode = 1;
+        } else {
+            const resolvedDocsDir = path.resolve(docsDir);
+            const lang = /^[a-z]{2}$/i.test(path.basename(resolvedDocsDir))
+                ? path.basename(resolvedDocsDir)
+                : 'ru';
+            const r = injectGostsTable({
+                langDir: resolvedDocsDir,
+                targetHtml,
+                lang
+            });
+            if (!r.success) process.exitCode = 1;
+        }
     } else if (command === 'termTitles') {
         injectTermTitles({ buildDir: outputDir, docsRoot: docsDir });
     } else if (command === 'contexts') {
@@ -89,12 +118,8 @@ if (require.main === module) {
         const dataRawIndex = args.indexOf('--dataRaw');
         const dataRaw = dataRawIndex !== -1 ? args[dataRawIndex + 1] : undefined;
 
-        generateRoadMap({
-            docsRoot: docsDir,
-            dataPath,
-            dataRaw,
-            engine: DiagramEngine.MERMAID,
-        });
+        generateRoadMap({ docsRoot: docsDir, data: dataPath ?? dataRaw, engine: DiagramEngine.MERMAID });
+
     } else if (command === 'footnoteList') {
         const sectionIdx = args.indexOf('--section');
         const section = sectionIdx !== -1 ? args[sectionIdx + 1] : null;
@@ -162,4 +187,5 @@ module.exports = {
     generateFigures,
     generateAbbrs,
     generateTerms,
+    generateGosts,
 };

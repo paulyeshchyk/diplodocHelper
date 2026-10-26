@@ -1,0 +1,34 @@
+# Автоматически сгенерированные переменные. Не редактировать вручную.
+default:
+    source: unknown_source
+    about:
+        author: "[paul.yestchick](mailto:paul.yestchick@gmail.com)"
+        start_date: "15.09.2026"
+        version: "1.4"
+    stats:
+        total_articles: "92"
+        avg_size: "3 761"
+        reading_time: "2"
+        total_sections: "0"
+        total_chapters: "0"
+        total_contexts: "0"
+        total_tags: "0"
+        last_update: "06.10.2026 18:49"
+        commit_hash: "e9cc6b239c1dba5c61fb7eba7decde0e091f9fb2"
+
+internal:
+    source: unknown_source
+    about:
+        author: "[paul.yestchick](mailto:paul.yestchick@gmail.com)"
+        start_date: "15.09.2026"
+        version: "1.4"
+    stats:
+        total_articles: "92"
+        avg_size: "3 761"
+        reading_time: "2"
+        total_sections: "0"
+        total_chapters: "0"
+        total_contexts: "0"
+        total_tags: "0"
+        last_update: "06.10.2026 18:49"
+        commit_hash: "e9cc6b239c1dba5c61fb7eba7decde0e091f9fb2"

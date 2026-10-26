@@ -1,0 +1,18 @@
+title: Приложения
+href: index.yaml
+items:
+  - name: Терминология проекта
+    href: Терминологияпроекта/index.md
+    include:
+      path: Терминологияпроекта/toc.yaml
+      mode: link
+  - name: Справочник команд
+    href: Справочниккоманд/index.md
+    include:
+      path: Справочниккоманд/toc.yaml
+      mode: link
+  - name: Рекомендуемые сценарии
+    href: Рекомендуемыесценарии/index.md
+    include:
+      path: Рекомендуемыесценарии/toc.yaml
+      mode: link
