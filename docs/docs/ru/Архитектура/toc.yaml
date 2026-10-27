@@ -1,13 +1,3 @@
 title: Архитектура
 href: index.yaml
-items:
-  - name: Слои модулей
-    href: Слоимодулей/index.md
-    include:
-      path: Слоимодулей/toc.yaml
-      mode: link
-  - name: Поток данных (.md -> build -> .html -> браузер)
-    href: Потокданныхmdbuildhtmlбраузер/index.md
-    include:
-      path: Потокданныхmdbuildhtmlбраузер/toc.yaml
-      mode: link
+items: []
