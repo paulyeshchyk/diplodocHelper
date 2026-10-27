@@ -7,7 +7,7 @@ bug
 |
 critical
 |
-[`section.Rename`](../МодульПереименованиесекции/index.md), [`reindexer.directories`](../МодульПереиндексацияпапок/index.md)
+[`section.Rename`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md), [`reindexer.directories`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 section.Rename / reindexer.directories — возврат старого имени при ошибке
 |
@@ -33,7 +33,7 @@ bug
 |
 major
 |
-[`section.Delete`](../МодульУдалениесекции/index.md), [`file.Delete`](../МодульУдалениефайла/index.md)
+[`section.Delete`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md), [`file.Delete`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 Удаление папки через force не бросает исключение при неудаче (нет прав, файл занят) — на диске остаётся, пользователь видит «успех»
 |
@@ -46,7 +46,7 @@ bug
 |
 major
 |
-[`contexts`](../МодульКонтексты/index.md), [`contextmap`](../МодульКартаконтекстов/index.md), [`context-search.client`](../МодульКлиентскийпоискпоконтекстам/index.md), [`context-tags`](../МодульКонтекстныетеги/index.md), [`presetsStat`](../МодульСтатистикапресетов/index.md)
+[`contexts`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md), [`contextmap`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2/index.md), [`context-search.client`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BF%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0%D0%BC/index.md), [`context-tags`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md), [`presetsStat`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 расхождение разделителей в context
 |
@@ -72,7 +72,7 @@ bug
 |
 major
 |
-[`reindexer.directories`](../МодульПереиндексацияпапок/index.md)
+[`reindexer.directories`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 Обновление заголовка в toc.yaml вносится в память, но следующая сортировка перечитывает файл с диска — новое имя в файл не попадает
 |
@@ -85,7 +85,7 @@ bug
 |
 major
 |
-[`footnoteAnchors`](../МодульЯкорясносок/index.md)
+[`footnoteAnchors`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%BA%D0%BE%D1%80%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Не идемпотентен: при повторной сборке (или watch) инжектирует скрипт повторно, накапливая дубликаты
 |
@@ -98,7 +98,7 @@ bug
 |
 major
 |
-[`build.js`](../МодульСборкарасширения/index.md)
+[`build.js`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 Скрипт npm run watch, на который ссылается launch.json как preLaunchTask, отсутствует в package.json — отладка через F5 не работает
 |
@@ -111,7 +111,7 @@ bug
 |
 minor
 |
-[`presetsStat`](../МодульСтатистикапресетов/index.md)
+[`presetsStat`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 Автор и версия захардкожены; reading_time — время чтения одной статьи, а не всего руководства; totalArticles суммирует все языки
 |
@@ -124,7 +124,7 @@ bug
 |
 minor
 |
-[`context-tags`](../МодульКонтекстныетеги/index.md)
+[`context-tags`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 Не идемпотентен: при повторной сборке инжектирует скрипт повторно, HTML «толстеет»
 |
@@ -137,7 +137,7 @@ bug
 |
 minor
 |
-[`context-tags.client`](../МодульКлиентконтекстныхтегов/index.md)
+[`context-tags.client`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 Ссылка на страницу контекста строится из label, а не slug; для контекста с пробелом URL не совпадает с именем сгенерированного файла
 |
@@ -150,7 +150,7 @@ bug
 |
 minor
 |
-[`tocCleanMode`](../МодульРежимбезнавигации/index.md)
+[`tocCleanMode`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 Не идемпотентен: скрипт дублируется при повторной сборке
 |
@@ -163,7 +163,7 @@ bug
 |
 minor
 |
-[`linter.links`](../МодульЛинтерссылок/index.md)
+[`linter.links`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%81%D1%81%D1%8B%D0%BB%D0%BE%D0%BA/index.md)
 |
 Быстрое исправление парсит текст диагностики на русском языке — при локализации сообщений перестанет работать
 |
@@ -176,7 +176,7 @@ bug
 |
 minor
 |
-[`linter.links`](../МодульЛинтерссылок/index.md)
+[`linter.links`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%81%D1%81%D1%8B%D0%BB%D0%BE%D0%BA/index.md)
 |
 Кеш списка файлов и корня проекта глобальный, не сбрасывается при переключении workspace
 |
@@ -189,7 +189,7 @@ tradeoff
 |
 minor
 |
-[`footnotes`](../МодульСноски/index.md), [`footnoteNumbering`](../МодульСквознаянумерациясносок/index.md)
+[`footnotes`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md), [`footnoteNumbering`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 В стандартном сценарии сборки обрабатывается только русский язык; английские сноски не пересчитываются
 |
@@ -202,7 +202,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `module.exports` — только 9 из 24
 |
@@ -221,7 +221,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 Нет `--help`
 |
@@ -240,7 +240,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 Нет валидации команд
 |
@@ -257,7 +257,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `--docsDir` без значения — `undefined`
 |
@@ -279,7 +279,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `code return` — не устанавливается при ошибке
 |
@@ -298,7 +298,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `roadMap` — `--dataRaw` теряется
 |
@@ -320,7 +320,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `reindexFigures` — `targetLocale` из env
 |
@@ -342,7 +342,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `gostsInject` — `findSectionIndexHtml` без `--targetHtml`
 |
@@ -367,7 +367,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `footnoteList` — `--section` и `--targetHtml` без валидации приоритета
 |
@@ -397,7 +397,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 Кириллица в `argv` на Windows
 |
@@ -416,7 +416,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 Нет общего `--help` / `--version`
 |
@@ -433,7 +433,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `docs-build.cmd` — только для Windows
 |
@@ -455,7 +455,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `--docsDir` семантика — разная для разных команд
 |
@@ -482,7 +482,7 @@ unknown
 |
 major
 |
-[`МодульCLI`](../МодульCLI/index.md)
+[`МодульCLI`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CCLI/index.md)
 |
 `process.exitCode` не сбрасывается между вызовами
 |
@@ -501,7 +501,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `src/scripts/build-docs.js` и `src/scripts/utils` **не существуют** в расширении
 |
@@ -529,7 +529,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `extensionId = 'paulyestchick.diplodochelper'` — захардкожен
 |
@@ -548,7 +548,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `copyRecursiveSync` — `ignorePatterns` через `includes`
 |
@@ -573,7 +573,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `src/plugins` — копируется **всё**, включая `manifest.builder`, `installer`, `roadmap-data.json`
 |
@@ -600,7 +600,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `copyRecursiveSync` — `fs.statSync(src)` до `existsSync`
 |
@@ -626,7 +626,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `srcPath` → `destPath` — не нормализуется `..`
 |
@@ -643,7 +643,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `showOpenDialog` — нет проверки, что выбранная папка **не** внутри расширения
 |
@@ -662,7 +662,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `items` — только `src` и `dest`, без `optional`
 |
@@ -681,7 +681,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `showInformationMessage` — без списка установленного
 |
@@ -698,7 +698,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 Нет progress bar
 |
@@ -715,7 +715,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `installer` не поддерживает uninstall
 |
@@ -734,7 +734,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `installer.config.js` — `ignorePatterns` не исключает `manifest.builder`
 |
@@ -751,7 +751,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `installer` не проверяет версию
 |
@@ -768,7 +768,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `installer` — единственная команда в `other`, которая **не** про документацию
 |
@@ -787,7 +787,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `src/scripts/build-docs.js` — задуман, но отсутствует
 |
@@ -811,7 +811,7 @@ unknown
 |
 major
 |
-[`МодульInstaller`](../МодульInstaller/index.md)
+[`МодульInstaller`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CInstaller/index.md)
 |
 `utils/` — тоже отсутствует
 |
@@ -830,7 +830,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `manifest` перезаписывает `contributes` полностью
 |
@@ -849,7 +849,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `JSON.stringify(finalManifest, null, 4)` — формат 4 пробела
 |
@@ -866,7 +866,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `TsConfigParser` — ограниченный парсер TS
 |
@@ -891,7 +891,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `config.parser.tsconfig.js` — regex по JSDoc
 |
@@ -919,7 +919,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `menuItem`/`submenuItem` — порядок аргументов
 |
@@ -946,7 +946,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `ContributionMenuItem` — валидация только «есть command или submenu»
 |
@@ -969,7 +969,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `group` — формат `<prefix><groupOrder>.<groupName>@<order>`
 |
@@ -986,7 +986,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `manifest` не идемпотентен при ручной правке `contributes`
 |
@@ -1003,7 +1003,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `diplodoc.config.model.ts` — не TS-файл в прямом смысле
 |
@@ -1022,7 +1022,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `diplodoc.config.model.js` — мёртвый файл?
 |
@@ -1039,7 +1039,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `package.json` → `contributes` — не в git?
 |
@@ -1058,7 +1058,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `manifest` не проверяет существование `package.json`
 |
@@ -1079,7 +1079,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `manifest` не валидирует `contributes` против схемы VS Code
 |
@@ -1098,7 +1098,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `nls` — не генерируется
 |
@@ -1117,7 +1117,7 @@ unknown
 |
 major
 |
-[`МодульManifest`](../МодульManifest/index.md)
+[`МодульManifest`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8CManifest/index.md)
 |
 `manifest` — единственный модуль, который **пишет** `package.json`
 |
@@ -1136,7 +1136,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатуры`](../МодульАббревиатуры/index.md)
+[`МодульАббревиатуры`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B/index.md)
 |
 Коллизия анкоров при транслитерации
 |
@@ -1153,7 +1153,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатуры`](../МодульАббревиатуры/index.md)
+[`МодульАббревиатуры`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B/index.md)
 |
 Настройки `showWarnings` и `showUnused` выключены
 |
@@ -1181,7 +1181,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатуры`](../МодульАббревиатуры/index.md)
+[`МодульАббревиатуры`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B/index.md)
 |
 Выходная папка задаётся только через `abbrs.paths.yaml`
 |
@@ -1198,7 +1198,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатуры`](../МодульАббревиатуры/index.md)
+[`МодульАббревиатуры`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B/index.md)
 |
 Папки с именем `abbrs`/`terms`/`contexts`/… пропускаются где угодно
 |
@@ -1215,7 +1215,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатуры`](../МодульАббревиатуры/index.md)
+[`МодульАббревиатуры`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B/index.md)
 |
 `<abbr class="…">` полностью игнорируется
 |
@@ -1232,7 +1232,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатуры`](../МодульАббревиатуры/index.md)
+[`МодульАббревиатуры`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B/index.md)
 |
 Линтер чувствителен к регистру
 |
@@ -1249,7 +1249,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатурыКлиент`](../МодульАббревиатурыКлиент/index.md)
+[`МодульАббревиатурыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 Стили живут вне модуля
 |
@@ -1272,7 +1272,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатурыКлиент`](../МодульАббревиатурыКлиент/index.md)
+[`МодульАббревиатурыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 `MutationObserver` не отключается никогда
 |
@@ -1291,7 +1291,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатурыКлиент`](../МодульАббревиатурыКлиент/index.md)
+[`МодульАббревиатурыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 `getBoundingClientRect()` на каждом `mouseenter`
 |
@@ -1308,7 +1308,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатурыКлиент`](../МодульАббревиатурыКлиент/index.md)
+[`МодульАббревиатурыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 Работает только при наличии маркера `id="dl-abbr-occ-client"`
 |
@@ -1325,7 +1325,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатурыКлиент`](../МодульАббревиатурыКлиент/index.md)
+[`МодульАббревиатурыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 «Ещё/свернуть» — единственная локализация, и она захардкожена
 |
@@ -1342,7 +1342,7 @@ unknown
 |
 major
 |
-[`МодульАббревиатурыКлиент`](../МодульАббревиатурыКлиент/index.md)
+[`МодульАббревиатурыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 Polling-fallback срабатывает слишком долго
 |
@@ -1359,7 +1359,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `insertIndentedBlock` удаляет текст на строке левее курсора
 |
@@ -1400,7 +1400,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 Linux: `xclip` с `>` не работает
 |
@@ -1439,7 +1439,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `getImageFromClipboard` не проверяет наличие команды
 |
@@ -1458,7 +1458,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `prompt: translate(screenshot.name.prompt)` — без подстановки
 |
@@ -1486,7 +1486,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `screenshot.*` — NLS-ключи из другого модуля
 |
@@ -1507,7 +1507,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `altText = userInput.trim()` — не очищен от спецсимволов markdown
 |
@@ -1540,7 +1540,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `imageExtension` — константа, но `fileName` игнорирует
 |
@@ -1568,7 +1568,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 Буфер всегда конвертируется в PNG
 |
@@ -1595,7 +1595,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 Создание `images/` — без учёта `_assets`
 |
@@ -1614,7 +1614,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `getCursorContext` — используется только `listIndent`
 |
@@ -1639,7 +1639,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `Buffer` ограничен памятью
 |
@@ -1658,7 +1658,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `Timestamp` — UTC, не локальное время
 |
@@ -1686,7 +1686,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 Сообщение об успехе показывает `<slug>.png`, не введённое имя
 |
@@ -1707,7 +1707,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `editor.edit` — без проверки результата
 |
@@ -1730,7 +1730,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `uri` из палитры — тихий выход через `!editor`
 |
@@ -1747,7 +1747,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизбуфера`](../МодульВставкаизображенияизбуфера/index.md)
+[`МодульВставкаизображенияизбуфера`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.md)
 |
 `image.PasteFromClipboard` не проверяет, что курсор внутри `.md`-файла в папке проекта
 |
@@ -1766,7 +1766,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `workspaceFolders[0]` — мульти-workspace не поддерживается
 |
@@ -1794,7 +1794,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `!editor &#124;&#124; languageId !== 'markdown'` — одно сообщение для двух случаев
 |
@@ -1824,7 +1824,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `insert` в `selection.active` — выделение не заменяется
 |
@@ -1859,7 +1859,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 Нет `indentMultilinedText` — вставка в список ломает структуру
 |
@@ -1892,7 +1892,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `editor.edit` без проверки результата
 |
@@ -1913,7 +1913,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `caption` с `*` или `]` ломает markdown
 |
@@ -1949,7 +1949,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `extractFigureNumber` — фигуры без номера сортируются первыми
 |
@@ -1983,7 +1983,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 Дедупликация теряет информацию о второй статье
 |
@@ -2009,7 +2009,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `ExtractFigures`/`ExtractMdLinks` — последовательный обход
 |
@@ -2044,7 +2044,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 Нет `withProgress`
 |
@@ -2071,7 +2071,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 Кеш между вызовами отсутствует
 |
@@ -2090,7 +2090,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 Нет `link.Copy`-совместимости
 |
@@ -2109,7 +2109,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 Сообщение об успехе — захардкожено на русском
 |
@@ -2130,7 +2130,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `formatDetail` не локализован
 |
@@ -2155,7 +2155,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `caption` для `figure` не очищается от markdown-форматирования
 |
@@ -2184,7 +2184,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 Ссылка на `<figure>` идёт на `#id`, но id может быть невалидным
 |
@@ -2201,7 +2201,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 Файл `image.PasteFromList` использует `collectAllImages` из `figures`-экстрактора, но не `figures`-каталога
 |
@@ -2220,7 +2220,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 `FindMdFiles` без `try/catch`
 |
@@ -2241,7 +2241,7 @@ unknown
 |
 major
 |
-[`МодульВставкаизображенияизсписка`](../МодульВставкаизображенияизсписка/index.md)
+[`МодульВставкаизображенияизсписка`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/index.md)
 |
 Нет проверки, что `currentFilePath` внутри `rootDir`
 |
@@ -2260,7 +2260,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 Критический баг `isImage = ext !== 'md'`
 |
@@ -2299,13 +2299,13 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `data.isImage` из JSON игнорируется
 |
 {% cut "Развернуть" %}
 
-[`link.Copy`](../МодульКопированиессылки/index.md) кладёт `isImage` в JSON:
+[`link.Copy`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md) кладёт `isImage` в JSON:
 
 <code>
 isImage: /\.(png&#124;jpe?g&#124;gif&#124;svg&#124;webp)$/i.test(fsPath),
@@ -2337,7 +2337,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `fs.stat` при удалённом файле — тихая ошибка
 |
@@ -2367,7 +2367,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 Дублирование `extractAnchorsFromMdFile`, `promptAnchorSelection`, `calculateRelativeMdPath`, `generateSlug`
 |
@@ -2398,7 +2398,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `isCursorInsideHtmlTag` — мёртвый код (~80 строк)
 |
@@ -2417,7 +2417,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 HTML-ветка: `mdPath` без ведущего `/`
 |
@@ -2450,7 +2450,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 Вставка внутри существующей markdown-ссылки не отсекается
 |
@@ -2469,7 +2469,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `promptAnchorSelection` не находит `{@anchor}`
 |
@@ -2496,7 +2496,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `getTargetMdFile` для папок без `index.md`
 |
@@ -2522,7 +2522,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `uri` из палитры — тихий выход
 |
@@ -2539,7 +2539,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `encodeURIComponent` — потеря читаемости при отладке
 |
@@ -2556,7 +2556,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `listIndent` для выделения не применяется
 |
@@ -2575,7 +2575,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `workspaceRoot` — берётся первая папка
 |
@@ -2604,7 +2604,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `linkName` с `]` ломает markdown
 |
@@ -2621,7 +2621,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 Параметр `index` в `indentMultilinedText` не используется
 |
@@ -2642,7 +2642,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `error.emptybuffer` — недостижим в норме
 |
@@ -2669,7 +2669,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 Нет подтверждения при перезаписи
 |
@@ -2686,7 +2686,7 @@ unknown
 |
 major
 |
-[`МодульВставкассылки`](../МодульВставкассылки/index.md)
+[`МодульВставкассылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `sourceLinkPath` может быть относительным
 |
@@ -2705,7 +2705,7 @@ unknown
 |
 major
 |
-[`МодульГОСТы`](../МодульГОСТы/index.md)
+[`МодульГОСТы`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%93%D0%9E%D0%A1%D0%A2%D1%8B/index.md)
 |
 Markdown-ссылки в карточках рендерятся как текст
 |
@@ -2724,7 +2724,7 @@ unknown
 |
 major
 |
-[`МодульГОСТы`](../МодульГОСТы/index.md)
+[`МодульГОСТы`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%93%D0%9E%D0%A1%D0%A2%D1%8B/index.md)
 |
 `resolveMarkdownLinks` не обрабатывает абсолютные `.md`
 |
@@ -2747,7 +2747,7 @@ unknown
 |
 major
 |
-[`МодульГОСТы`](../МодульГОСТы/index.md)
+[`МодульГОСТы`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%93%D0%9E%D0%A1%D0%A2%D1%8B/index.md)
 |
 Клиентский скрипт копируется из `__dirname`
 |
@@ -2764,7 +2764,7 @@ unknown
 |
 major
 |
-[`МодульГОСТы`](../МодульГОСТы/index.md)
+[`МодульГОСТы`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%93%D0%9E%D0%A1%D0%A2%D1%8B/index.md)
 |
 Ссылка на раздел — по имени папки
 |
@@ -2781,7 +2781,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 `validateInput` и `slugify_latin_alphanumeric` — разный набор символов
 |
@@ -2807,7 +2807,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 `isInsideHtmlTag` — эвристика, ложно срабатывает на математике
 |
@@ -2828,7 +2828,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 `isInsideMarkdownLink` — только inline-формат
 |
@@ -2854,7 +2854,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 `editor.edit` без проверки результата
 |
@@ -2882,7 +2882,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 Одинарные кавычки в атрибутах
 |
@@ -2905,7 +2905,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -2926,7 +2926,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -2945,7 +2945,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -2964,7 +2964,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -2983,7 +2983,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -3002,7 +3002,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -3025,7 +3025,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 Отсутствие отмены
 |
@@ -3042,7 +3042,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 Порядок проверок не оптимален
 |
@@ -3059,7 +3059,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)
 |
 `error.invalidContext` — общее сообщение для двух случаев
 |
@@ -3076,7 +3076,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 PlantUML требует `java` — не везде есть
 |
@@ -3100,7 +3100,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `plantuml.jar` ищется в трёх местах
 |
@@ -3144,7 +3144,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `cleanupRoadmapPages` — тихая очистка при ошибке
 |
@@ -3168,7 +3168,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `task.url` — не `task.href` и не `task.link`
 |
@@ -3204,7 +3204,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `prepareRoadmapData` и `generateTableCompact` дублируют группировку
 |
@@ -3226,7 +3226,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `start`/`end` — только `MM-YYYY`
 |
@@ -3257,7 +3257,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `plantuml.svg.builder` использует `exec` с конкатенацией
 |
@@ -3279,7 +3279,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `outputDir` в `buildPlantUml` — это `outputDir` из `runGeneration`
 |
@@ -3311,7 +3311,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `cleanupRoadmapPages` — удаляет `gantt_<lang>.svg`, но не `gantt_<lang>.puml`
 |
@@ -3328,7 +3328,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `roadmap.patcher` — не часть `roadmap`
 |
@@ -3345,7 +3345,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `lang: 'ru' &#124; 'en'` захардкожено
 |
@@ -3368,7 +3368,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `svg` читается целиком в память
 |
@@ -3389,7 +3389,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `buildMermaidSvg` — заглушка
 |
@@ -3412,7 +3412,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `mappingJson` в Mermaid-ветке содержит пустую строку при отсутствии mapping
 |
@@ -3433,7 +3433,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `console.log('[${lang}] Roadmap создан (${engine}): ${indexPath}')`
 |
@@ -3450,7 +3450,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `roadmap` не создаёт `toc.yaml` для папки `roadmap/`
 |
@@ -3471,7 +3471,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `roadmap` не идемпотентен по `mapping`
 |
@@ -3495,7 +3495,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `generateMermaidScript` — `deps` фильтр
 |
@@ -3522,7 +3522,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `data.find(d => d.id === id)` — O(n) на каждую зависимость
 |
@@ -3545,7 +3545,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `lang` в `roadmap-data.json` не учитывается
 |
@@ -3564,7 +3564,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 `roadmap` не в `module.exports` файла CLI
 |
@@ -3596,7 +3596,7 @@ unknown
 |
 major
 |
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
+[`МодульДорожнаякарта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md)
 |
 PlantUML-диаграмма **не** регенерируется при повторной сборке без данных
 |
@@ -3617,7 +3617,7 @@ unknown
 |
 major
 |
-[`МодульИллюстрации`](../МодульИллюстрации/index.md)
+[`МодульИллюстрации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 Переключатель list/grid и лайтбокс не работают из коробки
 |
@@ -3649,7 +3649,7 @@ unknown
 |
 major
 |
-[`МодульИллюстрации`](../МодульИллюстрации/index.md)
+[`МодульИллюстрации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 Модуль `async`, но вызывается синхронно
 |
@@ -3676,7 +3676,7 @@ unknown
 |
 major
 |
-[`МодульИллюстрации`](../МодульИллюстрации/index.md)
+[`МодульИллюстрации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `sharp` — нативная зависимость
 |
@@ -3695,7 +3695,7 @@ unknown
 |
 major
 |
-[`МодульИллюстрации`](../МодульИллюстрации/index.md)
+[`МодульИллюстрации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 Превью не обновляются, если изменилось изображение
 |
@@ -3724,7 +3724,7 @@ unknown
 |
 major
 |
-[`МодульИллюстрации`](../МодульИллюстрации/index.md)
+[`МодульИллюстрации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `<figcaption>` — только двойные кавычки, одна строка
 |
@@ -3747,7 +3747,7 @@ unknown
 |
 major
 |
-[`МодульИллюстрации`](../МодульИллюстрации/index.md)
+[`МодульИллюстрации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 Изображение ищется «слева и ближе всех»
 |
@@ -3770,7 +3770,7 @@ unknown
 |
 major
 |
-[`МодульИллюстрации`](../МодульИллюстрации/index.md)
+[`МодульИллюстрации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 Относительные пути только от директории `.md`
 |
@@ -3789,7 +3789,7 @@ unknown
 |
 major
 |
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
+[`МодульКартаконтекстов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2/index.md)
 |
 `getContextStatus` режет только по запятой
 |
@@ -3820,7 +3820,7 @@ unknown
 |
 major
 |
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
+[`МодульКартаконтекстов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2/index.md)
 |
 `helpMap` не нормализует `context`
 |
@@ -3846,7 +3846,7 @@ unknown
 |
 major
 |
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
+[`МодульКартаконтекстов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2/index.md)
 |
 `generationContextmap` в VS Code генерирует три отчёта
 |
@@ -3871,7 +3871,7 @@ unknown
 |
 major
 |
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
+[`МодульКартаконтекстов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2/index.md)
 |
 `runGeneration` в `contextmap.Generate.js` вызывается синхронно
 |
@@ -3896,7 +3896,7 @@ unknown
 |
 major
 |
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
+[`МодульКартаконтекстов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2/index.md)
 |
 `lang: ["ru", "en"]` захардкожено
 |
@@ -3913,7 +3913,7 @@ unknown
 |
 major
 |
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
+[`МодульКартаконтекстов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2/index.md)
 |
 `ARTICLE_STATUS_I18N` читает `document.documentElement.lang`
 |
@@ -3938,7 +3938,7 @@ unknown
 |
 major
 |
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
+[`МодульКартаконтекстов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2/index.md)
 |
 `getStatsHTML` считает статусы по **всей** матрице, а не по видимой части
 |
@@ -3968,7 +3968,7 @@ unknown
 |
 major
 |
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
+[`МодульКартаконтекстов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2/index.md)
 |
 Наследуемые ограничения от `Pagebuilder.common`
 |
@@ -3990,7 +3990,7 @@ unknown
 |
 major
 |
-[`МодульКартапомощи`](../МодульКартапомощи/index.md)
+[`МодульКартапомощи`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D0%B8/index.md)
 |
 VS Code-команда — «мёртвая»
 |
@@ -4012,7 +4012,7 @@ unknown
 |
 major
 |
-[`МодульКартапомощи`](../МодульКартапомощи/index.md)
+[`МодульКартапомощи`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D0%B8/index.md)
 |
 `segregation` не используется в пайплайне
 |
@@ -4031,7 +4031,7 @@ unknown
 |
 major
 |
-[`МодульКартапомощи`](../МодульКартапомощи/index.md)
+[`МодульКартапомощи`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D0%B8/index.md)
 |
 `getParentTitles` ломается на одноимённых папках
 |
@@ -4061,7 +4061,7 @@ unknown
 |
 major
 |
-[`МодульКартапомощи`](../МодульКартапомощи/index.md)
+[`МодульКартапомощи`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D0%B8/index.md)
 |
 `title` может быть пустым
 |
@@ -4078,7 +4078,7 @@ unknown
 |
 major
 |
-[`МодульКартапомощи`](../МодульКартапомощи/index.md)
+[`МодульКартапомощи`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D0%B8/index.md)
 |
 `hint`, `helptag`, `context` не нормализуются
 |
@@ -4095,7 +4095,7 @@ unknown
 |
 major
 |
-[`МодульКартапомощи`](../МодульКартапомощи/index.md)
+[`МодульКартапомощи`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D0%B8/index.md)
 |
 `data.hint?.trim()` — молчаливый `undefined`
 |
@@ -4116,7 +4116,7 @@ unknown
 |
 major
 |
-[`МодульКартасправочныхтегов`](../МодульКартасправочныхтегов/index.md)
+[`МодульКартасправочныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 Статус `excess` недостижим — легенда врёт
 |
@@ -4158,7 +4158,7 @@ unknown
 |
 major
 |
-[`МодульКартасправочныхтегов`](../МодульКартасправочныхтегов/index.md)
+[`МодульКартасправочныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `ARTICLE_STATUS_I18N_TEXTS` содержит `excess` — «Без тэгов» / «Один тэг» / «Избыточно»
 |
@@ -4175,7 +4175,7 @@ unknown
 |
 major
 |
-[`МодульКартасправочныхтегов`](../МодульКартасправочныхтегов/index.md)
+[`МодульКартасправочныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 «тэгов» с «э» — расхождение с общей терминологией
 |
@@ -4197,7 +4197,7 @@ unknown
 |
 major
 |
-[`МодульКартасправочныхтегов`](../МодульКартасправочныхтегов/index.md)
+[`МодульКартасправочныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `getTitle` показывает всю строку `helptag` без форматирования
 |
@@ -4218,7 +4218,7 @@ unknown
 |
 major
 |
-[`МодульКартасправочныхтегов`](../МодульКартасправочныхтегов/index.md)
+[`МодульКартасправочныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 CLI-команда `periodicTableHelpTag` — «тихая»
 |
@@ -4252,7 +4252,7 @@ unknown
 |
 major
 |
-[`МодульКартасправочныхтегов`](../МодульКартасправочныхтегов/index.md)
+[`МодульКартасправочныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 Все ограничения `Pagebuilder.common` применимы
 |
@@ -4274,7 +4274,7 @@ unknown
 |
 major
 |
-[`МодульКартасправочныхтегов`](../МодульКартасправочныхтегов/index.md)
+[`МодульКартасправочныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%B0%D1%80%D1%82%D0%B0%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 Отчёт «по наличию поля» — не «по качеству поля»
 |
@@ -4297,7 +4297,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 Клик по ссылке внутри ячейки триггерит row-click
 |
@@ -4316,7 +4316,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `formatMarkdown` экранирует HTML, но не санитизирует `url`
 |
@@ -4343,7 +4343,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `formatMarkdown` — только `[text](url)`
 |
@@ -4360,7 +4360,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `escape` не обёрнуто в `data-*`
 |
@@ -4377,7 +4377,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `getSortedGroups` — `sortedTypes = Object.keys(groups).sort()`
 |
@@ -4394,7 +4394,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `formatMarkdown(item.date &#124;&#124; '—')` — `date` может быть `Date`
 |
@@ -4411,7 +4411,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `state.openCardId` — только одна открытая карточка
 |
@@ -4428,7 +4428,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `renderTable()` вызывается целиком на каждое изменение
 |
@@ -4445,7 +4445,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `hashchange` сбрасывает `openCardId`
 |
@@ -4462,7 +4462,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `MutationObserver` не отключается
 |
@@ -4479,7 +4479,7 @@ unknown
 |
 major
 |
-[`МодульКлиентГОСТов`](../МодульКлиентГОСТов/index.md)
+[`МодульКлиентГОСТов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%93%D0%9E%D0%A1%D0%A2%D0%BE%D0%B2/index.md)
 |
 `anchorId` fallback — расхождение с `gost.Insert`
 |
@@ -4496,7 +4496,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 Контексты с пробелом ломают ссылку
 |
@@ -4521,7 +4521,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `slug` не совпадает с именем файла
 |
@@ -4546,7 +4546,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 Inline-стили в `<script>` — дублирование
 |
@@ -4563,7 +4563,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 Retry без ограничения
 |
@@ -4587,7 +4587,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `MutationObserver` отсутствует
 |
@@ -4604,7 +4604,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `visibleCount = 5` — захардкожено
 |
@@ -4621,7 +4621,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `context-tags.js` не настраивается через CLI
 |
@@ -4638,7 +4638,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `a.target` — не задан
 |
@@ -4655,7 +4655,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `item.label` не экранируется при `encodeURIComponent`
 |
@@ -4672,7 +4672,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `MutationObserver` и `context-tags` — отсутствие синхронизации с `contexts`
 |
@@ -4689,7 +4689,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 `document.head` — без проверки
 |
@@ -4710,7 +4710,7 @@ unknown
 |
 major
 |
-[`МодульКлиентконтекстныхтегов`](../МодульКлиентконтекстныхтегов/index.md)
+[`МодульКлиентконтекстныхтегов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D1%85%D1%82%D0%B5%D0%B3%D0%BE%D0%B2/index.md)
 |
 Inline-скрипт `__CONTEXT_ITEMS__` — данные для каждой страницы
 |
@@ -4729,7 +4729,7 @@ unknown
 |
 major
 |
-[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)
+[`МодульКлиентперечнясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BF%D0%B5%D1%80%D0%B5%D1%87%D0%BD%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Retry 15 секунд
 |
@@ -4746,7 +4746,7 @@ unknown
 |
 major
 |
-[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)
+[`МодульКлиентперечнясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BF%D0%B5%D1%80%D0%B5%D1%87%D0%BD%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `footnotesData` не сбрасывается между страницами
 |
@@ -4763,7 +4763,7 @@ unknown
 |
 major
 |
-[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)
+[`МодульКлиентперечнясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BF%D0%B5%D1%80%D0%B5%D1%87%D0%BD%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `esc` не оборачивает `url`
 |
@@ -4784,7 +4784,7 @@ unknown
 |
 major
 |
-[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)
+[`МодульКлиентперечнясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BF%D0%B5%D1%80%D0%B5%D1%87%D0%BD%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Сортировка по `article` — `localeCompare('ru')`
 |
@@ -4801,7 +4801,7 @@ unknown
 |
 major
 |
-[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)
+[`МодульКлиентперечнясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BF%D0%B5%D1%80%D0%B5%D1%87%D0%BD%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `state` не сохраняется
 |
@@ -4818,7 +4818,7 @@ unknown
 |
 major
 |
-[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)
+[`МодульКлиентперечнясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D0%BF%D0%B5%D1%80%D0%B5%D1%87%D0%BD%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `lang` из `footnotesData` не используется
 |
@@ -4835,7 +4835,7 @@ unknown
 |
 major
 |
-[`МодульКлиентскийпоискпоконтекстам`](../МодульКлиентскийпоискпоконтекстам/index.md)
+[`МодульКлиентскийпоискпоконтекстам`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BF%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0%D0%BC/index.md)
 |
 Не подключается автоматически
 |
@@ -4852,7 +4852,7 @@ unknown
 |
 major
 |
-[`МодульКлиентскийпоискпоконтекстам`](../МодульКлиентскийпоискпоконтекстам/index.md)
+[`МодульКлиентскийпоискпоконтекстам`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BF%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0%D0%BC/index.md)
 |
 `split(',')` без пробелов — расхождение с `contexts`
 |
@@ -4869,7 +4869,7 @@ unknown
 |
 major
 |
-[`МодульКлиентскийпоискпоконтекстам`](../МодульКлиентскийпоискпоконтекстам/index.md)
+[`МодульКлиентскийпоискпоконтекстам`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BF%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0%D0%BC/index.md)
 |
 `terms.every()` — точное совпадение
 |
@@ -4886,7 +4886,7 @@ unknown
 |
 major
 |
-[`МодульКлиентскийпоискпоконтекстам`](../МодульКлиентскийпоискпоконтекстам/index.md)
+[`МодульКлиентскийпоискпоконтекстам`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BF%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0%D0%BC/index.md)
 |
 `hintDiv` — только по последнему слову
 |
@@ -4903,7 +4903,7 @@ unknown
 |
 major
 |
-[`МодульКлиентскийпоискпоконтекстам`](../МодульКлиентскийпоискпоконтекстам/index.md)
+[`МодульКлиентскийпоискпоконтекстам`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BF%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0%D0%BC/index.md)
 |
 `preferredLang` не используется
 |
@@ -4920,7 +4920,7 @@ unknown
 |
 major
 |
-[`МодульКлиентскийпоискпоконтекстам`](../МодульКлиентскийпоискпоконтекстам/index.md)
+[`МодульКлиентскийпоискпоконтекстам`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BF%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0%D0%BC/index.md)
 |
 `contextData` не сбрасывается между инициализациями
 |
@@ -4937,7 +4937,7 @@ unknown
 |
 major
 |
-[`МодульКлиентскийпоискпоконтекстам`](../МодульКлиентскийпоискпоконтекстам/index.md)
+[`МодульКлиентскийпоискпоконтекстам`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BF%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0%D0%BC/index.md)
 |
 `JSON.parse` ошибки не логируются
 |
@@ -4954,7 +4954,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `slug` не совпадает с `slugify_filename`
 |
@@ -4986,7 +4986,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `toLowerCase()` без `.trim()` — пробелы в label
 |
@@ -5016,7 +5016,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `split(',')` — расхождение с `contexts.extractor`
 |
@@ -5037,7 +5037,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `lang = rel.split('/')[0]` — может быть `'index.html'`
 |
@@ -5069,7 +5069,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 Нет идемпотентности
 |
@@ -5099,7 +5099,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 Regex `<meta>` — жёсткий порядок атрибутов
 |
@@ -5122,7 +5122,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `fs.readFileSync(templatePath)` — без проверки существования
 |
@@ -5146,7 +5146,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `fs.readFileSync` на каждую страницу
 |
@@ -5163,13 +5163,13 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `runGeneration` не пишет `toc.yaml` / `index.yaml`
 |
 {% cut "Развернуть" %}
 
-`context-tags` — **только** инжектор. Раздел «Контексты» (`docs/ru/contexts/`) создаётся модулем [`contexts`](../МодульКонтексты/index.md), а `context-tags` добавляет чипы в **каждую** статью. Это не «страница раздела», а «блок в каждой статье».
+`context-tags` — **только** инжектор. Раздел «Контексты» (`docs/ru/contexts/`) создаётся модулем [`contexts`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md), а `context-tags` добавляет чипы в **каждую** статью. Это не «страница раздела», а «блок в каждой статье».
 
 То есть `context-tags` не требует `toc.yaml`. Правильно, но может смутить при чтении кода (другие модули с `runGeneration` создают страницы).
 
@@ -5182,7 +5182,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `console.log` с `results.success.length` — общее число
 |
@@ -5199,7 +5199,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `walk` из `utils/walk.js` — симлинки
 |
@@ -5228,7 +5228,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `context-tags` не удаляет старые `<script>`
 |
@@ -5247,7 +5247,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `if (require.main === module)` — без проверки `docs-build.js`
 |
@@ -5264,7 +5264,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `CONTEXT_SPLITTER = ','` — не конфигурируется
 |
@@ -5281,7 +5281,7 @@ unknown
 |
 major
 |
-[`МодульКонтекстныетеги`](../МодульКонтекстныетеги/index.md)
+[`МодульКонтекстныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `context-tags` и `context-search.client` — рассинхрон
 |
@@ -5304,7 +5304,7 @@ unknown
 |
 major
 |
-[`МодульКонтексты`](../МодульКонтексты/index.md)
+[`МодульКонтексты`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)
 |
 Кириллические имена файлов модуля
 |
@@ -5326,7 +5326,7 @@ unknown
 |
 major
 |
-[`МодульКонтексты`](../МодульКонтексты/index.md)
+[`МодульКонтексты`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)
 |
 `contexts.generator.js` — мёртвый код
 |
@@ -5343,7 +5343,7 @@ unknown
 |
 major
 |
-[`МодульКонтексты`](../МодульКонтексты/index.md)
+[`МодульКонтексты`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)
 |
 Нет `contexts.paths.yaml` — путь захардкожен
 |
@@ -5360,7 +5360,7 @@ unknown
 |
 major
 |
-[`МодульКонтексты`](../МодульКонтексты/index.md)
+[`МодульКонтексты`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)
 |
 `writeTocAndIndexYaml` — второй генератор toc.yaml, неиспользуемый
 |
@@ -5377,7 +5377,7 @@ unknown
 |
 major
 |
-[`МодульКонтексты`](../МодульКонтексты/index.md)
+[`МодульКонтексты`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)
 |
 `sortTocItems` не применяется к папке `contexts/`
 |
@@ -5394,7 +5394,7 @@ unknown
 |
 major
 |
-[`МодульКонтексты`](../МодульКонтексты/index.md)
+[`МодульКонтексты`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)
 |
 `collapseTail` с порогом 3 — захардкожен
 |
@@ -5411,7 +5411,7 @@ unknown
 |
 major
 |
-[`МодульКонтексты`](../МодульКонтексты/index.md)
+[`МодульКонтексты`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)
 |
 Treemap: `&#123;` и `&#125;` вместо `{` `}`
 |
@@ -5436,7 +5436,7 @@ unknown
 |
 major
 |
-[`МодульКонтексты`](../МодульКонтексты/index.md)
+[`МодульКонтексты`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)
 |
 Поиск зависит от `app-help-contents.json`
 |
@@ -5453,7 +5453,7 @@ unknown
 |
 major
 |
-[`МодульКонтексты`](../МодульКонтексты/index.md)
+[`МодульКонтексты`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)
 |
 `getParentTitles` из `helpMap` и `resolveFolderTitle` из `contexts` — разные алгоритмы
 |
@@ -5475,7 +5475,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `uri` из палитры — тихий выход
 |
@@ -5494,7 +5494,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `fs.statSync` без `try/catch`
 |
@@ -5517,7 +5517,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `buildTitle` не использует `title` из frontmatter
 |
@@ -5550,7 +5550,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `buildTitle` не убирает `.md` из имени файла
 |
@@ -5573,7 +5573,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `when` не покрывает `.jpeg`, `.gif`, `.webp`
 |
@@ -5594,7 +5594,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `JSON.stringify(data)` без `\n` / indent
 |
@@ -5613,7 +5613,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `isImage` — не влияет на поведение в этой команде
 |
@@ -5640,7 +5640,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `targetPath` — избыточная переменная
 |
@@ -5667,7 +5667,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 Симлинки
 |
@@ -5686,7 +5686,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 Сообщение не показывает путь
 |
@@ -5709,7 +5709,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `link.Copy` не проверяет, что `fsPath` — `.md`, `.png` или папка
 |
@@ -5728,7 +5728,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 Нет обработки длинных путей Windows (>260)
 |
@@ -5745,7 +5745,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `sourceLinkPath` — абсолютный путь в JSON
 |
@@ -5764,7 +5764,7 @@ unknown
 |
 major
 |
-[`МодульКопированиессылки`](../МодульКопированиессылки/index.md)
+[`МодульКопированиессылки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)
 |
 `link.Copy` — не идемпотентна «в хорошем смысле»
 |
@@ -5783,7 +5783,7 @@ unknown
 |
 major
 |
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
+[`МодульЛинтераббревиатур`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80/index.md)
 |
 Нет Diagnostic-ов — только QuickPick
 |
@@ -5808,7 +5808,7 @@ unknown
 |
 major
 |
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
+[`МодульЛинтераббревиатур`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80/index.md)
 |
 `languages: ['ru', 'en']` — захардкожено
 |
@@ -5833,7 +5833,7 @@ unknown
 |
 major
 |
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
+[`МодульЛинтераббревиатур`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80/index.md)
 |
 `SKIP_DIRS` захардкожен
 |
@@ -5856,7 +5856,7 @@ unknown
 |
 major
 |
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
+[`МодульЛинтераббревиатур`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80/index.md)
 |
 `<abbr>` внутри код-блоков **не** проверяются, но `<abbr>` в HTML тоже нет
 |
@@ -5875,7 +5875,7 @@ unknown
 |
 major
 |
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
+[`МодульЛинтераббревиатур`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80/index.md)
 |
 `line`/`character` — позиция начала `<abbr>`, не `<abbr>`-контента
 |
@@ -5892,7 +5892,7 @@ unknown
 |
 major
 |
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
+[`МодульЛинтераббревиатур`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80/index.md)
 |
 `hasAbbr`-проверка чувствительна к регистру
 |
@@ -5911,7 +5911,7 @@ unknown
 |
 major
 |
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
+[`МодульЛинтераббревиатур`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80/index.md)
 |
 `QuickPick` с `label: $(warning) abbr` — не локализован
 |
@@ -5936,7 +5936,7 @@ unknown
 |
 major
 |
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
+[`МодульЛинтераббревиатур`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80/index.md)
 |
 `languages` не влияет на `docsRoot`
 |
@@ -5953,7 +5953,7 @@ unknown
 |
 major
 |
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
+[`МодульЛинтераббревиатур`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80/index.md)
 |
 `withProgress` блокирует UI
 |
@@ -5970,7 +5970,7 @@ unknown
 |
 major
 |
-[`МодульЛинтерссылок`](../МодульЛинтерссылок/index.md)
+[`МодульЛинтерссылок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%81%D1%81%D1%8B%D0%BB%D0%BE%D0%BA/index.md)
 |
 `hasAnchor` не находит якоря Diplodoc
 |
@@ -5996,7 +5996,7 @@ unknown
 |
 major
 |
-[`МодульЛинтертерминов`](../МодульЛинтертерминов/index.md)
+[`МодульЛинтертерминов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%82%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%BE%D0%B2/index.md)
 |
 `<abbr class="term">` внутри код-блоков — ложные срабатывания
 |
@@ -6021,7 +6021,7 @@ unknown
 |
 major
 |
-[`МодульЛинтертерминов`](../МодульЛинтертерминов/index.md)
+[`МодульЛинтертерминов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%82%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%BE%D0%B2/index.md)
 |
 `<abbr class="term">` с `data-term` и без — считаются по-разному
 |
@@ -6043,7 +6043,7 @@ unknown
 |
 major
 |
-[`МодульЛинтертерминов`](../МодульЛинтертерминов/index.md)
+[`МодульЛинтертерминов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%82%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%BE%D0%B2/index.md)
 |
 `resolveDocsRoot` дублируется
 |
@@ -6060,7 +6060,7 @@ unknown
 |
 major
 |
-[`МодульЛинтертерминов`](../МодульЛинтертерминов/index.md)
+[`МодульЛинтертерминов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%82%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%BE%D0%B2/index.md)
 |
 `title=` — не проверяется
 |
@@ -6077,7 +6077,7 @@ unknown
 |
 major
 |
-[`МодульЛинтертерминов`](../МодульЛинтертерминов/index.md)
+[`МодульЛинтертерминов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%82%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%BE%D0%B2/index.md)
 |
 `languages: ['ru', 'en']` — захардкожено
 |
@@ -6094,7 +6094,7 @@ unknown
 |
 major
 |
-[`МодульЛинтертерминов`](../МодульЛинтертерминов/index.md)
+[`МодульЛинтертерминов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%82%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%BE%D0%B2/index.md)
 |
 `SKIP_DIRS` — копия
 |
@@ -6115,7 +6115,7 @@ unknown
 |
 major
 |
-[`МодульЛинтертерминов`](../МодульЛинтертерминов/index.md)
+[`МодульЛинтертерминов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%82%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%BE%D0%B2/index.md)
 |
 `withProgress` без `cancellable`
 |
@@ -6132,7 +6132,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `t` вычисляется один раз при загрузке модуля
 |
@@ -6173,7 +6173,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `renderStatusCell` — мёртвый код
 |
@@ -6202,7 +6202,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `renderArticles` — inline-стили `display:grid`
 |
@@ -6223,7 +6223,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `article-block` — размер `3ch × 3ch` фиксирован
 |
@@ -6240,7 +6240,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `#cell-R-C` — глобальный `id`
 |
@@ -6263,7 +6263,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `config.getTitle` — не экранирует `art.title`
 |
@@ -6284,7 +6284,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `article-block` — все ссылки `target="_blank"`
 |
@@ -6305,7 +6305,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `renderLegend` — глобальный поиск `#legend-container`
 |
@@ -6326,7 +6326,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `getStatsHTML` вызывается с `t` из модуля
 |
@@ -6343,7 +6343,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `renderLang` использует `localStorage` без проверки доступности
 |
@@ -6364,7 +6364,7 @@ unknown
 |
 major
 |
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
+[`МодульОбщийрендерер`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D0%B1%D1%89%D0%B8%D0%B9%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B5%D1%80/index.md)
 |
 `renderLang` — не перерисовывает `navLinks`/`legend`
 |
@@ -6383,7 +6383,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `process.exit(1)` — немедленный выход при ошибке
 |
@@ -6409,7 +6409,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `--arg value` не поддерживается
 |
@@ -6430,7 +6430,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `--skip` без `--only` — но `--only` без `--skip` — работают
 |
@@ -6449,7 +6449,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `--list` — только имена шагов, без описания
 |
@@ -6470,7 +6470,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `step.cwd` — по умолчанию `projectRoot`
 |
@@ -6495,7 +6495,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `NODE_PATH` — от `projectRoot`
 |
@@ -6522,7 +6522,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `buildShellCommand` — только Windows
 |
@@ -6545,7 +6545,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `run('clean build', …)` — `fs.rmSync` без `try/catch`
 |
@@ -6570,7 +6570,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `steps` порядок — захардкожен в массиве
 |
@@ -6587,7 +6587,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `docs-build.js` не в `module.exports` — только `STEPS`, `PHASES`
 |
@@ -6608,7 +6608,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 Нет `--dry-run`
 |
@@ -6625,7 +6625,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `run`-шаги не логируют свои действия
 |
@@ -6642,7 +6642,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `--phase=build` без `pre` — сломается
 |
@@ -6661,7 +6661,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `docs-build.js` — `.cmd`-обёртка только для Windows
 |
@@ -6683,7 +6683,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `--quiet` в `@diplodoc/cli` — уменьшает вывод, но не отключает
 |
@@ -6704,7 +6704,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `periodicTable*` — три отдельных шага
 |
@@ -6727,7 +6727,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `cleanup service files` — удаляет `.yfm` в `build/`
 |
@@ -6752,7 +6752,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `docs-build.js` — нет `npm run docs-build`
 |
@@ -6779,7 +6779,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `package.json → scripts` — `precompile` вызывает `validate` (lint + type-check + test)
 |
@@ -6804,7 +6804,7 @@ unknown
 |
 major
 |
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
+[`МодульОркестраторсборки`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)
 |
 `docs-build.js` — `pre`-фаза не «идемпотентна»
 |
@@ -6821,7 +6821,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `buildDir` не читается из `options.docsRoot`
 |
@@ -6852,7 +6852,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `CURRENT_ENGINE = PLANTUML`, но CLI ставит `MERMAID`
 |
@@ -6881,7 +6881,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `patchPlantUml` — нет идемпотентности
 |
@@ -6906,7 +6906,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `patchMermaid` — проверка идемпотентности не работает
 |
@@ -6930,7 +6930,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `patchMermaid` — маркер `mermaid` слишком широкий
 |
@@ -6959,7 +6959,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `plantuml.client.js` — CDN без fallback
 |
@@ -6978,7 +6978,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `plantuml.client.js` — кнопки fit-* — мёртвый код
 |
@@ -7005,7 +7005,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `plantuml.client.js` — `document.querySelectorAll('.gantt-wrapper')` при загрузке
 |
@@ -7024,7 +7024,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `mermaid.client.js` — свой pan/zoom, без ограничений `svg-pan-zoom`
 |
@@ -7046,7 +7046,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `mermaid.client.js` — `MutationObserver` не отключается
 |
@@ -7073,7 +7073,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `mermaid.client.js` — `window.open(url, '_blank')` — popup blocker
 |
@@ -7090,7 +7090,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `setupClickableNodes` — `taskId` может не найтись
 |
@@ -7121,7 +7121,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `plantuml.patcher.js` — `</body>` в одном регистре
 |
@@ -7144,7 +7144,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `findHtmlFiles` в `mermaid.patcher.js` дублирует `walkHtmlFiles` из `plantuml.patcher.js`
 |
@@ -7161,7 +7161,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `plantuml.patcher.js` — `getGanttRuntimeFixScrollScript()` читает файл на каждую страницу
 |
@@ -7185,7 +7185,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `mermaid.patcher.js` — `<style>` дублирует `roadmap.css`
 |
@@ -7204,7 +7204,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `plantuml.client.js` — `svgPanZoom` instance не сохраняется в переменной на уровне модуля
 |
@@ -7225,7 +7225,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `svg-pan-zoom@3.6.1` — старая версия (2020)
 |
@@ -7247,7 +7247,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `roadmap.patcher` и `roadmap` — engine не согласованы
 |
@@ -7270,7 +7270,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `error.self` не применимо, `process.exitCode` не ставится
 |
@@ -7287,7 +7287,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `plantuml.patcher.js` — `console.log('[PlantUML Patcher] Внедрен скриптPan/Zoom…')` — нет пробела
 |
@@ -7304,7 +7304,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 Опечатка `findHtmlFiles` в `mermaid.patcher.js` — без проверки `fs.existsSync(dir)`
 |
@@ -7328,7 +7328,7 @@ unknown
 |
 major
 |
-[`МодульПатчерГанта`](../МодульПатчерГанта/index.md)
+[`МодульПатчерГанта`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)
 |
 `roadmap.patcher` не экспортирует `patchPlantUml` / `patchMermaid`
 |
@@ -7347,7 +7347,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `isTypeChanged` сравнивает label с name
 |
@@ -7380,7 +7380,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `TocYamlEntryUpdateOrAppend` вызывается с `finalFolderName = oldFolderName`
 |
@@ -7414,7 +7414,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `DiplodocSectionPatch` возвращает старое имя при ошибке, но папка может быть уже переименована
 |
@@ -7462,7 +7462,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `TocYamlEntryPatchReference` — regex без экранирования
 |
@@ -7496,7 +7496,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `IndexYamlEntryPatchHRef` при `composedTitle = ''` опустошает `title`
 |
@@ -7540,7 +7540,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `IndexYamlEntryPatchSection` (regex) не добавляет `pureTitle` если его нет
 |
@@ -7563,7 +7563,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `uri` из палитры — тихий выход
 |
@@ -7580,7 +7580,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `promptSectionIndex` — `Escape` не отменяет
 |
@@ -7609,7 +7609,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `updateLinksAfterRename` вызывается даже когда папка не переименована
 |
@@ -7628,7 +7628,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `rename.error.interrupted` — только в консоль
 |
@@ -7654,7 +7654,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Сообщение об успехе повторяет имя, если оно не изменилось
 |
@@ -7675,7 +7675,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `needSorting` — сортировка всегда (из-за `isTypeChanged`)
 |
@@ -7692,7 +7692,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `IndexYamlEntryPatch` (js-yaml) и `IndexYamlEntryPatchSection` (regex) дают разный результат
 |
@@ -7713,7 +7713,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `TocYamlEntryUpdateOrAppend` обновляет только первую запись
 |
@@ -7730,7 +7730,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Нет `withProgress` на `updateLinksAfterRename`
 |
@@ -7747,7 +7747,7 @@ unknown
 |
 major
 |
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
+[`МодульПереименованиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BC%D0%B5%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Неатомарность и отсутствие rollback
 |
@@ -7768,7 +7768,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `FrontMatterSectionTypesIndexed` включает `Page` — Page ошибочно получает индекс
 |
@@ -7806,7 +7806,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `TocYamlEntryPatch` правит `tocDoc` в памяти, но `sortTocItems` перечитывает с диска
 |
@@ -7830,7 +7830,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `sortTocItems` вызывается **после** каждой рекурсии
 |
@@ -7865,7 +7865,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `localCounter` не сохраняется между рекурсиями
 |
@@ -7884,7 +7884,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `DiplodocSectionPatch` возвращает старое имя при ошибке (та же проблема, что в `section.Rename`)
 |
@@ -7916,7 +7916,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `IndexMdUpsert` вызывается **до** `DiplodocSectionPatch`
 |
@@ -7938,7 +7938,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `warnings` не удаляются после показа
 |
@@ -7963,7 +7963,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `checkMissingSectionType` — пустой `sectionType` = `null`, а не `''`
 |
@@ -7990,7 +7990,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `checkTitleHasPrefix` — только по префиксу
 |
@@ -8017,7 +8017,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `sortTocItems` не вызывается, если `toc.yaml` не существует
 |
@@ -8042,7 +8042,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 Нет CLI — только VS Code
 |
@@ -8061,7 +8061,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `showInformationMessage` — всегда «успех», даже с warnings
 |
@@ -8083,7 +8083,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `reindexDirectory` не логирует число обработанных секций
 |
@@ -8100,7 +8100,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `getSectionMetadata` возвращает `sectionIndex: null`, `String(null &#124;&#124; '') = ''`
 |
@@ -8123,7 +8123,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексацияпапок`](../МодульПереиндексацияпапок/index.md)
+[`МодульПереиндексацияпапок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA/index.md)
 |
 `metadata.pureTitle &#124;&#124; sectionName`
 |
@@ -8144,7 +8144,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 Только `ru` в `docs-build.js`
 |
@@ -8161,7 +8161,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 Регулярка `<figcaption>` — жёсткая по формату
 |
@@ -8190,7 +8190,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `uniqueKey` — path-specific
 |
@@ -8210,7 +8210,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `updateFigureLinksInFile` — только `[text](path#fig-…)`
 |
@@ -8239,7 +8239,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `updateFigureLinksInFile` — только `#fig-…`
 |
@@ -8256,7 +8256,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `template.replace('{0}', ...)` — только первое вхождение
 |
@@ -8277,7 +8277,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `innerText` — только первый уровень форматирования
 |
@@ -8307,7 +8307,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `pass 1` — `captionText` захватывает `[\s\S]*?`
 |
@@ -8327,7 +8327,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `figureCounter` — глобальный, но `pass 1` не идемпотентна
 |
@@ -8344,7 +8344,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `targetLocale !== activeLocale` → жёстко `«Figure»`
 |
@@ -8367,7 +8367,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `DiplodocConfigFromJson(configJsonOrObj)` — две разные реализации
 |
@@ -8405,7 +8405,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `updateFigureLinksInFile` — не пишет `console.log` при обновлении
 |
@@ -8431,7 +8431,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `rootDir` — не проверяется
 |
@@ -8448,7 +8448,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 `success: false` в `reindexFigures` при отсутствии `toc.yaml`
 |
@@ -8465,7 +8465,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациярисунков`](../МодульПереиндексациярисунков/index.md)
+[`МодульПереиндексациярисунков`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.md)
 |
 Нет CLI-опции для `--locale` / `--config`
 |
@@ -8482,7 +8482,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `FrontMatterSectionTypesIndexed` включает `Page` — Page ошибочно учитывается
 |
@@ -8507,7 +8507,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 Не учитывает дочерние секции второго уровня
 |
@@ -8534,7 +8534,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `maxIdx` — последняя часть, не полная
 |
@@ -8561,7 +8561,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `parentIndex === ''` — `'1'` (не `'0'`)
 |
@@ -8607,7 +8607,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `parseInt` без `radix`
 |
@@ -8628,7 +8628,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `get` возвращает `null` при отсутствии
 |
@@ -8647,7 +8647,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `reduce((a, b) => Math.max(a, b), 0)` — но это `maxIdx`
 |
@@ -8664,7 +8664,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `parentIndex` не trim
 |
@@ -8687,7 +8687,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 Нет обработки ошибок `fs.readdirSync`
 |
@@ -8704,7 +8704,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 Дублирование логики с `reindexer.directories`
 |
@@ -8734,7 +8734,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `reindexer.md` не в `module.exports` CLI
 |
@@ -8751,7 +8751,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `sectionIndex` не поддерживает буквенные префиксы
 |
@@ -8768,7 +8768,7 @@ unknown
 |
 major
 |
-[`МодульПереиндексациястатей`](../МодульПереиндексациястатей/index.md)
+[`МодульПереиндексациястатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `IndexYaml` / `toc.yaml` не читаются
 |
@@ -8785,7 +8785,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Перемещение в корень языка невозможно
 |
@@ -8813,7 +8813,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `getComposedTitle` читает `title:` регуляркой
 |
@@ -8836,7 +8836,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `getComposedTitle` fallback — имя папки
 |
@@ -8859,7 +8859,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Порядок операций при `!isSameParent` не атомарен
 |
@@ -8889,7 +8889,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `updateLinksAfterRename` обходит **все** `.md` в проекте, включая перемещённый раздел
 |
@@ -8910,7 +8910,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `TocYamlEntryInsertAtPosition` при `after` — тихий fallback
 |
@@ -8937,7 +8937,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `error.self` — мёртвый NLS-ключ
 |
@@ -8975,7 +8975,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `updateLinksAfterRename` с `stubText = '**удалено**'` — вводит в заблуждение
 |
@@ -9000,7 +9000,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `selectTargetDirectory` — `matchOnDescription: true` бесполезен
 |
@@ -9032,7 +9032,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `fs.renameSync` — кросс-диск не поддерживается
 |
@@ -9051,7 +9051,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `fs.existsSync(targetPath)` — проверка на любую папку, не только секцию
 |
@@ -9077,13 +9077,13 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `references` не собираются
 |
 {% cut "Развернуть" %}
 
-В отличие от [`section.Delete`](../МодульУдалениесекции/index.md), `section.Move` **не** собирает `references` заранее. Это правильно: при перемещении ссылки не удаляются, а пересчитываются. Но если в проекте тысячи `.md` — обход для `updateLinksAfterRename` занимает секунды, и пользователь ждёт без индикатора прогресса (нет `withProgress`). См. следующий пункт.
+В отличие от [`section.Delete`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md), `section.Move` **не** собирает `references` заранее. Это правильно: при перемещении ссылки не удаляются, а пересчитываются. Но если в проекте тысячи `.md` — обход для `updateLinksAfterRename` занимает секунды, и пользователь ждёт без индикатора прогресса (нет `withProgress`). См. следующий пункт.
 
 {% endcut %}
 ||
@@ -9094,7 +9094,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Нет `withProgress`
 |
@@ -9113,7 +9113,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Сообщение об успехе содержит `sourceName`, а не число ссылок
 |
@@ -9138,7 +9138,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `uri` из палитры — тихий выход
 |
@@ -9155,7 +9155,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `isSameParent` — `getComposedTitle` вызывается **после** проверок
 |
@@ -9180,7 +9180,7 @@ unknown
 |
 major
 |
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
+[`МодульПеремещениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `TocYamlEntryMoveWithinSameFile` — не проверяет `movingEntry` на `null`
 |
@@ -9215,7 +9215,7 @@ unknown
 |
 major
 |
-[`МодульПереченьсносок`](../МодульПереченьсносок/index.md)
+[`МодульПереченьсносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `injectContainerIntoState` не вызывается
 |
@@ -9241,7 +9241,7 @@ unknown
 |
 major
 |
-[`МодульПереченьсносок`](../МодульПереченьсносок/index.md)
+[`МодульПереченьсносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `generateFootnoteListPage` не существует
 |
@@ -9285,7 +9285,7 @@ unknown
 |
 major
 |
-[`МодульПереченьсносок`](../МодульПереченьсносок/index.md)
+[`МодульПереченьсносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `footnoteList` не «оживляет» уже отрисованную таблицу — нет обновления при `MutationObserver`
 |
@@ -9315,7 +9315,7 @@ unknown
 |
 major
 |
-[`МодульПереченьсносок`](../МодульПереченьсносок/index.md)
+[`МодульПереченьсносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `--section` ищет **только** папку с точным именем
 |
@@ -9341,7 +9341,7 @@ unknown
 |
 major
 |
-[`МодульПереченьсносок`](../МодульПереченьсносок/index.md)
+[`МодульПереченьсносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `urlPrefix` не кодируется
 |
@@ -9371,7 +9371,7 @@ unknown
 |
 major
 |
-[`МодульПереченьсносок`](../МодульПереченьсносок/index.md)
+[`МодульПереченьсносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `stripLinks` удаляет **все** ссылки
 |
@@ -9396,7 +9396,7 @@ unknown
 |
 major
 |
-[`МодульПереченьсносок`](../МодульПереченьсносок/index.md)
+[`МодульПереченьсносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `langPrefix` из CLI — эвристика
 |
@@ -9418,7 +9418,7 @@ unknown
 |
 major
 |
-[`МодульПереченьсносок`](../МодульПереченьсносок/index.md)
+[`МодульПереченьсносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Порядок сносок определяется `toc.yaml`, но не «физическим» порядком в файле
 |
@@ -9435,7 +9435,7 @@ unknown
 |
 major
 |
-[`МодульПереченьсносок`](../МодульПереченьсносок/index.md)
+[`МодульПереченьсносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `footnoteList` не экспортируется из `diplodoc-helper-cli.js`
 |
@@ -9464,7 +9464,7 @@ unknown
 |
 major
 |
-[`МодульРазмерыстатей`](../МодульРазмерыстатей/index.md)
+[`МодульРазмерыстатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 Средний размер считается по `.md`, а не по HTML
 |
@@ -9483,7 +9483,7 @@ unknown
 |
 major
 |
-[`МодульРазмерыстатей`](../МодульРазмерыстатей/index.md)
+[`МодульРазмерыстатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 «Глава» и «Раздел» — эвристика по имени папки
 |
@@ -9502,7 +9502,7 @@ unknown
 |
 major
 |
-[`МодульРазмерыстатей`](../МодульРазмерыстатей/index.md)
+[`МодульРазмерыстатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `Pagebuilder.common` — общий, но не экспортируется как «библиотека»
 |
@@ -9525,7 +9525,7 @@ unknown
 |
 major
 |
-[`МодульРазмерыстатей`](../МодульРазмерыстатей/index.md)
+[`МодульРазмерыстатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 Цвет статуса захардкожен в трёх местах
 |
@@ -9548,7 +9548,7 @@ unknown
 |
 major
 |
-[`МодульРазмерыстатей`](../МодульРазмерыстатей/index.md)
+[`МодульРазмерыстатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `periodicTable` — имя CLI-команды, не совпадает с модулем
 |
@@ -9565,7 +9565,7 @@ unknown
 |
 major
 |
-[`МодульРазмерыстатей`](../МодульРазмерыстатей/index.md)
+[`МодульРазмерыстатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `navLinks` дублируются между отчётами
 |
@@ -9609,7 +9609,7 @@ unknown
 |
 major
 |
-[`МодульРазмерыстатей`](../МодульРазмерыстатей/index.md)
+[`МодульРазмерыстатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `lang: ["ru", "en"]` — захардкожено
 |
@@ -9632,7 +9632,7 @@ unknown
 |
 major
 |
-[`МодульРазмерыстатей`](../МодульРазмерыстатей/index.md)
+[`МодульРазмерыстатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `core-renderer` читает `preferredLang` из `localStorage`
 |
@@ -9653,7 +9653,7 @@ unknown
 |
 major
 |
-[`МодульРазмерыстатей`](../МодульРазмерыстатей/index.md)
+[`МодульРазмерыстатей`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)
 |
 `stripLinks` в `footnoteList` и `bytescounter` — разные
 |
@@ -9670,7 +9670,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `docs-build.js` — `tocCleanMode` в фазе `pre` (критический баг)
 |
@@ -9717,7 +9717,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 Нет идемпотентности
 |
@@ -9741,7 +9741,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `sessionStorage` может бросить
 |
@@ -9768,7 +9768,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `[class*="sidebar"]` — слишком широкий селектор
 |
@@ -9794,7 +9794,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `setTimeout × 5` — избыточно
 |
@@ -9817,7 +9817,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `MutationObserver` без отключения
 |
@@ -9836,7 +9836,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `console.log` в проде
 |
@@ -9858,7 +9858,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `hideNavigation` использует `cssText` (перезаписывает всё)
 |
@@ -9883,7 +9883,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `urlParams.has('clean')` — не различает `?clean` и `?clean=0`
 |
@@ -9907,7 +9907,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `sessionStorage` ключ `diplodoc_clean_mode` — глобальный для домена
 |
@@ -9924,7 +9924,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `injectCleanMode` не проверяет, что `files.length > 0`
 |
@@ -9941,7 +9941,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `console.log` с префиксом `[tocInject]` — не `[CleanMode]`
 |
@@ -9962,7 +9962,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `walk` без `fs.existsSync(dir)`
 |
@@ -9985,7 +9985,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `sessionStorage` не изолирует поддомены
 |
@@ -10002,7 +10002,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `tocCleanMode` не документирован в CLI-командах пользователя
 |
@@ -10019,7 +10019,7 @@ unknown
 |
 major
 |
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
+[`МодульРежимбезнавигации`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D0%B1%D0%B5%D0%B7%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D0%B8/index.md)
 |
 `injectCleanMode` не читает конфиг
 |
@@ -10036,7 +10036,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `.vscode/launch.json → preLaunchTask: "Watch (for Debugging)"` — таск не существует
 |
@@ -10078,7 +10078,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `process.exit(1)` — немедленный выход
 |
@@ -10104,7 +10104,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `Watch mode (development with sourcemaps) started...` — всегда «development»
 |
@@ -10129,7 +10129,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `fs.statSync('dist/extension.js')` — без try/catch
 |
@@ -10150,7 +10150,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `sourcemap` и `sourcesContent` — `!isProduction`
 |
@@ -10169,7 +10169,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `minify: isProduction` — не `minifySyntax`/`minifyIdentifiers` отдельно
 |
@@ -10191,7 +10191,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `treeShaking: true` — но `bundle: true` уже включает
 |
@@ -10208,7 +10208,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `logLevel: 'info'` — `info` и `warn` в stdout
 |
@@ -10225,7 +10225,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `isWatch` не отключает `isProduction`
 |
@@ -10244,7 +10244,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `buildOptions.sourcemap = !isProduction` — в dev `true`
 |
@@ -10263,7 +10263,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `fs.mkdirSync('dist', { recursive: true })` — до `try`
 |
@@ -10288,7 +10288,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `entryPoints: ['src/extension.js']` — единственная точка
 |
@@ -10307,7 +10307,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `NODE_ENV=production` vs `--prod`
 |
@@ -10330,7 +10330,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `console.log('Watch mode ...')` — блокирует завершение `build()`
 |
@@ -10358,7 +10358,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `dist/extension.js` — не проверяется содержимое
 |
@@ -10377,7 +10377,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `source-map` в production — не создаётся
 |
@@ -10394,7 +10394,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `platform: 'node'` — не `'browser'`
 |
@@ -10411,7 +10411,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 Нет `--minify=false` override
 |
@@ -10428,7 +10428,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `watch` без обработки ошибок пересчёта
 |
@@ -10447,7 +10447,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `dist/` — не очищается перед сборкой
 |
@@ -10466,7 +10466,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `npm run watch` — отсутствует
 |
@@ -10483,7 +10483,7 @@ unknown
 |
 major
 |
-[`МодульСборкарасширения`](../МодульСборкарасширения/index.md)
+[`МодульСборкарасширения`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%B1%D0%BE%D1%80%D0%BA%D0%B0%D1%80%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F/index.md)
 |
 `build.js` не в `module.exports`
 |
@@ -10502,7 +10502,7 @@ unknown
 |
 major
 |
-[`МодульСквознаянумерациясносок`](../МодульСквознаянумерациясносок/index.md)
+[`МодульСквознаянумерациясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Только `ru` в `docs-build.js`
 |
@@ -10519,7 +10519,7 @@ unknown
 |
 major
 |
-[`МодульСквознаянумерациясносок`](../МодульСквознаянумерациясносок/index.md)
+[`МодульСквознаянумерациясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Порядок сносок определяется `toc.yaml`
 |
@@ -10536,7 +10536,7 @@ unknown
 |
 major
 |
-[`МодульСквознаянумерациясносок`](../МодульСквознаянумерациясносок/index.md)
+[`МодульСквознаянумерациясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 «Болтающиеся» сноски в файлах без `toc`
 |
@@ -10553,7 +10553,7 @@ unknown
 |
 major
 |
-[`МодульСквознаянумерациясносок`](../МодульСквознаянумерациясносок/index.md)
+[`МодульСквознаянумерациясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Регулярка `(fnref&#124;fn)(\d+)\b` — совпадения в произвольном тексте
 |
@@ -10572,7 +10572,7 @@ unknown
 |
 major
 |
-[`МодульСквознаянумерациясносок`](../МодульСквознаянумерациясносок/index.md)
+[`МодульСквознаянумерациясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `\b` без `\b` в начале — уже упомянуто
 |
@@ -10589,7 +10589,7 @@ unknown
 |
 major
 |
-[`МодульСквознаянумерациясносок`](../МодульСквознаянумерациясносок/index.md)
+[`МодульСквознаянумерациясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `<ol>` в state JSON — вероятно, регулярка мёртвая
 |
@@ -10636,7 +10636,7 @@ unknown
 |
 major
 |
-[`МодульСквознаянумерациясносок`](../МодульСквознаянумерациясносок/index.md)
+[`МодульСквознаянумерациясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `counter-reset` не работает без CSS
 |
@@ -10653,7 +10653,7 @@ unknown
 |
 major
 |
-[`МодульСквознаянумерациясносок`](../МодульСквознаянумерациясносок/index.md)
+[`МодульСквознаянумерациясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `total` ≠ `changed`
 |
@@ -10670,7 +10670,7 @@ unknown
 |
 major
 |
-[`МодульСквознаянумерациясносок`](../МодульСквознаянумерациясносок/index.md)
+[`МодульСквознаянумерациясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `.yfm`-настройки не учитываются
 |
@@ -10687,7 +10687,7 @@ unknown
 |
 major
 |
-[`МодульСноски`](../МодульСноски/index.md)
+[`МодульСноски`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)
 |
 Только один язык за вызов
 |
@@ -10710,7 +10710,7 @@ unknown
 |
 major
 |
-[`МодульСноски`](../МодульСноски/index.md)
+[`МодульСноски`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)
 |
 Сквозная нумерация сбрасывается в HTML
 |
@@ -10718,7 +10718,7 @@ major
 
 После `reindexFootnotes` в `.md` нумерация сквозная по проекту: файл 1 использует `[^53]`–`[^54]`, файл 2 — `[^55]`–`[^56]`. Но `@diplodoc/cli` при рендере HTML **перенумеровывает каждую страницу с 1**. То есть на странице 2 будет `[^55]` в исходнике и `[^53]` в готовом HTML.
 
-Это ожидаемое поведение (сквозной номер в `.md` нужен только для порядка в исходниках, а не для отображения), но может сбить с толку при отладке: `grep` по `[^55]` в `.md` найдёт сноску на странице 2, а в HTML та же сноска будет `#fn1`. Сквозная нумерация в HTML — отдельная задача модуля [`footnoteNumbering`](../МодульСквознаянумерациясносок/index.md).
+Это ожидаемое поведение (сквозной номер в `.md` нужен только для порядка в исходниках, а не для отображения), но может сбить с толку при отладке: `grep` по `[^55]` в `.md` найдёт сноску на странице 2, а в HTML та же сноска будет `#fn1`. Сквозная нумерация в HTML — отдельная задача модуля [`footnoteNumbering`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md).
 
 {% endcut %}
 ||
@@ -10729,7 +10729,7 @@ unknown
 |
 major
 |
-[`МодульСноски`](../МодульСноски/index.md)
+[`МодульСноски`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)
 |
 Многострочные определения не поддерживаются
 |
@@ -10754,7 +10754,7 @@ unknown
 |
 major
 |
-[`МодульСноски`](../МодульСноски/index.md)
+[`МодульСноски`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)
 |
 `[^58]` с буквами становится числом
 |
@@ -10773,7 +10773,7 @@ unknown
 |
 major
 |
-[`МодульСноски`](../МодульСноски/index.md)
+[`МодульСноски`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)
 |
 `applyFootnoteRenumbering` удаляет `\r?\n` после определения-сироты
 |
@@ -10797,7 +10797,7 @@ unknown
 |
 major
 |
-[`МодульСноски`](../МодульСноски/index.md)
+[`МодульСноски`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)
 |
 `computeFootnoteRenumbering` не идемпотентна по `startNumber`
 |
@@ -10814,7 +10814,7 @@ unknown
 |
 major
 |
-[`МодульСноски`](../МодульСноски/index.md)
+[`МодульСноски`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)
 |
 Поиск `indexOf` в `analyzeDefBlock`
 |
@@ -10838,7 +10838,7 @@ unknown
 |
 major
 |
-[`МодульСноски`](../МодульСноски/index.md)
+[`МодульСноски`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)
 |
 `reindexFootnotesInFile` не используется
 |
@@ -10855,7 +10855,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `promptSectionIndex` не отменяет операцию
 |
@@ -10887,7 +10887,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `composeFullTitle` без пробела для `hasPrefix && !hasIndex`
 |
@@ -10918,7 +10918,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `TocYamlEntryPatchItems` добавляет в конец, не сортирует
 |
@@ -10937,7 +10937,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `createDirectory` глотает `fs`-ошибки
 |
@@ -10978,7 +10978,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `uri` из палитры — тихий выход
 |
@@ -11006,7 +11006,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `<` `>` в `title` ломают YAML
 |
@@ -11038,7 +11038,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `IndexMdFileCreate` не проверяет существование файла
 |
@@ -11065,7 +11065,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Сообщение об успехе не содержит имени папки
 |
@@ -11092,7 +11092,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `isValidName` — единственная проверка, и она почти пустая
 |
@@ -11115,7 +11115,7 @@ unknown
 |
 major
 |
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
+[`МодульСозданиесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `calculateNextIndex` не учитывает уже существующие `folderName` с одинаковым индексом
 |
@@ -11142,7 +11142,7 @@ unknown
 |
 major
 |
-[`МодульСправочныетеги`](../МодульСправочныетеги/index.md)
+[`МодульСправочныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 В `title` попадает путь, а не заголовок статьи
 |
@@ -11166,7 +11166,7 @@ unknown
 |
 major
 |
-[`МодульСправочныетеги`](../МодульСправочныетеги/index.md)
+[`МодульСправочныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `SKIP_DIRS` короче, чем у соседних модулей
 |
@@ -11185,7 +11185,7 @@ unknown
 |
 major
 |
-[`МодульСправочныетеги`](../МодульСправочныетеги/index.md)
+[`МодульСправочныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 Страницы под тегом не сортируются
 |
@@ -11202,7 +11202,7 @@ unknown
 |
 major
 |
-[`МодульСправочныетеги`](../МодульСправочныетеги/index.md)
+[`МодульСправочныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 Модуль не экспортируется из `diplodoc-helper-cli.js`
 |
@@ -11232,7 +11232,7 @@ unknown
 |
 major
 |
-[`МодульСправочныетеги`](../МодульСправочныетеги/index.md)
+[`МодульСправочныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 Нет `helptags.paths.yaml` — путь захардкожен
 |
@@ -11249,7 +11249,7 @@ unknown
 |
 major
 |
-[`МодульСправочныетеги`](../МодульСправочныетеги/index.md)
+[`МодульСправочныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `helptag.Update` и `helptag.Delete` не связаны с этим модулем
 |
@@ -11273,7 +11273,7 @@ unknown
 |
 major
 |
-[`МодульСправочныетеги`](../МодульСправочныетеги/index.md)
+[`МодульСправочныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 `lstatSync` без `withFileTypes` — потенциальная проблема с симлинками
 |
@@ -11290,7 +11290,7 @@ unknown
 |
 major
 |
-[`МодульСправочныетеги`](../МодульСправочныетеги/index.md)
+[`МодульСправочныетеги`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D1%87%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md)
 |
 Возможные пустые языковые папки
 |
@@ -11307,7 +11307,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `version: "1.4"` захардкожен и не связан с версией пакета
 |
@@ -11330,7 +11330,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `author` захардкожен с личным email
 |
@@ -11351,7 +11351,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `default` и `internal` дублируются
 |
@@ -11372,7 +11372,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `totalArticles` = все статьи всех языков
 |
@@ -11393,7 +11393,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `totalSections` и `totalChapters` — эвристика по title
 |
@@ -11418,7 +11418,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `reading_time` — «время чтения одной статьи», не всего руководства
 |
@@ -11450,7 +11450,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `git-meta.json` — если файла нет и CI запускается
 |
@@ -11493,7 +11493,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `console.warn`/`console.error` без `process.exitCode`
 |
@@ -11520,7 +11520,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `periodicStat` в `docs-build.js` между `tocCleanMode` и `contexts`
 |
@@ -11548,7 +11548,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `STAT_FILENAME` захардкожен
 |
@@ -11575,7 +11575,7 @@ unknown
 |
 major
 |
-[`МодульСтатистикапресетов`](../МодульСтатистикапресетов/index.md)
+[`МодульСтатистикапресетов`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0%D0%BF%D1%80%D0%B5%D1%81%D0%B5%D1%82%D0%BE%D0%B2/index.md)
 |
 `presets.yaml` — «сгенерированный файл в `docs/`»
 |
@@ -11599,7 +11599,7 @@ unknown
 |
 major
 |
-[`МодульТермины`](../МодульТермины/index.md)
+[`МодульТермины`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B/index.md)
 |
 Коллизия анкоров при транслитерации
 |
@@ -11616,7 +11616,7 @@ unknown
 |
 major
 |
-[`МодульТермины`](../МодульТермины/index.md)
+[`МодульТермины`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B/index.md)
 |
 `showWarnings` и `showUnused` выключены
 |
@@ -11633,7 +11633,7 @@ unknown
 |
 major
 |
-[`МодульТермины`](../МодульТермины/index.md)
+[`МодульТермины`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B/index.md)
 |
 Требуется `class="term"` — иначе термин «выпадает»
 |
@@ -11650,7 +11650,7 @@ unknown
 |
 major
 |
-[`МодульТермины`](../МодульТермины/index.md)
+[`МодульТермины`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B/index.md)
 |
 Линтер чувствителен к регистру
 |
@@ -11667,7 +11667,7 @@ unknown
 |
 major
 |
-[`МодульТермины`](../МодульТермины/index.md)
+[`МодульТермины`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B/index.md)
 |
 Дублирование `shared/*` с `abbrs`
 |
@@ -11684,7 +11684,7 @@ unknown
 |
 major
 |
-[`МодульТерминыКлиент`](../МодульТерминыКлиент/index.md)
+[`МодульТерминыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 Стили живут вне модуля
 |
@@ -11701,7 +11701,7 @@ unknown
 |
 major
 |
-[`МодульТерминыКлиент`](../МодульТерминыКлиент/index.md)
+[`МодульТерминыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 `MutationObserver` не отключается
 |
@@ -11718,7 +11718,7 @@ unknown
 |
 major
 |
-[`МодульТерминыКлиент`](../МодульТерминыКлиент/index.md)
+[`МодульТерминыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 `getBoundingClientRect()` на каждом `mouseenter` и `scroll`
 |
@@ -11735,7 +11735,7 @@ unknown
 |
 major
 |
-[`МодульТерминыКлиент`](../МодульТерминыКлиент/index.md)
+[`МодульТерминыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 `scroll`-подписка не убрана в отличие от `abbrs.client`
 |
@@ -11752,7 +11752,7 @@ unknown
 |
 major
 |
-[`МодульТерминыКлиент`](../МодульТерминыКлиент/index.md)
+[`МодульТерминыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 Работает только при наличии маркера `id="dl-term-occ-client"`
 |
@@ -11769,7 +11769,7 @@ unknown
 |
 major
 |
-[`МодульТерминыКлиент`](../МодульТерминыКлиент/index.md)
+[`МодульТерминыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 Polling-fallback срабатывает слишком долго
 |
@@ -11786,7 +11786,7 @@ unknown
 |
 major
 |
-[`МодульТерминыКлиент`](../МодульТерминыКлиент/index.md)
+[`МодульТерминыКлиент`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82/index.md)
 |
 «Ещё/свернуть» захардкожено
 |
@@ -11803,7 +11803,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `removeFileOrDirectory` с `force: true` — тихое «успешно»
 |
@@ -11842,7 +11842,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `checkDeleteAccess` не используется
 |
@@ -11876,7 +11876,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `TocYamlEntryRemove` ищет только `href: <folderName>/index.md`
 |
@@ -11920,7 +11920,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `getLanguageRoot(parentDir)` — иногда «не тот» корень
 |
@@ -11963,7 +11963,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `updateLinksInProject` обходит **все** `.md` в проекте, включая внутри удаляемого раздела
 |
@@ -12001,7 +12001,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `references` используется только как «флаг» для `updateLinksAfterDelete`
 |
@@ -12031,7 +12031,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `updateLinksInProject` глотает ошибки
 |
@@ -12065,7 +12065,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `findReferencesToMdSection` — только внутри `projectRoot`
 |
@@ -12084,7 +12084,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `uri` из палитры — тихий выход
 |
@@ -12101,7 +12101,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `references` может врать
 |
@@ -12124,7 +12124,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Отсутствует `confirm` для «много ссылок»
 |
@@ -12143,7 +12143,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 Файлы и папки только через `force: true` — нет «частичного» удаления
 |
@@ -12160,7 +12160,7 @@ unknown
 |
 major
 |
-[`МодульУдалениесекции`](../МодульУдалениесекции/index.md)
+[`МодульУдалениесекции`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)
 |
 `smart.delete` не различает «не-секция с toc.yaml»
 |
@@ -12179,7 +12179,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 Не чистит `toc.yaml` родителя
 |
@@ -12200,7 +12200,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 `uri` из палитры — тихий выход
 |
@@ -12217,7 +12217,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 `fs.statSync` без `try/catch`
 |
@@ -12238,7 +12238,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 `removeFileOrDirectory` с `force: true` — тихое «успешно»
 |
@@ -12265,7 +12265,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 `references` — только inline-ссылки
 |
@@ -12288,7 +12288,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 `FileDeleteMessageBuilder.footer` — пустой
 |
@@ -12307,7 +12307,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 `FileDeleteMessageBuilder` переиспользует `plugin.section.delete.confirmation.text`
 |
@@ -12333,7 +12333,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 Кнопка `«Удалить»` — не из NLS
 |
@@ -12354,7 +12354,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 Сообщение об успехе — захардкожено
 |
@@ -12379,7 +12379,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 `getLanguageRoot` может вернуть не-корень-языка
 |
@@ -12396,7 +12396,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 `references` может быть пустым для файла с само-ссылками
 |
@@ -12422,7 +12422,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 Двойной вызов `findDirectories`
 |
@@ -12439,7 +12439,7 @@ unknown
 |
 major
 |
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
+[`МодульУдалениефайла`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%84%D0%B0%D0%B9%D0%BB%D0%B0/index.md)
 |
 `FileDeleteMessageBuilder` — `introduction` для папки-не-секции
 |
@@ -12456,7 +12456,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 `.jpeg`, `.gif`, `.webp` — команда не видна
 |
@@ -12475,7 +12475,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 `fs.existsSync` → `fs.statSync` — race condition
 |
@@ -12498,7 +12498,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 `file.Delete` при несуществующем пути — `throw`
 |
@@ -12523,7 +12523,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 Папка-не-секция без `toc.yaml` — `file.Delete` не чистит `toc.yaml`
 |
@@ -12544,7 +12544,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 `ux_smart_delete` не логирует маршрут
 |
@@ -12563,7 +12563,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 `return ux_*` — VS Code-команда не ждёт
 |
@@ -12589,7 +12589,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 `uri` из палитры — тихий выход
 |
@@ -12606,7 +12606,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 `isDiplodocSection` — только по трём файлам
 |
@@ -12625,7 +12625,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 Отсутствие обратной совместимости в заголовке
 |
@@ -12647,7 +12647,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 `smart.delete` не экспортируется из `diplodoc-helper-cli.js`
 |
@@ -12664,7 +12664,7 @@ unknown
 |
 major
 |
-[`МодульУмноеудаление`](../МодульУмноеудаление/index.md)
+[`МодульУмноеудаление`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%BC%D0%BD%D0%BE%D0%B5%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5/index.md)
 |
 `smart.delete` — единственная точка входа для `file.Delete`
 |
@@ -12685,7 +12685,7 @@ unknown
 |
 major
 |
-[`МодульЯдросекций`](../МодульЯдросекций/index.md)
+[`МодульЯдросекций`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%B4%D1%80%D0%BE%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B9/index.md)
 |
 Два разных движка YAML
 |
@@ -12709,7 +12709,7 @@ unknown
 |
 major
 |
-[`МодульЯдросекций`](../МодульЯдросекций/index.md)
+[`МодульЯдросекций`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%B4%D1%80%D0%BE%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B9/index.md)
 |
 `TEMPLATE_FINAL_TITLE` и `composeFullTitle` — разная логика для одного результата
 |
@@ -12749,7 +12749,7 @@ unknown
 |
 major
 |
-[`МодульЯдросекций`](../МодульЯдросекций/index.md)
+[`МодульЯдросекций`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%B4%D1%80%D0%BE%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B9/index.md)
 |
 `isIndexedSectionType` не согласован с `FrontMatterSectionTypesIndexed`
 |
@@ -12782,7 +12782,7 @@ unknown
 |
 major
 |
-[`МодульЯдросекций`](../МодульЯдросекций/index.md)
+[`МодульЯдросекций`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%B4%D1%80%D0%BE%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B9/index.md)
 |
 `DiplodocSectionPatch` не удаляет старые `index.yaml`/`toc.yaml` при переименовании в другой тип
 |
@@ -12801,7 +12801,7 @@ unknown
 |
 major
 |
-[`МодульЯдросекций`](../МодульЯдросекций/index.md)
+[`МодульЯдросекций`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%B4%D1%80%D0%BE%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B9/index.md)
 |
 `getSectionMetadata` читает через `get()` — с `null` по умолчанию
 |
@@ -12834,7 +12834,7 @@ unknown
 |
 major
 |
-[`МодульЯдросекций`](../МодульЯдросекций/index.md)
+[`МодульЯдросекций`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%B4%D1%80%D0%BE%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B9/index.md)
 |
 `sortTocItems` при `sortOrder = 'none'` — не сортирует, но перезаписывает файл
 |
@@ -12857,7 +12857,7 @@ unknown
 |
 major
 |
-[`МодульЯдросекций`](../МодульЯдросекций/index.md)
+[`МодульЯдросекций`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%B4%D1%80%D0%BE%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B9/index.md)
 |
 `getIndexFromBlock` в `yaml.toc.utils.js` — парсит блок из текста, а не YAML
 |
@@ -12878,7 +12878,7 @@ unknown
 |
 major
 |
-[`МодульЯкорясносок`](../МодульЯкорясносок/index.md)
+[`МодульЯкорясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%BA%D0%BE%D1%80%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Регулярка ловит только числовые id
 |
@@ -12895,7 +12895,7 @@ unknown
 |
 major
 |
-[`МодульЯкорясносок`](../МодульЯкорясносок/index.md)
+[`МодульЯкорясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%BA%D0%BE%D1%80%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Зависимость от `<link rel="canonical">`
 |
@@ -12915,7 +12915,7 @@ unknown
 |
 major
 |
-[`МодульЯкорясносок`](../МодульЯкорясносок/index.md)
+[`МодульЯкорясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%BA%D0%BE%D1%80%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 `replace` не различает контекст
 |
@@ -12932,7 +12932,7 @@ unknown
 |
 major
 |
-[`МодульЯкорясносок`](../МодульЯкорясносок/index.md)
+[`МодульЯкорясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%BA%D0%BE%D1%80%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Модуль не идемпотентен на повторном вызове
 |
@@ -12954,7 +12954,7 @@ unknown
 |
 major
 |
-[`МодульЯкорясносок`](../МодульЯкорясносок/index.md)
+[`МодульЯкорясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%BA%D0%BE%D1%80%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Канонический URL берётся «как есть»
 |
@@ -12973,7 +12973,7 @@ unknown
 |
 major
 |
-[`МодульЯкорясносок`](../МодульЯкорясносок/index.md)
+[`МодульЯкорясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%BA%D0%BE%D1%80%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Не пишет `totalFixed` в консоль в CLI-режиме
 |
@@ -12996,7 +12996,7 @@ unknown
 |
 major
 |
-[`МодульЯкорясносок`](../МодульЯкорясносок/index.md)
+[`МодульЯкорясносок`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%AF%D0%BA%D0%BE%D1%80%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md)
 |
 Симметрия с `mdedit_fixes/fix-footnote-links.js`
 |

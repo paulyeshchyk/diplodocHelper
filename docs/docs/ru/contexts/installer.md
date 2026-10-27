@@ -1,4 +1,5 @@
 # INSTALLER
 
 - Модули
-  - [Модуль. Installer](../Модули/МодульInstaller/index.md) (16 КБ)
+  - Реестр модулей
+    - [Модуль. Installer](../Модули/Реестр/МодульInstaller/index.md) (16 КБ)

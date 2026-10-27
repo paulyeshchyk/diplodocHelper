@@ -1,7 +1,7 @@
 # LAYER
 
 - Модули
-  - [Слои (layer)](../Модули/Слоиlayer/index.md) (24 КБ)
+  - [Слои (layer)](../Модули/Слоиlayer/index.md) (31 КБ)
     - [Клиентский runtime](../Модули/Слоиlayer/ClientRuntime/index.md) (4.0 КБ)
     - [Общее ядро](../Модули/Слоиlayer/SharedCore/index.md) (2.9 КБ)
     - [CLI](../Модули/Слоиlayer/Cli/index.md) (2.3 КБ)
