@@ -1,4 +1,4 @@
 # PACKAGE.JSON
 
 - Модули
-  - [Модуль. Manifest](../Модули/МодульManifest/index.md) (27 КБ)
+  - [Модуль. Manifest](../Модули/МодульManifest/index.md) (28 КБ)

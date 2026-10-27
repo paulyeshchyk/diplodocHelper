@@ -101,6 +101,7 @@ const STEPS = {
         ),
         cli('breadcrumb', './build'),
         cli('contexttags', './build'),
+        cli('comments', './build'),
         cli('ganttFixScroll', './build'),
         cli('periodicTable'),
         cli('periodicTableHelpTag'),

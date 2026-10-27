@@ -1,0 +1,22 @@
+<div class="thread-card__header">
+  <div>
+    <span class="thread-card__status">{{STATUS_LABEL}}</span>
+    <a class="thread-card__page" href="{{PAGE_PATH}}" target="_blank" title="Открыть документ">{{PAGE_PATH}}</a>
+  </div>
+  <span>{{CREATED}}</span>
+</div>
+<div class="thread-card__quote">«{{QUOTE}}»</div>
+<div class="thread-card__comments"></div>
+<div class="thread-card__reply">
+  <textarea placeholder="Ответ технического писателя…" maxlength="4000"></textarea>
+  <input type="text" class="basis-input" placeholder="Основание (ссылка на ТЗ)..." maxlength="500">
+  <input type="text" class="name-input" placeholder="Имя (опционально, по умолчанию без имени)" maxlength="100">
+  <div class="thread-card__actions">
+    <label><input type="checkbox" class="resolve-on-reply" checked> Разрешить после ответа</label>
+    <span class="spacer" style="flex:1"></span>
+    <button class="reply-btn">Ответить</button>
+    <button class="resolve-btn" {{RESOLVE_DISABLED}}>Разрешить</button>
+    <button class="reopen-btn" {{REOPEN_DISABLED}}>Переоткрыть</button>
+    <button class="archive-btn" {{ARCHIVE_DISABLED}}>В архив</button>
+  </div>
+</div>

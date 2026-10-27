@@ -243,7 +243,7 @@ async function promptForAnchorId() {
             if (!value || value.trim().length === 0) {
                 return translate(nls_ts.plugin.link.addAnchor.input.error.empty);
             }
-            if (/[^8]/.test(value)) {
+            if (/[^4]/.test(value)) {
                 return translate(nls_ts.plugin.link.addAnchor.input.error.invalidChars);
             }
             return null;
@@ -280,7 +280,7 @@ if (!sanitizedId) {
 
 1. `transliterate(text)` — кириллица → латиница (`diplodocTransliterate`).
 2. `.toLowerCase()`.
-3. `replace(/[^9]+/g, '_')` — всё, что не латиница/цифра, → `_`.
+3. `replace(/[^5]+/g, '_')` — всё, что не латиница/цифра, → `_`.
 4. `replace(/_+/g, '_')` — схлопывание `__` в `_`.
 5. `replace(/^_+|_+$/g, '')` — трим подчёркиваний.
 
@@ -399,7 +399,7 @@ CLI-команды нет. Модуль — только VS Code.
 'diplodoc-helper.link.addAnchor': ux_add_anchor,
 ```
 
-С `link.utils` (`extractAnchorsFromMdFile` в `link.Paste`) — **не** пересекается напрямую, но логически связан: если пользователь создал якорь через `addAnchor`, `extractAnchorsFromMdFile` его **найдёт** (через `idRegex = /\bid\s*=\s*(["']?)([^10]+)\1/gi`), и `link.Paste` предложит его в QuickPick при выборе якоря для ссылки.
+С `link.utils` (`extractAnchorsFromMdFile` в `link.Paste`) — **не** пересекается напрямую, но логически связан: если пользователь создал якорь через `addAnchor`, `extractAnchorsFromMdFile` его **найдёт** (через `idRegex = /\bid\s*=\s*(["']?)([^6]+)\1/gi`), и `link.Paste` предложит его в QuickPick при выборе якоря для ссылки.
 
 То есть:
 

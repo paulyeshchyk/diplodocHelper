@@ -89,7 +89,7 @@ function loadSearchData(callback) {
     var jsonUrl = '../' + DATASET_FILENAME;
     var scriptTag = document.currentScript;
     if (scriptTag) {
-        var baseUrl = scriptTag.src.replace(/\/[^20]*$/, '/');
+        var baseUrl = scriptTag.src.replace(/\/[^10]*$/, '/');
         jsonUrl = baseUrl + '../../' + DATASET_FILENAME;
     }
 

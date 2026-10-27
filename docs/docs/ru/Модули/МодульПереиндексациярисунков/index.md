@@ -23,7 +23,7 @@ context: reindexer.figures, reindexer, figure, pre-processing, markdown
 `reindexer.figures` — «массовая» операция над рисунками. Пользователь вызывает **Diplodoc → Переиндексировать рисунки** на `docs/ru/` — и модуль:
 
 1. **Читает `toc.yaml`** (рекурсивно через `include`) — получает список `.md` в **порядке чтения**.
-2. **Идёт по файлам** в этом порядке, для каждого `<figcaption class="imageDescription" id="…">Рисунок 5. `:
+2. **Идёт по файлам** в этом порядке, для каждого `<figcaption class="imageDescription" id="…">Рисунок 4. `:
    - очищает текущую подпись от `Рисунок N.` / `Figure N.` / `Рис. N.`;
    - ставит **сквозной** номер `<prefix> N. <текст>`;
    - запоминает `id → N` в глобальный `mapping`.
@@ -172,7 +172,7 @@ for (const mdFilePath of allMdFiles) {
 **`processFigureCaptions(content, startCounter, prefix, mdFilePath)`**:
 
 ```js
-const regex = /<figcaption\s+class="imageDescription"([^33]*?)\s+id="([^34]+)"([^33]*?)>([\s\S]*?)<\/figcaption>/gi;
+const regex = /<figcaption\s+class="imageDescription"([^19]*?)\s+id="([^20]+)"([^19]*?)>([\s\S]*?)<\/figcaption>/gi;
 let counter = startCounter;
 const mapping = new Map();
 
@@ -195,7 +195,7 @@ const newContent = content.replace(regex, (match, beforeId, id, afterId, caption
 return { newContent, newCounter: counter, figureMapping: mapping };
 ```
 
-- **Regex** — ищет `<figcaption class="imageDescription" id="…">Рисунок 6. …</figcaption>` (многострочно).
+- **Regex** — ищет `<figcaption class="imageDescription" id="…">Рисунок 5. …</figcaption>` (многострочно).
 - **`cleaned`** — удаляет старый префикс (`Рисунок N.` / `Figure N.` / `Fig. N.` / `Рис. N.`) и `N. ` в начале. Опционально.
 - **`newCaption`** — `${prefix} ${counter}. ${cleaned}` (например, `Рисунок 42. Схема архитектуры`).
 - **`uniqueKey`** — `${абсолютныйПуть}::${id}` — глобальный ключ для `mapping`. Нужен, потому что `id` могут совпадать в разных файлах.
@@ -228,7 +228,7 @@ for (const file of files) {
 **`updateFigureLinksInFile(filePath, figureNumberMap, defaultTemplate)`**:
 
 ```js
-const linkRegex = /\[([^35]]+)\]\(([^36]*?)(#fig-[^36]+)\)/g;
+const linkRegex = /\[([^21]]+)\]\(([^22]*?)(#fig-[^22]+)\)/g;
 
 const newContent = content.replace(linkRegex, (match, linkText, pathPart, anchor) => {
     const figId = anchor.substring(1);  // '#fig-abc' → 'fig-abc'
@@ -271,7 +271,7 @@ const newContent = content.replace(linkRegex, (match, linkText, pathPart, anchor
 });
 ```
 
-- **Regex** — `\[([^35]]+)\]\(([^36]*?)(#fig-[^36]+)\)`. Ищет `[text](path#fig-…)`.
+- **Regex** — `\[([^21]]+)\]\(([^22]*?)(#fig-[^22]+)\)`. Ищет `[text](path#fig-…)`.
 - **`figId`** — `#fig-abc` → `fig-abc`.
 - **`targetMdPath`** — резолвится от текущего файла + `pathPart`. Для same-file ссылок (`#fig-abc` без `pathPart`) — `path.resolve(filePath)`.
 - **`uniqueKey`** — `${targetMdPath}::${figId}` — совпадает с pass 1.

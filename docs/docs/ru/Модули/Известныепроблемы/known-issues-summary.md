@@ -1,69 +1,6 @@
 #|
 || **ID** | **Тип** | **Severity** | **Модуль** | **Кратко** | **Подробности** ||
 ||
-KI-001
-|
-bug
-|
-critical
-|
-[`link.Paste`](../МодульВставкассылки/index.md)
-|
-link.Paste — признак «это изображение»
-|
-{% cut "Развернуть" %}
-
-**Что происходит.** Расширение файла берётся вместе с точкой, а сравнивается со строкой без точки — сравнение всегда истинно. Значит, признак «изображение» срабатывает для любого файла. Практические симптомы:
-
-- при вставке ссылки на `.md`-файл получается `<figure>` с картинкой-плейсхолдером вместо `[text](url)`;
-- при вставке ссылки на папку — якоря не предлагаются (ветка «только для не-картинок» не выполняется);
-- поле «изображение», которое кладёт в буфер `link.Copy`, полностью игнорируется — модуль пересчитывает флаг заново, с ошибкой.
-
-**Почему.** Сравнение `ext !== 'md'` — точка в `ext` не учтена. И `data.isImage` не читается из буфера, а вычисляется локально.
-
-**Что исправить.** Сравнивать с `'.md'` и/или использовать готовый `data.isImage` из JSON, если он есть.
-
-{% endcut %}
-||
-||
-KI-002
-|
-bug
-|
-critical
-|
-[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)
-|
-image.PasteFromClipboard — вставка затирает строку
-|
-{% cut "Развернуть" %}
-
-**Что происходит.** Диапазон замены — от начала текущей строки до позиции курсора. Всё, что было на строке левее курсора, удаляется и заменяется на `<figure>`-блок.
-
-- если курсор на пустой строке — работает ожидаемо;
-- если курсор в конце строки с текстом — текст удаляется;
-- если курсор в середине строки — правая часть остаётся, левая удаляется.
-
-**Почему.** Не проверяется, что слева от курсора нет текста, и не используется `insert` вместо `replace` в общем случае.
-
-**Что исправить.** Вставлять через `insert` в позицию курсора (с добавлением `\n` при необходимости), либо явно проверять «строка пустая/только отступ» и делать `replace` только тогда.
-
-{% endcut %}
-||
-||
-KI-003
-|
-bug
-|
-critical
-|
-[`reindexer.md`](../МодульПереиндексациястатей/index.md)
-|
-При отсутствии родительского index.md всегда возвращает 1 — при создании второй секции в корне языка происходит коллизия с уже существующей
-|
-—
-||
-||
 KI-004
 |
 bug
@@ -88,87 +25,6 @@ section.Rename / reindexer.directories — возврат старого име�
 **Что исправить.** В `catch` — попытаться откатить `fs.renameSync(newFolderPath, folderPath)`. Либо возвращать фактическое имя и явно сообщать пользователю о частичном успехе.
 
 {% endcut %}
-||
-||
-KI-005
-|
-bug
-|
-critical
-|
-[`manifest`](../МодульManifest/index.md)
-|
-manifest — парсер JSDoc
-|
-{% cut "Развернуть" %}
-
-**Что происходит.** В парсере TS-интерфейса (извлечение настроек) условие «эта строка — начало JSDoc-комментария» реализовано как `startsWith` с пустой строкой. Пустая строка — префикс любой строки, поэтому условие истинно всегда: все строки собираются как один блок «комментария». При подтверждении — описания настроек в `contributes.configuration` будут мусорными или пустыми.
-
-**Почему.** Опечатка/недоработка в условии. При копировании кода пробелы/символы потерялись.
-
-**Что исправить.** Условие должно проверять реальное начало JSDoc (`/**`), а не пустую строку. Проверить через `npm run generate-manifest` и посмотреть `description` в `package.json → contributes.configuration.properties`.
-
-{% endcut %}
-||
-||
-KI-006
-|
-bug
-|
-critical
-|
-[`installer`](../МодульInstaller/index.md)
-|
-Конфиг ссылается на несуществующие src/scripts/build-docs.js и src/scripts/utils; копируется только src/plugins/, но пользователю показывается «✅ Скрипты успешно установлены»
-|
-—
-||
-||
-KI-007
-|
-bug
-|
-critical
-|
-[`tocCleanMode`](../МодульРежимбезнавигации/index.md), [`docs-build`](../МодульОркестраторсборки/index.md)
-|
-tocCleanMode в фазе pre оркестратора
-|
-{% cut "Развернуть" %}
-
-**Что происходит.** В оркестраторе сборки `tocCleanMode` стоит в списке шагов фазы `pre` — до вызова `@diplodoc/cli`. Но clean mode встраивает скрипт в `.html`-файлы, а на момент вызова фазы `pre` папка сборки пуста (очищена первым шагом). Скрипт не встраивается ни в один файл. При стандартной сборке clean mode не работает.
-
-**Почему.** Ошибка порядка шагов в оркестраторе (не в самом модуле).
-
-**Что исправить.** Перенести `tocCleanMode` из фазы `pre` в фазу `post`, после шагов, генерирующих HTML.
-
-{% endcut %}
-||
-||
-KI-008
-|
-bug
-|
-major
-|
-[`section.Delete`](../МодульУдалениесекции/index.md), [`section.Move`](../МодульПеремещениесекции/index.md), [`section.Rename`](../МодульПереименованиесекции/index.md), [`file.Delete`](../МодульУдалениефайла/index.md)
-|
-Определение корня языка может вернуть промежуточную папку с toc.yaml без index.md — поиск и правка ссылок работают в узком scope
-|
-—
-||
-||
-KI-009
-|
-bug
-|
-major
-|
-[`section.Delete`](../МодульУдалениесекции/index.md), [`section.Move`](../МодульПеремещениесекции/index.md), [`section.Rename`](../МодульПереименованиесекции/index.md), [`file.Delete`](../МодульУдалениефайла/index.md)
-|
-Ошибки записи при обходе .md ловятся и логируются, но не пробрасываются наружу — частичное обновление, пользователь видит «успех»
-|
-—
 ||
 ||
 KI-010
@@ -223,136 +79,6 @@ major
 —
 ||
 ||
-KI-013
-|
-bug
-|
-major
-|
-[`sections.core`](../МодульЯдросекций/index.md)
-|
-При переименовании папки замена в родительском toc.yaml строится через регулярное выражение без escape — точки в именах папок матчат любой символ, портят содержимое
-|
-—
-||
-||
-KI-014
-|
-bug
-|
-major
-|
-[`linter.links`](../МодульЛинтерссылок/index.md)
-|
-Проверка якорей находит только inline HTML-атрибуты; markdown-якоря {#id} и авто-якоря заголовков не находятся — ложные срабатывания на валидных ссылках
-|
-—
-||
-||
-KI-015
-|
-bug
-|
-major
-|
-[`tocCleanMode`](../МодульРежимбезнавигации/index.md)
-|
-Селектор [class*="sidebar"] скрывает любой элемент с подстрокой в классе, включая примеры кода в статьях
-|
-—
-||
-||
-KI-016
-|
-bug
-|
-major
-|
-[`core-renderer`](../МодульОбщийрендерер/index.md)
-|
-Локализованные подписи вычисляются один раз при загрузке модуля, до смены языка — английские страницы получают русские тексты
-|
-—
-||
-||
-KI-017
-|
-bug
-|
-major
-|
-[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)
-|
-На Linux команда xclip с аргументом перенаправления не работает через прямой вызов — буфер всегда пуст
-|
-—
-||
-||
-KI-018
-|
-bug
-|
-major
-|
-[`file.Delete`](../МодульУдалениефайла/index.md)
-|
-Не чистит toc.yaml родителя — при удалении папки, на которую ссылается навигация, запись остаётся, @diplodoc/cli падает
-|
-—
-||
-||
-KI-019
-|
-bug
-|
-major
-|
-[`section.Delete`](../МодульУдалениесекции/index.md), [`section.Move`](../МодульПеремещениесекции/index.md)
-|
-Удаление записи из toc.yaml ищет точное совпадение href на index.md; варианты index.yaml, index.html, ссылка на папку без файла не удаляются
-|
-—
-||
-||
-KI-020
-|
-bug
-|
-major
-|
-[`section.Move`](../МодульПеремещениесекции/index.md)
-|
-Порядок операций не атомарен: удаление записи из старого toc.yaml выполняется до переименования; при падении переименования раздел «пропадает» из навигации
-|
-—
-||
-||
-KI-021
-|
-bug
-|
-major
-|
-[`footnoteNumbering`](../МодульСквознаянумерациясносок/index.md)
-|
-Правка нумерации в JSON-состоянии страницы использует регулярку, не совпадающую с реальным форматом <ol> — после гидратации номера могут сброситься
-|
-—
-||
-||
-KI-022
-|
-bug
-|
-major
-|
-[`contexts`](../МодульКонтексты/index.md), [`context-search.client`](../МодульКлиентскийпоискпоконтекстам/index.md)
-|
-Клиентский скрипт поиска копируется в ассеты, но не подключается к HTML — поиск не работает без ручного добавления тега
-|
-—
-||
-||
 KI-023
 |
 bug
@@ -375,45 +101,6 @@ major
 [`build.js`](../МодульСборкарасширения/index.md)
 |
 Скрипт npm run watch, на который ссылается launch.json как preLaunchTask, отсутствует в package.json — отладка через F5 не работает
-|
-—
-||
-||
-KI-025
-|
-bug
-|
-minor
-|
-[`reindexer.directories`](../МодульПереиндексацияпапок/index.md), [`reindexer.md`](../МодульПереиндексациястатей/index.md)
-|
-Список «индексируемых типов» включает Page — статьи получают sectionIndex при переиндексации, что семантически неверно
-|
-—
-||
-||
-KI-026
-|
-bug
-|
-minor
-|
-[`diplodoc-helper-cli`](../МодульCLI/index.md)
-|
-В экспорте модуля только 9 функций из 24 команд — остальные недоступны для программного вызова
-|
-—
-||
-||
-KI-027
-|
-bug
-|
-minor
-|
-[`helptagmap`](../МодульКартасправочныхтегов/index.md)
-|
-Статус «избыток» в легенде недостижим: количество тегов вычисляется как 0 или 1, ветка «больше 1» не выполняется
 |
 —
 ||
@@ -444,32 +131,6 @@ minor
 —
 ||
 ||
-KI-030
-|
-bug
-|
-minor
-|
-[`context-tags`](../МодульКонтекстныетеги/index.md)
-|
-Регулярка для <meta name="context"> требует строгий порядок атрибутов — при изменении шаблона Diplodoc перестанет находить контексты
-|
-—
-||
-||
-KI-031
-|
-bug
-|
-minor
-|
-[`context-tags`](../МодульКонтекстныетеги/index.md)
-|
-Определение языка через первый сегмент пути: для корневой страницы build/index.html даёт 'index.html' вместо кода языка
-|
-—
-||
-||
 KI-032
 |
 bug
@@ -492,318 +153,6 @@ minor
 [`tocCleanMode`](../МодульРежимбезнавигации/index.md)
 |
 Не идемпотентен: скрипт дублируется при повторной сборке
-|
-—
-||
-||
-KI-034
-|
-bug
-|
-minor
-|
-[`tocCleanMode`](../МодульРежимбезнавигации/index.md)
-|
-Параметр ?clean=0 не выключает режим, а включает (проверяется факт наличия параметра, а не значение)
-|
-—
-||
-||
-KI-035
-|
-bug
-|
-minor
-|
-[`tocCleanMode`](../МодульРежимбезнавигации/index.md)
-|
-Запись в sessionStorage может бросить в private browsing или sandbox-iframe — скрипт падает, режим не активируется
-|
-—
-||
-||
-KI-036
-|
-bug
-|
-minor
-|
-[`gosts.client`](../МодульКлиентГОСТов/index.md)
-|
-Клик по ссылке внутри ячейки одновременно открывает ссылку и раскрывает/закрывает карточку
-|
-—
-||
-||
-KI-037
-|
-bug
-|
-minor
-|
-[`gosts.client`](../МодульКлиентГОСТов/index.md)
-|
-Формат-парсер ссылок не блокирует javascript:-схемы
-|
-—
-||
-||
-KI-038
-|
-bug
-|
-minor
-|
-[`link.Paste`](../МодульВставкассылки/index.md)
-|
-HTML-ветка возвращает путь без ведущего / — при вставке внутрь <a> или <img> ссылка относительна, браузер её не найдёт
-|
-—
-||
-||
-KI-039
-|
-bug
-|
-minor
-|
-[`link.Copy`](../МодульКопированиессылки/index.md)
-|
-Условие появления в контекстном меню не покрывает .jpeg, .gif, .webp — при том, что флаг «изображение» в коде их учитывает
-|
-—
-||
-||
-KI-040
-|
-bug
-|
-minor
-|
-[`link.addAnchor`](../МодульДобавлениеякоря/index.md)
-|
-Валидация разрешает дефис, а транслитерация заменяет его на подчёркивание — пользователь вводит одно, получает другое
-|
-—
-||
-||
-KI-041
-|
-bug
-|
-minor
-|
-[`link.addAnchor`](../МодульДобавлениеякоря/index.md)
-|
-Проверка «внутри HTML-тега» ложно срабатывает на математические сравнения и стрелки
-|
-—
-||
-||
-KI-042
-|
-bug
-|
-minor
-|
-[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)
-|
-Текст описания вставляется без экранирования — [, ], * ломают markdown-ссылку и <figcaption>
-|
-—
-||
-||
-KI-043
-|
-bug
-|
-minor
-|
-[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)
-|
-Заголовок диалога содержит незаполненный плейсхолдер — пользователь видит шаблон вместо текста
-|
-—
-||
-||
-KI-044
-|
-bug
-|
-minor
-|
-[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)
-|
-Метка времени в имени файла вычисляется в UTC, а не в локальном времени пользователя
-|
-—
-||
-||
-KI-045
-|
-bug
-|
-minor
-|
-[`image.PasteFromList`](../МодульВставкаизображенияизсписка/index.md)
-|
-Корень проекта берётся из первой папки workspace — в мульти-workspace поиск идёт не в том проекте
-|
-—
-||
-||
-KI-046
-|
-bug
-|
-minor
-|
-[`image.PasteFromList`](../МодульВставкаизображенияизсписка/index.md)
-|
-Вставка не заменяет выделенный текст, а добавляет ссылку после выделения
-|
-—
-||
-||
-KI-047
-|
-bug
-|
-minor
-|
-[`image.PasteFromList`](../МодульВставкаизображенияизсписка/index.md)
-|
-Название с символами * или ] ломает markdown-ссылку при вставке
-|
-—
-||
-||
-KI-048
-|
-bug
-|
-minor
-|
-[`reindexer.figures`](../МодульПереиндексациярисунков/index.md)
-|
-Обновляются только markdown-ссылки вида [text](path#fig-…); HTML-ссылки и reference-style не трогаются
-|
-—
-||
-||
-KI-049
-|
-bug
-|
-minor
-|
-[`sections.core`](../МодульЯдросекций/index.md)
-|
-Две функции сборки заголовка дают разные результаты для одного входа (с точкой и без, с пробелом и без) — зависит от того, какая из них вызвана
-|
-—
-||
-||
-KI-050
-|
-bug
-|
-minor
-|
-[`section.Create`](../МодульСозданиесекции/index.md)
-|
-Escape в диалоге ввода индекса не отменяет создание, а создаёт секцию без индекса
-|
-—
-||
-||
-KI-051
-|
-bug
-|
-minor
-|
-[`section.Create`](../МодульСозданиесекции/index.md)
-|
-Ошибки создания папки (спецсимволы, зарезервированные имена Windows, слишком длинный путь) логируются, но не показываются пользователю
-|
-—
-||
-||
-KI-052
-|
-bug
-|
-minor
-|
-[`section.Create`](../МодульСозданиесекции/index.md)
-|
-Проверка имени не отсеивает YAML-спецсимволы (>, &#124;, @) — некоторые из них ломают frontmatter при записи
-|
-—
-||
-||
-KI-053
-|
-bug
-|
-minor
-|
-[`section.Move`](../МодульПеремещениесекции/index.md)
-|
-Нельзя переместить секцию в корень языка — в списке целевых папок только секции, самого корня нет
-|
-—
-||
-||
-KI-054
-|
-bug
-|
-minor
-|
-[`section.Move`](../МодульПеремещениесекции/index.md)
-|
-Заголовок секции читается регулярным выражением «первое title: в файле» — может захватить title: из тела статьи или из meta.title
-|
-—
-||
-||
-KI-055
-|
-bug
-|
-minor
-|
-[`section.Rename`](../МодульПереименованиесекции/index.md)
-|
-Признак «тип изменился» сравнивает имя типа (Section) с меткой (Раздел) — всегда истинно, сортировка запускается при каждом переименовании
-|
-—
-||
-||
-KI-056
-|
-bug
-|
-minor
-|
-[`smart.delete`](../МодульУмноеудаление/index.md)
-|
-Условие появления в меню не покрывает .jpeg, .gif, .webp — для этих расширений команда не показывается
-|
-—
-||
-||
-KI-057
-|
-bug
-|
-minor
-|
-[`smart.delete`](../МодульУмноеудаление/index.md)
-|
-Если путь исчез между кликом и вызовом, маршрутизация уходит в файловое удаление и падает на чтении статуса без обработки
 |
 —
 ||
@@ -834,149 +183,6 @@ minor
 —
 ||
 ||
-KI-060
-|
-bug
-|
-minor
-|
-[`linter.abbrs`](../МодульЛинтераббревиатур/index.md), [`linter.terms`](../МодульЛинтертерминов/index.md)
-|
-Код-блоки не маскируются перед поиском — примеры кода с тегами дают ложные срабатывания
-|
-—
-||
-||
-KI-061
-|
-bug
-|
-minor
-|
-[`linter.abbrs`](../МодульЛинтераббревиатур/index.md), [`linter.terms`](../МодульЛинтертерминов/index.md)
-|
-Определение корня документации дублируется в двух модулях — при изменении алгоритма надо править в двух местах
-|
-—
-||
-||
-KI-062
-|
-bug
-|
-minor
-|
-[`linter.abbrs`](../МодульЛинтераббревиатур/index.md), [`linter.terms`](../МодульЛинтертерминов/index.md)
-|
-Поиск в словаре чувствителен к регистру — ИСО не совпадает с исо, ложное «не найдено»
-|
-—
-||
-||
-KI-063
-|
-bug
-|
-minor
-|
-[`docs-build`](../МодульОркестраторсборки/index.md)
-|
-При падении шага процесс завершается немедленно, не давая cleanup-обработчикам выполниться
-|
-—
-||
-||
-KI-064
-|
-bug
-|
-minor
-|
-[`docs-build`](../МодульОркестраторсборки/index.md)
-|
-Аргументы парсятся только в форме --arg=value, --arg value не поддерживается
-|
-—
-||
-||
-KI-065
-|
-bug
-|
-minor
-|
-[`docs-build`](../МодульОркестраторсборки/index.md)
-|
-Пустое значение --only= (без списка) приводит к молчаливому пропуску всех шагов
-|
-—
-||
-||
-KI-066
-|
-bug
-|
-minor
-|
-[`diplodoc-helper-cli`](../МодульCLI/index.md)
-|
-Нет флага --help; запуск без аргументов молча завершается с кодом 0
-|
-—
-||
-||
-KI-067
-|
-gap
-|
-minor
-|
-[`footnoteList`](../МодульПереченьсносок/index.md)
-|
-Функция для встраивания контейнера в JSON-состояние определена, но нигде не вызывается — контейнер создаётся только клиентом
-|
-—
-||
-||
-KI-068
-|
-gap
-|
-minor
-|
-[`footnoteList`](../МодульПереченьсносок/index.md)
-|
-generateFootnoteListPage импортируется из generateNavigationContent, но не экспортируется — вызов через эту точку входа падает
-|
-—
-||
-||
-KI-069
-|
-tradeoff
-|
-minor
-|
-[`abbrs`](../МодульАббревиатуры/index.md), [`terms`](../МодульТермины/index.md), [`gosts`](../МодульГОСТы/index.md)
-|
-Выходная папка задаётся только через paths.yaml, CLI-аргумента нет — при переносе модуля нужна правка YAML
-|
-—
-||
-||
-KI-070
-|
-tradeoff
-|
-minor
-|
-[`abbrs`](../МодульАббревиатуры/index.md), [`terms`](../МодульТермины/index.md)
-|
-Список папок-исключений задан по имени глобально — если у пользователя есть папка figures/ со статьями, они будут проигнорированы
-|
-—
-||
-||
 KI-071
 |
 tradeoff
@@ -986,45 +192,6 @@ minor
 [`footnotes`](../МодульСноски/index.md), [`footnoteNumbering`](../МодульСквознаянумерациясносок/index.md)
 |
 В стандартном сценарии сборки обрабатывается только русский язык; английские сноски не пересчитываются
-|
-—
-||
-||
-KI-072
-|
-tradeoff
-|
-minor
-|
-[`footnotes`](../МодульСноски/index.md)
-|
-Многострочные определения сносок не поддерживаются — вторая строка остаётся обычным текстом
-|
-—
-||
-||
-KI-073
-|
-by-design
-|
-minor
-|
-[`abbrs`](../МодульАббревиатуры/index.md), [`terms`](../МодульТермины/index.md)
-|
-Теги с атрибутом class полностью игнорируются — если пользователь добавил класс для стилизации, запись выпадает из словаря и линтера
-|
-—
-||
-||
-KI-074
-|
-by-design
-|
-minor
-|
-[`figures`](../МодульИллюстрации/index.md)
-|
-Регулярка для <figcaption> требует двойные кавычки и одну строку — одинарные и многострочные не сработают
 |
 —
 ||
@@ -1096,7 +263,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const docsDirIndex = args.indexOf('--docsDir');
 const docsDir = docsDirIndex !== -1 ? args[docsDirIndex + 1] : './docs';
 </code>
@@ -1137,35 +304,12 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const dataRaw = args[dataRawIndex !== -1 ? dataRawIndex + 1 : undefined];
 generateRoadMap({ docsRoot: docsDir, dataPath, dataRaw, engine: DiagramEngine.MERMAID });
 </code>
 
 `generateRoadMap` (`roadmap.js`) читает `options.data`, а не `options.dataRaw`. `--dataRaw` **не работает** (fallback на `dataPath` или `DEFAULT_DATA_PATH`).
-
-{% endcut %}
-||
-||
-KI-106
-|
-unknown
-|
-major
-|
-[`МодульCLI`](../МодульCLI/index.md)
-|
-`ganttFixScroll` — `docsRoot` вместо `buildDir`
-|
-{% cut "Развернуть" %}
-
-<code class="language-js">
-} else if (command === 'ganttFixScroll') {
-    generateGanttFixScroll({ docsRoot: outputDir, engine: DiagramEngine.MERMAID });
-}
-</code>
-
-`generateGanttFixScroll` (`roadmap.patcher`) читает `options.buildDir`, а не `options.docsRoot`. Работает только потому, что в `docs-build.js` `cli('ganttFixScroll', './build')` — `outputDir` совпадает с `./build` (дефолт). `--outputDir ./custom` — не сработает.
 
 {% endcut %}
 ||
@@ -1182,7 +326,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const { targetLocale, configObj } = DiplodocConfigFromCli(CONFIG_KEY);
 reindexFigures(docsDir, targetLocale, configObj);
 </code>
@@ -1204,7 +348,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (targetHtmlIdx !== -1) {
     targetHtml = path.resolve(args[targetHtmlIdx + 1]);
 } else {
@@ -1229,7 +373,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (section) {
     targetHtml = findSectionIndexHtml(outputDir, section);
 } else {
@@ -1295,7 +439,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-cmd">
+<code>
 @echo off
 node "%~dp0docs-build.js" %*
 </code>
@@ -1365,7 +509,7 @@ major
 
 В `installer.config.js`:
 
-<code class="language-js">
+<code>
 { src: 'src/scripts/build-docs.js', dest: './build-docs.js' },
 { src: 'src/scripts/utils', dest: './utils' },
 </code>
@@ -1410,7 +554,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (ignorePatterns && ignorePatterns.some((pattern) => childItemName.includes(pattern))) {
     return;
 }
@@ -1462,7 +606,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const exists = fs.existsSync(src);
 const stats = fs.statSync(src);
 </code>
@@ -1651,7 +795,7 @@ major
 
 Судя по конфигу, должен быть **отдельный** `build-docs.js`, отличный от `docs-build.js`. Возможно, это тонкая обёртка для пользователя:
 
-<code class="language-js">
+<code>
 // src/scripts/build-docs.js
 require('../plugins/docs-build.js');
 </code>
@@ -1753,7 +897,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (line.trim().startsWith('')) {
     currentComment += '\n' + lines[i];
     i++;
@@ -1781,13 +925,13 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function menuItem(command, when, groupName, groupOrder, order, separator = SeparatorPosition.NONE) {
 </code>
 
 Шесть аргументов. В декларации:
 
-<code class="language-js">
+<code>
 menuItem('diplodoc-helper.createSection', WHEN.EXPLORER_IS_FOLDER, GROUP.DIPLODOC_SECTION, GROUP_ORDER.SECTION, 1)
 </code>
 
@@ -1808,7 +952,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!command && !submenu) {
     throw new Error('MenuItem must have either "command" or "submenu"');
 }
@@ -1920,7 +1064,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const originalPackage = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 </code>
 
@@ -2017,7 +1161,7 @@ major
 
 В `abbrs.config.js`:
 
-<code class="language-js">
+<code>
 module.exports = {
     showWarnings: false,
     showUnused: false,
@@ -2221,7 +1365,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const rangeToReplace = new vscode.Range(new vscode.Position(position.line, 0), position);
 await editor.edit(editBuilder => {
     editBuilder.replace(rangeToReplace, formattedText);
@@ -2262,7 +1406,7 @@ Linux: `xclip` с `>` не работает
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function GetImageLinux() {
     let script = 'xclip';
     let args = ['-selection', 'clipboard', '-t', 'image/png', '-o', '>', tempPath];
@@ -2274,7 +1418,7 @@ function GetImageLinux() {
 
 Фикс:
 
-<code class="language-js">
+<code>
 const args = ['-selection', 'clipboard', '-t', 'image/png', '-o'];
 cp.execFile('xclip', args, (error, stdout) => {
     if (error) return resolve(null);
@@ -2320,7 +1464,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const defaultFilename = translate(nls_ts.screenshot.name.prompt, timestamp);
 const userInput = await vscode.window.showInputBox({
     prompt: translate(nls_ts.screenshot.name.prompt),   // ← без args
@@ -2371,7 +1515,7 @@ major
 
 Если пользователь введёт `Привет [мир]`, `altText = "Привет [мир]"`, а `figureBlock`:
 
-<code class="language-md">
+<code>
 ![Привет [мир]](./images/foo.png)
 </code>
 
@@ -2379,7 +1523,7 @@ Markdown-парсер воспримет `[мир]` как начало ссыл
 
 `buildFigure` не экранирует `altText`:
 
-<code class="language-js">
+<code>
 const linkBlock = `![${altText}](${url})`;
 </code>
 
@@ -2402,7 +1546,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const imageExtension = '.png';
 
 // validateInput
@@ -2520,7 +1664,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').slice(0, 19);
 </code>
 
@@ -2528,7 +1672,7 @@ const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_
 
 Фикс:
 
-<code class="language-js">
+<code>
 const now = new Date();
 const timestamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
 </code>
@@ -2548,7 +1692,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 vscode.window.showInformationMessage(translate(nls_ts.screenshot.saved.info, fileName));
 </code>
 
@@ -2569,7 +1713,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 await editor.edit(editBuilder => { … });
 </code>
 
@@ -2628,7 +1772,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const rootDir = workspaceFolders[0].uri.fsPath;
 </code>
 
@@ -2636,7 +1780,7 @@ const rootDir = workspaceFolders[0].uri.fsPath;
 
 Фикс — найти папку, содержащую `currentFilePath`:
 
-<code class="language-js">
+<code>
 const folder = workspaceFolders.find(f => currentFilePath.startsWith(f.uri.fsPath));
 const rootDir = (folder ?? workspaceFolders[0]).uri.fsPath;
 </code>
@@ -2660,7 +1804,7 @@ major
 
 Фикс — разделить:
 
-<code class="language-js">
+<code>
 if (!editor) {
     vscode.window.showErrorMessage('Нет активного редактора');
     return;
@@ -2686,7 +1830,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 await editor.edit(editBuilder => {
     editBuilder.insert(editor.selection.active, markdownLink);
 });
@@ -2698,7 +1842,7 @@ await editor.edit(editBuilder => {
 
 Фикс — по образцу `link.Paste`:
 
-<code class="language-js">
+<code>
 if (!editor.selection.isEmpty) {
     await editor.edit(eb => eb.replace(editor.selection, markdownLink));
 } else {
@@ -2723,14 +1867,14 @@ major
 
 Если курсор внутри списка:
 
-<code class="language-md">
+<code>
 - пункт списка
   &#124;
 </code>
 
 `insert` добавит `![*caption*](relative)` без отступа. Получится:
 
-<code class="language-md">
+<code>
 - пункт списка
 ![*caption*](relative)
 </code>
@@ -2754,7 +1898,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 await editor.edit(editBuilder => { … });
 </code>
 
@@ -2775,13 +1919,13 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const markdownLink = `![*${selectedImage.caption}*](${relativeLink})`;
 </code>
 
 `caption` для `figure` — текст из `<figcaption>`. Если в нём есть `*` (например, `Рисунок 1. Формула *E=mc²*`), markdown-курсив сломается:
 
-<code class="language-md">
+<code>
 ![*Рисунок 1. Формула *E=mc²**](...)
 </code>
 
@@ -2789,7 +1933,7 @@ const markdownLink = `![*${selectedImage.caption}*](${relativeLink})`;
 
 Фикс — экранировать `*` и `]`:
 
-<code class="language-js">
+<code>
 const safeCaption = String(selectedImage.caption).replace(/([*\]\\])/g, '\\$1');
 const markdownLink = `![*${safeCaption}*](${relativeLink})`;
 </code>
@@ -2811,7 +1955,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const numA = extractFigureNumber(a.caption);   // 0 если нет "Рисунок N"
 const numB = extractFigureNumber(b.caption);
 if (numA !== numB) return numA - numB;
@@ -2821,7 +1965,7 @@ if (numA !== numB) return numA - numB;
 
 Фикс:
 
-<code class="language-js">
+<code>
 if (numA === 0 && numB === 0) return 0;   // оба без номера
 if (numA === 0) return 1;                  // A без номера → в конец
 if (numB === 0) return -1;
@@ -2845,7 +1989,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!imageByNormalizedPath.has(key)) {
     images.push(image);
     imageByNormalizedPath.set(key, image);
@@ -2871,7 +2015,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 for (const fileUri of mdFiles) {
     await ExtractFigures(fileUri.fsPath, …);
     await ExtractMdLinks(fileUri.fsPath, …);
@@ -2882,7 +2026,7 @@ for (const fileUri of mdFiles) {
 
 Фикс — параллелить через `Promise.all`:
 
-<code class="language-js">
+<code>
 await Promise.all(mdFiles.map(async (fileUri) => {
     await ExtractFigures(fileUri.fsPath, …);
     await ExtractMdLinks(fileUri.fsPath, …);
@@ -2910,7 +2054,7 @@ major
 
 Фикс — `withProgress` вокруг `collectAllImages`:
 
-<code class="language-js">
+<code>
 let images = [];
 await vscode.window.withProgress(
     { location: vscode.ProgressLocation.Notification, title: 'Сбор изображений…' },
@@ -2971,7 +2115,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 vscode.window.showInformationMessage(`Вставлена ссылка: ${selectedImage.caption}`);
 </code>
 
@@ -2992,7 +2136,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const formatDetail = (img) => {
     return img.type === 'figure'
         ? `Figure • ${img.id}`
@@ -3019,7 +2163,7 @@ major
 
 `extractFigcaptions` в `md.links.extract.js` вызывает `cleanCaption(match[2])`:
 
-<code class="language-js">
+<code>
 function cleanCaption(text) {
     text = text.replace(/\[([^4]]*)\]\([^5]*\)/g, '$1');   // [text](url) → text
     text = text.replace(/<a[^6]*>([^7]*)<\/a>/g, '$1');    // <a>text</a> → text
@@ -3082,7 +2226,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const mdFiles = await FindMdFiles(rootDir);
 </code>
 
@@ -3122,7 +2266,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const ext = path.extname(targetFilePath);   // для 'foo.md' → '.md' (с точкой)
 // …
 isImage = ext !== 'md';                     // '.md' !== 'md' → true
@@ -3140,7 +2284,7 @@ isImage = ext !== 'md';                     // '.md' !== 'md' → true
 
 Фикс — одна строка:
 
-<code class="language-js">
+<code>
 isImage = ext !== '.md';
 </code>
 
@@ -3163,13 +2307,13 @@ major
 
 [`link.Copy`](../МодульКопированиессылки/index.md) кладёт `isImage` в JSON:
 
-<code class="language-js">
+<code>
 isImage: /\.(png&#124;jpe?g&#124;gif&#124;svg&#124;webp)$/i.test(fsPath),
 </code>
 
 `link.Paste` **не** читает его:
 
-<code class="language-js">
+<code>
 const { isDirectory, isImage } = await getFileTypeInfo(targetFilePath);
 </code>
 
@@ -3177,7 +2321,7 @@ const { isDirectory, isImage } = await getFileTypeInfo(targetFilePath);
 
 Правильный подход — доверять `data.isImage`, если он есть:
 
-<code class="language-js">
+<code>
 const { isDirectory } = await getFileTypeInfo(targetFilePath);
 const isImage = (data.isImage !== undefined) ? data.isImage : await guessIsImage(targetFilePath);
 </code>
@@ -3201,7 +2345,7 @@ major
 
 Если целевой файл был удалён между `link.Copy` и `link.Paste`, `getFileTypeInfo`:
 
-<code class="language-js">
+<code>
 try {
     const stat = await fs.stat(targetFilePath);
     // …
@@ -3279,7 +2423,7 @@ HTML-ветка: `mdPath` без ведущего `/`
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 mdPath = segments.map(s => encodeURIComponent(s)).join('/');
 </code>
 
@@ -3287,7 +2431,7 @@ mdPath = segments.map(s => encodeURIComponent(s)).join('/');
 
 В `buildDocumentLink` для HTML:
 
-<code class="language-js">
+<code>
 return `<a href="${mdPath}">${sourceLinkName}</a>`;
 </code>
 
@@ -3358,7 +2502,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function getTargetMdFile(targetFilePath, isDirectory) {
     if (isDirectory) {
         return path.join(targetFilePath, INDEX_MD);
@@ -3437,7 +2581,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
 </code>
 
@@ -3445,7 +2589,7 @@ const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
 
 Правильно — найти папку-workspace, содержащую `sourceFilePath`:
 
-<code class="language-js">
+<code>
 const workspaceRoot = vscode.workspace.workspaceFolders
     ?.find(f => sourceFilePath.startsWith(f.uri.fsPath))
     ?.uri.fsPath;
@@ -3483,7 +2627,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 .map((line, index) => { … })
 </code>
 
@@ -3504,7 +2648,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (data === null &#124;&#124; !data.sourceLinkPath &#124;&#124; !data.sourceLinkName) {
     throw new Error(translate('plugin.link.paste.error.emptybuffer'));
 }
@@ -3574,27 +2718,6 @@ Markdown-ссылки в карточках рендерятся как текс
 {% endcut %}
 ||
 ||
-KI-212
-|
-unknown
-|
-major
-|
-[`МодульГОСТы`](../МодульГОСТы/index.md)
-|
-Клик по ссылке открывает/закрывает карточку
-|
-{% cut "Развернуть" %}
-
-`gosts.js` вешает `onRowClick` на `<tr>`; клик по вновь появившейся ссылке срабатывает и на ссылку, и на строку. После внедрения `renderRichText` нужно добавить в обработчик ранний выход:
-
-<code class="language-js">
-if (e.target.closest && e.target.closest('a')) return;
-</code>
-
-{% endcut %}
-||
-||
 KI-213
 |
 unknown
@@ -3609,7 +2732,7 @@ major
 
 Условие `if (mdPath.startsWith('http') &#124;&#124; mdPath.startsWith('/')) return match;` пропускает ссылки от корня сайта: `[text](/ru/foo/bar.md)` останется с `.md`. Лечится отдельной веткой:
 
-<code class="language-js">
+<code>
 if (mdPath.startsWith('/')) {
     return `[${linkText}](${mdPath.replace(/\.md$/, '.html')}${hash &#124;&#124; ''})`;
 }
@@ -3713,7 +2836,7 @@ major
 
 Не находит reference-style ссылки:
 
-<code class="language-md">
+<code>
 [text][ref]
 [ref]: url
 </code>
@@ -3737,7 +2860,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 await editor.edit(editBuilder => { … });
 </code>
 
@@ -3745,7 +2868,7 @@ await editor.edit(editBuilder => { … });
 
 Правильно:
 
-<code class="language-js">
+<code>
 const ok = await editor.edit(…);
 if (!ok) vscode.window.showErrorMessage('Не удалось изменить документ');
 </code>
@@ -3765,7 +2888,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-html">
+</code>html
 <div id='formula' class='diplodocanchor'>
 </code>
 
@@ -3885,7 +3008,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const wrappedText = `<div id='${sanitizedId}' class='diplodocanchor'>${selectedText}</div>`;
 </code>
 
@@ -3947,42 +3070,6 @@ major
 {% endcut %}
 ||
 ||
-KI-230
-|
-unknown
-|
-major
-|
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
-|
-`CURRENT_ENGINE = PLANTUML`, но CLI ставит `MERMAID`
-|
-{% cut "Развернуть" %}
-
-`roadmap.js`:
-
-<code class="language-js">
-const CURRENT_ENGINE = DiagramEngine.PLANTUML;
-</code>
-
-`diplodoc-helper-cli.js`:
-
-<code class="language-js">
-generateRoadMap({
-    docsRoot: docsDir,
-    dataPath,
-    dataRaw,
-    engine: DiagramEngine.MERMAID,
-});
-</code>
-
-**Жёстко Mermaid.** Вызов `runGeneration` **без** `engine` (например, программно, если кто-то импортирует модуль) — PlantUML. Вызов через CLI — Mermaid. Если пользователь запускает `docs-build.js`, в котором `cli('roadMap', …)` → Mermaid.
-
-То есть **фактический движок в проде — Mermaid**, а не PlantUML. `CURRENT_ENGINE` — мёртвая константа. Расхождение создаёт путаницу при отладке.
-
-{% endcut %}
-||
-||
 KI-231
 |
 unknown
@@ -4019,7 +3106,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function getPlantUmlCommand(tempPumlPath, targetDir) {
     if (process.env.PLANTUML_JAR_PATH && fs.existsSync(process.env.PLANTUML_JAR_PATH)) {
         return `java -jar "${process.env.PLANTUML_JAR_PATH}" …`;
@@ -4051,39 +3138,6 @@ function getPlantUmlCommand(tempPumlPath, targetDir) {
 {% endcut %}
 ||
 ||
-KI-233
-|
-unknown
-|
-major
-|
-[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)
-|
-`--dataRaw` парсится, но не используется как fallback в CLI-строке
-|
-{% cut "Развернуть" %}
-
-<code class="language-js">
-} else if (command === 'roadMap') {
-    const docsDir = …;
-    const dataPath = dataPathIndex !== -1 ? args[dataPathIndex + 1] : undefined;
-    const dataRaw = dataRawIndex !== -1 ? args[dataRawIndex + 1] : undefined;
-
-    generateRoadMap({ docsRoot: docsDir, dataPath, dataRaw, engine: MERMAID });
-}
-</code>
-
-`dataRaw` передаётся в `runGeneration`, но `runGeneration` **читает** `options.data`, не `options.dataRaw`:
-
-<code class="language-js">
-const dataSource = typeof options === 'object' ? options.data : null;
-</code>
-
-То есть `--dataRaw` теряется. Если пользователь передал `--dataRaw '[…]'` без `--dataPath` — `runGeneration` получит `data = undefined`, `resolveData(undefined)` → fallback на `DEFAULT_DATA_PATH`. То есть `--dataRaw` **не работает**.
-
-{% endcut %}
-||
-||
 KI-234
 |
 unknown
@@ -4096,7 +3150,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!data) {
     cleanupRoadmapPages(docsRoot);
     return;
@@ -4122,7 +3176,7 @@ major
 
 В `roadmap-data.json` поле URL называется `url`. В `prepareRoadmapData`:
 
-<code class="language-js">
+<code>
 if (task.url) mapping[task.id] = task.url;
 </code>
 
@@ -4130,7 +3184,7 @@ if (task.url) mapping[task.id] = task.url;
 
 См. `table.generator.js`:
 
-<code class="language-js">
+<code>
 const funcLabel = func.url ? `[${func.name}](func.url)` : `${func.name}`;
 </code>
 
@@ -4180,7 +3234,7 @@ major
 
 `parseDateToNumber(dateStr)`:
 
-<code class="language-js">
+<code>
 const parts = dateStr.split('-');
 if (parts.length !== 2) return 0;
 const month = parts[0].padStart(2, '0');
@@ -4209,7 +3263,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const command = getPlantUmlCommand(tempPumlPath, targetDir);
 exec(command, callback);
 </code>
@@ -4231,13 +3285,13 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const outputDir = path.join(langDir, 'roadmap');
 </code>
 
 `buildPlantUml(data, lang, outputDir, ROADMAP_CSS)`:
 
-<code class="language-js">
+<code>
 const { svgAbsolutePath } = getPlantUmlImagePath(outputDir, lang);
 // outputDir/images/gantt_<lang>.svg
 </code>
@@ -4297,7 +3351,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const languages = fs.readdirSync(docsRoot).filter(dir => {
     return fs.statSync(fullPath).isDirectory() && (dir === 'ru' &#124;&#124; dir === 'en');
 });
@@ -4320,7 +3374,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 let svgContent = fs.readFileSync(renderPath, 'utf-8');
 </code>
 
@@ -4341,7 +3395,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 async function buildMermaidSvg() {
     return { svgContent: null, isClientRendered: true };
 }
@@ -4364,7 +3418,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const mappingJson = Object.keys(mapping).length > 0 ? JSON.stringify(mapping) : null;
 </code>
 
@@ -4447,7 +3501,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const deps = task.dependencies.filter(id => {
     const depItem = data.find(d => d.id === id);
     return depItem && depItem.type === 'function';
@@ -4476,7 +3530,7 @@ major
 
 В `generateMermaidScript`:
 
-<code class="language-js">
+<code>
 const depItem = data.find(d => d.id === id);
 </code>
 
@@ -4516,7 +3570,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 module.exports = {
     generateHelpMap,
     generateContexts,
@@ -4571,7 +3625,7 @@ major
 
 `writeFigureList` генерирует:
 
-<code class="language-html">
+</code>html
 <div class="figures-view-switch" role="tablist">
   <button type="button" data-figures-view="list" aria-pressed="true">Список</button>
   <button type="button" data-figures-view="grid" aria-pressed="false">Сетка</button>
@@ -4603,7 +3657,7 @@ major
 
 `runGeneration` в `figures.js` — `async`. В CLI (`diplodoc-helper-cli.js`) вызов синхронный:
 
-<code class="language-js">
+<code>
 } else if (command === 'createFigureContent') {
     generateFigures(docsDir);  // Promise, никто не ждёт
 }
@@ -4649,7 +3703,7 @@ major
 
 `createThumbnail` пропускает файл, если `<thumbPath>` уже существует:
 
-<code class="language-js">
+<code>
 if (fs.existsSync(extThumbPath)) return;
 </code>
 
@@ -4701,7 +3755,7 @@ major
 
 `extractFiguresFromFile` берёт **ближайшее** markdown-изображение, находящееся **до** `<figcaption>`:
 
-<code class="language-js">
+<code>
 if (img.pos < pos && pos - img.pos < bestDist) { … }
 </code>
 
@@ -4741,7 +3795,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const parts = context.split(',').map(s => s.trim()).filter(s => s !== '');
 </code>
 
@@ -4749,7 +3803,7 @@ const parts = context.split(',').map(s => s.trim()).filter(s => s !== '');
 
 Модуль `contexts` (pre-обработка) в `extractContextTagValue` использует другой разделитель:
 
-<code class="language-js">
+<code>
 const terms = contextValue.split(/[\s,]+/).map(t => t.trim().toLowerCase());
 </code>
 
@@ -4800,7 +3854,7 @@ major
 
 Команда `diplodoc-helper.generateContextmap` (в меню `Debug`) вызывает `ux_contextmap_generate`, а та — **три** `runGeneration` подряд:
 
-<code class="language-js">
+<code>
 runGeneration({ ..., command: 'periodicTable', ... });       // bytescounter
 runGeneration({ ..., command: 'periodicTableContext', ... }); // contextmap
 runGeneration({ ..., command: 'periodicTableHelpTag', ... }); // helptagmap
@@ -4825,7 +3879,7 @@ major
 
 `ux_contextmap_generate` — `async`, но внутри:
 
-<code class="language-js">
+<code>
 runGeneration({ ... });
 runGeneration({ ... });
 runGeneration({ ... });
@@ -4853,50 +3907,6 @@ major
 {% endcut %}
 ||
 ||
-KI-266
-|
-unknown
-|
-major
-|
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
-|
-`navLinks` дублируются
-|
-{% cut "Развернуть" %}
-
-<code class="language-js">
-navLinks: [
-    { label: 'Хэлптэги', url: 'helptagmap.html' },
-    { label: 'Размеры', url: 'bytescounter.html' },
-]
-</code>
-
-В `bytescounter`: `{ label: 'Контексты', … }, { label: 'Хелптаги', … }` (обрати внимание — «Контексты» с маленькой «к», «Хелптаги» без «э»).
-В `helptagmap`: `{ label: 'Размеры', … }, { label: 'Контексты', … }`.
-
-Три раза одно и то же с разными формулировками («Хелптаги» vs «Хэлптэги»). Если добавится четвёртый отчёт — править все четыре места. Стоит вынести в общий `CONTENT_NAV_LINKS`.
-
-{% endcut %}
-||
-||
-KI-267
-|
-unknown
-|
-major
-|
-[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)
-|
-`preferredLang` из `localStorage` — общий для всех отчётов
-|
-{% cut "Развернуть" %}
-
-Ключ `preferredLang` — один на всё семейство. Если пользователь переключился на `en` в `bytescounter`, а потом открыл `contextmap` — увидит `en`. Это работает, но при пустых данных `en` (в проекте только `ru`) выглядит как «пустая страница»: пользователь не понимает, что язык «перетёк» с прошлой вкладки.
-
-{% endcut %}
-||
-||
 KI-268
 |
 unknown
@@ -4909,7 +3919,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function ARTICLE_STATUS_I18N(status) {
     const uiLang = document.documentElement.lang &#124;&#124; 'ru';
     const t = ARTICLE_STATUS_I18N_TEXTS[uiLang] &#124;&#124; ARTICLE_STATUS_I18N_TEXTS.ru;
@@ -4936,7 +3946,7 @@ major
 
 Функция проходит по `matrixData.matrix`:
 
-<code class="language-js">
+<code>
 for (const row of matrixData.matrix) {
     for (const cell of row) {
         for (const art of cell) {
@@ -5027,7 +4037,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const parentDir = path.join(docsDir, ...parts.slice(0, startIdx + parentParts.indexOf(parent) + 1));
 </code>
 
@@ -5041,23 +4051,6 @@ const parentDir = path.join(docsDir, ...parts.slice(0, startIdx + parentParts.in
 В итоге `parents` для статьи в `docs/ru/foo/bar/foo/article.md` получит заголовок из `docs/ru/foo/index.md` вместо `docs/ru/foo/bar/foo/index.md`.
 
 Правильно было бы использовать индекс в массиве (`parentParts.forEach((parent, i) => …)`), а не `indexOf`.
-
-{% endcut %}
-||
-||
-KI-274
-|
-unknown
-|
-major
-|
-[`МодульКартапомощи`](../МодульКартапомощи/index.md)
-|
-`size` — размер `.md`, не HTML
-|
-{% cut "Развернуть" %}
-
-Поле `size` в JSON — это размер исходного Markdown-файла. Потребители (`contentNavigator`, таблица размеров) читают его как «размер статьи», но это **не** размер итогового HTML. Если на странице много `{% cut %}`, картинок, таблиц — HTML может быть в 3–10 раз больше. Сравнивать «размеры статей» по этому полю между собой можно, а вот экстраполировать на «вес страницы» — нельзя.
 
 {% endcut %}
 ||
@@ -5108,7 +4101,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 hint: data.hint?.trim() &#124;&#124; defaultHintValue,
 </code>
 
@@ -5149,7 +4142,7 @@ major
 
 Починка — три строки:
 
-<code class="language-js">
+<code>
 const parts = String(art.helptag &#124;&#124; '').split(',').map(s => s.trim()).filter(s => s !== '');
 const count = parts.length;
 </code>
@@ -5210,7 +4203,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 title += '\n' + art.helptag.trim();
 </code>
 
@@ -5233,7 +4226,7 @@ CLI-команда `periodicTableHelpTag` — «тихая»
 
 `generateHelpTagPage` — синхронная функция без `return`-значения. В CLI:
 
-<code class="language-js">
+<code>
 } else if (command === 'periodicTableHelpTag') {
     generateNavigationContent({ mapDir: outputDir, outputDir, command, docsDir });
 }
@@ -5241,7 +4234,7 @@ CLI-команда `periodicTableHelpTag` — «тихая»
 
 `process.exitCode` не устанавливается. Если `app-help-contents.json` отсутствует, `generateGenericTableFromArticles` печатает `console.error('❌ File … was not found…')` и `return;` — `process.exitCode` остаётся `0`. То есть в `docs-build.js` шаг `periodicTableHelpTag` при отсутствии данных «успешно» завершится, но `helptagmap.html` не появится. См. `Pagebuilder.common.js`:
 
-<code class="language-js">
+<code>
 if (!fs.existsSync(jsonPath)) {
     console.error(`❌ File ${jsonPath} was not found. …`);
     return;   // ← без process.exitCode
@@ -5329,7 +4322,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 return safe.replace(/\[([^16]]+)\]\(([^17]+)\)/g, (match, linkText, url) => {
     const isExternal = url.startsWith('http');
     const targetAttr = isExternal ? ' target="_blank" rel="noopener"' : '';
@@ -5536,7 +4529,7 @@ major
 
 Даже если использовать `item.slug`:
 
-<code class="language-js">
+<code>
 const slug = context.replace(/\s+/g, '');
 </code>
 
@@ -5576,7 +4569,7 @@ Retry без ограничения
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!container) {
     setTimeout(insertContextTags, 300);
     return;
@@ -5702,7 +4695,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 document.head.appendChild(style);
 </code>
 
@@ -5726,37 +4719,6 @@ Inline-скрипт `__CONTEXT_ITEMS__` — данные для каждой с�
 `context-tags.js` для каждой HTML-страницы генерирует **свой** `<script>` с её контекстами. Для 500 страниц — 500 разных инлайн-скриптов (по 200–500 байт каждый). Дублирование стилей (одинаковых) — 500 копий. Можно было бы вынести стили в общий CSS, а `__CONTEXT_ITEMS__` — в `<script type="application/json">` с id страницы.
 
 Сейчас — работает, но HTML «толстеет» на ~1 KB × N страниц.
-
-{% endcut %}
-||
-||
-KI-308
-|
-unknown
-|
-major
-|
-[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)
-|
-`MutationObserver` не восстанавливает таблицу
-|
-{% cut "Развернуть" %}
-
-<code class="language-js">
-var obs = new MutationObserver(function () {
-    if (!document.getElementById('footnotes-container')) tick();
-});
-</code>
-
-Если контейнер **есть**, но таблица внутри **пропала** (например, Diplodoc перерисовал содержимое контейнера) — `tick()` не сработает. Таблица не восстановится.
-
-Фикс:
-
-<code class="language-js">
-var obs = new MutationObserver(function () {
-    if (!document.querySelector('#footnotes-container .footnote-table')) tick();
-});
-</code>
 
 {% endcut %}
 ||
@@ -5795,23 +4757,6 @@ major
 {% endcut %}
 ||
 ||
-KI-311
-|
-unknown
-|
-major
-|
-[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)
-|
-`formatCellContent` — `stripLinks` удаляет ВСЕ ссылки
-|
-{% cut "Развернуть" %}
-
-`text` может содержать `[text](url)` → в `footnoteList.collectFootnotes` уже вырезаны (через `stripLinks`). Но если в `text` попали **HTML**-ссылки (`<a href>`) — клиентский `stripLinks` удалит их ещё раз. Двойная очистка — ок.
-
-{% endcut %}
-||
-||
 KI-312
 |
 unknown
@@ -5824,7 +4769,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 return '<a class="cell-link" href="' + esc(url) + '">' + cleanText + '</a>';
 </code>
 
@@ -6015,7 +4960,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const slug = context.replace(/\s+/g, '');
 </code>
 
@@ -6025,7 +4970,7 @@ const slug = context.replace(/\s+/g, '');
 
 Правильно — в `generateContextScript` использовать `slugify_filename` (из `utils/encoding.slugify`):
 
-<code class="language-js">
+<code>
 const { slugify_filename } = require('../utils/encoding.slugify');
 const slug = slugify_filename(context);
 </code>
@@ -6047,13 +4992,13 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const context = c.toLowerCase();
 </code>
 
 `c` — уже `.trim()`-нутый в `runGeneration`:
 
-<code class="language-js">
+<code>
 const contexts = contextMeta[1]
     .split(CONTEXT_SPLITTER)
     .map(s => s.trim())
@@ -6111,7 +5056,7 @@ major
 
 Фикс — проверять, что `lang` из двух букв:
 
-<code class="language-js">
+<code>
 const lang = /^[a-z]{2}$/i.test(rel.split('/')[0]) ? rel.split('/')[0] : 'ru';
 </code>
 
@@ -6138,7 +5083,7 @@ major
 
 Фикс — маркер `id="dl-context-tags"`:
 
-<code class="language-js">
+<code>
 if (content.includes('id="dl-context-tags"')) return;
 newContent = newContent.slice(0, bodyCloseIndex) +
     '\n<script id="dl-context-tags">\n' + script + '\n</script>\n' +
@@ -6160,7 +5105,7 @@ Regex `<meta>` — жёсткий порядок атрибутов
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 /<meta\s+name="context"\s+content="([^23]*)"\s*\/?>/i
 </code>
 
@@ -6183,7 +5128,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const templatePath = path.join(__dirname, 'context-tags.client.js');
 const clientScriptCode = fs.readFileSync(templatePath, 'utf8');
 </code>
@@ -6260,7 +5205,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function walk(dir, filter, callback) {
     if (!fs.existsSync(dir)) return;
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -6409,23 +5354,6 @@ major
 {% endcut %}
 ||
 ||
-KI-341
-|
-unknown
-|
-major
-|
-[`МодульКонтексты`](../МодульКонтексты/index.md)
-|
-Клиентский скрипт копируется, но не подключается
-|
-{% cut "Развернуть" %}
-
-`writeContextSearchScript` кладёт `context-search.js` в `docs/_assets/scripts/`. `@diplodoc/cli` копирует `_assets/` в `build/_assets/`, но **не** вставляет `<script src="/_assets/scripts/context-search.js">` в HTML. Подключение — задача пользователя (`_assets` в шаблоне `.yfm`, глобальные скрипты проекта или ручной `<script>` в `contexts/index.md`). Без подключения поиск не работает — панель «Поиск» отрисуется, но при вводе ничего не произойдёт.
-
-{% endcut %}
-||
-||
 KI-342
 |
 unknown
@@ -6491,7 +5419,7 @@ Treemap: `&#123;` и `&#125;` вместо `{` `}`
 
 В `generateMapContent` перед возвратом:
 
-<code class="language-js">
+<code>
 return (legend + '\n' + svgHtml).replace(/{/g, '&#123;').replace(/}/g, '&#125;');
 </code>
 
@@ -6572,7 +5500,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const stats = fs.statSync(fsPath);
 </code>
 
@@ -6595,7 +5523,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const section = IndexMdFileRead(fsPath);
 return section?.pureTitle &#124;&#124; path.basename(fsPath);
 </code>
@@ -6606,7 +5534,7 @@ return section?.pureTitle &#124;&#124; path.basename(fsPath);
 
 Правильный порядок — `pureTitle` → `title` → `basename`:
 
-<code class="language-js">
+<code>
 const section = IndexMdFileRead(fsPath);
 if (section?.pureTitle) return section.pureTitle;
 if (section?.title) return section.title;
@@ -6693,7 +5621,7 @@ major
 
 `isImage` кладётся в JSON, но `link.Copy` сам его не использует. Его использует `link.Paste`:
 
-<code class="language-js">
+<code>
 if (isImage) {
     return shouldRenderAsHtml ? buildDocumentLink('!', linkName, mdPath, true) : buildImageLink(linkName, mdPath);
 }
@@ -6718,7 +5646,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 let targetPath = fsPath;
 let title = buildTitle(stats, fsPath);
 const data = {
@@ -6764,7 +5692,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 vscode.window.showInformationMessage(translate('plugin.link.copy.info.success', title));
 </code>
 
@@ -6874,23 +5802,6 @@ major
 {% endcut %}
 ||
 ||
-KI-363
-|
-unknown
-|
-major
-|
-[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)
-|
-`resolveDocsRoot` — общая функция, дублируется в двух модулях
-|
-{% cut "Развернуть" %}
-
-В `linter.abbrs` и `linter.terms` — одинаковая функция `resolveDocsRoot(uri)`, скопированная в оба файла. Изменение в одном не подхватится в другом. Стоит вынести в `utils/path.directory` или `utils/docsRoot.js`.
-
-{% endcut %}
-||
-||
 KI-364
 |
 unknown
@@ -6905,7 +5816,7 @@ major
 
 `lintAbbrs(docsRoot, options)` принимает `options.languages`, но VS Code-команда вызывает без `options`:
 
-<code class="language-js">
+<code>
 await vscode.window.withProgress(…, async () => {
     issues = lintAbbrs(docsRoot);
 });
@@ -6928,7 +5839,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const SKIP_DIRS = new Set(['abbrs', 'terms', 'contexts', 'helptags', 'figures', 'roadmap', 'node_modules']);
 </code>
 
@@ -6951,7 +5862,7 @@ major
 |
 {% cut "Развернуть" %}
 
-`lintFile` ищет `<abbr>…</abbr>` по всему `.md`, включая `.md`-блоки кода (<code> <code class="language-html"> ... </code> </code>). Это даёт ложные срабатывания: если в примере кода есть `<abbr>ИСО</abbr>`, а в словаре `ИСО` нет — линтер покажет «не найдено», хотя это **пример кода**, а не использование в статье.
+`lintFile` ищет `<abbr>…</abbr>` по всему `.md`, включая `.md`-блоки кода (</code>` </code>html ... </code> </code>`). Это даёт ложные срабатывания: если в примере кода есть `<abbr>ИСО</abbr>`, а в словаре `ИСО` нет — линтер покажет «не найдено», хотя это **пример кода**, а не использование в статье.
 
 Правильно — `maskCodeInMarkdown` перед regex-поиском (как в `extractAbbrsFromFile` из `abbrs.extractor`). Сейчас `linter.abbrs` этого не делает — расхождение с `extractor`-ом.
 
@@ -7008,7 +5919,7 @@ major
 
 `$(warning)` — иконка Codicon, работает. Но `placeHolder`:
 
-<code class="language-js">
+<code>
 const placeHolder = translate(nls_ts.plugin.linter.abbrs.pick.placeholder, issues.length);
 </code>
 
@@ -7067,14 +5978,14 @@ major
 
 Проверка якоря — regex `/(?:id&#124;name)\s*=\s*["']<anchor>["']/i`. Она находит только **inline HTML**:
 
-<code class="language-html">
+</code>html
 <div id="anchor"></div>
 <a name="anchor"></a>
 </code>
 
 Но Diplodoc поддерживает markdown-якоря:
 
-<code class="language-md">
+<code>
 
 {% endcut %}
 ||
@@ -7093,11 +6004,11 @@ major
 
 `lintFile` не маскирует код-блоки перед regex. Если в примере кода:
 
-<code class="language-md">
-<code class="language-html">
+`<code>
+</code>html
 <abbr class="term">Пример</abbr>
 </code>
-</code>
+</code>`
 
 и в `terms.yaml` нет «Пример» — линтер покажет «не найдено», хотя это **пример кода**. `terms.extractor.extractTermsFromFile` использует `maskCodeInMarkdown` — линтер **не** использует. Расхождение.
 
@@ -7189,7 +6100,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const SKIP_DIRS = new Set(['terms', 'abbrs', 'contexts', 'helptags', 'figures', 'roadmap', 'node_modules']);
 </code>
 
@@ -7227,7 +6138,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const uiLang = document.documentElement.lang &#124;&#124; 'ru';
 const t = I18N[uiLang] &#124;&#124; I18N.ru;
 </code>
@@ -7238,7 +6149,7 @@ const t = I18N[uiLang] &#124;&#124; I18N.ru;
 
 Фикс — пересчитывать `t` внутри `renderTable`:
 
-<code class="language-js">
+<code>
 function renderTable(lang, matrixData, config) {
     const t = I18N[lang] &#124;&#124; I18N.ru;
     // …
@@ -7247,7 +6158,7 @@ function renderTable(lang, matrixData, config) {
 
 Или — в `initApp` перед `renderTable`:
 
-<code class="language-js">
+<code>
 const t = I18N[currentLang] &#124;&#124; I18N.ru;
 </code>
 
@@ -7268,7 +6179,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function renderStatusCell(status, container) {
     if (!container) return;
     const colorMap = { … };
@@ -7297,7 +6208,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 let html = `<div style="display:grid; grid-template-columns: repeat(${cols}, 3ch); gap:3px; …">`;
 </code>
 
@@ -7335,7 +6246,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-html">
+</code>html
 <td><div id="cell-${r}-${c}"></div></td>
 </code>
 
@@ -7358,28 +6269,11 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 getTitle(art, t) { return `${art.title} (${art.size} ${t.bytes})`; }
 </code>
 
 `art.title` вставляется в `title="…"` (HTML-атрибут). Если `title` содержит `"` — сломает атрибут. `Pagebuilder.common` не экранирует `title` при создании `matrixData`. Симптом: тултип плитки обрезается на первой кавычке.
-
-{% endcut %}
-||
-||
-KI-386
-|
-unknown
-|
-major
-|
-[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)
-|
-`preferredLang` — общий для всех трёх отчётов
-|
-{% cut "Развернуть" %}
-
-`localStorage.preferredLang` — один ключ на всё семейство. Переключение языка в `bytescounter` влияет на `contextmap` и `helptagmap`. Хорошо для консистентности, но пользователь не ожидает «перетекания».
 
 {% endcut %}
 ||
@@ -7396,7 +6290,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 html += `<a href="${art.url}" target="_blank" class="article-block …">`;
 </code>
 
@@ -7417,7 +6311,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 container = document.getElementById('legend-container');
 </code>
 
@@ -7455,7 +6349,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const savedLang = localStorage.getItem('preferredLang');
 </code>
 
@@ -7483,49 +6377,6 @@ major
 {% endcut %}
 ||
 ||
-KI-392
-|
-unknown
-|
-major
-|
-[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)
-|
-`tocCleanMode` в фазе `pre` (критический баг)
-|
-{% cut "Развернуть" %}
-
-<code class="language-js">
-pre: [
-    run('clean build', …),
-    cli('reindexFigures', …),
-    cli('reindexFootnotes', …),
-    cli('helpMap'),
-    cli('tocCleanMode'),    // ← ЗДЕСЬ. build/ пуст.
-    cli('periodicStat'),
-    …
-],
-</code>
-
-`tocCleanMode` вызывается **до** `@diplodoc/cli`. На пустом `build/` — `files = []`, ничего не инжектится. После `@diplodoc/cli` HTML создан, но скрипт **не** встроен → clean mode не работает при стандартной сборке.
-
-Правильно — перенести в `post`:
-
-<code class="language-js">
-post: [
-    …
-    cli('contexttags', './build'),
-    cli('tocCleanMode', '--outputDir', './build'),   // ← здесь
-    cli('ganttFixScroll', './build'),
-    …
-]
-</code>
-
-Одна строка.
-
-{% endcut %}
-||
-||
 KI-393
 |
 unknown
@@ -7538,7 +6389,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 catch (e) {
     console.error(`❌ ${step.name}: ${e.message}`);
     process.exit(1);
@@ -7564,7 +6415,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 else if (a.startsWith('--phase=')) out.phase = a.slice(8).split(',').filter(Boolean);
 </code>
 
@@ -7604,7 +6455,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 console.log(`  - ${s.name}${off}`);
 </code>
 
@@ -7625,7 +6476,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const projectRoot = path.resolve(__dirname, '..');
 </code>
 
@@ -7650,7 +6501,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 NODE_PATH: process.env.NODE_PATH &#124;&#124; path.join(projectRoot, 'node_modules')
 </code>
 
@@ -7700,7 +6551,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 run('clean build', () => {
     fs.rmSync(buildDir, { recursive: true, force: true });
 }),
@@ -7742,7 +6593,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 module.exports = { STEPS, PHASES };
 </code>
 
@@ -7816,7 +6667,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-cmd">
+<code>
 @echo off
 node "%~dp0docs-build.js" %*
 </code>
@@ -7838,7 +6689,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 npx('diplodoc build', '@diplodoc/cli', '-i', './docs', '-o', './build', '--allow-custom-resources', '--apply-presets', '--quiet', 'internal'),
 </code>
 
@@ -7859,7 +6710,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 cli('periodicTable'),
 cli('periodicTableHelpTag'),
 cli('periodicTableContext'),
@@ -7882,7 +6733,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 run('cleanup service files', () => {
     for (const f of ['.yfm', '.yfmignore', '.yfmlint']) {
         fs.rmSync(path.join(buildDir, f), { recursive: true, force: true });
@@ -7909,7 +6760,7 @@ major
 
 В `package.json`:
 
-<code class="language-js">on
+<code>on
 "scripts": {
     "build": "npm run compile",
     "compile": "npm run generate-manifest && node build.js",
@@ -7934,7 +6785,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">on
+<code>on
 "precompile": "npm run validate",
 "validate": "npm run lint && npm run type-check && npm run test",
 "lint": "echo ''",   // ← пустой
@@ -7978,13 +6829,13 @@ major
 
 CLI передаёт `docsRoot`:
 
-<code class="language-js">
+<code>
 generateGanttFixScroll({ docsRoot: outputDir, engine: DiagramEngine.MERMAID });
 </code>
 
 `runGeneration` читает `options.buildDir`:
 
-<code class="language-js">
+<code>
 const buildDir = typeof options === 'string' ? options : options?.buildDir &#124;&#124; './build';
 </code>
 
@@ -8009,13 +6860,13 @@ major
 
 Та же проблема, что в `roadmap.js`. `post-build.js`:
 
-<code class="language-js">
+<code>
 const CURRENT_ENGINE = DiagramEngine.PLANTUML;
 </code>
 
 CLI:
 
-<code class="language-js">
+<code>
 generateGanttFixScroll({ docsRoot: outputDir, engine: DiagramEngine.MERMAID });
 </code>
 
@@ -8061,7 +6912,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!content.includes('initMermaidGanttLinks')) {
     content = content.replace('</body>', `${injectionBundle}\n</body>`);
     …
@@ -8085,7 +6936,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (content.includes('js-gantt-mapping') &#124;&#124; content.includes('mermaid')) {
 </code>
 
@@ -8133,7 +6984,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 var btnFitWidth = wrapper.querySelector('.js-fit-width');
 var btnFitHeight = wrapper.querySelector('.js-fit-height');
 var btnFitBoth = wrapper.querySelector('.js-fit-both');
@@ -8201,7 +7052,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const observer = new MutationObserver((_, obs) => {
     if (setupMermaidFeatures()) {
         obs.disconnect();
@@ -8245,7 +7096,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const selectors = [
     `#${taskId}`,
     `[id*="${taskId}"]`,
@@ -8276,7 +7127,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const bodyCloseIndex = content.lastIndexOf('</body>');
 </code>
 
@@ -8316,7 +7167,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function getGanttRuntimeFixScrollScript() {
     const scriptPath = path.resolve(__dirname, 'plantuml.client.js');
     return fs.readFileSync(scriptPath, 'utf-8');
@@ -8359,7 +7210,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 var panZoomInstance = svgPanZoom(svg, { … });
 </code>
 
@@ -8459,7 +7310,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function findHtmlFiles(dir, fileList = []) {
     if (!fs.existsSync(dir)) return fileList;
     // …
@@ -8502,7 +7353,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const currentSectionType = IndexMdEntryReadSectionType(oldFolderPath);   // 'Section'
 const isTypeChanged = currentSectionType !== newSectionTypeObj.value;    // 'Раздел'
 </code>
@@ -8516,7 +7367,7 @@ const isTypeChanged = currentSectionType !== newSectionTypeObj.value;    // 'Р�
 
 Правильно сравнивать `name` с `name`:
 
-<code class="language-js">
+<code>
 const isTypeChanged = currentSectionType !== newSectionTypeObj.name;   // 'Section' vs 'Section'
 </code>
 
@@ -8535,7 +7386,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 let finalFolderName = oldFolderName;
 
 TocYamlEntryUpdateOrAppend(
@@ -8569,7 +7420,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 try {
     fs.renameSync(folderPath, newFolderPath);                   // ← папка уже новая
     TocYamlEntryPatchReference(parentDir, oldFolderName, newFolderName);
@@ -8585,7 +7436,7 @@ try {
 
 Если `fs.renameSync` успешен, но следующий шаг (`TocYamlEntryPatchReference` или `IndexYamlEntryPatch`) бросает — `catch` возвращает `oldFolderName`. В `ux_section_rename`:
 
-<code class="language-js">
+<code>
 finalFolderName = DiplodocSectionPatch(...);   // = oldFolderName
 finalFolderName = path.basename(finalFolderName);  // = oldFolderName
 // …
@@ -8617,7 +7468,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 content = content.replace(new RegExp(oldFolderName, 'g'), newFolderName);
 </code>
 
@@ -8629,7 +7480,7 @@ content = content.replace(new RegExp(oldFolderName, 'g'), newFolderName);
 
 Фикс — `escapeRegExp(oldFolderName)`:
 
-<code class="language-js">
+<code>
 function escapeRegExp(s) {
     return s.replace(/[.*+?^${}()&#124;[\]\\]/g, '\\$&');
 }
@@ -8651,12 +7502,12 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 // In TocYamlEntryPatchReference:
 IndexYamlEntryPatchHRef(parentDir, oldFolderName, newFolderName, '');
 </code>
 
-<code class="language-js">
+<code>
 // In IndexYamlEntryPatchHRef:
 const selfRegex = new RegExp(`(\\s*-\\s+title:\\s*)([^32]+)(\\n\\s+href:\\s+)${oldFolderName}/index\\.md`, 'g');
 content = content.replace(selfRegex, `$1${composedTitle}$3${newFolderName}/index.md`);
@@ -8664,14 +7515,14 @@ content = content.replace(selfRegex, `$1${composedTitle}$3${newFolderName}/index
 
 Если в `index.yaml` родителя есть запись вида:
 
-</code>yaml
+<code>
 - title: Старое название
   href: Раздел1.Введение/index.md
 </code>
 
 — она превратится в:
 
-</code>yaml
+<code>
 - title: 
   href: Раздел2.Новое/index.md
 </code>
@@ -8695,7 +7546,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 content = content.replace(/^pureTitle:.*/m, `pureTitle: ${pureTitle}`);
 </code>
 
@@ -8735,7 +7586,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 userIndex = (await promptSectionIndex(currentIndex)) ?? '';
 </code>
 
@@ -8743,7 +7594,7 @@ userIndex = (await promptSectionIndex(currentIndex)) ?? '';
 
 Правильно:
 
-<code class="language-js">
+<code>
 const raw = await promptSectionIndex(currentIndex);
 if (raw === undefined) return null;  // отмена
 userIndex = raw;
@@ -8771,25 +7622,6 @@ major
 {% endcut %}
 ||
 ||
-KI-445
-|
-unknown
-|
-major
-|
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
-|
-`updateLinksAfterRename` глотает ошибки
-|
-{% cut "Развернуть" %}
-
-Та же проблема, что в [`section.Delete`](../МодульУдалениесекции/index.md) и [`section.Move`](../МодульПеремещениесекции/index.md): `updateLinksInProject` ловит `try/catch` на каждом файле, `console.warn` в консоль, цикл продолжается. Внешний `catch` в `ux_section_rename` **не сработает** — модуль «успешно» переименует, но некоторые файлы останутся со старыми ссылками.
-
-Общий фикс — в `links.md`: пробрасывать ошибки наружу (или возвращать `{ changed, errors }` и показывать предупреждение).
-
-{% endcut %}
-||
-||
 KI-446
 |
 unknown
@@ -8802,7 +7634,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!newSectionObject) {
     console.log(translate(nls_ts.plugin.section.rename.error.interrupted));
     return;
@@ -8850,33 +7682,6 @@ major
 {% cut "Развернуть" %}
 
 Уже описано в первом пункте. Второй эффект: `sortTocItems(parentDir)` использует `IndexMdEntryReadIndex` для каждой дочерней секции. Если какая-то дочерняя секция была повреждена (`index.md` не имеет `sectionIndex`), она попадёт в `nonIndexed` и уедет в конец списка. Это «правильно» по дизайну `sortTocItems`, но если раньше в `toc.yaml` она стояла в середине — пользователь увидит неожиданное «переехало в конец» после переименования **другой** секции.
-
-{% endcut %}
-||
-||
-KI-449
-|
-unknown
-|
-major
-|
-[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)
-|
-`isIndexedSectionType` включает `Page` — мёртвая ветка
-|
-{% cut "Развернуть" %}
-
-<code class="language-js">
-if (!isIndexedSectionType(newSectionTypeObj)) {
-    finalIndex = '';
-}
-</code>
-
-Для `Page` (`name: 'Page'`) — `isIndexedSectionType` возвращает `true` (потому что `FrontMatterSectionTypesIndexed` включает `Page`). То есть `finalIndex` **не** обнуляется. Но для `Page` `promptSection` не запрашивает индекс, `userIndex = ''`, `finalIndex = ''`. Уже пустой.
-
-Для `Part`/`Section`/`Chapter` — `true`, `finalIndex` остаётся. `promptSection` запрашивает индекс. Всё согласовано.
-
-То есть `if (!isIndexedSectionType(...))` — **никогда** не срабатывает в текущем коде. Мёртвая ветка. Семантически `Page` **не** должна быть в `FrontMatterSectionTypesIndexed` — это должна быть «не индексируется». Но так как ветка не работает, баг компенсирован.
 
 {% endcut %}
 ||
@@ -8971,7 +7776,7 @@ major
 
 В `model/frontmatter.model.js`:
 
-<code class="language-js">
+<code>
 const FrontMatterSectionTypesIndexed = [
     FrontMatterSectionTypes.PART,
     FrontMatterSectionTypes.SECTION,
@@ -8986,7 +7791,7 @@ const FrontMatterSectionTypesIndexed = [
 
 Фикс — использовать `FrontMatterSectionTypesIndexed2` (без `Page`):
 
-<code class="language-js">
+<code>
 if (FrontMatterSectionTypesIndexed2.includes(sectionType)) { … }
 </code>
 
@@ -9033,7 +7838,7 @@ major
 
 Структура:
 
-<code class="language-js">
+<code>
 for (const section of sections) {
     const result = reindexAndRenameSection(...);
     const childWarnings = reindexDirectory(result.sectionPath, ...);   // рекурсия
@@ -9085,7 +7890,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 try {
     fs.renameSync(folderPath, newFolderPath);
     // … много правок …
@@ -9117,7 +7922,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 IndexMdUpsert(oldSectionPath, pureTitle, sectionType, sectionLabel, currentIndex);
 const newFolderName = DiplodocSectionPatch(oldSectionPath, pureTitle, sectionTypeObj, currentIndex);
 </code>
@@ -9141,7 +7946,7 @@ major
 
 `ux_reindex_directories`:
 
-<code class="language-js">
+<code>
 if (allWarnings.length > 0) {
     showWarnings(allWarnings);
 }
@@ -9164,7 +7969,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function checkMissingSectionType(metadata, sectionPath, warnings) {
     if (!metadata.sectionType &#124;&#124; metadata.sectionType.trim() === '') {
         // …
@@ -9191,7 +7996,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const prefixes = ['Часть', 'Раздел', 'Глава'];
 for (const prefix of prefixes) {
     if (title.startsWith(prefix + ' ') &#124;&#124; title.startsWith(prefix + '.')) {
@@ -9218,7 +8023,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (tocDoc && sortOrder !== 'none') {
     sortTocItems(dir, sortOrder, sortKind);
 }
@@ -9262,7 +8067,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 vscode.window.showInformationMessage(translate(nls_ts.plugin.section.reindex.info.success));
 if (allWarnings.length > 0) showWarnings(allWarnings);
 </code>
@@ -9301,7 +8106,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 let currentIndex = String(metadata.sectionIndex &#124;&#124; '').trim();
 </code>
 
@@ -9324,7 +8129,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const pureTitle = metadata.pureTitle &#124;&#124; sectionName;
 </code>
 
@@ -9362,7 +8167,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const regex = /<figcaption\s+class="imageDescription"([^37]*?)\s+id="([^38]+)"([^37]*?)>([\s\S]*?)<\/figcaption>/gi;
 </code>
 
@@ -9413,7 +8218,7 @@ major
 
 Regex:
 
-<code class="language-js">
+<code>
 const linkRegex = /\[([^39]]+)\]\(([^40]*?)(#fig-[^40]+)\)/g;
 </code>
 
@@ -9457,7 +8262,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const newLinkText = template.replace('{0}', (newNumber ?? '').toString());
 </code>
 
@@ -9478,7 +8283,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const formatPatterns = [
     { regex: /^(\*{1,2})(.*?)\1$/, wrapper: '$1' },
     { regex: /^(_{1,2})(.*?)\1$/, wrapper: '$1' },
@@ -9545,7 +8350,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function GetPrefixOrDefault(config, activeLocale, targetLocale) {
     return activeLocale !== targetLocale ? 'Figure' : config.figureCaptionPrefix &#124;&#124; 'Figure';
 }
@@ -9570,13 +8375,13 @@ major
 
 В `reindexer.figures.js` импорт:
 
-<code class="language-js">
+<code>
 const { DiplodocConfigFromJson } = require('../manifest/config/diplodoc.config');
 </code>
 
 В `manifest/config/diplodoc.config.js`:
 
-<code class="language-js">
+<code>
 function DiplodocConfigFromJson(json) {
     if (typeof json === 'string') {
         try { return JSON.parse(json); } catch (err) { … }
@@ -9608,7 +8413,7 @@ major
 
 Комментарий в коде:
 
-<code class="language-js">
+<code>
 // if (updated) {
 //     fs.writeFileSync(filePath, newContent, 'utf8');
 //     // console.log(`Обновлены ссылки в ${path.relative(process.cwd(), filePath)}`);
@@ -9683,7 +8488,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (sectionType && FrontMatterSectionTypesIndexed.includes(sectionType) && sectionIndex) {
 </code>
 
@@ -9735,7 +8540,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const parts = sectionIndex.split('.');
 const lastPart = parts[parts.length - 1];
 const lastNum = parseInt(lastPart, 10);
@@ -9762,7 +8567,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!fs.existsSync(parentIndexPath)) return '1';
 </code>
 
@@ -9770,7 +8575,7 @@ if (!fs.existsSync(parentIndexPath)) return '1';
 
 Стоп — `section.Create` (Фаза 2):
 
-<code class="language-js">
+<code>
 const hasIndex = FrontMatterSectionTypesIndexed2.includes(sectionType.name);
 const sectionIndexCalculated = calculateNextIndex(targetDir);
 const sectionIndex = hasIndex ? await promptSectionIndex(sectionIndexCalculated) : '';
@@ -9782,7 +8587,7 @@ const sectionIndex = hasIndex ? await promptSectionIndex(sectionIndexCalculated)
 
 Правильный код:
 
-<code class="language-js">
+<code>
 let parentIndex = '';
 if (fs.existsSync(parentIndexPath)) {
     const parentContent = fs.readFileSync(parentIndexPath, 'utf8');
@@ -9808,7 +8613,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const lastNum = parseInt(lastPart, 10);
 </code>
 
@@ -9865,7 +8670,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const parentIndex = String(get(parentContent, 'sectionIndex') &#124;&#124; '');
 </code>
 
@@ -9992,7 +8797,7 @@ major
 
 Починка — добавить `languageRoot` в начало списка в `selectTargetDirectory`:
 
-<code class="language-js">
+<code>
 const targets = [
     { path: languageRoot, label: '(корень языка)', level: 0 },
     ...(await collectMoveTargets(languageRoot)),
@@ -10014,7 +8819,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const titleMatch = content.match(/title:\s*(.+)/);
 </code>
 
@@ -10037,7 +8842,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 return titleMatch ? titleMatch[1].trim() : path.basename(sectionPath);
 </code>
 
@@ -10078,43 +8883,6 @@ major
 {% endcut %}
 ||
 ||
-KI-501
-|
-unknown
-|
-major
-|
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
-|
-`updateLinksAfterRename` глотает ошибки
-|
-{% cut "Развернуть" %}
-
-`updateLinksInProject` (из `diplodoc-helper.links.md.js`):
-
-<code class="language-js">
-for (const filePath of files) {
-    try {
-        const content = fs.readFileSync(filePath, 'utf8');
-        const newContent = updateLinksInContent(...);
-        if (newContent !== content) {
-            fs.writeFileSync(filePath, newContent, 'utf8');
-        }
-    } catch (err) {
-        console.warn(`Ошибка обработки ${filePath}:`, msg);
-    }
-}
-</code>
-
-Ошибка `fs.writeFileSync` на каком-то файле (нет прав, диск переполнен) — `console.warn` в консоль расширения, **не** прерывает цикл. Внешний `catch` в `performMove` не сработает — он увидит «успех».
-
-Итог: часть файлов обновилась, часть — нет. Пользователь видит `«Обновлено ссылок в …»`, а где-то остались старые ссылки. При следующей сборке — битые ссылки.
-
-Это та же проблема, что в [`section.Delete`](../МодульУдалениесекции/index.md). Фикс — общий для `links.md`: передавать ошибки наружу, а не глотать.
-
-{% endcut %}
-||
-||
 KI-502
 |
 unknown
@@ -10136,25 +8904,6 @@ major
 {% endcut %}
 ||
 ||
-KI-503
-|
-unknown
-|
-major
-|
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
-|
-`TocYamlEntryRemove` ищет только `index.md`
-|
-{% cut "Развернуть" %}
-
-Та же проблема, что в [`section.Delete`](../МодульУдалениесекции/index.md): `targetHref = sourceName + '/index.md'`. Если запись была с `href: sourceName/index.yaml` или `href: sourceName/index.html` или `href: sourceName/` — фильтр не сработает. Запись останется в `toc.yaml` старого родителя.
-
-Симптом: после перемещения `toc.yaml` старого родителя содержит **и** старую запись (не удалилась), **и** новую (если она была добавлена в тот же родитель — не бывает при `!isSameParent`). В старом родителе — «висячая» запись на несуществующую папку.
-
-{% endcut %}
-||
-||
 KI-504
 |
 unknown
@@ -10167,7 +8916,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (targetIndex !== -1) {
     tocData.items.splice(targetIndex + 1, 0, newEntry);
 } else {
@@ -10196,13 +8945,13 @@ major
 
 В `package.nls.json`:
 
-<code class="language-js">on
+<code>on
 "plugin.section.move.error.self": "Нельзя переместить раздел в самого себя."
 </code>
 
 Но в коде `error.self` **не используется**. Проверка на «переместить в себя»:
 
-<code class="language-js">
+<code>
 if (isSameParent && position.position === 'after' && position.afterName === sourceName) {
     vscode.window.showWarningMessage(translate(nls_ts.plugin.section.move.warning.samePosition, sourceName));
     return false;
@@ -10211,7 +8960,7 @@ if (isSameParent && position.position === 'after' && position.afterName === sour
 
 Это про «сменить позицию на текущую» — предупреждение `warning.samePosition`. А «переместить в папку самого себя» (например, `Раздел1` → `Раздел1/Подраздел`) — проверяется через `error.recursive`:
 
-<code class="language-js">
+<code>
 if (!isSameParent && targetPath.startsWith(sourcePath + path.sep)) { … error.recursive … }
 </code>
 
@@ -10234,7 +8983,7 @@ major
 
 В `performMove`:
 
-<code class="language-js">
+<code>
 await updateLinksAfterRename(sourcePath, targetPath, projectRoot, '**удалено**');
 </code>
 
@@ -10257,7 +9006,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const items = targets.map(t => ({
     label: '  '.repeat(t.level) + t.label,
     description: t.path,
@@ -10273,25 +9022,6 @@ const selected = await vscode.window.showQuickPick(items, {
 `description: t.path` — полный абсолютный путь. При поиске в QuickPick пользователь набирает «Введение», QuickPick ищет по `label` и `description`. По `description` — по абсолютному пути, что совпадает почти всегда (все пути начинаются с `C:\…` или `/home/…`). Фильтрация по `description` даёт шум: пользователь набирает «foo», и в списке остаются все, у кого в пути есть «foo».
 
 `matchOnDescription: true` имеет смысл, когда `description` короткий и семантичный (например, `'module'`, `'article'`). Здесь — абсолютный путь, бесполезно.
-
-{% endcut %}
-||
-||
-KI-508
-|
-unknown
-|
-major
-|
-[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)
-|
-`getLanguageRoot` может вернуть не-корень-языка
-|
-{% cut "Развернуть" %}
-
-Та же проблема, что в [`section.Delete`](../МодульУдалениесекции/index.md): `isLanguageRoot(current)` определяется как «есть `toc.yaml`, нет `index.md`». Если у пользователя есть папка `docs/ru/foo/` без `index.md` с `toc.yaml` (черновики), `getLanguageRoot` вернёт её. Тогда `collectMoveTargets` и `findFiles` работают в `docs/ru/foo/`, а не в `docs/ru/`.
-
-Практический эффект: в `QuickPick` будут только секции внутри `foo/`, а перемещение в разделы `docs/ru/` — недоступно. Ссылки из `docs/ru/bar.md` — не обновятся.
 
 {% endcut %}
 ||
@@ -10327,7 +9057,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!isSameParent && fs.existsSync(targetPath)) {
     vscode.window.showErrorMessage(translate(nls_ts.plugin.section.move.error.sectionexists, sourceName));
     return false;
@@ -10391,7 +9121,7 @@ major
 
 NLS-ключ `plugin.section.move.info.success`: `"Обновлено ссылок в {0} файлах"`. В коде:
 
-<code class="language-js">
+<code>
 vscode.window.showInformationMessage(translate(nls_ts.plugin.section.move.info.success, sourceName));
 </code>
 
@@ -10431,7 +9161,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 console.log(`[Move] Изменение позиции внутри одного родителя для: ${sourceName}`);
 const composedTitle = await getComposedTitle(sourcePath);
 TocYamlEntryMoveWithinSameFile(newParentDir, composedTitle, sourceName, position);
@@ -10456,14 +9186,14 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const [movingEntry] = tocData.items.splice(currentIndex, 1);
 if (currentIndex === -1) { console.error(…); return; }
 </code>
 
 Стоп, порядок в коде:
 
-<code class="language-js">
+<code>
 const currentIndex = tocData.items.findIndex(...);
 if (currentIndex === -1) {
     console.error('❌ Элемент не найден в текущем TOC для перемещения');
@@ -10493,7 +9223,7 @@ major
 
 В `Pagebuilder.Config.FootnoteList.js` есть функция `injectContainerIntoState(html)`:
 
-<code class="language-js">
+<code>
 json.data.html += '\n<div id="footnotes-container"></div>';
 return html.replace(stateRe, `$1${JSON.stringify(json)}$3`);
 </code>
@@ -10519,7 +9249,7 @@ major
 
 В `generateNavigationContent.js`:
 
-<code class="language-js">
+<code>
 } else if (command === 'footnoteList') {
     generateFootnoteListPage({ docsDir, outputDir, lang: 'ru', langPrefix: 'ru' });
 }
@@ -10527,7 +9257,7 @@ major
 
 Но в `Pagebuilder.Config.FootnoteList.js` **нет** функции `generateFootnoteListPage` — там только `injectFootnoteList`. Импорт в `generateNavigationContent.js`:
 
-<code class="language-js">
+<code>
 const { generateFootnoteListPage } = require('./Pagebuilder.Config.FootnoteList');
 // → undefined
 </code>
@@ -10536,7 +9266,7 @@ const { generateFootnoteListPage } = require('./Pagebuilder.Config.FootnoteList'
 
 К счастью, **это не путь CLI**: `diplodoc-helper-cli.js` для `footnoteList` вызывает `injectFootnoteList` напрямую:
 
-<code class="language-js">
+<code>
 } else if (command === 'footnoteList') {
     // …resolves targetHtml…
     const { injectFootnoteList } = require('./contentNavigator/Pagebuilder.Config.FootnoteList.js');
@@ -10563,7 +9293,7 @@ major
 
 Клиент `footnoteList.js`:
 
-<code class="language-js">
+<code>
 function tick() {
     var c = ensureContainer();
     if (!c) return false;
@@ -10593,7 +9323,7 @@ major
 
 `findSectionIndexHtml(outputDir, sectionName)`:
 
-<code class="language-js">
+<code>
 if (e.name.toLowerCase() === sectionName.toLowerCase()) {
     const indexHtml = path.join(full, 'index.html');
     if (fs.existsSync(indexHtml)) return indexHtml;
@@ -10617,14 +9347,14 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 let urlPrefix = path.relative(targetDir, buildRoot).replace(/\\/g, '/');
 if (urlPrefix && !urlPrefix.endsWith('/')) urlPrefix += '/';
 </code>
 
 `path.relative` даёт `../../..`. Но если в пути к целевой странице есть кириллица (`Дополнительнаяинформация/Переченьсносок`), то при обратном построении URL в `collectFootnotes`:
 
-<code class="language-js">
+<code>
 const url = `${urlPrefix}${prefixWithLang}${rel}`;
 </code>
 
@@ -10649,7 +9379,7 @@ major
 
 И серверный, и клиентский `stripLinks` вырезают `<a>`, `![…](…)` и `[…](…)`. То есть если в определении сноски была ссылка на статью, в таблице останется только текст без ссылки. Пример:
 
-<code class="language-md">
+<code>
 [^44]: См. [раздел «Установка»](../Установка/index.md).
 </code>
 
@@ -10672,7 +9402,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const lastSeg = path.basename(path.resolve(docsDir));
 const langPrefix = /^[a-z]{2}$/i.test(lastSeg) ? lastSeg : null;
 </code>
@@ -10713,7 +9443,7 @@ major
 
 В `module.exports` файла `diplodoc-helper-cli.js`:
 
-<code class="language-js">
+<code>
 module.exports = {
     generateHelpMap,
     generateContexts,
@@ -10780,7 +9510,7 @@ major
 
 Функции `buildMatrix`, `buildSectionsMap`, `getArticleStatus`, `generateGenericTableFromArticles` лежат в `Pagebuilder.common.js` и экспортируются:
 
-<code class="language-js">
+<code>
 module.exports = { generateGenericTableFromArticles, buildMatrix };
 </code>
 
@@ -10843,7 +9573,7 @@ major
 
 У `bytescounter`:
 
-<code class="language-js">
+<code>
 navLinks: [
     { label: 'Контексты', url: 'contextmap.html' },
     { label: 'Хелптаги', url: 'helptagmap.html' },
@@ -10852,7 +9582,7 @@ navLinks: [
 
 У `contextmap`:
 
-<code class="language-js">
+<code>
 navLinks: [
     { label: 'Хэлптэги', url: 'helptagmap.html' },
     { label: 'Размеры', url: 'bytescounter.html' },
@@ -10861,7 +9591,7 @@ navLinks: [
 
 У `helptagmap`:
 
-<code class="language-js">
+<code>
 navLinks: [
     { label: 'Размеры', url: 'bytescounter.html' },
     { label: 'Контексты', url: 'contextmap.html' },
@@ -10887,7 +9617,7 @@ major
 
 В `generateBytesCounterPage` вызов:
 
-<code class="language-js">
+<code>
 generateGenericTableFromArticles({ …, lang: ['ru', 'en'], … });
 </code>
 
@@ -10908,7 +9638,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const savedLang = localStorage.getItem('preferredLang');
 </code>
 
@@ -10946,7 +9676,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 pre: [
     run('clean build', …),
     cli('reindexFigures', '--docsDir', './docs/ru'),
@@ -10964,7 +9694,7 @@ pre: [
 
 Правильно — перенести в `post:`, после `@diplodoc/cli`:
 
-<code class="language-js">
+<code>
 post: [
     cli('footnoteAnchors', './build'),
     …
@@ -10997,38 +9727,9 @@ major
 
 Фикс — маркер `id="dl-clean-mode"`:
 
-<code class="language-js">
+<code>
 if (content.includes('id="dl-clean-mode"')) return;
 content = content.replace('</body>', `<script id="dl-clean-mode">${cleanScript}</script>\n</body>`);
-</code>
-
-{% endcut %}
-||
-||
-KI-537
-|
-unknown
-|
-major
-|
-[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)
-|
-`sessionStorage` — не выход из режима
-|
-{% cut "Развернуть" %}
-
-`isCleanMode = sessionStorage.getItem(…) === 'true'`. Установить `'true'` можно через `?clean=1`. Сбросить — **только** `sessionStorage.clear()` или закрытие вкладки.
-
-Переход на `?clean=0` — `urlParams.has('clean')` → `true` (ключ есть, неважно, какое значение) → `sessionStorage.setItem('diplodoc_clean_mode', 'true')` — **снова активирует**. То есть `?clean=0` — **не** выход, а повторный вход.
-
-Если пользователь хочет «выйти из режима» — единственный способ — `sessionStorage.removeItem('diplodoc_clean_mode')` в DevTools Console, или закрыть вкладку.
-
-Фикс — поддержать `?clean=0` и `?mode=full` как «выключение»:
-
-<code class="language-js">
-if (urlParams.get('clean') === '0' &#124;&#124; urlParams.get('mode') === 'full') {
-    sessionStorage.removeItem('diplodoc_clean_mode');
-}
 </code>
 
 {% endcut %}
@@ -11046,7 +9747,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 sessionStorage.setItem('diplodoc_clean_mode', 'true');
 </code>
 
@@ -11054,7 +9755,7 @@ sessionStorage.setItem('diplodoc_clean_mode', 'true');
 
 Фикс:
 
-<code class="language-js">
+<code>
 try { sessionStorage.setItem(…); } catch { /* fallback: без сохранения */ }
 </code>
 
@@ -11073,7 +9774,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 document.querySelectorAll('.dc-sidebar, .dc-doc-layout__sidebar, [class*="sidebar"]')
     .forEach(el => (el.style.display = 'none'));
 </code>
@@ -11141,7 +9842,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 console.log('[Diplodoc Clean Mode] Activated');
 console.log('[Diplodoc Clean Mode] Persistent mode enabled');
 </code>
@@ -11163,7 +9864,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 el.style.cssText = `visibility: hidden !important; width: 0 !important; …`;
 </code>
 
@@ -11190,7 +9891,7 @@ major
 
 `urlParams.has('clean')` → `true` для `?clean`, `?clean=`, `?clean=0`, `?clean=1`, `?clean=abc`. То есть `?clean=0` **включает** режим (см. выше). Правильно было бы:
 
-<code class="language-js">
+<code>
 const cleanValue = urlParams.get('clean');
 const hasCleanParam = (cleanValue === '' &#124;&#124; cleanValue === '1' &#124;&#124; cleanValue === 'true') &#124;&#124; urlParams.get('mode') === 'embed';
 </code>
@@ -11246,7 +9947,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 console.log(`[tocInject] Процесс завершён.`);
 </code>
 
@@ -11267,7 +9968,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function walk(dir) {
     fs.readdirSync(dir, { withFileTypes: true }).forEach(…);
 }
@@ -11343,13 +10044,13 @@ major
 
 `.vscode/launch.json`:
 
-<code class="language-js">on
+<code>on
 "preLaunchTask": "Watch (for Debugging)"
 </code>
 
 `.vscode/tasks.json`:
 
-<code class="language-js">on
+<code>on
 {
     "label": "Watch (for Debugging)",
     "type": "shell",
@@ -11362,7 +10063,7 @@ major
 
 **Фикс** — добавить в `package.json`:
 
-<code class="language-js">on
+<code>on
 "watch": "node build.js --watch"
 </code>
 
@@ -11383,7 +10084,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 catch (err) {
     console.error('Build failed:', err);
     process.exit(1);
@@ -11409,7 +10110,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (isWatch) {
     const ctx = await esbuild.context(buildOptions);
     await ctx.watch();
@@ -11434,7 +10135,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const size = (fs.statSync('dist/extension.js').size / 1024).toFixed(2);
 </code>
 
@@ -11568,7 +10269,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!fs.existsSync('dist')) {
     fs.mkdirSync('dist', { recursive: true });
 }
@@ -11641,7 +10342,7 @@ major
 
 Правильно — дождаться первой сборки:
 
-<code class="language-js">
+<code>
 await esbuild.build(buildOptions);  // initial build
 const ctx = await esbuild.context(buildOptions);
 await ctx.watch();
@@ -11894,7 +10595,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 newHtml = newHtml.replace(
     /&lt;ol(\s[^45]*?class=\\"footnotes-list\\"[^45]*?)&gt;/g,
     …
@@ -11909,7 +10610,7 @@ newHtml = newHtml.replace(
 
 Проверить в DevTools на второй странице с offset > 0:
 
-<code class="language-js">
+<code>
 // В state (если hydrate):
 JSON.parse(document.getElementById('diplodoc-state').textContent).data.html
 // Ищем там <ol class=\"footnotes-list\" — есть ли start= и style=?
@@ -11917,7 +10618,7 @@ JSON.parse(document.getElementById('diplodoc-state').textContent).data.html
 
 Если `start` там не обновлён, а `counter-reset` тоже — то после hydrate сноски могут отобразиться с локальными номерами, перебивая глобальные. Решение — добавить третью регулярку:
 
-<code class="language-js">
+<code>
 newHtml = newHtml.replace(
     /<ol(\s[^46]*class=\\"footnotes-list\\"[^46]*?)>/g,
     (m, attrs) => `<ol${upsertStyle(attrs, styleDecl, true)}>`
@@ -11994,7 +10695,7 @@ major
 
 CLI-команда `reindexFootnotes` обрабатывает **один** `--docsDir`. В `docs-build.js` вызов прописан только для `./docs/ru`:
 
-<code class="language-js">
+<code>
 cli('reindexFootnotes', '--docsDir', './docs/ru'),
 </code>
 
@@ -12036,7 +10737,7 @@ major
 
 `FOOTNOTE_DEF_REGEX = /^\[\^([^57]\s]+)\]:[ \t]*(.*)$/gm` — `.*` не переходит через `\n`. Если пользователь написал:
 
-<code class="language-md">
+<code>
     Вторая строка — продолжение.
 </code>
 
@@ -12078,7 +10779,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 let end = d.index + d.length;
 if (text[end] === '\r') end++;
 if (text[end] === '\n') end++;
@@ -12119,7 +10820,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const gap = text.slice(prevEnd, defs[i].index);
 if (!/^\s*$/.test(gap)) {
     return { canReorder: false, blockStart: 0, blockEnd: 0 };
@@ -12162,7 +10863,7 @@ major
 
 Если пользователь нажал `Escape` в диалоге индекса, `promptSectionIndex` вернёт `undefined`. В `ux_section_create`:
 
-<code class="language-js">
+<code>
 const sectionIndex = hasIndex ? await promptSectionIndex(sectionIndexCalculated) : '';
 </code>
 
@@ -12172,7 +10873,7 @@ const sectionIndex = hasIndex ? await promptSectionIndex(sectionIndexCalculated)
 
 Правильно было бы:
 
-<code class="language-js">
+<code>
 const sectionIndex = hasIndex ? await promptSectionIndex(sectionIndexCalculated) : '';
 if (sectionIndex === undefined) return; // отмена
 </code>
@@ -12192,7 +10893,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (hasPrefix && !hasIndex) return sectionType.value;
 </code>
 
@@ -12202,7 +10903,7 @@ if (hasPrefix && !hasIndex) return sectionType.value;
 
 Починка — в `composeFullTitle` добавить `+ '. '`:
 
-<code class="language-js">
+<code>
 if (hasPrefix && !hasIndex) return sectionType.value + '. ';
 </code>
 
@@ -12230,31 +10931,6 @@ major
 {% endcut %}
 ||
 ||
-KI-594
-|
-unknown
-|
-major
-|
-[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)
-|
-`isValidName` не отсеивает спецсимволы
-|
-{% cut "Развернуть" %}
-
-`ShowSectionNameSelector` валидирует только длину и непустоту. Спецсимволы в названии:
-
-- **в `title`** (`Раздел 1. <Введение>`) — попадут как есть, ломая YAML (если в значении есть `<`, `>`);
-- **в `pureTitle`** — то же;
-- **в имени папки** — вырежутся `replace(/[^60]/g, '')`.
-
-Итог: `title` содержит спецсимволы, а `folderName` — только буквы/цифры. Может привести к коллизии: две секции «Введение» и «Введ<ение>» дадут одинаковое имя папки `Раздел1.Введение` и `Раздел1.Введение` — `createDirectory` упадёт на `canCreateFolder` (папка уже есть) и покажет «Путь уже существует: …». Пользователь не поймёт, почему «Введ<ение>» конфликтует с «Введение».
-
-Также `isValidName` не проверяет зарезервированные имена Windows (`CON`, `PRN`, `AUX`, `NUL`, `COM1`–`COM9`, `LPT1`–`LPT9`). Секция «CON» создаст папку `Раздел1.CON` — в Windows это приведёт к ошибке `fs.mkdirSync`. Сообщение — `console.error(err)` в `createDirectory`, без показа пользователю. См. `createDirectory` — `catch` не вызывает `onError`.
-
-{% endcut %}
-||
-||
 KI-595
 |
 unknown
@@ -12267,7 +10943,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function createDirectory(canCreateFolder, newFolderPath, recursive, folderName, onError) {
     if (!canCreateFolder(newFolderPath, onError)) return null;
     try {
@@ -12286,7 +10962,7 @@ function createDirectory(canCreateFolder, newFolderPath, recursive, folderName, 
 
 Должно быть:
 
-<code class="language-js">
+<code>
 } catch (err) {
     onError(err instanceof Error ? err.message : String(err));
     return null;
@@ -12308,7 +10984,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (!uri) return;
 </code>
 
@@ -12338,7 +11014,7 @@ major
 
 `ShowSectionNameSelector` разрешает `<` и `>`. `IndexMdFileCreate` пишет:
 
-</code>yaml
+<code>
 title: Раздел 1. <Введение>
 </code>
 
@@ -12368,7 +11044,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function IndexMdFileCreate(folderPath, title, sectionType, sectionValue, sectionIndex) {
     const filePath = path.join(folderPath, FrontMatterFiles.INDEX_MD);
     const metaObj = { … };
@@ -12395,7 +11071,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 vscode.window.showInformationMessage(
     translate(nls_ts.plugin.section.create.info.success, fullTitle, sectionType.label)
 );
@@ -12447,7 +11123,7 @@ major
 
 `calculateNextIndex` ищет максимальный `sectionIndex` среди детей. Если дети проиндексированы — работает. Если у ребёнка `sectionIndex` не заполнен (пустая строка, `null`), он **пропускается**:
 
-<code class="language-js">
+<code>
 if (sectionType && FrontMatterSectionTypesIndexed.includes(sectionType) && sectionIndex) {
     …
 }
@@ -12534,7 +11210,7 @@ major
 
 В отличие от `generateHelpMap`, `generateContexts`, `generateAbbrs`, `generateTerms`, `generateGosts` — функция `runGeneration` для `helptags` **не входит** в `module.exports` файла `src/plugins/diplodoc-helper-cli.js`:
 
-<code class="language-js">
+<code>
 const { runGeneration: generateHelptags } = require('./helptags/helptags.js');
 // ...
 module.exports = {
@@ -12637,7 +11313,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const stubVersion = '1.4';
 </code>
 
@@ -12660,7 +11336,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const stubAuthor = '[Вавренюк Виктор Андреевич](mailto:vavrenyuk@ascon.by)';
 </code>
 
@@ -12748,7 +11424,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const readingTimeNumeric = Math.ceil(avgSizeNumeric / 2500);
 </code>
 
@@ -12756,7 +11432,7 @@ const readingTimeNumeric = Math.ceil(avgSizeNumeric / 2500);
 
 Если статья пишет:
 
-<code class="language-md">
+<code>
 В руководстве {{ stats.total_articles }} статей. Общее время чтения —
 {{ stats.reading_time }} минут.
 </code>
@@ -12782,7 +11458,7 @@ major
 
 По умолчанию `gitMeta`:
 
-<code class="language-js">
+<code>
 {
     firstCommitDate: 'Январь 2025 г.',
     lastCommitHash: 'unknown',
@@ -12797,7 +11473,7 @@ major
 
 Стоп, перечитываю:
 
-<code class="language-js">
+<code>
 if (!lastCommitDate) {
     const now = new Date();
     lastCommitDate = `${now.toLocaleDateString('ru-RU')} ${now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
@@ -12825,7 +11501,7 @@ major
 
 Как и `helptags`/`footnoteNumbering`, при ошибке `presetsStat` **не падает**:
 
-<code class="language-js">
+<code>
 } catch (error) {
     console.error('❌ Ошибка обработки статистики:', msg);
 }
@@ -12852,7 +11528,7 @@ major
 
 В `docs-build.js`, фаза `pre`:
 
-<code class="language-js">
+<code>
 cli('helpMap'),
 cli('tocCleanMode'),
 cli('periodicStat'),
@@ -12878,13 +11554,13 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const STAT_FILENAME = 'app-help-contents.json';
 </code>
 
 В `helpmap.config.js`:
 
-<code class="language-js">
+<code>
 outputFileName: 'app-help-contents.json',
 </code>
 
@@ -12947,23 +11623,6 @@ major
 {% cut "Развернуть" %}
 
 В `terms.config.js` `showWarnings: false`, `showUnused: false`. Баннер «Нет в словаре» и метка «В статьях не используется» не появятся, пока не поправить конфиг.
-
-{% endcut %}
-||
-||
-KI-623
-|
-unknown
-|
-major
-|
-[`МодульТермины`](../МодульТермины/index.md)
-|
-Выходная папка задаётся только через `terms.paths.yaml`
-|
-{% cut "Развернуть" %}
-
-Путь `Дополнительнаяинформация/Терминыиопределения` (ru) / `Additional information/Terms and definitions` (en) фиксирован. CLI-аргумента нет.
 
 {% endcut %}
 ||
@@ -13150,7 +11809,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function removeFileOrDirectory(isDirectory, deletedPath) {
     if (isDirectory) {
         fs.rmSync(deletedPath, { recursive: true, force: true });
@@ -13191,7 +11850,7 @@ major
 
 В `src/commands/diplodoc-helper.fs.access.js` есть функция:
 
-<code class="language-js">
+<code>
 function checkDeleteAccess(paths) {
     for (const p of paths) {
         const parent = path.dirname(p);
@@ -13223,7 +11882,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const targetHref = `${folderName}/${FrontMatterFiles.INDEX_MD}`;
 tocData.items = tocData.items.filter(item => item[FrontMatterToc.ITEMS_HREF] !== targetHref);
 </code>
@@ -13240,7 +11899,7 @@ tocData.items = tocData.items.filter(item => item[FrontMatterToc.ITEMS_HREF] !==
 
 Правильно — проверять все варианты:
 
-<code class="language-js">
+<code>
 const variants = new Set([
     `${folderName}/index.md`,
     `${folderName}/index.yaml`,
@@ -13269,7 +11928,7 @@ major
 
 `getLanguageRoot(sourcePath)`:
 
-<code class="language-js">
+<code>
 let current = path.dirname(sourcePath);
 while (current && current !== path.parse(current).root) {
     const basename = path.basename(current).toLowerCase();
@@ -13310,7 +11969,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 async function updateLinksInProject(projectRoot, transformTarget, stubText) {
     const files = await findFiles(projectRoot, '.md');
     for (const filePath of files) { … }
@@ -13326,7 +11985,7 @@ async function updateLinksInProject(projectRoot, transformTarget, stubText) {
 
 Правильно — исключать `targetDir` из обхода:
 
-<code class="language-js">
+<code>
 const files = (await findFiles(projectRoot, '.md'))
     .filter(f => !f.startsWith(targetDir + path.sep) && f !== targetDir);
 </code>
@@ -13348,7 +12007,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (references.length > 0) {
     await updateLinksAfterFolderDelete(deletedPath, projectRoot, stubText);
 }
@@ -13378,7 +12037,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 for (const filePath of files) {
     try {
         const content = fs.readFileSync(filePath, 'utf8');
@@ -13564,7 +12223,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const isDirectory = fs.statSync(deletedPath).isDirectory();
 </code>
 
@@ -13587,7 +12246,7 @@ major
 
 Та же проблема, что в `section.Delete`:
 
-<code class="language-js">
+<code>
 if (isDirectory) {
     fs.rmSync(deletedPath, { recursive: true, force: true });
 }
@@ -13596,36 +12255,6 @@ if (isDirectory) {
 `force: true` не бросает при неудаче (нет прав, файл занят). Модуль после вызова показывает «Папка удалена». Пользователь считает, что удалено, а на диске осталось.
 
 Для файлов (`fs.unlinkSync`) — бросает, `catch` ловит.
-
-{% endcut %}
-||
-||
-KI-651
-|
-unknown
-|
-major
-|
-[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)
-|
-`updateLinksInProject` глотает ошибки `fs.writeFileSync`
-|
-{% cut "Развернуть" %}
-
-Как и в `section.Delete`/`section.Move`/`section.Rename`:
-
-<code class="language-js">
-for (const filePath of files) {
-    try {
-        // …
-        fs.writeFileSync(filePath, newContent, 'utf8');
-    } catch (err) {
-        console.warn(`Ошибка обработки ${filePath}:`, msg);
-    }
-}
-</code>
-
-Частичное обновление — часть файлов обновлена, часть — нет. Внешний `catch` не сработает. Пользователь видит «успешно». Общий фикс — в `links.md.js`, а не здесь.
 
 {% endcut %}
 ||
@@ -13684,7 +12313,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 introduction() {
     if (this.isDirectory) {
         return translate(nls_ts.plugin.section.delete.confirmation.text, this.targetName);
@@ -13710,7 +12339,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const confirm = await vscode.window.showWarningMessage(message, { modal: true }, 'Удалить');
 </code>
 
@@ -13731,7 +12360,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 vscode.window.showInformationMessage(
     isDirectory
         ? `Папка "${targetName}" успешно удалена.`
@@ -13775,7 +12404,7 @@ major
 
 `findReferencesToMdFile` пропускает сам `targetFilePath`:
 
-<code class="language-js">
+<code>
 for (const filePath of allMdFiles) {
     if (filePath === targetFilePath) continue;
     // …
@@ -13852,7 +12481,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (fs.existsSync(targetPath) && fs.statSync(targetPath).isDirectory() && isDiplodocSection(targetPath)) {
 </code>
 
@@ -13877,7 +12506,7 @@ major
 
 Если `smart.delete` вызван на несуществующем пути (`existsSync === false`), маршрут — `file.Delete`. Внутри:
 
-<code class="language-js">
+<code>
 const isDirectory = fs.statSync(deletedPath).isDirectory();
 </code>
 
@@ -13940,7 +12569,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 async function ux_smart_delete(uri) {
     // …
     return ux_section_delete(uri);
@@ -14088,7 +12717,7 @@ major
 
 `TEMPLATE_FINAL_TITLE(sectionValue, sectionIndex, title)`:
 
-<code class="language-js">
+<code>
 if (!sectionValue &#124;&#124; sectionValue.trim() === '') return title;
 const leftPart = sectionIndex.trim().length === 0 ? sectionValue : `${sectionValue} ${sectionIndex.trim()}`;
 return `${leftPart}. ${title}`;
@@ -14096,7 +12725,7 @@ return `${leftPart}. ${title}`;
 
 `composeTitlePrefix(index, sectionType)`:
 
-<code class="language-js">
+<code>
 const hasPrefix = !!sectionType.value;
 const hasIndex = !!index;
 if (hasPrefix && hasIndex) return `${sectionType.value} ${index}. `;
@@ -14128,7 +12757,7 @@ major
 
 В `frontmatter.section.title.js`:
 
-<code class="language-js">
+<code>
 function isIndexedSectionType(sectionType) {
     return FrontMatterSectionTypesIndexed.includes(sectionType.name);
 }
@@ -14136,36 +12765,13 @@ function isIndexedSectionType(sectionType) {
 
 `FrontMatterSectionTypesIndexed` включает `Part`, `Section`, `Chapter`, **`Page`**. Но `Page` — статья, у неё нет `sectionIndex`, `isIndexedSectionType` для `Page` вернёт `true`. Используется в `section.Rename`:
 
-<code class="language-js">
+<code>
 if (!isIndexedSectionType(newSectionTypeObj)) {
     finalIndex = '';
 }
 </code>
 
 Для `Page` (статьи) `isIndexedSectionType` вернёт `true` — `finalIndex` не сбросится, что семантически неверно (статья не индексируется). В коде это компенсируется тем, что `promptSection` сам не запрашивает индекс для `Page` (проверяет `FrontMatterSectionTypesIndexed2`). Но `isIndexedSectionType` формально «врёт» для `Page`.
-
-{% endcut %}
-||
-||
-KI-675
-|
-unknown
-|
-major
-|
-[`МодульЯдросекций`](../МодульЯдросекций/index.md)
-|
-`TocYamlEntryPatchReference` — простая `replace`
-|
-{% cut "Развернуть" %}
-
-<code class="language-js">
-content = content.replace(new RegExp(oldFolderName, 'g'), newFolderName);
-</code>
-
-`oldFolderName` — не escaped. Если в имени папки есть спецсимволы regex (`.`, `*`, `(`, `)`), замена сработает непредсказуемо. Имя папки `Раздел1.Введение` содержит `.` — `new RegExp('Раздел1.Введение', 'g')` трактует `.` как «любой символ». Замена `Раздел1.Введение` → `Раздел2.Новое` может «съесть» лишние символы.
-
-Это **реальный баг** при переименовании. Правильно — `escapeRegExp(oldFolderName)`.
 
 {% endcut %}
 ||
@@ -14201,7 +12807,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 function getSectionMetadata(content) {
     return {
         sectionType: get(content, 'sectionType'),          // null если нет
@@ -14213,7 +12819,7 @@ function getSectionMetadata(content) {
 
 Для статьи без `sectionType` — `null`. Для `String(null)` — `'null'`. В `reindexer.directories` это обрабатывается:
 
-<code class="language-js">
+<code>
 const sectionTypeObj = localSectionTypes.find(st => st.name === metadata.sectionType) &#124;&#124; DEFAULT_SECTION_TYPE;
 </code>
 
@@ -14234,7 +12840,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 if (tocDoc && sortOrder !== 'none') {
     sortTocItems(dir, sortOrder, sortKind);
 }
@@ -14257,7 +12863,7 @@ major
 |
 {% cut "Развернуть" %}
 
-<code class="language-js">
+<code>
 const hrefMatch = block.match(/href:\s+([^68]+)/);
 </code>
 
@@ -14375,7 +12981,7 @@ major
 
 Внутри функции:
 
-<code class="language-js">
+<code>
 console.log(`[FootnoteAnchors] Исправлено файлов: ${totalFixed}`);
 </code>
 
@@ -14398,7 +13004,7 @@ major
 
 В `src/plugins/mdedit_fixes/fix-footnote-links.js` есть **клиентский** скрипт, который делает похожее:
 
-<code class="language-js">
+<code>
 document.querySelectorAll('.footnote-ref a[href^="#fn"]').forEach(function (link) {
     var hash = link.getAttribute('href');
     if (hash && hash[0] === '#') {

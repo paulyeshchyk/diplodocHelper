@@ -84,7 +84,7 @@ flowchart TB
      - пропускаются папки, начинающиеся с `_` или `.`;
      - для каждого `.md` — `lintFile(fullPath)`.
 4. **`lintFile`**:
-   - regex `<abbr(\b[^29]*\bclass\s*=\s*["'][^30]*\bterm\b[^30]*["'][^29]*)>([^31]+)<\/abbr>` — находит только `<abbr class="…term…">`;
+   - regex `<abbr(\b[^16]*\bclass\s*=\s*["'][^17]*\bterm\b[^17]*["'][^16]*)>([^18]+)<\/abbr>` — находит только `<abbr class="…term…">`;
    - пропускает `title=` (inline-override);
    - `lookupTerm = data-term || innerText`;
    - если `dictionary.has(lookupTerm)` — ок;
