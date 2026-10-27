@@ -141,7 +141,7 @@ function isValidName(name) {
 }
 ```
 
-То есть проверяется только непустота и длина. Спецсимволы (`<`, `>`, `:`, `"`, `/`, `\`, `|`, `?`, `*`) **не** отсеиваются — они попадут в `title`, `pureTitle`, а в имени папки `TEMPLATE_FOLDER_NAME` их вырежет (`replace(/[^59]/g, '')`). См. «Известные ограничения».
+То есть проверяется только непустота и длина. Спецсимволы (`<`, `>`, `:`, `"`, `/`, `\`, `|`, `?`, `*`) **не** отсеиваются — они попадут в `title`, `pureTitle`, а в имени папки `TEMPLATE_FOLDER_NAME` их вырежет (`replace(/[^31]/g, '')`). См. «Известные ограничения».
 
 Если `undefined` — выход.
 
@@ -187,7 +187,7 @@ if (!folderResult) return;
 `createSectionFolder` (из `diplodoc.flow.js`):
 
 1. `folderName = TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex)` — по правилам:
-   - `sectionType.value` + `sectionIndex` + `'.'` + `sectionName.replace(/[^59]/g, '')`;
+   - `sectionType.value` + `sectionIndex` + `'.'` + `sectionName.replace(/[^31]/g, '')`;
    - если `sectionType.value` нет — `sectionIndex + '.' + name`;
    - если `sectionIndex` нет — `sectionType.value + '.' + name`;
    - если ничего нет — `name`.

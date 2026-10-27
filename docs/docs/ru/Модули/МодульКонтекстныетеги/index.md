@@ -97,7 +97,7 @@ function runGeneration(buildDir) {
     walk(buildDir, filter, htmlPath => {
         try {
             const content = fs.readFileSync(htmlPath, 'utf8');
-            const contextMeta = content.match(/<meta\s+name="context"\s+content="([^21]*)"\s*\/?>/i);
+            const contextMeta = content.match(/<meta\s+name="context"\s+content="([^11]*)"\s*\/?>/i);
             if (!contextMeta) return;
 
             const contexts = contextMeta[1]
@@ -138,7 +138,7 @@ function runGeneration(buildDir) {
 2. **`walk(buildDir, isHtmlFile, callback)`** — рекурсивный обход, только `.html`. Из `utils/walk.js` — та же функция, что в `breadcrumb.collector`.
 3. **Для каждого HTML:**
    - читает содержимое;
-   - **regex** `/<meta\s+name="context"\s+content="([^21]*)"\s*\/?>/i` — ищет `<meta name="context" content="…">`;
+   - **regex** `/<meta\s+name="context"\s+content="([^11]*)"\s*\/?>/i` — ищет `<meta name="context" content="…">`;
    - если нет — пропуск (страница без контекстов);
    - `split(',')` → `trim()` → `filter(Boolean)` → массив контекстов;
    - `generateContextScript(contexts, htmlPath, buildDir)` — формирует `<script>`-строку;

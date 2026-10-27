@@ -116,7 +116,7 @@ async function ux_file_delete(uri) {
 
 1. `allMdFiles = await findFiles(projectRoot, '.md')` — все `.md` в языке (рекурсивно, кроме папок с `.` в имени).
 2. Для каждого `filePath`, кроме **самого** `targetFilePath`:
-   - читает содержимое, парсит `parseMarkdownLinks(content)` (regex `(!?)\[([^63]]*)\]\(([^64]+)\)`);
+   - читает содержимое, парсит `parseMarkdownLinks(content)` (regex `(!?)\[([^32]]*)\]\(([^33]+)\)`);
    - для каждой ссылки:
      - `isExternalLink` → пропуск (`http://`, `#`, `mailto:`, `/`);
      - `splitMdPathQueryHash(rawPath)` → `pathPart` (без `?query#hash`);

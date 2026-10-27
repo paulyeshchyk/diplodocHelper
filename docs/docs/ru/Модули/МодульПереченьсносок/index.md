@@ -44,7 +44,7 @@ context: footnoteList, footnote, post-processing, html
 flowchart TB
     subgraph pre[Pre-processing]
         TOC["docs/&lt;lang&gt;/toc.yaml"]
-        MD["docs/&lt;lang&gt;/**/*.md<br/>[^41] и [^N]: …"]
+        MD["docs/&lt;lang&gt;/**/*.md<br/>[^23] и [^N]: …"]
     end
     subgraph post[Post-processing]
         COL["collectFootnotes<br/>(docsDir, langPrefix, urlPrefix)"]
@@ -83,11 +83,11 @@ flowchart TB
 2. **Для каждого `.md`:**
    - читается содержимое;
    - frontmatter через `gray-matter` — берётся `title` (приоритет: `data.title` → `data.pureTitle` → имя папки);
-   - `extractFootnoteRefs(content)` — все ссылки `[^41]` (из `reindexer.footnotes`);
+   - `extractFootnoteRefs(content)` — все ссылки `[^23]` (из `reindexer.footnotes`);
    - `extractFootnoteDefs(content)` — все определения `[^N]: …`.
 
 3. **Сопоставление.**
-   - `idToNumber: Map<id, globalNumber>` — по порядку первого появления ссылки: первый `[^42]` получает `counter++`, второй новый id — следующий `counter`, и т.д. Глобальный счётчик сквозной по всему проекту.
+   - `idToNumber: Map<id, globalNumber>` — по порядку первого появления ссылки: первый `[^24]` получает `counter++`, второй новый id — следующий `counter`, и т.д. Глобальный счётчик сквозной по всему проекту.
    - `defsById: Map<id, content>` — первое определение для каждого id. Если id определён дважды, побеждает первое (молча, без предупреждения).
 
 4. **Запись.**

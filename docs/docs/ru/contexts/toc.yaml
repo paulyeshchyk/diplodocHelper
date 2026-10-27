@@ -7,8 +7,14 @@ items:
     href: abbrs.md
   - name: abbrs.client
     href: abbrs.client.md
+  - name: admin
+    href: admin.md
   - name: anchor
     href: anchor.md
+  - name: api
+    href: api.md
+  - name: auth
+    href: auth.md
   - name: breadcrumb
     href: breadcrumb.md
   - name: browser
@@ -27,10 +33,14 @@ items:
     href: clean-mode.md
   - name: cli
     href: cli.md
+  - name: client
+    href: client.md
   - name: client-runtime
     href: client-runtime.md
   - name: clipboard
     href: clipboard.md
+  - name: comments
+    href: comments.md
   - name: context
     href: context.md
   - name: context-search.client
@@ -49,6 +59,8 @@ items:
     href: core-renderer.md
   - name: diplodoc-helper-cli
     href: diplodoc-helper-cli.md
+  - name: docker
+    href: docker.md
   - name: docs-build
     href: docs-build.md
   - name: esbuild
@@ -135,8 +147,12 @@ items:
     href: markdown.md
   - name: meta
     href: meta.md
+  - name: moderation
+    href: moderation.md
   - name: modules
     href: modules.md
+  - name: notifications
+    href: notifications.md
   - name: orchestrator
     href: orchestrator.md
   - name: package.json
@@ -175,10 +191,14 @@ items:
     href: section.rename.md
   - name: sections.core
     href: sections.core.md
+  - name: server
+    href: server.md
   - name: shared-core
     href: shared-core.md
   - name: smart.delete
     href: smart.delete.md
+  - name: sqlite
+    href: sqlite.md
   - name: term
     href: term.md
   - name: terms
@@ -187,11 +207,13 @@ items:
     href: terms.client.md
   - name: toccleanmode
     href: toccleanmode.md
+  - name: ui
+    href: ui.md
   - name: vscode-ui
     href: vscode-ui.md
   - name: yaml
     href: yaml.md
-  - name: "Прочее (70 терм.)"
+  - name: "Прочее (81 терм.)"
     href: prochee.md
 navigation:
   logo:

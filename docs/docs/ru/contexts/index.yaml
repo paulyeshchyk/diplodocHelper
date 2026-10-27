@@ -9,9 +9,18 @@ links:
 - title: abbrs.client
   description: "Rank: 1"
   href: abbrs.client.md
+- title: admin
+  description: "Rank: 1"
+  href: admin.md
 - title: anchor
   description: "Rank: 2"
   href: anchor.md
+- title: api
+  description: "Rank: 1"
+  href: api.md
+- title: auth
+  description: "Rank: 1"
+  href: auth.md
 - title: breadcrumb
   description: "Rank: 1"
   href: breadcrumb.md
@@ -39,12 +48,18 @@ links:
 - title: cli
   description: "Rank: 6"
   href: cli.md
+- title: client
+  description: "Rank: 1"
+  href: client.md
 - title: client-runtime
   description: "Rank: 14"
   href: client-runtime.md
 - title: clipboard
   description: "Rank: 3"
   href: clipboard.md
+- title: comments
+  description: "Rank: 2"
+  href: comments.md
 - title: context
   description: "Rank: 5"
   href: context.md
@@ -72,6 +87,9 @@ links:
 - title: diplodoc-helper-cli
   description: "Rank: 1"
   href: diplodoc-helper-cli.md
+- title: docker
+  description: "Rank: 1"
+  href: docker.md
 - title: docs-build
   description: "Rank: 1"
   href: docs-build.md
@@ -201,9 +219,15 @@ links:
 - title: meta
   description: "Rank: 7"
   href: meta.md
+- title: moderation
+  description: "Rank: 1"
+  href: moderation.md
 - title: modules
   description: "Rank: 5"
   href: modules.md
+- title: notifications
+  description: "Rank: 1"
+  href: notifications.md
 - title: orchestrator
   description: "Rank: 2"
   href: orchestrator.md
@@ -211,10 +235,10 @@ links:
   description: "Rank: 1"
   href: package.json.md
 - title: post-processing
-  description: "Rank: 14"
+  description: "Rank: 15"
   href: post-processing.md
 - title: pre-processing
-  description: "Rank: 20"
+  description: "Rank: 21"
   href: pre-processing.md
 - title: presetsstat
   description: "Rank: 1"
@@ -261,12 +285,18 @@ links:
 - title: sections.core
   description: "Rank: 1"
   href: sections.core.md
+- title: server
+  description: "Rank: 1"
+  href: server.md
 - title: shared-core
   description: "Rank: 1"
   href: shared-core.md
 - title: smart.delete
   description: "Rank: 1"
   href: smart.delete.md
+- title: sqlite
+  description: "Rank: 1"
+  href: sqlite.md
 - title: term
   description: "Rank: 3"
   href: term.md
@@ -279,12 +309,15 @@ links:
 - title: toccleanmode
   description: "Rank: 1"
   href: toccleanmode.md
+- title: ui
+  description: "Rank: 2"
+  href: ui.md
 - title: vscode-ui
   description: "Rank: 16"
   href: vscode-ui.md
 - title: yaml
   description: "Rank: 14"
   href: yaml.md
-- title: "Прочее (70 терм.)"
+- title: "Прочее (81 терм.)"
   description: "Контексты, встречающиеся реже 3 раз"
   href: prochee.md

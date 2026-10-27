@@ -3,32 +3,32 @@ default:
 
     about:
         author: "[paul.yestchick](mailto:paul.yestchick@gmail.com)"
-        start_date: "09.07.2026"
+        start_date: "01.05.2026"
         version: "1.4"
     stats:
-        total_articles: "305"
-        avg_size: "9 386"
-        reading_time: "4"
+        total_articles: "268"
+        avg_size: "6 947"
+        reading_time: "3"
         total_sections: "0"
         total_chapters: "0"
-        total_contexts: "97"
+        total_contexts: "108"
         total_tags: "0"
-        last_update: "24.10.2026 13:16"
-        commit_hash: "52c80a9294a3c0132f53ec36a394593bc204d5cf"
+        last_update: "27.10.2026 15:30"
+        commit_hash: "451757c6e16a7617ba661b5b935212096f997550"
 
 internal:
 
     about:
         author: "[paul.yestchick](mailto:paul.yestchick@gmail.com)"
-        start_date: "09.07.2026"
+        start_date: "01.05.2026"
         version: "1.4"
     stats:
-        total_articles: "305"
-        avg_size: "9 386"
-        reading_time: "4"
+        total_articles: "268"
+        avg_size: "6 947"
+        reading_time: "3"
         total_sections: "0"
         total_chapters: "0"
-        total_contexts: "97"
+        total_contexts: "108"
         total_tags: "0"
-        last_update: "24.10.2026 13:16"
-        commit_hash: "52c80a9294a3c0132f53ec36a394593bc204d5cf"
+        last_update: "27.10.2026 15:30"
+        commit_hash: "451757c6e16a7617ba661b5b935212096f997550"

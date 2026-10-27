@@ -210,7 +210,7 @@ const contextItems = contexts.map(c => {
 
 ```js
 const slug = slugify_filename(term);
-// slugify_filename: replace(/[^19]/gu, '_')
+// slugify_filename: replace(/[^9]/gu, '_')
 ```
 
 `slugify_filename` сохраняет кириллицу (`\p{L}` — все буквы Unicode). То есть `пост-обработка` → `пост-обработка` (без изменений). `encodeURIComponent` кодирует в `%D0%BF…`. Файл `contexts/пост-обработка.md` → `contexts/пост-обработка.html`. `href` с `%D0%BF…` — работает (браузер декодирует).

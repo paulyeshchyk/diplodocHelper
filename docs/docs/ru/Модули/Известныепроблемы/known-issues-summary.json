@@ -1,28 +1,4 @@
 [
-{
-    "id": "KI-001",
-    "type": "bug",
-    "severity": "critical",
-    "module": "[`link.Paste`](../МодульВставкассылки/index.md)",
-    "title": "link.Paste — признак «это изображение»",
-    "details": "**Что происходит.** Расширение файла берётся вместе с точкой, а сравнивается со строкой без точки — сравнение всегда истинно. Значит, признак «изображение» срабатывает для любого файла. Практические симптомы:\n\n- при вставке ссылки на `.md`-файл получается `<figure>` с картинкой-плейсхолдером вместо `[text](url)`;\n- при вставке ссылки на папку — якоря не предлагаются (ветка «только для не-картинок» не выполняется);\n- поле «изображение», которое кладёт в буфер `link.Copy`, полностью игнорируется — модуль пересчитывает флаг заново, с ошибкой.\n\n**Почему.** Сравнение `ext !== 'md'` — точка в `ext` не учтена. И `data.isImage` не читается из буфера, а вычисляется локально.\n\n**Что исправить.** Сравнивать с `'.md'` и/или использовать готовый `data.isImage` из JSON, если он есть."
-  },
-  {
-    "id": "KI-002",
-    "type": "bug",
-    "severity": "critical",
-    "module": "[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)",
-    "title": "image.PasteFromClipboard — вставка затирает строку",
-    "details": "**Что происходит.** Диапазон замены — от начала текущей строки до позиции курсора. Всё, что было на строке левее курсора, удаляется и заменяется на `<figure>`-блок.\n\n- если курсор на пустой строке — работает ожидаемо;\n- если курсор в конце строки с текстом — текст удаляется;\n- если курсор в середине строки — правая часть остаётся, левая удаляется.\n\n**Почему.** Не проверяется, что слева от курсора нет текста, и не используется `insert` вместо `replace` в общем случае.\n\n**Что исправить.** Вставлять через `insert` в позицию курсора (с добавлением `\\n` при необходимости), либо явно проверять «строка пустая/только отступ» и делать `replace` только тогда."
-  },
-  {
-    "id": "KI-003",
-    "type": "bug",
-    "severity": "critical",
-    "module": "[`reindexer.md`](../МодульПереиндексациястатей/index.md)",
-    "title": "При отсутствии родительского index.md всегда возвращает 1 — при создании второй секции в корне языка происходит коллизия с уже существующей",
-    "details": ""
-  },
   {
     "id": "KI-004",
     "type": "bug",
@@ -30,46 +6,6 @@
     "module": "[`section.Rename`](../МодульПереименованиесекции/index.md), [`reindexer.directories`](../МодульПереиндексацияпапок/index.md)",
     "title": "section.Rename / reindexer.directories — возврат старого имени при ошибке",
     "details": "**Что происходит.** Переименование папки выполняется первым шагом. Если следующий шаг (правка `toc.yaml`, `index.yaml`, `index.md`) бросает исключение — `catch` возвращает **старое** имя папки. Но физически папка уже переименована. На выходе:\n\n- `section.Rename` считает, что «новое имя = старое», и передаёт в обновление ссылок тот же путь — ссылки остаются на несуществующую папку;\n- `reindexer.directories` рекурсивно идёт по несуществующему пути — `readdirSync` падает с «файл не найден» на следующем уровне.\n\nСимптом: после неудачной операции часть папок переименована, часть — нет; `toc.yaml` в неконсистентном состоянии; `@diplodoc/cli` не собирает проект.\n\n**Почему.** Нет отката `fs.renameSync` при ошибке на пост-шагах.\n\n**Что исправить.** В `catch` — попытаться откатить `fs.renameSync(newFolderPath, folderPath)`. Либо возвращать фактическое имя и явно сообщать пользователю о частичном успехе."
-  },
-  {
-    "id": "KI-005",
-    "type": "bug",
-    "severity": "critical",
-    "module": "[`manifest`](../МодульManifest/index.md)",
-    "title": "manifest — парсер JSDoc",
-    "details": "**Что происходит.** В парсере TS-интерфейса (извлечение настроек) условие «эта строка — начало JSDoc-комментария» реализовано как `startsWith` с пустой строкой. Пустая строка — префикс любой строки, поэтому условие истинно всегда: все строки собираются как один блок «комментария». При подтверждении — описания настроек в `contributes.configuration` будут мусорными или пустыми.\n\n**Почему.** Опечатка/недоработка в условии. При копировании кода пробелы/символы потерялись.\n\n**Что исправить.** Условие должно проверять реальное начало JSDoc (`/**`), а не пустую строку. Проверить через `npm run generate-manifest` и посмотреть `description` в `package.json → contributes.configuration.properties`."
-  },
-  {
-    "id": "KI-006",
-    "type": "bug",
-    "severity": "critical",
-    "module": "[`installer`](../МодульInstaller/index.md)",
-    "title": "Конфиг ссылается на несуществующие src/scripts/build-docs.js и src/scripts/utils; копируется только src/plugins/, но пользователю показывается «✅ Скрипты успешно установлены»",
-    "details": ""
-  },
-  {
-    "id": "KI-007",
-    "type": "bug",
-    "severity": "critical",
-    "module": "[`tocCleanMode`](../МодульРежимбезнавигации/index.md), [`docs-build`](../МодульОркестраторсборки/index.md)",
-    "title": "tocCleanMode в фазе pre оркестратора",
-    "details": "**Что происходит.** В оркестраторе сборки `tocCleanMode` стоит в списке шагов фазы `pre` — до вызова `@diplodoc/cli`. Но clean mode встраивает скрипт в `.html`-файлы, а на момент вызова фазы `pre` папка сборки пуста (очищена первым шагом). Скрипт не встраивается ни в один файл. При стандартной сборке clean mode не работает.\n\n**Почему.** Ошибка порядка шагов в оркестраторе (не в самом модуле).\n\n**Что исправить.** Перенести `tocCleanMode` из фазы `pre` в фазу `post`, после шагов, генерирующих HTML."
-  },
-  {
-    "id": "KI-008",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`section.Delete`](../МодульУдалениесекции/index.md), [`section.Move`](../МодульПеремещениесекции/index.md), [`section.Rename`](../МодульПереименованиесекции/index.md), [`file.Delete`](../МодульУдалениефайла/index.md)",
-    "title": "Определение корня языка может вернуть промежуточную папку с toc.yaml без index.md — поиск и правка ссылок работают в узком scope",
-    "details": ""
-  },
-  {
-    "id": "KI-009",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`section.Delete`](../МодульУдалениесекции/index.md), [`section.Move`](../МодульПеремещениесекции/index.md), [`section.Rename`](../МодульПереименованиесекции/index.md), [`file.Delete`](../МодульУдалениефайла/index.md)",
-    "title": "Ошибки записи при обходе .md ловятся и логируются, но не пробрасываются наружу — частичное обновление, пользователь видит «успех»",
-    "details": ""
   },
   {
     "id": "KI-010",
@@ -96,86 +32,6 @@
     "details": ""
   },
   {
-    "id": "KI-013",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`sections.core`](../МодульЯдросекций/index.md)",
-    "title": "При переименовании папки замена в родительском toc.yaml строится через регулярное выражение без escape — точки в именах папок матчат любой символ, портят содержимое",
-    "details": ""
-  },
-  {
-    "id": "KI-014",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`linter.links`](../МодульЛинтерссылок/index.md)",
-    "title": "Проверка якорей находит только inline HTML-атрибуты; markdown-якоря {#id} и авто-якоря заголовков не находятся — ложные срабатывания на валидных ссылках",
-    "details": ""
-  },
-  {
-    "id": "KI-015",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`tocCleanMode`](../МодульРежимбезнавигации/index.md)",
-    "title": "Селектор [class*=\"sidebar\"] скрывает любой элемент с подстрокой в классе, включая примеры кода в статьях",
-    "details": ""
-  },
-  {
-    "id": "KI-016",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`core-renderer`](../МодульОбщийрендерер/index.md)",
-    "title": "Локализованные подписи вычисляются один раз при загрузке модуля, до смены языка — английские страницы получают русские тексты",
-    "details": ""
-  },
-  {
-    "id": "KI-017",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)",
-    "title": "На Linux команда xclip с аргументом перенаправления не работает через прямой вызов — буфер всегда пуст",
-    "details": ""
-  },
-  {
-    "id": "KI-018",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`file.Delete`](../МодульУдалениефайла/index.md)",
-    "title": "Не чистит toc.yaml родителя — при удалении папки, на которую ссылается навигация, запись остаётся, @diplodoc/cli падает",
-    "details": ""
-  },
-  {
-    "id": "KI-019",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`section.Delete`](../МодульУдалениесекции/index.md), [`section.Move`](../МодульПеремещениесекции/index.md)",
-    "title": "Удаление записи из toc.yaml ищет точное совпадение href на index.md; варианты index.yaml, index.html, ссылка на папку без файла не удаляются",
-    "details": ""
-  },
-  {
-    "id": "KI-020",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`section.Move`](../МодульПеремещениесекции/index.md)",
-    "title": "Порядок операций не атомарен: удаление записи из старого toc.yaml выполняется до переименования; при падении переименования раздел «пропадает» из навигации",
-    "details": ""
-  },
-  {
-    "id": "KI-021",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`footnoteNumbering`](../МодульСквознаянумерациясносок/index.md)",
-    "title": "Правка нумерации в JSON-состоянии страницы использует регулярку, не совпадающую с реальным форматом <ol> — после гидратации номера могут сброситься",
-    "details": ""
-  },
-  {
-    "id": "KI-022",
-    "type": "bug",
-    "severity": "major",
-    "module": "[`contexts`](../МодульКонтексты/index.md), [`context-search.client`](../МодульКлиентскийпоискпоконтекстам/index.md)",
-    "title": "Клиентский скрипт поиска копируется в ассеты, но не подключается к HTML — поиск не работает без ручного добавления тега",
-    "details": ""
-  },
-  {
     "id": "KI-023",
     "type": "bug",
     "severity": "major",
@@ -189,30 +45,6 @@
     "severity": "major",
     "module": "[`build.js`](../МодульСборкарасширения/index.md)",
     "title": "Скрипт npm run watch, на который ссылается launch.json как preLaunchTask, отсутствует в package.json — отладка через F5 не работает",
-    "details": ""
-  },
-  {
-    "id": "KI-025",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`reindexer.directories`](../МодульПереиндексацияпапок/index.md), [`reindexer.md`](../МодульПереиндексациястатей/index.md)",
-    "title": "Список «индексируемых типов» включает Page — статьи получают sectionIndex при переиндексации, что семантически неверно",
-    "details": ""
-  },
-  {
-    "id": "KI-026",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`diplodoc-helper-cli`](../МодульCLI/index.md)",
-    "title": "В экспорте модуля только 9 функций из 24 команд — остальные недоступны для программного вызова",
-    "details": ""
-  },
-  {
-    "id": "KI-027",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`helptagmap`](../МодульКартасправочныхтегов/index.md)",
-    "title": "Статус «избыток» в легенде недостижим: количество тегов вычисляется как 0 или 1, ветка «больше 1» не выполняется",
     "details": ""
   },
   {
@@ -232,22 +64,6 @@
     "details": ""
   },
   {
-    "id": "KI-030",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`context-tags`](../МодульКонтекстныетеги/index.md)",
-    "title": "Регулярка для <meta name=\"context\"> требует строгий порядок атрибутов — при изменении шаблона Diplodoc перестанет находить контексты",
-    "details": ""
-  },
-  {
-    "id": "KI-031",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`context-tags`](../МодульКонтекстныетеги/index.md)",
-    "title": "Определение языка через первый сегмент пути: для корневой страницы build/index.html даёт 'index.html' вместо кода языка",
-    "details": ""
-  },
-  {
     "id": "KI-032",
     "type": "bug",
     "severity": "minor",
@@ -261,198 +77,6 @@
     "severity": "minor",
     "module": "[`tocCleanMode`](../МодульРежимбезнавигации/index.md)",
     "title": "Не идемпотентен: скрипт дублируется при повторной сборке",
-    "details": ""
-  },
-  {
-    "id": "KI-034",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`tocCleanMode`](../МодульРежимбезнавигации/index.md)",
-    "title": "Параметр ?clean=0 не выключает режим, а включает (проверяется факт наличия параметра, а не значение)",
-    "details": ""
-  },
-  {
-    "id": "KI-035",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`tocCleanMode`](../МодульРежимбезнавигации/index.md)",
-    "title": "Запись в sessionStorage может бросить в private browsing или sandbox-iframe — скрипт падает, режим не активируется",
-    "details": ""
-  },
-  {
-    "id": "KI-036",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`gosts.client`](../МодульКлиентГОСТов/index.md)",
-    "title": "Клик по ссылке внутри ячейки одновременно открывает ссылку и раскрывает/закрывает карточку",
-    "details": ""
-  },
-  {
-    "id": "KI-037",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`gosts.client`](../МодульКлиентГОСТов/index.md)",
-    "title": "Формат-парсер ссылок не блокирует javascript:-схемы",
-    "details": ""
-  },
-  {
-    "id": "KI-038",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`link.Paste`](../МодульВставкассылки/index.md)",
-    "title": "HTML-ветка возвращает путь без ведущего / — при вставке внутрь <a> или <img> ссылка относительна, браузер её не найдёт",
-    "details": ""
-  },
-  {
-    "id": "KI-039",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`link.Copy`](../МодульКопированиессылки/index.md)",
-    "title": "Условие появления в контекстном меню не покрывает .jpeg, .gif, .webp — при том, что флаг «изображение» в коде их учитывает",
-    "details": ""
-  },
-  {
-    "id": "KI-040",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`link.addAnchor`](../МодульДобавлениеякоря/index.md)",
-    "title": "Валидация разрешает дефис, а транслитерация заменяет его на подчёркивание — пользователь вводит одно, получает другое",
-    "details": ""
-  },
-  {
-    "id": "KI-041",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`link.addAnchor`](../МодульДобавлениеякоря/index.md)",
-    "title": "Проверка «внутри HTML-тега» ложно срабатывает на математические сравнения и стрелки",
-    "details": ""
-  },
-  {
-    "id": "KI-042",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)",
-    "title": "Текст описания вставляется без экранирования — [, ], * ломают markdown-ссылку и <figcaption>",
-    "details": ""
-  },
-  {
-    "id": "KI-043",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)",
-    "title": "Заголовок диалога содержит незаполненный плейсхолдер — пользователь видит шаблон вместо текста",
-    "details": ""
-  },
-  {
-    "id": "KI-044",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`image.PasteFromClipboard`](../МодульВставкаизображенияизбуфера/index.md)",
-    "title": "Метка времени в имени файла вычисляется в UTC, а не в локальном времени пользователя",
-    "details": ""
-  },
-  {
-    "id": "KI-045",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`image.PasteFromList`](../МодульВставкаизображенияизсписка/index.md)",
-    "title": "Корень проекта берётся из первой папки workspace — в мульти-workspace поиск идёт не в том проекте",
-    "details": ""
-  },
-  {
-    "id": "KI-046",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`image.PasteFromList`](../МодульВставкаизображенияизсписка/index.md)",
-    "title": "Вставка не заменяет выделенный текст, а добавляет ссылку после выделения",
-    "details": ""
-  },
-  {
-    "id": "KI-047",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`image.PasteFromList`](../МодульВставкаизображенияизсписка/index.md)",
-    "title": "Название с символами * или ] ломает markdown-ссылку при вставке",
-    "details": ""
-  },
-  {
-    "id": "KI-048",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`reindexer.figures`](../МодульПереиндексациярисунков/index.md)",
-    "title": "Обновляются только markdown-ссылки вида [text](path#fig-…); HTML-ссылки и reference-style не трогаются",
-    "details": ""
-  },
-  {
-    "id": "KI-049",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`sections.core`](../МодульЯдросекций/index.md)",
-    "title": "Две функции сборки заголовка дают разные результаты для одного входа (с точкой и без, с пробелом и без) — зависит от того, какая из них вызвана",
-    "details": ""
-  },
-  {
-    "id": "KI-050",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`section.Create`](../МодульСозданиесекции/index.md)",
-    "title": "Escape в диалоге ввода индекса не отменяет создание, а создаёт секцию без индекса",
-    "details": ""
-  },
-  {
-    "id": "KI-051",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`section.Create`](../МодульСозданиесекции/index.md)",
-    "title": "Ошибки создания папки (спецсимволы, зарезервированные имена Windows, слишком длинный путь) логируются, но не показываются пользователю",
-    "details": ""
-  },
-  {
-    "id": "KI-052",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`section.Create`](../МодульСозданиесекции/index.md)",
-    "title": "Проверка имени не отсеивает YAML-спецсимволы (>, |, @) — некоторые из них ломают frontmatter при записи",
-    "details": ""
-  },
-  {
-    "id": "KI-053",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`section.Move`](../МодульПеремещениесекции/index.md)",
-    "title": "Нельзя переместить секцию в корень языка — в списке целевых папок только секции, самого корня нет",
-    "details": ""
-  },
-  {
-    "id": "KI-054",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`section.Move`](../МодульПеремещениесекции/index.md)",
-    "title": "Заголовок секции читается регулярным выражением «первое title: в файле» — может захватить title: из тела статьи или из meta.title",
-    "details": ""
-  },
-  {
-    "id": "KI-055",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`section.Rename`](../МодульПереименованиесекции/index.md)",
-    "title": "Признак «тип изменился» сравнивает имя типа (Section) с меткой (Раздел) — всегда истинно, сортировка запускается при каждом переименовании",
-    "details": ""
-  },
-  {
-    "id": "KI-056",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`smart.delete`](../МодульУмноеудаление/index.md)",
-    "title": "Условие появления в меню не покрывает .jpeg, .gif, .webp — для этих расширений команда не показывается",
-    "details": ""
-  },
-  {
-    "id": "KI-057",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`smart.delete`](../МодульУмноеудаление/index.md)",
-    "title": "Если путь исчез между кликом и вызовом, маршрутизация уходит в файловое удаление и падает на чтении статуса без обработки",
     "details": ""
   },
   {
@@ -472,94 +96,6 @@
     "details": ""
   },
   {
-    "id": "KI-060",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`linter.abbrs`](../МодульЛинтераббревиатур/index.md), [`linter.terms`](../МодульЛинтертерминов/index.md)",
-    "title": "Код-блоки не маскируются перед поиском — примеры кода с тегами дают ложные срабатывания",
-    "details": ""
-  },
-  {
-    "id": "KI-061",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`linter.abbrs`](../МодульЛинтераббревиатур/index.md), [`linter.terms`](../МодульЛинтертерминов/index.md)",
-    "title": "Определение корня документации дублируется в двух модулях — при изменении алгоритма надо править в двух местах",
-    "details": ""
-  },
-  {
-    "id": "KI-062",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`linter.abbrs`](../МодульЛинтераббревиатур/index.md), [`linter.terms`](../МодульЛинтертерминов/index.md)",
-    "title": "Поиск в словаре чувствителен к регистру — ИСО не совпадает с исо, ложное «не найдено»",
-    "details": ""
-  },
-  {
-    "id": "KI-063",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`docs-build`](../МодульОркестраторсборки/index.md)",
-    "title": "При падении шага процесс завершается немедленно, не давая cleanup-обработчикам выполниться",
-    "details": ""
-  },
-  {
-    "id": "KI-064",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`docs-build`](../МодульОркестраторсборки/index.md)",
-    "title": "Аргументы парсятся только в форме --arg=value, --arg value не поддерживается",
-    "details": ""
-  },
-  {
-    "id": "KI-065",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`docs-build`](../МодульОркестраторсборки/index.md)",
-    "title": "Пустое значение --only= (без списка) приводит к молчаливому пропуску всех шагов",
-    "details": ""
-  },
-  {
-    "id": "KI-066",
-    "type": "bug",
-    "severity": "minor",
-    "module": "[`diplodoc-helper-cli`](../МодульCLI/index.md)",
-    "title": "Нет флага --help; запуск без аргументов молча завершается с кодом 0",
-    "details": ""
-  },
-  {
-    "id": "KI-067",
-    "type": "gap",
-    "severity": "minor",
-    "module": "[`footnoteList`](../МодульПереченьсносок/index.md)",
-    "title": "Функция для встраивания контейнера в JSON-состояние определена, но нигде не вызывается — контейнер создаётся только клиентом",
-    "details": ""
-  },
-  {
-    "id": "KI-068",
-    "type": "gap",
-    "severity": "minor",
-    "module": "[`footnoteList`](../МодульПереченьсносок/index.md)",
-    "title": "generateFootnoteListPage импортируется из generateNavigationContent, но не экспортируется — вызов через эту точку входа падает",
-    "details": ""
-  },
-  {
-    "id": "KI-069",
-    "type": "tradeoff",
-    "severity": "minor",
-    "module": "[`abbrs`](../МодульАббревиатуры/index.md), [`terms`](../МодульТермины/index.md), [`gosts`](../МодульГОСТы/index.md)",
-    "title": "Выходная папка задаётся только через paths.yaml, CLI-аргумента нет — при переносе модуля нужна правка YAML",
-    "details": ""
-  },
-  {
-    "id": "KI-070",
-    "type": "tradeoff",
-    "severity": "minor",
-    "module": "[`abbrs`](../МодульАббревиатуры/index.md), [`terms`](../МодульТермины/index.md)",
-    "title": "Список папок-исключений задан по имени глобально — если у пользователя есть папка figures/ со статьями, они будут проигнорированы",
-    "details": ""
-  },
-  {
     "id": "KI-071",
     "type": "tradeoff",
     "severity": "minor",
@@ -567,31 +103,6 @@
     "title": "В стандартном сценарии сборки обрабатывается только русский язык; английские сноски не пересчитываются",
     "details": ""
   },
-  {
-    "id": "KI-072",
-    "type": "tradeoff",
-    "severity": "minor",
-    "module": "[`footnotes`](../МодульСноски/index.md)",
-    "title": "Многострочные определения сносок не поддерживаются — вторая строка остаётся обычным текстом",
-    "details": ""
-  },
-  {
-    "id": "KI-073",
-    "type": "by-design",
-    "severity": "minor",
-    "module": "[`abbrs`](../МодульАббревиатуры/index.md), [`terms`](../МодульТермины/index.md)",
-    "title": "Теги с атрибутом class полностью игнорируются — если пользователь добавил класс для стилизации, запись выпадает из словаря и линтера",
-    "details": ""
-  },
-  {
-    "id": "KI-074",
-    "type": "by-design",
-    "severity": "minor",
-    "module": "[`figures`](../МодульИллюстрации/index.md)",
-    "title": "Регулярка для <figcaption> требует двойные кавычки и одну строку — одинарные и многострочные не сработают",
-    "details": ""
-  },
-
   {
     "id": "KI-100",
     "type": "unknown",
@@ -639,14 +150,6 @@
     "module": "[`МодульCLI`](../МодульCLI/index.md)",
     "title": "`roadMap` — `--dataRaw` теряется",
     "details": "```js\nconst dataRaw = args[dataRawIndex !== -1 ? dataRawIndex + 1 : undefined];\ngenerateRoadMap({ docsRoot: docsDir, dataPath, dataRaw, engine: DiagramEngine.MERMAID });\n```\n\n`generateRoadMap` (`roadmap.js`) читает `options.data`, а не `options.dataRaw`. `--dataRaw` **не работает** (fallback на `dataPath` или `DEFAULT_DATA_PATH`)."
-  },
-  {
-    "id": "KI-106",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульCLI`](../МодульCLI/index.md)",
-    "title": "`ganttFixScroll` — `docsRoot` вместо `buildDir`",
-    "details": "```js\n} else if (command === 'ganttFixScroll') {\n    generateGanttFixScroll({ docsRoot: outputDir, engine: DiagramEngine.MERMAID });\n}\n```\n\n`generateGanttFixScroll` (`roadmap.patcher`) читает `options.buildDir`, а не `options.docsRoot`. Работает только потому, что в `docs-build.js` `cli('ganttFixScroll', './build')` — `outputDir` совпадает с `./build` (дефолт). `--outputDir ./custom` — не сработает."
   },
   {
     "id": "KI-107",
@@ -1489,14 +992,6 @@
     "details": "`resolveMarkdownLinks` в `gosts.injector.js` переписывает URL (`.md` → `.html`, абсолютизирует), но оставляет markdown-синтаксис: `[text](url)`. Клиент (`gosts.js`) экранирует поля через `esc()`, который не трогает `[]()`. В итоге в карточке виден литерал `[text](/ru/foo.html)`, а не гиперссылка.\n\n**Решение (в бэклоге):** добавить в клиент функцию `renderRichText`, которая экранирует HTML, а затем превращает `[text](url)` в `<a href>` — с проверкой схемы (`javascript:`, `vbscript:`, `data:` — блокировать) и добавлением `target=\"_blank\" rel=\"noopener\"` для внешних URL."
   },
   {
-    "id": "KI-212",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульГОСТы`](../МодульГОСТы/index.md)",
-    "title": "Клик по ссылке открывает/закрывает карточку",
-    "details": "`gosts.js` вешает `onRowClick` на `<tr>`; клик по вновь появившейся ссылке срабатывает и на ссылку, и на строку. После внедрения `renderRichText` нужно добавить в обработчик ранний выход:\n\n```js\nif (e.target.closest && e.target.closest('a')) return;\n```"
-  },
-  {
     "id": "KI-213",
     "type": "unknown",
     "severity": "major",
@@ -1633,14 +1128,6 @@
     "details": "Одна ошибка `«Нельзя добавить якорь внутри HTML-тега или Markdown-ссылки»` — для двух разных случаев (HTML vs markdown). Пользователь не знает, какая именно проблема. Можно было бы разделить на два сообщения, но не критично."
   },
   {
-    "id": "KI-230",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)",
-    "title": "`CURRENT_ENGINE = PLANTUML`, но CLI ставит `MERMAID`",
-    "details": "`roadmap.js`:\n\n```js\nconst CURRENT_ENGINE = DiagramEngine.PLANTUML;\n```\n\n`diplodoc-helper-cli.js`:\n\n```js\ngenerateRoadMap({\n    docsRoot: docsDir,\n    dataPath,\n    dataRaw,\n    engine: DiagramEngine.MERMAID,\n});\n```\n\n**Жёстко Mermaid.** Вызов `runGeneration` **без** `engine` (например, программно, если кто-то импортирует модуль) — PlantUML. Вызов через CLI — Mermaid. Если пользователь запускает `docs-build.js`, в котором `cli('roadMap', …)` → Mermaid.\n\nТо есть **фактический движок в проде — Mermaid**, а не PlantUML. `CURRENT_ENGINE` — мёртвая константа. Расхождение создаёт путаницу при отладке."
-  },
-  {
     "id": "KI-231",
     "type": "unknown",
     "severity": "major",
@@ -1655,14 +1142,6 @@
     "module": "[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)",
     "title": "`plantuml.jar` ищется в трёх местах",
     "details": "```js\nfunction getPlantUmlCommand(tempPumlPath, targetDir) {\n    if (process.env.PLANTUML_JAR_PATH && fs.existsSync(process.env.PLANTUML_JAR_PATH)) {\n        return `java -jar \"${process.env.PLANTUML_JAR_PATH}\" …`;\n    }\n    const projectRelativeJar = path.resolve(__dirname, '../../../docs/_assets/jar/plantuml.jar');\n    if (fs.existsSync(projectRelativeJar)) {\n        return `java -jar \"${projectRelativeJar}\" …`;\n    }\n    return `plantuml …`;\n}\n```\n\nПриоритет:\n\n1. `PLANTUML_JAR_PATH` в env.\n2. `<project>/docs/_assets/jar/plantuml.jar`.\n3. Команда `plantuml` в PATH.\n\n`path.resolve(__dirname, '../../../docs/…')` — от `src/plugins/roadMap/builders/plantuml.svg.builder.js` **три** уровня вверх → `src/plugins/roadMap/../..` → `src/plugins`… стоп, это неверно. Три уровня от `src/plugins/roadMap/builders/`:\n\n- `..` → `src/plugins/roadMap/`\n- `../..` → `src/plugins/`\n- `../../..` → `src/`\n\nЗначит `path.resolve(__dirname, '../../../docs/_assets/jar/plantuml.jar')` = `src/docs/_assets/jar/plantuml.jar`. Это **не** `<project>/docs/`, это `src/docs/`. Скорее всего, баг — должно быть `'../../../../docs/_assets/jar/plantuml.jar'` (4 уровня вверх).\n\nПрактически: jar в `src/docs/` почти никто не кладёт, так что работает fallback на `plantuml` в PATH. Но если пользователь положит jar в `<project>/docs/_assets/jar/` — модуль его **не найдёт**."
-  },
-  {
-    "id": "KI-233",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульДорожнаякарта`](../МодульДорожнаякарта/index.md)",
-    "title": "`--dataRaw` парсится, но не используется как fallback в CLI-строке",
-    "details": "```js\n} else if (command === 'roadMap') {\n    const docsDir = …;\n    const dataPath = dataPathIndex !== -1 ? args[dataPathIndex + 1] : undefined;\n    const dataRaw = dataRawIndex !== -1 ? args[dataRawIndex + 1] : undefined;\n\n    generateRoadMap({ docsRoot: docsDir, dataPath, dataRaw, engine: MERMAID });\n}\n```\n\n`dataRaw` передаётся в `runGeneration`, но `runGeneration` **читает** `options.data`, не `options.dataRaw`:\n\n```js\nconst dataSource = typeof options === 'object' ? options.data : null;\n```\n\nТо есть `--dataRaw` теряется. Если пользователь передал `--dataRaw '[…]'` без `--dataPath` — `runGeneration` получит `data = undefined`, `resolveData(undefined)` → fallback на `DEFAULT_DATA_PATH`. То есть `--dataRaw` **не работает**."
   },
   {
     "id": "KI-234",
@@ -1921,22 +1400,6 @@
     "details": "Как и в `bytescounter`. CLI-команда `periodicTableContext` не принимает `--langs`. Если в проекте только `ru` — вторая половина пуста («No articles for this language»). Если добавится третий язык — правка кода."
   },
   {
-    "id": "KI-266",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)",
-    "title": "`navLinks` дублируются",
-    "details": "```js\nnavLinks: [\n    { label: 'Хэлптэги', url: 'helptagmap.html' },\n    { label: 'Размеры', url: 'bytescounter.html' },\n]\n```\n\nВ `bytescounter`: `{ label: 'Контексты', … }, { label: 'Хелптаги', … }` (обрати внимание — «Контексты» с маленькой «к», «Хелптаги» без «э»).\nВ `helptagmap`: `{ label: 'Размеры', … }, { label: 'Контексты', … }`.\n\nТри раза одно и то же с разными формулировками («Хелптаги» vs «Хэлптэги»). Если добавится четвёртый отчёт — править все четыре места. Стоит вынести в общий `CONTENT_NAV_LINKS`."
-  },
-  {
-    "id": "KI-267",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульКартаконтекстов`](../МодульКартаконтекстов/index.md)",
-    "title": "`preferredLang` из `localStorage` — общий для всех отчётов",
-    "details": "Ключ `preferredLang` — один на всё семейство. Если пользователь переключился на `en` в `bytescounter`, а потом открыл `contextmap` — увидит `en`. Это работает, но при пустых данных `en` (в проекте только `ru`) выглядит как «пустая страница»: пользователь не понимает, что язык «перетёк» с прошлой вкладки."
-  },
-  {
     "id": "KI-268",
     "type": "unknown",
     "severity": "major",
@@ -1983,14 +1446,6 @@
     "module": "[`МодульКартапомощи`](../МодульКартапомощи/index.md)",
     "title": "`getParentTitles` ломается на одноимённых папках",
     "details": "```js\nconst parentDir = path.join(docsDir, ...parts.slice(0, startIdx + parentParts.indexOf(parent) + 1));\n```\n\n`parentParts.indexOf(parent)` ищет **первое** вхождение по имени. Для `docs/ru/foo/bar/foo/article.md`:\n- `parts` = `['ru', 'foo', 'bar', 'foo', 'article.md']`, `startIdx = 1`;\n- `parentParts` = `['foo', 'bar', 'foo']`;\n- первая итерация: `parent = 'foo'`, `indexOf = 0`, `parentDir = docs/ru/foo`. Правильно.\n- вторая итерация: `parent = 'bar'`, `indexOf = 1`, `parentDir = docs/ru/foo/bar`. Правильно.\n- третья итерация: `parent = 'foo'`, `indexOf = 0` (первое вхождение!), `parentDir = docs/ru/foo`. **Неправильно** — должно быть `docs/ru/foo/bar/foo`.\n\nВ итоге `parents` для статьи в `docs/ru/foo/bar/foo/article.md` получит заголовок из `docs/ru/foo/index.md` вместо `docs/ru/foo/bar/foo/index.md`.\n\nПравильно было бы использовать индекс в массиве (`parentParts.forEach((parent, i) => …)`), а не `indexOf`."
-  },
-  {
-    "id": "KI-274",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульКартапомощи`](../МодульКартапомощи/index.md)",
-    "title": "`size` — размер `.md`, не HTML",
-    "details": "Поле `size` в JSON — это размер исходного Markdown-файла. Потребители (`contentNavigator`, таблица размеров) читают его как «размер статьи», но это **не** размер итогового HTML. Если на странице много `{% cut %}`, картинок, таблиц — HTML может быть в 3–10 раз больше. Сравнивать «размеры статей» по этому полю между собой можно, а вот экстраполировать на «вес страницы» — нельзя."
   },
   {
     "id": "KI-275",
@@ -2257,14 +1712,6 @@
     "details": "`context-tags.js` для каждой HTML-страницы генерирует **свой** `<script>` с её контекстами. Для 500 страниц — 500 разных инлайн-скриптов (по 200–500 байт каждый). Дублирование стилей (одинаковых) — 500 копий. Можно было бы вынести стили в общий CSS, а `__CONTEXT_ITEMS__` — в `<script type=\"application/json\">` с id страницы.\n\nСейчас — работает, но HTML «толстеет» на ~1 KB × N страниц."
   },
   {
-    "id": "KI-308",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)",
-    "title": "`MutationObserver` не восстанавливает таблицу",
-    "details": "```js\nvar obs = new MutationObserver(function () {\n    if (!document.getElementById('footnotes-container')) tick();\n});\n```\n\nЕсли контейнер **есть**, но таблица внутри **пропала** (например, Diplodoc перерисовал содержимое контейнера) — `tick()` не сработает. Таблица не восстановится.\n\nФикс:\n\n```js\nvar obs = new MutationObserver(function () {\n    if (!document.querySelector('#footnotes-container .footnote-table')) tick();\n});\n```"
-  },
-  {
     "id": "KI-309",
     "type": "unknown",
     "severity": "major",
@@ -2279,14 +1726,6 @@
     "module": "[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)",
     "title": "`footnotesData` не сбрасывается между страницами",
     "details": "Если когда-нибудь появится SPA-навигация, `footnotesData` останется в памяти. Сейчас неактуально (Diplodoc — полная перезагрузка)."
-  },
-  {
-    "id": "KI-311",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульКлиентперечнясносок`](../МодульКлиентперечнясносок/index.md)",
-    "title": "`formatCellContent` — `stripLinks` удаляет ВСЕ ссылки",
-    "details": "`text` может содержать `[text](url)` → в `footnoteList.collectFootnotes` уже вырезаны (через `stripLinks`). Но если в `text` попали **HTML**-ссылки (`<a href>`) — клиентский `stripLinks` удалит их ещё раз. Двойная очистка — ок."
   },
   {
     "id": "KI-312",
@@ -2521,14 +1960,6 @@
     "details": "В отличие от `abbrs`, `terms`, `gosts`, у `contexts` нет конфига с путями. Выходная папка `langDir/contexts/` и скрипт `docs/_assets/scripts/context-search.js` прописаны в коде. Если понадобится другая папка — правка кода и пересборка."
   },
   {
-    "id": "KI-341",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульКонтексты`](../МодульКонтексты/index.md)",
-    "title": "Клиентский скрипт копируется, но не подключается",
-    "details": "`writeContextSearchScript` кладёт `context-search.js` в `docs/_assets/scripts/`. `@diplodoc/cli` копирует `_assets/` в `build/_assets/`, но **не** вставляет `<script src=\"/_assets/scripts/context-search.js\">` в HTML. Подключение — задача пользователя (`_assets` в шаблоне `.yfm`, глобальные скрипты проекта или ручной `<script>` в `contexts/index.md`). Без подключения поиск не работает — панель «Поиск» отрисуется, но при вводе ничего не произойдёт."
-  },
-  {
     "id": "KI-342",
     "type": "unknown",
     "severity": "major",
@@ -2695,14 +2126,6 @@
     "module": "[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)",
     "title": "Нет Diagnostic-ов — только QuickPick",
     "details": "В отличие от `linter.links`, результат `linter.abbrs` не попадает в панель Problems. Это значит:\n\n- нельзя «фильтровать» по файлу;\n- нельзя «переходить по Tab» из Problems;\n- нельзя интегрировать в CI через `vscode.Diagnostic`-механизм (если бы был headless-режим).\n\nПользователь видит список только пока открыт `QuickPick`. Закрыл — забыл. Для ревью перед релизом может быть неудобно (нет «постоянной» видимости).\n\nПричина — дизайн-выбор: много `<abbr>` в тексте, диагностики на каждую — визуальный шум. Но если пользователь часто ловит «сирот», стоило бы сделать Diagnostics **по запросу** (например, флаг в конфиге — показывать ли диагностики)."
-  },
-  {
-    "id": "KI-363",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульЛинтераббревиатур`](../МодульЛинтераббревиатур/index.md)",
-    "title": "`resolveDocsRoot` — общая функция, дублируется в двух модулях",
-    "details": "В `linter.abbrs` и `linter.terms` — одинаковая функция `resolveDocsRoot(uri)`, скопированная в оба файла. Изменение в одном не подхватится в другом. Стоит вынести в `utils/path.directory` или `utils/docsRoot.js`."
   },
   {
     "id": "KI-364",
@@ -2881,14 +2304,6 @@
     "details": "```js\ngetTitle(art, t) { return `${art.title} (${art.size} ${t.bytes})`; }\n```\n\n`art.title` вставляется в `title=\"…\"` (HTML-атрибут). Если `title` содержит `\"` — сломает атрибут. `Pagebuilder.common` не экранирует `title` при создании `matrixData`. Симптом: тултип плитки обрезается на первой кавычке."
   },
   {
-    "id": "KI-386",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)",
-    "title": "`preferredLang` — общий для всех трёх отчётов",
-    "details": "`localStorage.preferredLang` — один ключ на всё семейство. Переключение языка в `bytescounter` влияет на `contextmap` и `helptagmap`. Хорошо для консистентности, но пользователь не ожидает «перетекания»."
-  },
-  {
     "id": "KI-387",
     "type": "unknown",
     "severity": "major",
@@ -2927,14 +2342,6 @@
     "module": "[`МодульОбщийрендерер`](../МодульОбщийрендерер/index.md)",
     "title": "`renderLang` — не перерисовывает `navLinks`/`legend`",
     "details": "При клике на кнопку `EN` — только `renderTable` вызывается. `navLinks` и `legend` остаются от `ru`. Для `navLinks` — терпимо (ссылки одинаковые). Для `legend` — описания на `ru` (например, «Избыток (>6)»).\n\nФикс — в обработчике клика: `renderLegend(legendItems)` с обновлённым `t`. Но `legendItems` — из `periodicData` (в замыкании `initApp`), надо прокидывать."
-  },
-  {
-    "id": "KI-392",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульОркестраторсборки`](../МодульОркестраторсборки/index.md)",
-    "title": "`tocCleanMode` в фазе `pre` (критический баг)",
-    "details": "```js\npre: [\n    run('clean build', …),\n    cli('reindexFigures', …),\n    cli('reindexFootnotes', …),\n    cli('helpMap'),\n    cli('tocCleanMode'),    // ← ЗДЕСЬ. build/ пуст.\n    cli('periodicStat'),\n    …\n],\n```\n\n`tocCleanMode` вызывается **до** `@diplodoc/cli`. На пустом `build/` — `files = []`, ничего не инжектится. После `@diplodoc/cli` HTML создан, но скрипт **не** встроен → clean mode не работает при стандартной сборке.\n\nПравильно — перенести в `post`:\n\n```js\npost: [\n    …\n    cli('contexttags', './build'),\n    cli('tocCleanMode', '--outputDir', './build'),   // ← здесь\n    cli('ganttFixScroll', './build'),\n    …\n]\n```\n\nОдна строка."
   },
   {
     "id": "KI-393",
@@ -3353,14 +2760,6 @@
     "details": "Если `newFolderName === oldFolderName` (только `pureTitle` изменился, а `sectionIndex` и `sectionType` — нет), `effectiveNewPath === effectiveOldPath`. `updateLinksAfterRename` обходит все `.md` в проекте, но `transform` для «своих» возвращает тот же путь → `updateLinksInContent` пересобирает ссылки с тем же относительным путём → `newContent === content` → файлы **не** перезаписываются.\n\nТо есть на выходе — ничего не меняется, но время потрачено. На проекте с тысячей `.md` — секунды. Стоит добавить проверку `if (effectiveOldPath !== effectiveNewPath) await updateLinksAfterRename(...)`."
   },
   {
-    "id": "KI-445",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)",
-    "title": "`updateLinksAfterRename` глотает ошибки",
-    "details": "Та же проблема, что в [`section.Delete`](../МодульУдалениесекции/index.md) и [`section.Move`](../МодульПеремещениесекции/index.md): `updateLinksInProject` ловит `try/catch` на каждом файле, `console.warn` в консоль, цикл продолжается. Внешний `catch` в `ux_section_rename` **не сработает** — модуль «успешно» переименует, но некоторые файлы останутся со старыми ссылками.\n\nОбщий фикс — в `links.md`: пробрасывать ошибки наружу (или возвращать `{ changed, errors }` и показывать предупреждение)."
-  },
-  {
     "id": "KI-446",
     "type": "unknown",
     "severity": "major",
@@ -3383,14 +2782,6 @@
     "module": "[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)",
     "title": "`needSorting` — сортировка всегда (из-за `isTypeChanged`)",
     "details": "Уже описано в первом пункте. Второй эффект: `sortTocItems(parentDir)` использует `IndexMdEntryReadIndex` для каждой дочерней секции. Если какая-то дочерняя секция была повреждена (`index.md` не имеет `sectionIndex`), она попадёт в `nonIndexed` и уедет в конец списка. Это «правильно» по дизайну `sortTocItems`, но если раньше в `toc.yaml` она стояла в середине — пользователь увидит неожиданное «переехало в конец» после переименования **другой** секции."
-  },
-  {
-    "id": "KI-449",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульПереименованиесекции`](../МодульПереименованиесекции/index.md)",
-    "title": "`isIndexedSectionType` включает `Page` — мёртвая ветка",
-    "details": "```js\nif (!isIndexedSectionType(newSectionTypeObj)) {\n    finalIndex = '';\n}\n```\n\nДля `Page` (`name: 'Page'`) — `isIndexedSectionType` возвращает `true` (потому что `FrontMatterSectionTypesIndexed` включает `Page`). То есть `finalIndex` **не** обнуляется. Но для `Page` `promptSection` не запрашивает индекс, `userIndex = ''`, `finalIndex = ''`. Уже пустой.\n\nДля `Part`/`Section`/`Chapter` — `true`, `finalIndex` остаётся. `promptSection` запрашивает индекс. Всё согласовано.\n\nТо есть `if (!isIndexedSectionType(...))` — **никогда** не срабатывает в текущем коде. Мёртвая ветка. Семантически `Page` **не** должна быть в `FrontMatterSectionTypesIndexed` — это должна быть «не индексируется». Но так как ветка не работает, баг компенсирован."
   },
   {
     "id": "KI-450",
@@ -3801,28 +3192,12 @@
     "details": "Четыре шага:\n\n1. `TocYamlEntryRemove` — удалили из старого родителя.\n2. `fs.renameSync` — перенесли папку.\n3. `updateLinksAfterRename` — обновили ссылки.\n4. `TocYamlEntryInsertAtPosition` — добавили в нового родителя.\n\nЕсли **шаг 2** (`fs.renameSync`) упадёт (кросс-диск, нет прав) — шаг 1 уже выполнен. Раздел «пропал» из навигации (запись в `toc.yaml` старого родителя удалена), но папка на месте. `catch` в `ux_section_move` ловит, показывает `«Ошибка перемещения: …»`. Пользователь получает раздел в исходной папке, но не в `toc.yaml`.\n\nЕсли **шаг 3** (`updateLinksAfterRename`) упадёт — шаг 4 не выполнится. Раздел в новой папке, ссылки в старом состоянии, `toc.yaml` нового родителя без записи.\n\nЕсли **шаг 4** (`TocYamlEntryInsertAtPosition`) упадёт — раздел в новой папке, ссылки обновлены, но `toc.yaml` без записи. На странице пользователь раздел не увидит.\n\nПравильный порядок — «сначала файлы, потом `toc.yaml`», и атомарность через временную папку: перенести в `targetPath.tmp`, обновить ссылки, переименовать `targetPath.tmp` → `targetPath`, обновить `toc.yaml`. Модуль этого не делает."
   },
   {
-    "id": "KI-501",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)",
-    "title": "`updateLinksAfterRename` глотает ошибки",
-    "details": "`updateLinksInProject` (из `diplodoc-helper.links.md.js`):\n\n```js\nfor (const filePath of files) {\n    try {\n        const content = fs.readFileSync(filePath, 'utf8');\n        const newContent = updateLinksInContent(...);\n        if (newContent !== content) {\n            fs.writeFileSync(filePath, newContent, 'utf8');\n        }\n    } catch (err) {\n        console.warn(`Ошибка обработки ${filePath}:`, msg);\n    }\n}\n```\n\nОшибка `fs.writeFileSync` на каком-то файле (нет прав, диск переполнен) — `console.warn` в консоль расширения, **не** прерывает цикл. Внешний `catch` в `performMove` не сработает — он увидит «успех».\n\nИтог: часть файлов обновилась, часть — нет. Пользователь видит `«Обновлено ссылок в …»`, а где-то остались старые ссылки. При следующей сборке — битые ссылки.\n\nЭто та же проблема, что в [`section.Delete`](../МодульУдалениесекции/index.md). Фикс — общий для `links.md`: передавать ошибки наружу, а не глотать."
-  },
-  {
     "id": "KI-502",
     "type": "unknown",
     "severity": "major",
     "module": "[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)",
     "title": "`updateLinksAfterRename` обходит **все** `.md` в проекте, включая перемещённый раздел",
     "details": "`updateLinksInProject(projectRoot, transform, stubText)` — `findFiles(projectRoot, '.md')` вернёт `.md` и внутри перемещённого раздела. Для ссылок **внутри** раздела на **файлы того же раздела** `transform` вернёт `newPath`, но относительный путь **не изменится** (оба файла переехали вместе). `updateLinksInContent` пересчитает путь и запишет то же самое — лишняя работа, но не ошибка.\n\nДля ссылок из раздела **на внешние файлы** — относительный путь **изменится** (глубина вложенности другая). Например, из `Раздел1/foo.md` на `common/bar.md` — путь `../common/bar.md`. После перемещения `Раздел1` в `Раздел2/Раздел1` — `../../common/bar.md`. `updateLinksInContent` корректно пересчитает.\n\nТо есть **это** `section.Move` обновляет правильно — в отличие от `section.Delete` (где обход внутри раздела приводит к порче)."
-  },
-  {
-    "id": "KI-503",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)",
-    "title": "`TocYamlEntryRemove` ищет только `index.md`",
-    "details": "Та же проблема, что в [`section.Delete`](../МодульУдалениесекции/index.md): `targetHref = sourceName + '/index.md'`. Если запись была с `href: sourceName/index.yaml` или `href: sourceName/index.html` или `href: sourceName/` — фильтр не сработает. Запись останется в `toc.yaml` старого родителя.\n\nСимптом: после перемещения `toc.yaml` старого родителя содержит **и** старую запись (не удалилась), **и** новую (если она была добавлена в тот же родитель — не бывает при `!isSameParent`). В старом родителе — «висячая» запись на несуществующую папку."
   },
   {
     "id": "KI-504",
@@ -3855,14 +3230,6 @@
     "module": "[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)",
     "title": "`selectTargetDirectory` — `matchOnDescription: true` бесполезен",
     "details": "```js\nconst items = targets.map(t => ({\n    label: '  '.repeat(t.level) + t.label,\n    description: t.path,\n    targetPath: t.path,\n}));\n\nconst selected = await vscode.window.showQuickPick(items, {\n    placeHolder: translate(nls_ts.plugin.section.move.placeholder.targetfolder),\n    matchOnDescription: true,\n});\n```\n\n`description: t.path` — полный абсолютный путь. При поиске в QuickPick пользователь набирает «Введение», QuickPick ищет по `label` и `description`. По `description` — по абсолютному пути, что совпадает почти всегда (все пути начинаются с `C:\\…` или `/home/…`). Фильтрация по `description` даёт шум: пользователь набирает «foo», и в списке остаются все, у кого в пути есть «foo».\n\n`matchOnDescription: true` имеет смысл, когда `description` короткий и семантичный (например, `'module'`, `'article'`). Здесь — абсолютный путь, бесполезно."
-  },
-  {
-    "id": "KI-508",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульПеремещениесекции`](../МодульПеремещениесекции/index.md)",
-    "title": "`getLanguageRoot` может вернуть не-корень-языка",
-    "details": "Та же проблема, что в [`section.Delete`](../МодульУдалениесекции/index.md): `isLanguageRoot(current)` определяется как «есть `toc.yaml`, нет `index.md`». Если у пользователя есть папка `docs/ru/foo/` без `index.md` с `toc.yaml` (черновики), `getLanguageRoot` вернёт её. Тогда `collectMoveTargets` и `findFiles` работают в `docs/ru/foo/`, а не в `docs/ru/`.\n\nПрактический эффект: в `QuickPick` будут только секции внутри `foo/`, а перемещение в разделы `docs/ru/` — недоступно. Ссылки из `docs/ru/bar.md` — не обновятся."
   },
   {
     "id": "KI-509",
@@ -4087,14 +3454,6 @@
     "module": "[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)",
     "title": "Нет идемпотентности",
     "details": "`injectCleanMode` вставляет `<script>` перед `</body>` **всегда**. При повторном запуске (например, в watch-режиме или после ручной правки build/) — скрипт дублируется. На странице — 2, 3, N копий клиентского скрипта. Каждый выполнится: `hideNavigation` N раз, N `MutationObserver`, N × 5 `setTimeout`. Работает, но неаккуратно.\n\nФикс — маркер `id=\"dl-clean-mode\"`:\n\n```js\nif (content.includes('id=\"dl-clean-mode\"')) return;\ncontent = content.replace('</body>', `<script id=\"dl-clean-mode\">${cleanScript}</script>\\n</body>`);\n```"
-  },
-  {
-    "id": "KI-537",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульРежимбезнавигации`](../МодульРежимбезнавигации/index.md)",
-    "title": "`sessionStorage` — не выход из режима",
-    "details": "`isCleanMode = sessionStorage.getItem(…) === 'true'`. Установить `'true'` можно через `?clean=1`. Сбросить — **только** `sessionStorage.clear()` или закрытие вкладки.\n\nПереход на `?clean=0` — `urlParams.has('clean')` → `true` (ключ есть, неважно, какое значение) → `sessionStorage.setItem('diplodoc_clean_mode', 'true')` — **снова активирует**. То есть `?clean=0` — **не** выход, а повторный вход.\n\nЕсли пользователь хочет «выйти из режима» — единственный способ — `sessionStorage.removeItem('diplodoc_clean_mode')` в DevTools Console, или закрыть вкладку.\n\nФикс — поддержать `?clean=0` и `?mode=full` как «выключение»:\n\n```js\nif (urlParams.get('clean') === '0' || urlParams.get('mode') === 'full') {\n    sessionStorage.removeItem('diplodoc_clean_mode');\n}\n```"
   },
   {
     "id": "KI-538",
@@ -4545,14 +3904,6 @@
     "details": "После создания `Раздел 1` → `Раздел 2` → `Раздел 3` они в `toc.yaml` окажутся в порядке 1, 2, 3 (потому что так создавались). Но если пользователь создаёт `Раздел 5` первым, потом `Раздел 2` — в `toc.yaml` будет 5, 2. Пока не запустят `sortTocItems` (вручную через `section.Rename` или через `reindexer.directories`), порядок будет «порядок создания».\n\n`section.Create` не вызывает `sortTocItems` после `TocYamlEntryPatchItems`. Это согласуется с `reindexer.directories` — сортировка делается в общем проходе. Но при отдельном использовании (без полной переиндексации) `toc.yaml` останется в порядке создания."
   },
   {
-    "id": "KI-594",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульСозданиесекции`](../МодульСозданиесекции/index.md)",
-    "title": "`isValidName` не отсеивает спецсимволы",
-    "details": "`ShowSectionNameSelector` валидирует только длину и непустоту. Спецсимволы в названии:\n\n- **в `title`** (`Раздел 1. <Введение>`) — попадут как есть, ломая YAML (если в значении есть `<`, `>`);\n- **в `pureTitle`** — то же;\n- **в имени папки** — вырежутся `replace(/[^60]/g, '')`.\n\nИтог: `title` содержит спецсимволы, а `folderName` — только буквы/цифры. Может привести к коллизии: две секции «Введение» и «Введ<ение>» дадут одинаковое имя папки `Раздел1.Введение` и `Раздел1.Введение` — `createDirectory` упадёт на `canCreateFolder` (папка уже есть) и покажет «Путь уже существует: …». Пользователь не поймёт, почему «Введ<ение>» конфликтует с «Введение».\n\nТакже `isValidName` не проверяет зарезервированные имена Windows (`CON`, `PRN`, `AUX`, `NUL`, `COM1`–`COM9`, `LPT1`–`LPT9`). Секция «CON» создаст папку `Раздел1.CON` — в Windows это приведёт к ошибке `fs.mkdirSync`. Сообщение — `console.error(err)` в `createDirectory`, без показа пользователю. См. `createDirectory` — `catch` не вызывает `onError`."
-  },
-  {
     "id": "KI-595",
     "type": "unknown",
     "severity": "major",
@@ -4777,14 +4128,6 @@
     "details": "В `terms.config.js` `showWarnings: false`, `showUnused: false`. Баннер «Нет в словаре» и метка «В статьях не используется» не появятся, пока не поправить конфиг."
   },
   {
-    "id": "KI-623",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульТермины`](../МодульТермины/index.md)",
-    "title": "Выходная папка задаётся только через `terms.paths.yaml`",
-    "details": "Путь `Дополнительнаяинформация/Терминыиопределения` (ru) / `Additional information/Terms and definitions` (en) фиксирован. CLI-аргумента нет."
-  },
-  {
     "id": "KI-624",
     "type": "unknown",
     "severity": "major",
@@ -5001,14 +4344,6 @@
     "details": "Та же проблема, что в `section.Delete`:\n\n```js\nif (isDirectory) {\n    fs.rmSync(deletedPath, { recursive: true, force: true });\n}\n```\n\n`force: true` не бросает при неудаче (нет прав, файл занят). Модуль после вызова показывает «Папка удалена». Пользователь считает, что удалено, а на диске осталось.\n\nДля файлов (`fs.unlinkSync`) — бросает, `catch` ловит."
   },
   {
-    "id": "KI-651",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульУдалениефайла`](../МодульУдалениефайла/index.md)",
-    "title": "`updateLinksInProject` глотает ошибки `fs.writeFileSync`",
-    "details": "Как и в `section.Delete`/`section.Move`/`section.Rename`:\n\n```js\nfor (const filePath of files) {\n    try {\n        // …\n        fs.writeFileSync(filePath, newContent, 'utf8');\n    } catch (err) {\n        console.warn(`Ошибка обработки ${filePath}:`, msg);\n    }\n}\n```\n\nЧастичное обновление — часть файлов обновлена, часть — нет. Внешний `catch` не сработает. Пользователь видит «успешно». Общий фикс — в `links.md.js`, а не здесь."
-  },
-  {
     "id": "KI-652",
     "type": "unknown",
     "severity": "major",
@@ -5191,14 +4526,6 @@
     "module": "[`МодульЯдросекций`](../МодульЯдросекций/index.md)",
     "title": "`isIndexedSectionType` не согласован с `FrontMatterSectionTypesIndexed`",
     "details": "В `frontmatter.section.title.js`:\n\n```js\nfunction isIndexedSectionType(sectionType) {\n    return FrontMatterSectionTypesIndexed.includes(sectionType.name);\n}\n```\n\n`FrontMatterSectionTypesIndexed` включает `Part`, `Section`, `Chapter`, **`Page`**. Но `Page` — статья, у неё нет `sectionIndex`, `isIndexedSectionType` для `Page` вернёт `true`. Используется в `section.Rename`:\n\n```js\nif (!isIndexedSectionType(newSectionTypeObj)) {\n    finalIndex = '';\n}\n```\n\nДля `Page` (статьи) `isIndexedSectionType` вернёт `true` — `finalIndex` не сбросится, что семантически неверно (статья не индексируется). В коде это компенсируется тем, что `promptSection` сам не запрашивает индекс для `Page` (проверяет `FrontMatterSectionTypesIndexed2`). Но `isIndexedSectionType` формально «врёт» для `Page`."
-  },
-  {
-    "id": "KI-675",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульЯдросекций`](../МодульЯдросекций/index.md)",
-    "title": "`TocYamlEntryPatchReference` — простая `replace`",
-    "details": "```js\ncontent = content.replace(new RegExp(oldFolderName, 'g'), newFolderName);\n```\n\n`oldFolderName` — не escaped. Если в имени папки есть спецсимволы regex (`.`, `*`, `(`, `)`), замена сработает непредсказуемо. Имя папки `Раздел1.Введение` содержит `.` — `new RegExp('Раздел1.Введение', 'g')` трактует `.` как «любой символ». Замена `Раздел1.Введение` → `Раздел2.Новое` может «съесть» лишние символы.\n\nЭто **реальный баг** при переименовании. Правильно — `escapeRegExp(oldFolderName)`."
   },
   {
     "id": "KI-676",
