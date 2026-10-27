@@ -24,7 +24,7 @@ function buildClientBundle() {
     parts.push(content);
     parts.push('');
   }
-  console.log(`[comments] client bundle: ${files.length} files (${files.join(', ')})`);
+  // console.log(`[comments] client bundle: ${files.length} files (${files.join(', ')})`);
   return `(function () {\n'use strict';\n\n${parts.join('\n')}\n})();`;
 }
 
@@ -39,7 +39,7 @@ function buildTemplatesHtml() {
     const content = fs.readFileSync(path.join(dir, f), 'utf8').trim();
     parts.push(`<script type="text/template" id="dl-tpl-${name}">${content}</script>`);
   }
-  console.log(`[comments] templates: ${files.length} (${files.join(', ')})`);
+  //console.log(`[comments] templates: ${files.length} (${files.join(', ')})`);
   return parts.join('\n') + '\n';
 }
 

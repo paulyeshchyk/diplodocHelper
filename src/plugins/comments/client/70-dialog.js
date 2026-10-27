@@ -37,6 +37,9 @@ function openDialog({ thread } = {}) {
     code: ov.querySelector('.dl-comment-dialog__code'),
     body: ov.querySelector('.dl-comment-dialog__body'),
     error: ov.querySelector('.dl-comment-dialog__error'),
+    typeSelect: ov.querySelector('.dl-comment-dialog__type'),
+    sourceGroup: ov.querySelector('.dl-comment-dialog__source-group'),
+    sourceDoc: ov.querySelector('.dl-comment-dialog__source-doc'),
   };
 
   const saved = getSavedName();
@@ -50,6 +53,14 @@ function openDialog({ thread } = {}) {
   if (els.email) els.email.focus();
   else els.body.focus();
 
+  if (els.typeSelect) {
+    els.typeSelect.addEventListener('change', () => {
+      const isDoc = els.typeSelect.value === 'document';
+      els.sourceGroup.hidden = !isDoc;
+      if (isDoc) els.sourceDoc.focus();
+    });
+  }
+
   state.dialog = ov;
 }
 
@@ -60,10 +71,24 @@ async function submitNew(els) {
   const anchor = buildAnchor(state.pendingRange);
   if (!anchor) { els.error.textContent = ui.errorGeneric || ''; return; }
 
+  const commentType = els.typeSelect ? els.typeSelect.value : 'grammar';
+  let sourceDoc = null;
+  if (commentType === 'document') {
+    sourceDoc = els.sourceDoc.value.trim();
+    if (!sourceDoc) { els.error.textContent = 'Укажите документ источник.'; els.sourceDoc.focus(); return; }
+  }
+
   const name = els.name && els.name.value.trim() ? els.name.value.trim() : null;
   if (name) setSavedName(name);
 
-  const payload = { page_path: location.pathname, anchor, author_name: name, body };
+  const payload = {
+    page_path: location.pathname,
+    anchor,
+    author_name: name,
+    body,
+    comment_type: commentType,
+    source_document: sourceDoc
+  };
 
   if (els.email) {
     const email = els.email.value.trim();
@@ -88,15 +113,11 @@ async function submitNew(els) {
     const res = await fetch(`${API}/threads`, { method: 'POST', headers, body: JSON.stringify(payload) });
 
     if (res.status === 401) {
-      clearToken();
-      state.isAuthenticated = false;
-      state.email = null;
+      clearToken(); state.isAuthenticated = false; state.email = null;
       els.error.textContent = ui.errUnauthorized || 'Сессия истекла. Введите email и код заново.';
-      els.submit.disabled = false;
-      els.submit.textContent = ui.submit || 'Отправить';
+      els.submit.disabled = false; els.submit.textContent = ui.submit || 'Отправить';
       setTimeout(() => {
-        const r = state.pendingRange;
-        closeDialog();
+        const r = state.pendingRange; closeDialog();
         if (r) { state.pendingRange = r; openDialog({}); }
       }, 100);
       return;
@@ -104,51 +125,37 @@ async function submitNew(els) {
     if (res.status === 403) {
       const data = await res.json().catch(() => ({}));
       const map = {
-        email_not_allowed: ui.errNotAllowed,
-        banned: ui.errBanned,
-        email_in_use: ui.errInUse,
-        bad_code: ui.errBadCode,
-        email_required: ui.errEmailRequired,
-        claim_code_required: ui.errCodeRequired,
+        email_not_allowed: ui.errNotAllowed, banned: ui.errBanned, email_in_use: ui.errInUse,
+        bad_code: ui.errBadCode, email_required: ui.errEmailRequired, claim_code_required: ui.errCodeRequired,
       };
       els.error.textContent = map[data.error] || ui.errorGeneric || '';
-      els.submit.disabled = false;
-      els.submit.textContent = ui.submit || 'Отправить';
+      els.submit.disabled = false; els.submit.textContent = ui.submit || 'Отправить';
       return;
     }
     if (res.status === 429) {
       els.error.textContent = ui.errRateLimit || 'Слишком много запросов.';
-      els.submit.disabled = false;
-      els.submit.textContent = ui.submit || 'Отправить';
+      els.submit.disabled = false; els.submit.textContent = ui.submit || 'Отправить';
       return;
     }
     if (!res.ok) {
-      let detail = '';
-      try { detail = (await res.clone().json()).error || ''; } catch { }
+      let detail = ''; try { detail = (await res.clone().json()).error || ''; } catch { }
       throw new Error(`HTTP ${res.status}${detail ? ' ' + detail : ''}`);
     }
 
     const data = await res.json();
-    if (data.session_token) {
-      setToken(data.session_token);
-      state.isAuthenticated = true;
-    }
+    if (data.session_token) { setToken(data.session_token); state.isAuthenticated = true; }
 
     closeDialog();
     if (data.thread) {
       addThread(data.thread);
       const seg = state.segments.find(s => s.threadIds.includes(data.thread.id));
       let rect = null;
-      if (seg) {
-        const r = rangeFromOffsets(getRoot(), seg.start, seg.end);
-        if (r) rect = r.getBoundingClientRect();
-      }
+      if (seg) { const r = rangeFromOffsets(getRoot(), seg.start, seg.end); if (r) rect = r.getBoundingClientRect(); }
       openPanelForThreads([data.thread.id], rect);
     }
   } catch (e) {
     console.error('[comments] submit failed:', e);
     els.error.textContent = (ui.errorGeneric || 'Ошибка') + ' — ' + e.message;
-    els.submit.disabled = false;
-    els.submit.textContent = ui.submit || 'Отправить';
+    els.submit.disabled = false; els.submit.textContent = ui.submit || 'Отправить';
   }
 }

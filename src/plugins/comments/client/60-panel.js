@@ -86,12 +86,27 @@ function renderPanelThread(t) {
     const div = document.createElement('div');
     div.className = 'msg' + (c.is_moderator ? ' msg--mod' : '');
     const author = c.author_name || (c.is_moderator ? 'Технический писатель' : (ui.anonymous || 'Аноним'));
+
+    let typeBadge = '';
+    if (c.comment_type === 'document') {
+      typeBadge = `<div class="msg__type-badge msg__type-badge--doc">⚠️ Несоответствие документу</div>`;
+    }
+
+    let basisBlock = '';
+    if (c.basis) {
+      const isUrl = /^https?:\/\//i.test(c.basis);
+      const basisContent = isUrl ? `<a href="${esc(c.basis)}" target="_blank">${esc(c.basis)}</a>` : esc(c.basis).replace(/\n/g, '<br>');
+      basisBlock = `<div class="msg__basis"><b>Документ источник:</b> ${basisContent}</div>`;
+    }
+
     div.innerHTML = renderTemplate('msg', {
       AUTHOR: esc(author),
       EMAIL_BADGE: c.author_email ? ' ' + esc(c.author_email) : '',
       TIME: esc(new Date(c.created_at).toLocaleString()),
       MOD_LABEL: c.is_moderator ? ' · техпис' : '',
       BODY: esc(c.body),
+      TYPE_BADGE: typeBadge,
+      BASIS_BLOCK: basisBlock
     });
     msgs.appendChild(div);
   }
@@ -155,11 +170,13 @@ function renderModeratorReply(t) {
   box.className = 'dl-comment-panel__reply';
   box.innerHTML = renderTemplate('reply-form', {
     PH: esc('Ответить как технический писатель…'),
+    BASIS_PH: esc('Основание (ссылка на ТЗ)...'),
     RESOLVE_LABEL: esc('Разрешить после ответа'),
     SUBMIT: esc('Ответить'),
   });
 
   const ta = box.querySelector('textarea');
+  const basisInput = box.querySelector('.dl-comment-panel__basis');
   const cb = box.querySelector('.resolve-cb');
   const btn = box.querySelector('.submit-btn');
   const errEl = box.querySelector('.dl-comment-panel__error');
@@ -172,7 +189,11 @@ function renderModeratorReply(t) {
       const r1 = await fetch(`${API}/comments`, {
         method: 'POST', credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ thread_id: t.id, body: text }),
+        body: JSON.stringify({
+          thread_id: t.id,
+          body: text,
+          basis: basisInput.value.trim() || null
+        }),
       });
       if (!r1.ok) throw new Error('HTTP ' + r1.status);
       if (cb.checked) {
