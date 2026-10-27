@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Комментарии — Админ</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0; background: #f6f8fa; color: #24292f; }
+  header { background: #24292f; color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  header h1 { font-size: 16px; margin: 0; }
+  header .spacer { flex: 1; }
+  header button { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.3); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  header button:hover { background: rgba(255,255,255,.1); }
+  main { max-width: 1000px; margin: 20px auto; padding: 0 16px; }
+
+  #login-view { max-width: 360px; margin: 80px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  #login-view h2 { margin-top: 0; font-size: 18px; }
+  #login-view input { width: 100%; padding: 8px; border: 1px solid #d0d7de; border-radius: 4px; font-size: 14px; margin-bottom: 12px; }
+  #login-view button { width: 100%; padding: 8px; background: #1f6feb; color: #fff; border: 0; border-radius: 4px; cursor: pointer; }
+  #login-error { color: #cf222e; font-size: 13px; min-height: 18px; margin-top: 8px; }
+  #login-warn { background: #fff8c5; padding: 8px 12px; border-radius: 4px; font-size: 13px; margin-bottom: 12px; }
+
+  .toolbar { display: flex; gap: 6px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+  .toolbar button { padding: 6px 12px; border: 1px solid #d0d7de; background: #fff; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  .toolbar button.active { background: #1f6feb; color: #fff; border-color: #1f6feb; }
+  .toolbar .spacer { flex: 1; }
+
+  .thread-card { background: #fff; border: 1px solid #d0d7de; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; }
+  .thread-card__header { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #57606a; margin-bottom: 6px; }
+  .thread-card__status { font-weight: 600; margin-right: 8px; }
+  .thread-card__page { color: #0969da; }
+  .thread-card__quote { background: #f6f8fa; border-left: 3px solid #ffd33d; padding: 8px 12px; font-style: italic; font-size: 13px; border-radius: 4px; margin-bottom: 10px; }
+  .thread-card__comments { margin-bottom: 10px; }
+  .msg { padding: 6px 0; border-bottom: 1px dashed #eaecef; }
+  .msg--mod { background: #f6f8ff; padding: 8px; border-radius: 4px; border: 0; }
+  .msg__meta { font-size: 12px; color: #57606a; }
+  .msg__meta b { color: #24292f; }
+  .msg__email {
+    color: #0969da;
+    font-size: 11px;
+    font-weight: normal;
+    margin-left: 2px;
+  }
+  .msg__body { margin-top: 3px; white-space: pre-wrap; word-break: break-word; font-size: 14px; }
+
+  .thread-card__reply textarea,
+  .thread-card__reply input[type="text"] {
+    width: 100%; border: 1px solid #d0d7de; border-radius: 4px; padding: 6px 8px; font-size: 13px; font-family: inherit; margin-bottom: 6px;
+  }
+  .thread-card__reply textarea { min-height: 60px; resize: vertical; }
+  .thread-card__actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .thread-card__actions label { font-size: 13px; }
+  .thread-card__actions button { padding: 5px 12px; border: 1px solid #d0d7de; background: #fff; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  .thread-card__actions button:hover:not(:disabled) { background: #f6f8fa; }
+  .thread-card__actions button:disabled { opacity: .5; cursor: default; }
+  .thread-card__actions .reply-btn { background: #1f6feb; color: #fff; border-color: #1f6feb; }
+  .thread-card__actions .reply-btn:hover:not(:disabled) { background: #1a5fcc; }
+
+  #new-token-banner { background: #dafbe1; padding: 12px; border-radius: 6px; margin-bottom: 16px; font-family: monospace; font-size: 12px; word-break: break-all; }
+
+  .thread-card--flash {
+    animation: dl-flash 1s ease-out 3;
+  }
+  @keyframes dl-flash {
+    0%, 100% { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    50%      { background: #fff8c5; box-shadow: 0 0 0 3px #ffd33d; }
+  }  
+
+ /* ---------- табы ---------- */
+  .admin-tabs {
+    display: flex; gap: 0; margin-bottom: 16px; border-bottom: 2px solid #eaecef;
+  }
+  .admin-tabs button {
+    background: transparent; border: 0; padding: 10px 18px;
+    font-size: 14px; cursor: pointer; color: #57606a;
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+    font-family: inherit;
+  }
+  .admin-tabs button:hover { color: #24292f; background: #f6f8fa; }
+  .admin-tabs button.active { color: #1f6feb; border-bottom-color: #1f6feb; font-weight: 600; }
+
+  /* ---------- таблица emails ---------- */
+  .emails-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #d0d7de; border-radius: 8px; overflow: hidden; }
+  .emails-table th, .emails-table td { padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 1px solid #eaecef; }
+  .emails-table th { background: #f6f8fa; font-weight: 600; }
+  .emails-table tr:last-child td { border-bottom: 0; }
+  .emails-table code { background: #f6f8fa; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+  .emails-table .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .emails-table .badge--active { background: #dafbe1; color: #1a7f37; }
+  .emails-table .badge--free   { background: #eaeef2; color: #57606a; }
+  .emails-table .badge--banned { background: #ffebe9; color: #cf222e; }
+  .emails-table .actions { display: flex; gap: 4px; flex-wrap: wrap; }
+  .emails-table .actions button {
+    padding: 3px 8px; font-size: 12px; border: 1px solid #d0d7de;
+    background: #fff; border-radius: 4px; cursor: pointer; font-family: inherit;
+  }
+  .emails-table .actions button:hover { background: #f6f8fa; }
+  .emails-table .actions button.danger { color: #cf222e; border-color: #ffcecb; }
+  .emails-table .actions button.danger:hover { background: #ffebe9; }
+
+  /* ---------- модалка для добавления email ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.4);
+    display: flex; align-items: center; justify-content: center; z-index: 9999;
+  }
+  .modal {
+    background: #fff; border-radius: 8px; padding: 20px; width: min(440px, calc(100vw - 32px));
+    box-shadow: 0 12px 40px rgba(0,0,0,.25);
+  }
+  .modal h2 { margin-top: 0; font-size: 16px; }
+  .modal label { display: block; font-size: 13px; color: #57606a; margin-bottom: 4px; }
+  .modal input { width: 100%; box-sizing: border-box; padding: 6px 8px; margin-bottom: 12px; border: 1px solid #d0d7de; border-radius: 4px; font-family: inherit; font-size: 13px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .modal-actions button { padding: 6px 14px; border: 1px solid #d0d7de; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 13px; }
+  .modal-actions button.primary { background: #1f6feb; color: #fff; border-color: #1f6feb; }
+  .modal-result { background: #dafbe1; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 14px; margin-top: 8px; word-break: break-all; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Комментарии — Админ</h1>
+  <span class="spacer"></span>
+  <button id="logout-btn" hidden>Выйти</button>
+</header>
+
+<main>
+  <section id="login-view" hidden>
+    <h2>Вход для техписа</h2>
+    <div id="login-warn" hidden></div>
+    <form id="login-form">
+      <input type="password" id="login-password" placeholder="MODERATOR_TOKEN" autocomplete="current-password" autofocus>
+      <button type="submit">Войти</button>
+    </form>
+    <div id="login-error"></div>
+  </section>
+
+  <section id="app-view" hidden>
+
+    <nav class="admin-tabs">
+      <button data-tab="threads" class="active">Комментарии</button>
+      <button data-tab="emails">Комментаторы</button>
+    </nav>
+
+    <div id="tab-threads">
+      <div class="toolbar">
+        <button data-filter="all">Все</button>
+        <button data-filter="open" class="active">Открытые</button>
+        <button data-filter="resolved">Разрешённые</button>
+        <button data-filter="archived">Архив</button>
+        <button data-filter="orphaned">Сироты</button>
+        <span class="spacer"></span>
+        <button id="notify-btn" type="button">🔕 Уведомления: выкл</button>
+        <button id="rotate-btn">Ротировать токен</button>
+        <button id="refresh-btn">Обновить</button>
+      </div>
+      <div id="new-token-banner" hidden></div>
+      <div id="threads"></div>
+    </div>
+
+    <div id="tab-emails" hidden>
+      <div class="toolbar">
+        <button id="add-email-btn">+ Добавить email</button>
+        <button id="refresh-emails-btn">Обновить</button>
+      </div>
+      <table class="emails-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Примечание</th>
+            <th>Статус</th>
+            <th>Код</th>
+            <th>Сессии</th>
+            <th>Активность</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody id="emails-tbody"></tbody>
+      </table>
+    </div>
+
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  const state = { threads: [], filter: 'open', isMod: false };
+
+  async function api(path, opts = {}) {
+    const r = await fetch(path, { credentials: 'include', ...opts });
+    if (!r.ok) throw new Error(r.status + ' ' + (await r.text()));
+    return r.json();
+  }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+    async function boot() {
+    const s = await api('/admin/status');
+    document.getElementById('login-view').hidden = s.authenticated;
+    document.getElementById('app-view').hidden = !s.authenticated;
+    document.getElementById('logout-btn').hidden = !s.authenticated;
+    state.isMod = s.authenticated;
+
+    if (!s.configured) {
+      const w = document.getElementById('login-warn');
+      w.hidden = false;
+      w.textContent = 'ADMIN не настроен. Первый вход создаст токен и покажет его — сохраните.';
+    }
+    if (s.authenticated) {
+      notify.init();
+      await loadThreads();
+      notify.check(state.threads);   // регистрируем стартовый набор, чтобы не спамить
+      startPolling();
+      scrollToHashThread();
+    }
+  }
+
+  let pollTimer = null;
+  function startPolling() {
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(async () => {
+      if (document.visibilityState !== 'visible') return;
+      try {
+        const data = await api('/api/threads?all=1');
+        state.threads = data.threads;
+        render();
+        notify.check(state.threads);
+        scrollToHashThread();
+      } catch {}
+    }, 30_000);
+
+    window.addEventListener('focus', async () => {
+      try {
+        const data = await api('/api/threads?all=1');
+        state.threads = data.threads;
+        render();
+        notify.check(state.threads);
+      } catch {}
+    });
+    window.addEventListener('hashchange', scrollToHashThread);
+  }
+
+  async function loadThreads() {
+    const data = await api('/api/threads?all=1');
+    state.threads = data.threads;
+    render();
+  }
+
+  function render() {
+    const root = document.getElementById('threads');
+    let list = state.threads;
+    if (state.filter === 'orphaned') list = list.filter(t => t.orphaned_at);
+    else if (state.filter !== 'all') list = list.filter(t => t.status === state.filter && !t.orphaned_at);
+
+    if (!list.length) {
+      root.innerHTML = '<p style="text-align:center;color:#57606a;padding:40px 0;">Нет тредов.</p>';
+      return;
+    }
+    root.innerHTML = '';
+    for (const t of list) root.appendChild(renderCard(t));
+  }
+
+  function renderCard(t) {
+    const card = document.createElement('div');
+    card.dataset.threadId = t.id;
+    card.className = 'thread-card';
+    const quote = t.anchor.quote || '';
+    const created = new Date(t.created_at).toLocaleString();
+    const statusLabel =
+      t.status === 'resolved' ? '✅ Разрешён' :
+      t.status === 'archived' ? '📦 Архив' : '🟡 Открыт';
+    const orph = t.orphaned_at ? ' ⚠️ Сирота' : '';
+
+    card.innerHTML = `
+      <div class="thread-card__header">
+        <div>
+          <span class="thread-card__status">${statusLabel}${orph}</span>
+          <span class="thread-card__page">${esc(t.page_path)}</span>
+        </div>
+        <span>${esc(created)}</span>
+      </div>
+      <div class="thread-card__quote">«${esc(quote.slice(0, 300))}${quote.length > 300 ? '…' : ''}»</div>
+      <div class="thread-card__comments"></div>
+      <div class="thread-card__reply">
+        <textarea placeholder="Ответ технического писателя…" maxlength="4000"></textarea>
+        <input type="text" placeholder="Имя (опционально, по умолчанию без имени)" maxlength="100">
+        <div class="thread-card__actions">
+          <label><input type="checkbox" class="resolve-on-reply" checked> Разрешить после ответа</label>
+          <span class="spacer" style="flex:1"></span>
+          <button class="reply-btn">Ответить</button>
+          <button class="resolve-btn" ${t.status === 'resolved' ? 'disabled' : ''}>Разрешить</button>
+          <button class="reopen-btn" ${t.status !== 'resolved' ? 'disabled' : ''}>Переоткрыть</button>
+          <button class="archive-btn" ${t.status === 'archived' ? 'disabled' : ''}>В архив</button>
+        </div>
+      </div>
+    `;
+
+     const commentsRoot = card.querySelector('.thread-card__comments');
+    for (const c of t.comments) {
+      const div = document.createElement('div');
+      div.className = 'msg' + (c.is_moderator ? ' msg--mod' : '');
+
+      const author = c.author_name || (c.is_moderator ? 'Технический писатель' : 'Аноним');
+      const emailBadge = c.author_email
+        ? ` <span class="msg__email" title="email">${esc(c.author_email)}</span>`
+        : '';
+
+      div.innerHTML = `
+        <div class="msg__meta"><b>${esc(author)}</b>${emailBadge} · ${esc(new Date(c.created_at).toLocaleString())}${c.is_moderator ? ' · техпис' : ''}</div>
+        <div class="msg__body">${esc(c.body)}</div>`;
+      commentsRoot.appendChild(div);
+    }
+
+    const ta = card.querySelector('textarea');
+    const nameInput = card.querySelector('input[type="text"]');
+    const resolveOnReply = card.querySelector('.resolve-on-reply');
+    const replyBtn = card.querySelector('.reply-btn');
+    const resolveBtn = card.querySelector('.resolve-btn');
+    const reopenBtn = card.querySelector('.reopen-btn');
+    const archiveBtn = card.querySelector('.archive-btn');
+
+    replyBtn.addEventListener('click', async () => {
+      const text = ta.value.trim();
+      if (!text) { ta.focus(); return; }
+      replyBtn.disabled = true;
+      try {
+        await api('/api/comments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ thread_id: t.id, body: text, author_name: nameInput.value.trim() || null }),
+        });
+        if (resolveOnReply.checked) {
+          await api(`/api/threads/${t.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'resolved' }),
+          });
+        }
+        await loadThreads();
+      } catch (e) {
+        alert('Ошибка: ' + e.message);
+        replyBtn.disabled = false;
+      }
+    });
+
+    async function setStatus(s) {
+      try {
+        await api(`/api/threads/${t.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: s }),
+        });
+        await loadThreads();
+      } catch (e) { alert(e.message); }
+    }
+    resolveBtn.addEventListener('click', () => setStatus('resolved'));
+    reopenBtn.addEventListener('click', () => setStatus('open'));
+    archiveBtn.addEventListener('click', () => setStatus('archived'));
+
+    return card;
+  }
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pwd = document.getElementById('login-password').value;
+    try {
+      const res = await api('/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pwd }),
+      });
+      if (res.token) {
+        alert('ADMIN не был настроен. Создан токен, сохраните его:\n\n' + res.token +
+              '\n\nОн также сохранён в data/admin-token.txt');
+      }
+      await boot();
+    } catch {
+      document.getElementById('login-error').textContent = 'Неверный пароль';
+    }
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await api('/admin/logout', { method: 'POST' });
+    await boot();
+  });
+
+  document.getElementById('rotate-btn').addEventListener('click', async () => {
+    if (!confirm('Ротация токена инвалидирует все текущие сессии (включая эту) до следующего входа. Продолжить?')) return;
+    try {
+      const res = await api('/admin/rotate', { method: 'POST' });
+      const banner = document.getElementById('new-token-banner');
+      banner.hidden = false;
+      banner.textContent = 'Новый токен (сохраните, старый больше не действует): ' + res.token;
+    } catch (e) { alert(e.message); }
+  });
+
+  document.getElementById('refresh-btn').addEventListener('click', loadThreads);
+
+  document.querySelectorAll('[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.filter = btn.dataset.filter;
+      document.querySelectorAll('[data-filter]').forEach(b => b.classList.toggle('active', b === btn));
+      render();
+    });
+  });
+
+// ---------- notifications ----------
+  const notify = {
+    enabled: false,
+    knownIds: new Set(),
+
+    init() {
+      this.enabled = localStorage.getItem('dl-admin-notify') !== 'false';
+      try { this.knownIds = new Set(JSON.parse(localStorage.getItem('dl-admin-knownIds') || '[]')); }
+      catch { this.knownIds = new Set(); }
+      updateNotifyBtn();
+    },
+
+    save() {
+      try { localStorage.setItem('dl-admin-knownIds', JSON.stringify([...this.knownIds])); } catch {}
+    },
+
+    async enable() {
+      if (!('Notification' in window)) { alert('Браузер не поддерживает уведомления'); return; }
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') { alert('Уведомления запрещены в настройках браузера'); return; }
+      this.enabled = true;
+      localStorage.setItem('dl-admin-notify', 'true');
+      updateNotifyBtn();
+    },
+
+    disable() {
+      this.enabled = false;
+      localStorage.setItem('dl-admin-notify', 'false');
+      updateNotifyBtn();
+    },
+
+    check(threads) {
+      const fresh = threads.filter(t => !this.knownIds.has(t.id));
+      for (const t of threads) this.knownIds.add(t.id);
+      this.save();
+
+      const openFresh = fresh.filter(t => t.status === 'open');
+      if (!openFresh.length) return;
+
+      this.updateTitle(openFresh.length);
+      this.beep();
+      if (this.enabled && Notification.permission === 'granted') {
+        this.show(openFresh);
+      }
+    },
+
+    show(threads) {
+      if (threads.length === 1) {
+        const t = threads[0];
+        const first = (t.comments && t.comments[0]) || {};
+        const author = first.author_name || 'Аноним';
+        const body = (first.body || '').slice(0, 140);
+        const n = new Notification('💬 ' + author + ' · ' + t.page_path, {
+          body, tag: 'dl-thread-' + t.id, silent: true,
+        });
+        n.onclick = () => { window.focus(); location.hash = '#' + t.id; n.close(); };
+        return;
+      }
+      const n = new Notification('📬 Новые комментарии: ' + threads.length, {
+        body: 'Откройте админку для ответа', tag: 'dl-admin-comments', silent: true,
+      });
+      n.onclick = () => { window.focus(); n.close(); };
+    },
+
+    beep() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.frequency.value = 880; o.type = 'sine';
+        g.gain.setValueAtTime(0.0001, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.06, ctx.currentTime + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
+        o.start(); o.stop(ctx.currentTime + 0.2);
+      } catch {}
+    },
+
+    updateTitle(n) {
+      const original = document.title.replace(/^\(\d+\)\s*/, '');
+      document.title = `(${n}) ${original}`;
+      const reset = () => { document.title = original; window.removeEventListener('focus', reset); };
+      window.addEventListener('focus', reset);
+    },
+  };
+
+  function updateNotifyBtn() {
+    const btn = document.getElementById('notify-btn');
+    if (!btn) return;
+    btn.textContent = notify.enabled ? '🔔 Уведомления: вкл' : '🔕 Уведомления: выкл';
+    btn.title = notify.enabled ? 'Нажмите, чтобы выключить' : 'Нажмите, чтобы включить';
+  }
+
+  // ---------- deep-link (#thread-id) ----------
+  function scrollToHashThread() {
+    const id = location.hash.replace(/^#/, '').trim();
+    if (!id || !/^[0-9a-f-]+$/i.test(id)) return;
+
+    if (state.filter !== 'all') {
+      state.filter = 'all';
+      document.querySelectorAll('[data-filter]').forEach(b =>
+        b.classList.toggle('active', b.dataset.filter === 'all')
+      );
+      render();
+    }
+    const card = document.querySelector(`[data-thread-id="${id}"]`);
+    if (!card) return;
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.classList.add('thread-card--flash');
+    setTimeout(() => card.classList.remove('thread-card--flash'), 3000);
+  }
+
+  document.getElementById('notify-btn').addEventListener('click', () => {
+    if (notify.enabled) notify.disable();
+    else notify.enable();
+  });
+
+ // ---------- табы ----------
+  document.querySelectorAll('.admin-tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.toggle('active', b === btn));
+      document.getElementById('tab-threads').hidden = tab !== 'threads';
+      document.getElementById('tab-emails').hidden  = tab !== 'emails';
+      if (tab === 'emails') loadEmails();
+    });
+  });
+
+  // ---------- emails ----------
+  async function loadEmails() {
+    const tbody = document.getElementById('emails-tbody');
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#57606a;">Загрузка…</td></tr>';
+    try {
+      const data = await api('/api/admin/emails');
+      renderEmails(data.emails);
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="7" style="color:#cf222e;">Ошибка: ${esc(e.message)}</td></tr>`;
+    }
+  }
+
+  function renderEmails(emails) {
+    const tbody = document.getElementById('emails-tbody');
+    if (!emails.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#57606a;padding:30px;">Пусто. Нажмите «Добавить email».</td></tr>';
+      return;
+    }
+    tbody.innerHTML = '';
+    for (const e of emails) {
+      const tr = document.createElement('tr');
+
+      let status = '';
+      if (e.banned_at)      status = '<span class="badge badge--banned">забанен</span>';
+      else if (e.claimed_at) status = '<span class="badge badge--active">активен</span>';
+      else                   status = '<span class="badge badge--free">свободен</span>';
+
+      const codeCell = e.claim_code
+        ? `<code>${esc(e.claim_code)}</code>`
+        : '<span style="color:#57606a">—</span>';
+
+      const lastActive = e.last_activity
+        ? new Date(e.last_activity).toLocaleString()
+        : '<span style="color:#57606a">—</span>';
+
+      tr.innerHTML = `
+        <td>${esc(e.email)}</td>
+        <td>${esc(e.note || '')}</td>
+        <td>${status}</td>
+        <td>${codeCell}</td>
+        <td>${e.sessions}</td>
+        <td>${lastActive}</td>
+        <td><div class="actions"></div></td>
+      `;
+      const actions = tr.querySelector('.actions');
+
+      const resetBtn = document.createElement('button');
+      resetBtn.textContent = 'Сбросить';
+      resetBtn.title = 'Снять claim, сгенерировать новый код, отозвать все сессии';
+      resetBtn.addEventListener('click', async () => {
+        if (!confirm(`Сбросить «${e.email}»? Все сессии будут отозваны, будет выдан новый код.`)) return;
+        try {
+          const res = await api(`/api/admin/emails/${encodeURIComponent(e.email)}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'reset' }),
+          });
+          alert(`Новый код для ${e.email}:\n\n${res.claim_code}\n\nПередайте пользователю лично.`);
+          await loadEmails();
+        } catch (err) { alert('Ошибка: ' + err.message); }
+      });
+      actions.appendChild(resetBtn);
+
+      if (e.banned_at) {
+        const unban = document.createElement('button');
+        unban.textContent = 'Разбанить';
+        unban.addEventListener('click', async () => {
+          try {
+            await api(`/api/admin/emails/${encodeURIComponent(e.email)}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'unban' }),
+            });
+            await loadEmails();
+          } catch (err) { alert('Ошибка: ' + err.message); }
+        });
+        actions.appendChild(unban);
+      } else {
+        const ban = document.createElement('button');
+        ban.textContent = 'Забанить';
+        ban.className = 'danger';
+        ban.addEventListener('click', async () => {
+          if (!confirm(`Забанить «${e.email}»? Сессии будут отозваны.`)) return;
+          try {
+            await api(`/api/admin/emails/${encodeURIComponent(e.email)}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'ban' }),
+            });
+            await loadEmails();
+          } catch (err) { alert('Ошибка: ' + err.message); }
+        });
+        actions.appendChild(ban);
+      }
+
+      tbody.appendChild(tr);
+    }
+  }
+
+  document.getElementById('refresh-emails-btn').addEventListener('click', loadEmails);
+
+  document.getElementById('add-email-btn').addEventListener('click', () => {
+    const ov = document.createElement('div');
+    ov.className = 'modal-overlay';
+    ov.innerHTML = `
+      <div class="modal">
+        <h2>Добавить email</h2>
+        <label>Email</label>
+        <input type="email" id="m-email" placeholder="user@company.ru" autocomplete="off">
+        <label>Примечание (кто это)</label>
+        <input type="text" id="m-note" placeholder="Иванов, ОИТ" autocomplete="off" maxlength="200">
+        <div class="modal-actions">
+          <button type="button" id="m-cancel">Отмена</button>
+          <button type="button" id="m-add" class="primary">Добавить</button>
+        </div>
+        <div id="m-result"></div>
+      </div>`;
+    document.body.appendChild(ov);
+    ov.querySelector('#m-email').focus();
+    ov.querySelector('#m-cancel').addEventListener('click', () => ov.remove());
+    ov.addEventListener('mousedown', (e) => { if (e.target === ov) ov.remove(); });
+
+    ov.querySelector('#m-add').addEventListener('click', async () => {
+      const email = ov.querySelector('#m-email').value.trim();
+      const note = ov.querySelector('#m-note').value.trim() || null;
+      if (!email || !email.includes('@')) { alert('Введите корректный email'); return; }
+      try {
+        const res = await api('/api/admin/emails', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, note }),
+        });
+        ov.querySelector('#m-result').innerHTML =
+          `<div class="modal-result">Код для ${esc(res.email)}: <b>${esc(res.claim_code)}</b><br>Передайте пользователю лично.</div>`;
+        ov.querySelector('#m-add').disabled = true;
+        await loadEmails();
+      } catch (err) {
+        alert('Ошибка: ' + err.message);
+      }
+    });
+  });
+
+
+
+
+  boot().catch(e => {
+    document.getElementById('login-error').textContent = 'Ошибка: ' + e.message;
+  });
+})();
+</script>
+</body>
+</html>

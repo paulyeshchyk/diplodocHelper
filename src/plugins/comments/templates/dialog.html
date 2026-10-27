@@ -1,0 +1,17 @@
+<div class="dl-comment-dialog" role="dialog" aria-modal="true">
+  <div class="dl-comment-dialog__header">
+    <span class="dl-comment-dialog__title">{{TITLE}}</span>
+    <button type="button" class="dl-comment-dialog__close" aria-label="×">×</button>
+  </div>
+  <div class="dl-comment-dialog__quote">«{{QUOTE}}»</div>
+  <div class="dl-comment-dialog__compose">
+    {{AUTH_BLOCK}}
+    <input type="text" class="dl-comment-dialog__name" placeholder="{{NAME_PH}}" maxlength="100">
+    <textarea class="dl-comment-dialog__body" placeholder="{{BODY_PH}}" maxlength="4000"></textarea>
+    <div class="dl-comment-dialog__actions">
+      <button type="button" class="dl-comment-dialog__cancel">{{CANCEL}}</button>
+      <button type="button" class="dl-comment-dialog__submit">{{SUBMIT}}</button>
+    </div>
+    <div class="dl-comment-dialog__error" role="alert"></div>
+  </div>
+</div>
