@@ -8,4 +8,4 @@
     - [Модуль. Installer](../Модули/Реестр/МодульInstaller/index.md) (16 КБ)
     - [Модуль. Manifest](../Модули/Реестр/МодульManifest/index.md) (28 КБ)
   - Слои (layer)
-    - [CLI](../Модули/Слоиlayer/Cli/index.md) (2.3 КБ)
+    - [Слой. CLI](../Модули/Слоиlayer/СлойCLI/index.md) (1.9 КБ)

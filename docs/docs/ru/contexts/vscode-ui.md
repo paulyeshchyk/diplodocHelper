@@ -18,4 +18,4 @@
     - [Модуль. Умное удаление](../Модули/Реестр/МодульУмноеудаление/index.md) (12 КБ)
     - [Модуль. Installer](../Модули/Реестр/МодульInstaller/index.md) (16 КБ)
   - Слои (layer)
-    - [VS Code UI](../Модули/Слоиlayer/VsCodeUi/index.md) (2.4 КБ)
+    - [Слой. VS Code UI](../Модули/Слоиlayer/СлойVSCodeUI/index.md) (1.7 КБ)

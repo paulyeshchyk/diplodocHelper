@@ -13,4 +13,4 @@
     - [Модуль. Хлебные крошки](../Модули/Реестр/МодульХлебныекрошки/index.md) (13 КБ)
     - [Модуль. Якоря сносок](../Модули/Реестр/МодульЯкорясносок/index.md) (12 КБ)
   - Слои (layer)
-    - [Post-processing](../Модули/Слоиlayer/PostProcessing/index.md) (3.5 КБ)
+    - [Слой. Post-processing](../Модули/Слоиlayer/СлойPostprocessing/index.md) (2.7 КБ)

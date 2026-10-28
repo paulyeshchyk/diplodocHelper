@@ -1,33 +1,43 @@
 title: Слои (layer)
 href: index.yaml
 items:
-  - name: CLI
-    href: Cli/index.md
+  - name: Слой. CLI
+    href: СлойCLI/index.md
     include:
-      path: Cli/toc.yaml
+      path: СлойCLI/toc.yaml
       mode: link
-  - name: Клиентский runtime
-    href: ClientRuntime/index.md
+  - name: Слой. Клиентский runtime
+    href: СлойКлиентскийruntime/index.md
     include:
-      path: ClientRuntime/toc.yaml
+      path: СлойКлиентскийruntime/toc.yaml
       mode: link
-  - name: Post-processing
-    href: PostProcessing/index.md
+  - name: Слой. Post-processing
+    href: СлойPostprocessing/index.md
     include:
-      path: PostProcessing/toc.yaml
+      path: СлойPostprocessing/toc.yaml
       mode: link
-  - name: Pre-processing
-    href: PreProcessing/index.md
+  - name: Слой. Pre-processing
+    href: СлойPreprocessing/index.md
     include:
-      path: PreProcessing/toc.yaml
+      path: СлойPreprocessing/toc.yaml
       mode: link
-  - name: Общее ядро
-    href: SharedCore/index.md
+  - name: Слой. Общее ядро
+    href: СлойОбщееядро/index.md
     include:
-      path: SharedCore/toc.yaml
+      path: СлойОбщееядро/toc.yaml
       mode: link
-  - name: VsCodeUi
-    href: VsCodeUi/index.md
+  - name: Слой. VS Code UI
+    href: СлойVSCodeUI/index.md
     include:
-      path: VsCodeUi/toc.yaml
+      path: СлойVSCodeUI/toc.yaml
+      mode: link
+  - name: Слой. Клиентский runtime
+    href: СлойКлиентскийruntime/index.md
+    include:
+      path: СлойКлиентскийruntime/toc.yaml
+      mode: link
+  - name: Слой. Build
+    href: СлойBuild/index.md
+    include:
+      path: СлойBuild/toc.yaml
       mode: link

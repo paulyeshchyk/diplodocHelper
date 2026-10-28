@@ -57,7 +57,7 @@ const STEPS = {
         // TODO(integration-test): проверить полную сборку pre→build→post с перестройкой abbrs и появлением раздела в toc.
         cli('abbrs'),
         cli('terms'),
-        // cli('gosts'),
+        cli('gosts'),
         cli('createFigureContent'),
         cli('roadMap', '--dataPath', './plugins/roadMap/roadmap-data.json'),
     ],
@@ -92,7 +92,7 @@ const STEPS = {
             './build/ru/Дополнительнаяинформация/Переченьсносок/index.html'
         ),
 
-        // cli('gostsInject', '--docsDir', './docs/ru'), // 3. Внедряем таблицу в готовый HTML
+        cli('gostsInject', '--docsDir', './docs/ru'), // 3. Внедряем таблицу в готовый HTML
 
         node(
             'copy mdedit_fixes',
@@ -102,6 +102,7 @@ const STEPS = {
         ),
         cli('breadcrumb', './build'),
         cli('contexttags', './build'),
+        cli('comments', './build'),
         cli('ganttFixScroll', './build'),
         cli('periodicTable'),
         cli('periodicTableHelpTag'),

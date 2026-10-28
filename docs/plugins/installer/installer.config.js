@@ -15,6 +15,10 @@ module.exports = {
             dest: './plugins' // Скопирует папку plugins целиком в <выбранная_папка>/plugins
         },
         {
+            src: 'src/server',          // Серверная часть
+            dest: './server'
+        },
+        {
             src: 'src/scripts/build-docs.js', 
             dest: './build-docs.js' // Скопирует конкретный файл в корень
         },
@@ -29,6 +33,7 @@ module.exports = {
         '.git',
         '.test.js',
         '.spec.js',
-        'test'
+        'test',
+        'data',
     ]
 };

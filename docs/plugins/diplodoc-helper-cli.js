@@ -25,6 +25,7 @@ const { runGeneration: injectAbbrTitles } = require('./abbrs/abbrs.injector.js')
 const { runGeneration: generateTerms } = require('./terms/terms.js');
 const { runGeneration: injectTermTitles } = require('./terms/terms.injector.js');
 const { runGeneration: generateGosts } = require('./gosts/gosts.js');
+const { runGeneration: generateComments } = require('./comments/comments.js');
 
 const { injectGostsTable } = require('./gosts/gosts.injector.js');
 // Если запускают как cli
@@ -98,6 +99,8 @@ if (require.main === module) {
         generateHelptags(docsDir);
     } else if (command === 'contexttags') {
         generateContexttags(outputDir);
+    } else if (command === 'comments') {
+        generateComments(outputDir);
     } else if (command === 'breadcrumb') {
         generateBreadcrumb(outputDir);
     } else if (command === 'tocCleanMode') {
@@ -118,8 +121,12 @@ if (require.main === module) {
         const dataRawIndex = args.indexOf('--dataRaw');
         const dataRaw = dataRawIndex !== -1 ? args[dataRawIndex + 1] : undefined;
 
-        generateRoadMap({ docsRoot: docsDir, data: dataPath ?? dataRaw, engine: DiagramEngine.MERMAID });
-
+        generateRoadMap({
+            docsRoot: docsDir,
+            dataPath,
+            dataRaw,
+            engine: DiagramEngine.MERMAID,
+        });
     } else if (command === 'footnoteList') {
         const sectionIdx = args.indexOf('--section');
         const section = sectionIdx !== -1 ? args[sectionIdx + 1] : null;
