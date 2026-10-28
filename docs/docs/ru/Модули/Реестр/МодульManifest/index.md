@@ -3,18 +3,23 @@ title: Модуль. Manifest
 sectionType: Page
 pureTitle: Manifest
 context: manifest, cli, infrastructure, package.json
+capability: infrastructure
+family:
+layer:
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [6.2-048](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `manifest`                                                                                                    |
-| Наименование  | Manifest                                                                                                      |
-| Слой          | [cli](../%D0%A1%D0%BB%D0%BE%D0%B8layer/Cli/index.md#naznachenie)                                                |
-| Расположение  | `src/plugins/manifest.builder/` + `src/plugins/manifest/`                                                     |
-| Точка входа   | `node scripts/generate-manifest.js`                                                                           |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Генерирует `contributes` в `package.json` из декларативного кода (команды, меню, подменю, настройки)          |
+|               |                                                                                                                                                                                                                                                             |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [6.2-048](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                               |
+| Идентификатор | `manifest`                                                                                                                                                                                                                                                  |
+| Наименование  | Manifest                                                                                                                                                                                                                                                    |
+| Слой          | [cli](../%D0%A1%D0%BB%D0%BE%D0%B8layer/Cli/index.md#naznachenie)                                                                                                                                                                                            |
+| Каталог       | [Инфраструктура](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%98%D0%BD%D1%84%D1%80%D0%B0%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#infrastruktura)                                                                                                                                                                                                                                                            |
+| Семейство     | [Инфраструктура](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%98%D0%BD%D1%84%D1%80%D0%B0%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#fam-infrastructure) |
+| Расположение  | `src/plugins/manifest.builder/` + `src/plugins/manifest/`                                                                                                                                                                                                   |
+| Точка входа   | `node scripts/generate-manifest.js`                                                                                                                                                                                                                         |
+| Версия        | `1.54.0`                                                                                                                                                                                                                                                    |
+| Назначение    | Генерирует `contributes` в `package.json` из декларативного кода (команды, меню, подменю, настройки)                                                                                                                                                        |
 
 {: .page-legend }
 

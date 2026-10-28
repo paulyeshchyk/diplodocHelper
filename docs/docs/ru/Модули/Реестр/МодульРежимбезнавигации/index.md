@@ -3,6 +3,9 @@ title: Модуль. Режим без навигации
 sectionType: Page
 pureTitle: Режим без навигации
 context: tocCleanMode, clean-mode, post-processing, client-runtime, html
+capability: tocCleanMode
+family:
+layer:
 ---
 
 |               |                                                                                                                                                                             |
@@ -10,7 +13,9 @@ context: tocCleanMode, clean-mode, post-processing, client-runtime, html
 | ID            | [4.2-044](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                               |
 | Идентификатор | `tocCleanMode`                                                                                                                                                              |
 | Наименование  | Режим без навигации                                                                                                                                                         |
-| Слой          | [post-processing](../%D0%A1%D0%BB%D0%BE%D0%B8layer/PostProcessing/index.md#naznachenie) / [client-runtime](../%D0%A1%D0%BB%D0%BE%D0%B8layer/ClientRuntime/index.md#naznachenie) |
+| Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie) / [Клиентский runtime](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9runtime/index.md#naznachenie) |
+| Каталог       | [Режимы отображения](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC%D1%8B%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F/index.md#rezhimy-otobrazheniya)                                                                                                                                                                                |
+| Семейство     |                                                                                                                                                                                 |
 | Расположение  | `src/plugins/tocCleanMode/post-build.js`, `src/plugins/tocCleanMode/inject-clean-mode.js`                                                                                   |
 | Точка входа   | `injectCleanMode(buildDir)`                                                                                                                                                 |
 | Версия        | `1.54.0`                                                                                                                                                                    |

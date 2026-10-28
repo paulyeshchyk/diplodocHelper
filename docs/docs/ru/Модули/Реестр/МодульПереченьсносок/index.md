@@ -3,18 +3,23 @@ title: Модуль. Перечень сносок
 sectionType: Page
 pureTitle: Перечень сносок
 context: footnoteList, footnote, post-processing, html
+capability: footnotes
+family:
+layer:
 ---
 
-|               |                                                                                                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [4.2-014](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                         |
-| Идентификатор | `footnoteList`                                                                                                                        |
-| Наименование  | Перечень сносок                                                                                                                       |
-| Слой          | [post-processing](../%D0%A1%D0%BB%D0%BE%D0%B8layer/PostProcessing/index.md#naznachenie)                                                 |
-| Расположение  | `src/plugins/contentNavigator/Pagebuilder.Config.FootnoteList.js`, `footnoteList.collector.js`, `footnoteList.js`, `footnoteList.css` |
-| Точка входа   | `injectFootnoteList({ docsDir, targetHtml, lang, langPrefix })`                                                                       |
-| Версия        | `1.54.0`                                                                                                                              |
-| Назначение    | Собирает сводную таблицу всех сносок проекта и встраивает её в готовую HTML-страницу                                                  |
+|               |                                                                                                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [4.2-014](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                 |
+| Идентификатор | `footnoteList`                                                                                                                                                                                |
+| Наименование  | Перечень сносок                                                                                                                                                                               |
+| Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie)                                                                                                       |
+| Каталог       | [Сноски](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md#snoski)                                                                                                                                                                                              |
+| Семейство     | [Сноски](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md#fam-footnote) |
+| Расположение  | `src/plugins/contentNavigator/Pagebuilder.Config.FootnoteList.js`, `footnoteList.collector.js`, `footnoteList.js`, `footnoteList.css`                                                         |
+| Точка входа   | `injectFootnoteList({ docsDir, targetHtml, lang, langPrefix })`                                                                                                                               |
+| Версия        | `1.54.0`                                                                                                                                                                                      |
+| Назначение    | Собирает сводную таблицу всех сносок проекта и встраивает её в готовую HTML-страницу                                                                                                          |
 
 {: .page-legend }
 
@@ -268,12 +273,12 @@ cli(
 
 `footnoteList` — самый «поздний» модуль в цепочке сносок. Стоит после всех остальных и опирается на их артефакты:
 
-| Модуль                                                           | Слой | Роль для `footnoteList`                                                                      |
-| ---------------------------------------------------------------- | ---- | -------------------------------------------------------------------------------------------- |
-| [`footnotes`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)                          | pre  | Обеспечивает корректную нумерацию в `.md` (иначе номера в таблице будут непоследовательными) |
-| [`footnoteAnchors`](../МодульЯкоряСносок/index.md)               | post | Делает `href` абсолютными (иначе `refUrl` будет работать только на «родной» странице)        |
+| Модуль                                                                                                                                                                                                                                                 | Слой | Роль для `footnoteList`                                                                      |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---- | -------------------------------------------------------------------------------------------- |
+| [`footnotes`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)                                                                                                               | pre  | Обеспечивает корректную нумерацию в `.md` (иначе номера в таблице будут непоследовательными) |
+| [`footnoteAnchors`](../МодульЯкоряСносок/index.md)                                                                                                                                                                                                     | post | Делает `href` абсолютными (иначе `refUrl` будет работать только на «родной» странице)        |
 | [`footnoteNumbering`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BA%D0%B2%D0%BE%D0%B7%D0%BD%D0%B0%D1%8F%D0%BD%D1%83%D0%BC%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%D1%81%D0%BD%D0%BE%D1%81%D0%BE%D0%BA/index.md) | post | Делает номера в `.html` сквозными (совпадают с номерами в `footnoteList.data.js`)            |
-| **`footnoteList`**                                               | post | Собирает сводку и инжектит её                                                                |
+| **`footnoteList`**                                                                                                                                                                                                                                     | post | Собирает сводку и инжектит её                                                                |
 
 Зависимости от `shared-core`:
 

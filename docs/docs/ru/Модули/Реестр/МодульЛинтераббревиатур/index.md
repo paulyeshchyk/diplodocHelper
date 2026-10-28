@@ -3,18 +3,23 @@ title: Модуль. Линтер аббревиатур
 sectionType: Page
 pureTitle: Линтер аббревиатур
 context: linter.abbrs, abbr, lint, vscode-ui, markdown
+capability: lint
+family:
+layer:
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [7.1-020](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `linter.abbrs`                                                                                                |
-| Наименование  | Линтер аббревиатур                                                                                            |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/VsCodeUi/index.md#naznachenie)                                     |
-| Расположение  | `src/plugins/abbrs/abbrs.linter.js`, `src/commands/diplodoc-helper.linter.abbrs.js`                           |
-| Точка входа   | `lintAbbrs(docsRoot, options)` (ядро), `ux_linter_abbrs(uri)` (VS Code)                                       |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Находит `&lt;abbr&gt;` без определения в словаре и предлагает перейти к файлу                                 |
+|               |                                                                                                                                                                                                     |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [7.1-020](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                       |
+| Идентификатор | `linter.abbrs`                                                                                                                                                                                      |
+| Наименование  | Линтер аббревиатур                                                                                                                                                                                  |
+| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                                                                         |
+| Каталог       | [Линтеры](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%8B/index.md#lintery)                                                                                                                                                                                                    |
+| Семейство     | [Линтеры](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%8B/index.md#fam-linters) |
+| Расположение  | `src/plugins/abbrs/abbrs.linter.js`, `src/commands/diplodoc-helper.linter.abbrs.js`                                                                                                                 |
+| Точка входа   | `lintAbbrs(docsRoot, options)` (ядро), `ux_linter_abbrs(uri)` (VS Code)                                                                                                                             |
+| Версия        | `1.54.0`                                                                                                                                                                                            |
+| Назначение    | Находит `&lt;abbr&gt;` без определения в словаре и предлагает перейти к файлу                                                                                                                       |
 
 {: .page-legend }
 

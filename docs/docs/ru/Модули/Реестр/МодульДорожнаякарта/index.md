@@ -3,18 +3,23 @@ title: Модуль. Дорожная карта
 sectionType: Page
 pureTitle: Дорожная карта
 context: roadmap, report, pre-processing, markdown, yaml
+capability: roadmap
+family:
+layer:
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [8.2-032](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `roadmap`                                                                                                     |
-| Наименование  | Дорожная карта                                                                                                |
-| Слой          | [pre-processing](../%D0%A1%D0%BB%D0%BE%D0%B8layer/PreProcessing/index.md#naznachenie)                           |
-| Расположение  | `src/plugins/roadMap/roadmap.js`, `builders/*`, `enums/`, `patchers/` (используются отдельным модулем)        |
-| Точка входа   | `runGeneration({ docsRoot, data, engine })`                                                                   |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Генерирует `docs/<lang>/roadmap/index.md` с диаграммой Ганта и таблицей этапов из JSON-описания               |
+|               |                                                                                                                                                                                                                                                |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [8.2-032](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                  |
+| Идентификатор | `roadmap`                                                                                                                                                                                                                                      |
+| Наименование  | Дорожная карта                                                                                                                                                                                                                                 |
+| Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie)                                                                                                                               |
+| Каталог       | [Дорожная карта](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md#dorozhnaya-karta)             |
+| Семейство     | [Дорожная карта](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%94%D0%BE%D1%80%D0%BE%D0%B6%D0%BD%D0%B0%D1%8F%D0%BA%D0%B0%D1%80%D1%82%D0%B0/index.md#fam-roadmap) |
+| Расположение  | `src/plugins/roadMap/roadmap.js`, `builders/*`, `enums/`, `patchers/` (используются отдельным модулем)                                                                                                                                         |
+| Точка входа   | `runGeneration({ docsRoot, data, engine })`                                                                                                                                                                                                    |
+| Версия        | `1.54.0`                                                                                                                                                                                                                                       |
+| Назначение    | Генерирует `docs/<lang>/roadmap/index.md` с диаграммой Ганта и таблицей этапов из JSON-описания                                                                                                                                                |
 
 {: .page-legend }
 

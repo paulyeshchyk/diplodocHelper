@@ -4,6 +4,9 @@ sectionType: Page
 context: breadcrumb, post-processing, html
 pureTitle: Модуль. Хлебные крошки
 vars: false
+capability: navigation
+family:
+layer:
 ---
 
 |               |                                                                                                               |
@@ -11,7 +14,9 @@ vars: false
 | ID            | [4.2-001](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
 | Идентификатор | `breadcrumb`                                                                                                  |
 | Наименование  | Хлебные крошки                                                                                                |
-| Слой          | [post-processing](../%D0%A1%D0%BB%D0%BE%D0%B8layer/PostProcessing/index.md#naznachenie)                         |
+| Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie)                         |
+| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya)                                                                                                                                                                                |
+| Семейство     |                                                                                                                                                                                 |
 | Расположение  | `src/plugins/breadcrumb/`                                                                                     |
 | Точка входа   | `runGeneration(buildDir)`                                                                                     |
 | Версия        | `1.54.0`                                                                                                      |

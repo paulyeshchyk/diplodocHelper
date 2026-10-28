@@ -3,18 +3,23 @@ title: Модуль. Общий рендерер
 sectionType: Page
 pureTitle: Общий рендерер
 context: core-renderer, report, client-runtime, browser
+capability: report
+family:
+layer:
 ---
 
-|               |                                                                                                                                                                                                                                               |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [5.2-037](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                 |
-| Идентификатор | `core-renderer`                                                                                                                                                                                                                               |
-| Наименование  | Общий рендерер отчётов                                                                                                                                                                                                                        |
-| Слой          | [client-runtime](../%D0%A1%D0%BB%D0%BE%D0%B8layer/ClientRuntime/index.md#naznachenie)                                                                                                                                                           |
+|               |                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [5.2-037](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                                                                                                                                     |
+| Идентификатор | `core-renderer`                                                                                                                                                                                                                                                                                                                                                                   |
+| Наименование  | Общий рендерер отчётов                                                                                                                                                                                                                                                                                                                                                            |
+| Слой          | [Клиентский runtime](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9runtime/index.md#naznachenie)                                                                                                                                                                                                                                                                                             |
+| Каталог       | [Отчёты](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9E%D1%82%D1%87%D1%91%D1%82%D1%8B/index.md#otchety)                                                                                                                                                                                                                                                                                                                                                                                  |
+| Семейство     | [Отчёты](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9E%D1%82%D1%87%D1%91%D1%82%D1%8B/index.md#fam-reports)                                                                                                                                                                                      |
 | Расположение  | `src/plugins/contentNavigator/core-renderer.js` (копируется в `build/` модулями [`bytescounter`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md), [`contextmap`](../МодульКартаконтекстов/index.md), [`helptagmap`](../МодульКартасправочныхтегов/index.md)) |
-| Точка входа   | `initApp(matrixDataMap, navLinks, config)` (вызывается из `bytescounter.js`, `contextmap.js`, `helptagmap.js`)                                                                                                                                |
-| Версия        | `1.54.0`                                                                                                                                                                                                                                      |
-| Назначение    | Общий клиентский рендерер таблиц-карт для трёх отчётов `contentNavigator`                                                                                                                                                                     |
+| Точка входа   | `initApp(matrixDataMap, navLinks, config)` (вызывается из `bytescounter.js`, `contextmap.js`, `helptagmap.js`)                                                                                                                                                                                                                                                                    |
+| Версия        | `1.54.0`                                                                                                                                                                                                                                                                                                                                                                          |
+| Назначение    | Общий клиентский рендерер таблиц-карт для трёх отчётов `contentNavigator`                                                                                                                                                                                                                                                                                                         |
 
 {: .page-legend }
 
@@ -295,11 +300,11 @@ document.documentElement.lang                        // → 'ru' или 'en'
 
 `core-renderer` — «общий движок» для трёх модулей:
 
-| Модуль                                                 | Что передаёт в `core-renderer`                 |
-| ------------------------------------------------------ | ---------------------------------------------- |
-| [`bytescounter`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md)      | `bytescounterConfig` (5 цветов, размер статьи) |
-| [`contextmap`](../МодульКартаконтекстов/index.md)      | `contextmapConfig` (4 цвета, контексты)        |
-| [`helptagmap`](../МодульКартасправочныхтегов/index.md) | `helptagmapConfig` (3 цвета, helptag)          |
+| Модуль                                                                                                                                                                                | Что передаёт в `core-renderer`                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| [`bytescounter`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%8B%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/index.md) | `bytescounterConfig` (5 цветов, размер статьи) |
+| [`contextmap`](../МодульКартаконтекстов/index.md)                                                                                                                                     | `contextmapConfig` (4 цвета, контексты)        |
+| [`helptagmap`](../МодульКартасправочныхтегов/index.md)                                                                                                                                | `helptagmapConfig` (3 цвета, helptag)          |
 
 Все три — «отчёты `contentNavigator`». `core-renderer` — их общая клиентская база.
 

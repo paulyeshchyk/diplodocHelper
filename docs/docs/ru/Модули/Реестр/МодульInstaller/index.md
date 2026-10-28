@@ -3,18 +3,23 @@ title: Модуль. Installer
 sectionType: Page
 pureTitle: Installer
 context: installer, cli, infrastructure, vscode-ui
+capability: infrastructure
+family:
+layer:
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [6.2-049](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `installer`                                                                                                   |
-| Наименование  | Installer                                                                                                     |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/VsCodeUi/index.md#naznachenie)                                     |
-| Расположение  | `src/plugins/installer/installer.config.js` + `src/commands/diplodoc-helper.installScripts.js`                |
-| Точка входа   | `ux_install_scripts()` (VS Code)                                                                              |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Копирует скрипты расширения в выбранную папку пользователя — для standalone-использования без VS Code         |
+|               |                                                                                                                                                                                                                                                             |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [6.2-049](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                               |
+| Идентификатор | `installer`                                                                                                                                                                                                                                                 |
+| Наименование  | Installer                                                                                                                                                                                                                                                   |
+| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                                                                                                                                 |
+| Каталог       | [Инфраструктура](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%98%D0%BD%D1%84%D1%80%D0%B0%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#infrastruktura)                                                                                                                                                                                                                                                            |
+| Семейство     | [Инфраструктура](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%98%D0%BD%D1%84%D1%80%D0%B0%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#fam-infrastructure) |
+| Расположение  | `src/plugins/installer/installer.config.js` + `src/commands/diplodoc-helper.installScripts.js`                                                                                                                                                              |
+| Точка входа   | `ux_install_scripts()` (VS Code)                                                                                                                                                                                                                            |
+| Версия        | `1.54.0`                                                                                                                                                                                                                                                    |
+| Назначение    | Копирует скрипты расширения в выбранную папку пользователя — для standalone-использования без VS Code                                                                                                                                                       |
 
 {: .page-legend }
 

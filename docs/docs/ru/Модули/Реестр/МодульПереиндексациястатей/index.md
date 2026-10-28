@@ -3,6 +3,9 @@ title: Модуль. Переиндексация статей
 sectionType: Page
 pureTitle: Переиндексация статей
 context: reindexer.md, reindexer, section, pre-processing, markdown
+capability: strukture
+family:
+layer:
 ---
 
 |               |                                                                                                               |
@@ -10,7 +13,9 @@ context: reindexer.md, reindexer, section, pre-processing, markdown
 | ID            | [1.2-043](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
 | Идентификатор | `reindexer.md`                                                                                                |
 | Наименование  | Переиндексация статей                                                                                         |
-| Слой          | [pre-processing](../%D0%A1%D0%BB%D0%BE%D0%B8layer/PreProcessing/index.md#naznachenie)                           |
+| Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie)                           |
+| Каталог       | [Структура](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#struktura)                                                                                                                                                                                |
+| Семейство     | [Структура](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#fam-structure)                                                                                                                                                                                |
 | Расположение  | `src/plugins/reindexer/reindexer.md.js`                                                                       |
 | Точка входа   | `calculateNextIndex(targetDir)`                                                                               |
 | Версия        | `1.54.0`                                                                                                      |

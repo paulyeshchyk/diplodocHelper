@@ -3,18 +3,23 @@ title: Модуль. Контекстные теги
 sectionType: Page
 pureTitle: Контекстные теги
 context: context-tags, context, post-processing, html
+capability: navigation
+family:
+layer:
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [4.2-045](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `context-tags`                                                                                                |
-| Наименование  | Контекстные теги                                                                                              |
-| Слой          | [post-processing](../%D0%A1%D0%BB%D0%BE%D0%B8layer/PostProcessing/index.md#naznachenie)                         |
-| Расположение  | `src/plugins/context-tags/context-tags.js` (инжектор)                                                         |
-| Точка входа   | `runGeneration(buildDir)`                                                                                     |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Встраивает в HTML клиентский скрипт, который рисует в конце статьи чипы её `context`-тегов                    |
+|               |                                                                                                                                                                                                                                                                   |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [4.2-045](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                     |
+| Идентификатор | `context-tags`                                                                                                                                                                                                                                                    |
+| Наименование  | Контекстные теги                                                                                                                                                                                                                                                  |
+| Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie)                                                                                                                                                                           |
+| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya)                                                                                                                                                                                                                                                                  |
+| Семейство     | [Контекстные теги](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md#fam-context-tags) |
+| Расположение  | `src/plugins/context-tags/context-tags.js` (инжектор)                                                                                                                                                                                                             |
+| Точка входа   | `runGeneration(buildDir)`                                                                                                                                                                                                                                         |
+| Версия        | `1.54.0`                                                                                                                                                                                                                                                          |
+| Назначение    | Встраивает в HTML клиентский скрипт, который рисует в конце статьи чипы её `context`-тегов                                                                                                                                                                        |
 
 {: .page-legend }
 
@@ -271,13 +276,13 @@ if (require.main === module) {
 
 `context-tags` — один из «инъекторов» в post-processing. Пары:
 
-| Модуль                                               | Что вставляет                             | Где читается                                                       |
-| ---------------------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------ |
-| **`context-tags`**                                   | `<script>` с `__CONTEXT_ITEMS__` + клиент | [`context-tags.client`](../МодульКлиентаконтекстныхтегов/index.md) |
-| [`breadcrumb`](../МодульХлебныеКрошки/index.md)      | `<script>` с картой заголовков            | inline в скрипте                                                   |
-| [`roadmap.patcher`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md)   | `<script>` с pan/zoom                     | inline в скрипте                                                   |
-| [`abbrs`](../МодульАббревиатуры/index.md) (injector) | `<div class="dl-abbr">` + `<script>`      | [`abbrs.client`](../МодульКлиентаббревиатур/index.md)              |
-| [`terms`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B/index.md) (injector)      | `<div class="dl-term">` + `<script>`      | [`terms.client`](../МодульКлиентатерминов/index.md)                |
+| Модуль                                                                                                                                                                       | Что вставляет                             | Где читается                                                       |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------ |
+| **`context-tags`**                                                                                                                                                           | `<script>` с `__CONTEXT_ITEMS__` + клиент | [`context-tags.client`](../МодульКлиентаконтекстныхтегов/index.md) |
+| [`breadcrumb`](../МодульХлебныеКрошки/index.md)                                                                                                                              | `<script>` с картой заголовков            | inline в скрипте                                                   |
+| [`roadmap.patcher`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B0%D1%82%D1%87%D0%B5%D1%80%D0%93%D0%B0%D0%BD%D1%82%D0%B0/index.md) | `<script>` с pan/zoom                     | inline в скрипте                                                   |
+| [`abbrs`](../МодульАббревиатуры/index.md) (injector)                                                                                                                         | `<div class="dl-abbr">` + `<script>`      | [`abbrs.client`](../МодульКлиентаббревиатур/index.md)              |
+| [`terms`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D1%8B/index.md) (injector)                        | `<div class="dl-term">` + `<script>`      | [`terms.client`](../МодульКлиентатерминов/index.md)                |
 
 `context-tags` — **единственный**, кто инжектит `<script>` **инлайн** (с содержимым клиента прямо в HTML), не через `<script src>`. Плюс — не требует отдельного `.css` (стили в клиенте).
 

@@ -3,18 +3,23 @@ title: Модуль. Сквозная нумерация сносок
 sectionType: Page
 pureTitle: Сквозная нумерация сносок
 context: footnoteNumbering, footnote, post-processing, html
+capability: footnotes
+family:
+layer:
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [4.2-013](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `footnoteNumbering`                                                                                           |
-| Наименование  | Сквозная нумерация сносок                                                                                     |
-| Слой          | [post-processing](../%D0%A1%D0%BB%D0%BE%D0%B8layer/PostProcessing/index.md#naznachenie)                         |
-| Расположение  | `src/plugins/footnoteNumbering/`                                                                              |
-| Точка входа   | `renumberFootnotes({ docsDir, outputDir })`                                                                   |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Делает нумерацию сносок сквозной по всей документации в собранном HTML                                        |
+|               |                                                                                                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [4.2-013](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                 |
+| Идентификатор | `footnoteNumbering`                                                                                                                                                                           |
+| Наименование  | Сквозная нумерация сносок                                                                                                                                                                     |
+| Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie)                                                                                                       |
+| Каталог       | [Сноски](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md#snoski)                                                                                                                                                                                              |
+| Семейство     | [Сноски](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md#fam-footnote) |
+| Расположение  | `src/plugins/footnoteNumbering/`                                                                                                                                                              |
+| Точка входа   | `renumberFootnotes({ docsDir, outputDir })`                                                                                                                                                   |
+| Версия        | `1.54.0`                                                                                                                                                                                      |
+| Назначение    | Делает нумерацию сносок сквозной по всей документации в собранном HTML                                                                                                                        |
 
 {: .page-legend }
 
@@ -208,12 +213,12 @@ cli('footnoteNumbering', '--docsDir', './docs/ru', '--outputDir', './build'),
 
 `footnoteNumbering` — средний модуль в цепочке «три шага сносок в post-processing»:
 
-| Модуль                                             | Слой | Что делает                          |
-| -------------------------------------------------- | ---- | ----------------------------------- |
-| [`footnotes`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md)            | pre  | Пересчитывает нумерацию в `.md`     |
-| [`footnoteAnchors`](../МодульЯкоряСносок/index.md) | post | Делает `href="#fn…"` абсолютными    |
-| **`footnoteNumbering`**                            | post | Делает нумерацию сквозной в `.html` |
-| [`footnoteList`](../МодульПереченьсносок/index.md) | post | Собирает сводный перечень сносок    |
+| Модуль                                                                                                                                   | Слой | Что делает                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ---- | ----------------------------------- |
+| [`footnotes`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md) | pre  | Пересчитывает нумерацию в `.md`     |
+| [`footnoteAnchors`](../МодульЯкоряСносок/index.md)                                                                                       | post | Делает `href="#fn…"` абсолютными    |
+| **`footnoteNumbering`**                                                                                                                  | post | Делает нумерацию сквозной в `.html` |
+| [`footnoteList`](../МодульПереченьсносок/index.md)                                                                                       | post | Собирает сводный перечень сносок    |
 
 Зависимости от `shared-core`:
 

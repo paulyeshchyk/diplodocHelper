@@ -3,18 +3,23 @@ title: Модуль. Статистика пресетов
 sectionType: Page
 pureTitle: Статистика пресетов
 context: presetsStat, report, pre-processing, yaml
+capability: report
+family:
+layer:
 ---
 
-|               |                                                                                                                                   |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [8.2-018](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                     |
-| Идентификатор | `presetsStat`                                                                                                                     |
-| Наименование  | Статистика пресетов                                                                                                               |
-| Слой          | [pre-processing](../%D0%A1%D0%BB%D0%BE%D0%B8layer/PreProcessing/index.md#naznachenie)                                               |
-| Расположение  | `src/plugins/contentNavigator/Pagebuilder.Stats.js`                                                                               |
-| Точка входа   | `generateStat({ outputDir, docsDir })`                                                                                            |
-| Версия        | `1.54.0`                                                                                                                          |
-| Назначение    | Собирает агрегированную статистику документации и генерирует `docs/presets.yaml` для подстановки переменных через `@diplodoc/cli` |
+|               |                                                                                                                                                                                              |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [8.2-018](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                |
+| Идентификатор | `presetsStat`                                                                                                                                                                                |
+| Наименование  | Статистика пресетов                                                                                                                                                                          |
+| Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie)                                                                                                        |
+| Каталог       | [Отчёты](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9E%D1%82%D1%87%D1%91%D1%82%D1%8B/index.md#otchety)                                                                                                                                                                                             |
+| Семейство     | [Отчёты](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9E%D1%82%D1%87%D1%91%D1%82%D1%8B/index.md#fam-reports) |
+| Расположение  | `src/plugins/contentNavigator/Pagebuilder.Stats.js`                                                                                                                                          |
+| Точка входа   | `generateStat({ outputDir, docsDir })`                                                                                                                                                       |
+| Версия        | `1.54.0`                                                                                                                                                                                     |
+| Назначение    | Собирает агрегированную статистику документации и генерирует `docs/presets.yaml` для подстановки переменных через `@diplodoc/cli`                                                            |
 
 {: .page-legend }
 

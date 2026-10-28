@@ -3,18 +3,23 @@ title: Модуль. Карта помощи
 sectionType: Page
 pureTitle: Карта помощи
 context: helpMap, helptag, pre-processing, yaml
+capability: navigation
+family:
+layer:
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [8.2-008](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `helpMap`                                                                                                     |
-| Наименование  | Карта помощи                                                                                                  |
-| Слой          | [pre-processing](../%D0%A1%D0%BB%D0%BE%D0%B8layer/PreProcessing/index.md#naznachenie)                           |
-| Расположение  | `src/plugins/helpMap/`                                                                                        |
-| Точка входа   | `runGeneration({ docsDir, outputDir, segregation })`                                                          |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Собирает метаданные всех статей в `app-help-contents.json` — источник для фронтенда, отчётов и поиска         |
+|               |                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [8.2-008](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                                                                                                                                            |
+| Идентификатор | `helpMap`                                                                                                                                                                                                                                                                                                                                                                                |
+| Наименование  | Карта помощи                                                                                                                                                                                                                                                                                                                                                                             |
+| Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie)                                                                                                                                                                                                                                                                                                   |
+| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya)                                                                                                                                                                                                                                                                                                                                                                                         |
+| Семейство     | [Helptags](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEHelptags/index.md#fam-helptags) / [Контексты](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md#fam-contexts) |
+| Расположение  | `src/plugins/helpMap/`                                                                                                                                                                                                                                                                                                                                                                   |
+| Точка входа   | `runGeneration({ docsDir, outputDir, segregation })`                                                                                                                                                                                                                                                                                                                                     |
+| Версия        | `1.54.0`                                                                                                                                                                                                                                                                                                                                                                                 |
+| Назначение    | Собирает метаданные всех статей в `app-help-contents.json` — источник для фронтенда, отчётов и поиска                                                                                                                                                                                                                                                                                    |
 
 {: .page-legend }
 

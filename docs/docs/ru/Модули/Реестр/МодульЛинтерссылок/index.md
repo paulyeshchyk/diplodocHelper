@@ -3,18 +3,23 @@ title: Модуль. Линтер ссылок
 sectionType: Page
 pureTitle: Линтер ссылок
 context: linter.links, lint, vscode-ui, markdown
+capability: lint
+family:
+layer:
 ---
 
-|               |                                                                                                                            |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [7.1-019](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)              |
-| Идентификатор | `linter.links`                                                                                                             |
-| Наименование  | Линтер ссылок                                                                                                              |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/VsCodeUi/index.md#naznachenie)                                                  |
-| Расположение  | `src/plugins/linter/linter.links.js`, `src/commands/diplodoc-helper.linter.links.js`, `src/commands/vscode.linter.links.*` |
-| Точка входа   | `lintInternalLinks(rootDir)` (ядро), `ux_linter_links(uri)` (VS Code)                                                      |
-| Версия        | `1.54.0`                                                                                                                   |
-| Назначение    | Проверяет внутренние markdown-ссылки и якоря по `toc.yaml`, показывает диагностики и предлагает замену                     |
+|               |                                                                                                                                                                                                     |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [7.1-019](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                       |
+| Идентификатор | `linter.links`                                                                                                                                                                                      |
+| Наименование  | Линтер ссылок                                                                                                                                                                                       |
+| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                                                                         |
+| Каталог       | [Линтеры](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%8B/index.md#lintery)                                                                                                                                                                                                    |
+| Семейство     | [Линтеры](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%8B/index.md#fam-linters) |
+| Расположение  | `src/plugins/linter/linter.links.js`, `src/commands/diplodoc-helper.linter.links.js`, `src/commands/vscode.linter.links.*`                                                                          |
+| Точка входа   | `lintInternalLinks(rootDir)` (ядро), `ux_linter_links(uri)` (VS Code)                                                                                                                               |
+| Версия        | `1.54.0`                                                                                                                                                                                            |
+| Назначение    | Проверяет внутренние markdown-ссылки и якоря по `toc.yaml`, показывает диагностики и предлагает замену                                                                                              |
 
 {: .page-legend }
 
