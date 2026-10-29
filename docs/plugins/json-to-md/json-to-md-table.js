@@ -1,86 +1,208 @@
+// plugins/json-to-md-table.js
 const fs = require('fs');
 const path = require('path');
 
-/**
- * Генерирует расширенную Diplodoc-таблицу (#|| ... ||#)
- * @param {Array<Object>} issues
- * @returns {string}
- */
+// ─── ЭКРАНИРОВАНИЕ ────────────────────────────────────────────
+const escMd = (s) => String(s ?? '—').replace(/\|/g, '&#124;');
+const escMdLine = (s) => escMd(s).replace(/\r?\n/g, ' ');
+const escMermaid = (s) => String(s ?? '—').replace(/"/g, '&quot;').replace(/\r?\n/g, ' ').trim();
+
+// ─── ТАБЛИЦЫ ──────────────────────────────────────────────────
 function generateExtendedTable(issues) {
     if (!issues || issues.length === 0) return 'Нет данных для отображения.';
-
-    // Экранируем то, что ломает структуру
-    const esc = (s) =>
-        String(s ?? '—')
-            .replace(/\|/g, '&#124;')        // | → &#124; (не разделитель)
-            .replace(/\|\|/g, '&#124;&#124;');  // (страховка)
-
-    let result = '#|\n';                       // ← было '#||\n'
+    let result = '#|\n';
     result += '|| **ID** | **Тип** | **Severity** | **Модуль** | **Кратко** | **Подробности** ||\n';
-
     for (const issue of issues) {
         const details = issue.details && issue.details.trim()
-            ? `{% cut "Развернуть" %}\n\n${esc(issue.details.trim())}\n\n{% endcut %}`
+            ? `{% cut "Развернуть" %}\n\n${escMd(issue.details.trim())}\n\n{% endcut %}`
             : '—';
-
         result += '||\n';
-        result += `${esc(issue.id)}\n|\n`;
-        result += `${esc(issue.type)}\n|\n`;
-        result += `${esc(issue.severity)}\n|\n`;
-        result += `${esc(issue.module)}\n|\n`;
-        result += `${esc(issue.title)}\n|\n`;
+        result += `${escMd(issue.id)}\n|\n`;
+        result += `${escMd(issue.type)}\n|\n`;
+        result += `${escMd(issue.severity)}\n|\n`;
+        result += `${escMd(issue.module)}\n|\n`;
+        result += `${escMd(issue.title)}\n|\n`;
         result += `${details}\n`;
         result += '||\n';
     }
-
-    result += '|#\n';
-    return result;
+    return result + '|#\n';
 }
 
-/**
- * Генерирует стандартную Markdown-таблицу (| ... |)
- * @param {Array<Object>} issues
- * @returns {string}
- */
 function generateSimpleTable(issues) {
-    if (!issues || issues.length === 0) {
-        return 'Нет данных для отображения.';
-    }
-
+    if (!issues || issues.length === 0) return 'Нет данных для отображения.';
     let result = '| ID | Тип | Severity | Модуль | Кратко | Подробности |\n';
     result += '| --- | --- | --- | --- | --- | --- |\n';
-
     for (const issue of issues) {
-        const id = (issue.id || '—').replace(/\|/g, '\\|');
-        const type = (issue.type || '—').replace(/\|/g, '\\|');
-        const severity = (issue.severity || '—').replace(/\|/g, '\\|');
-        const moduleStr = (issue.module || '—').replace(/\|/g, '\\|');
-        const title = (issue.title || '—').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
-
-        let detailsStr = '—';
-        if (issue.details && issue.details.trim()) {
-            detailsStr = issue.details
-                .trim()
-                .replace(/\|/g, '\\|')
-                .replace(/\r?\n/g, '<br>');
-        }
-
-        result += `| ${id} | ${type} | ${severity} | ${moduleStr} | ${title} | ${detailsStr} |\n`;
+        const id = escMdLine(issue.id || '—');
+        const type = escMdLine(issue.type || '—');
+        const severity = escMdLine(issue.severity || '—');
+        const module_ = escMdLine(issue.module || '—');
+        const title = escMdLine(issue.title || '—');
+        const details = issue.details && issue.details.trim()
+            ? issue.details.trim().replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>')
+            : '—';
+        result += `| ${id} | ${type} | ${severity} | ${module_} | ${title} | ${details} |\n`;
     }
-
     return result;
 }
 
+// ─── TREEMAP-BETA ─────────────────────────────────────────────
 /**
- * Основная функция конвертации
- * @param {Object} options
- * @param {string} options.jsonPath - Путь к входному JSON-файлу
- * @param {string} options.outputDir - Путь к папке вывода
- * @param {string} [options.tableType='extended'] - Вид таблицы ('extended'/'#||' или 'simple'/'standard')
+ * Строит mermaid treemap-beta из плоского массива объектов.
+ * Ось Y = yField (верхний уровень), ось X = xField (вложенный),
+ * листья = labelField (по умолчанию id).
+ *
+ * @param {Array<Object>} issues
+ * @param {Object} [opts]
+ * @param {string} [opts.xField='module']
+ * @param {string} [opts.yField='layer']
+ * @param {string} [opts.labelField='id']
+ * @param {string|null} [opts.valueField=null] — числовое поле для размера
+ * @param {'count'|'sum'|'max'|'min'} [opts.valueAgg='count']
+ * @param {string|null} [opts.classField=null] — поле, значение которого даёт CSS-класс
+ * @param {Array<{name:string, style:string}>} [opts.classDefs=[]]
+ * @param {boolean} [opts.flat=false] — склеить «Y / X» в один секционный заголовок
  */
-function convertJsonToMdTable({ jsonPath, outputDir, tableType = 'extended' }) {
-    console.log(`[json-to-md] Чтение JSON из: ${jsonPath}`);
+function generateTreemap(issues, opts = {}) {
+    const {
+        xField = 'module',
+        yField = 'layer',
+        labelField = 'id',
+        valueField = null,
+        valueAgg = 'count',
+        classField = null,
+        classDefs = [],
+        flat = false,
+    } = opts;
 
+    if (!issues || issues.length === 0) return 'treemap-beta\n"Нет данных"\n';
+
+    // Группировка: Y → X → [items]
+    const tree = new Map();
+    for (const issue of issues) {
+        const y = issue[yField] ?? '—';
+        const x = issue[xField] ?? '—';
+        if (!tree.has(y)) tree.set(y, new Map());
+        const xMap = tree.get(y);
+        if (!xMap.has(x)) xMap.set(x, []);
+        xMap.get(x).push(issue);
+    }
+
+    const classOf = (item) => {
+        if (!classField) return '';
+        const raw = item[classField];
+        if (raw == null) return '';
+        return `:::${String(raw).replace(/[^\w-]/g, '_')}`;
+    };
+
+    let out = 'treemap-beta\n';
+
+    for (const [y, xMap] of tree) {
+        if (flat) {
+            for (const [x, items] of xMap) {
+                out += `"${escMermaid(y)} / ${escMermaid(x)}"\n`;
+                for (const item of items) {
+                    const label = escMermaid(item[labelField] ?? '—');
+                    const value = valueField ? (Number(item[valueField]) || 1) : 1;
+                    out += `    "${label}": ${value}${classOf(item)}\n`;
+                }
+            }
+        } else {
+            out += `"${escMermaid(y)}"\n`;
+            for (const [x, items] of xMap) {
+                out += `    "${escMermaid(x)}"\n`;
+                for (const item of items) {
+                    const label = escMermaid(item[labelField] ?? '—');
+                    const value = valueField ? (Number(item[valueField]) || 1) : 1;
+                    out += `        "${label}": ${value}${classOf(item)}\n`;
+                }
+            }
+        }
+    }
+
+    if (classDefs.length > 0) {
+        out += '\n';
+        for (const def of classDefs) {
+            out += `classDef ${def.name} ${def.style};\n`;
+        }
+    }
+    return out;
+}
+
+/** Оборачивает mermaid в markdown-блок для .md-файла. */
+function wrapMermaid(mermaidCode) {
+    return '```mermaid\n' + mermaidCode.trimEnd() + '\n```\n';
+}
+
+// ─── ПАРСЕР АРГУМЕНТОВ ────────────────────────────────────────
+function parseArgs(argv) {
+    const out = {
+        jsonPath: null,
+        outputDir: null,
+        outputFile: null,
+        tableType: 'extended',
+        xField: 'module',
+        yField: 'layer',
+        labelField: 'id',
+        valueField: null,
+        valueAgg: 'count',
+        classField: null,
+        flat: false,
+        groupBy: null,
+        groupFooter: true,
+        groupPlain: false,
+    };
+
+    const positional = [];
+    for (let i = 0; i < argv.length; i++) {
+        const a = argv[i];
+
+        // presence-only флаги — не трогают argv
+        if (a === '--flat') { out.flat = true; continue; }
+        if (a === '--groupPlain') { out.groupPlain = true; continue; }
+        if (a === '--no-groupFooter') { out.groupFooter = false; continue; }
+
+        if (!a.startsWith('--')) { positional.push(a); continue; }
+
+        const eq = a.indexOf('=');
+        let key, val;
+        if (eq !== -1) { key = a.slice(0, eq); val = a.slice(eq + 1); }
+        else { key = a; val = argv[++i]; }
+
+        switch (key) {
+            case '--jsonPath': out.jsonPath = val; break;
+            case '--outputDir': out.outputDir = val; break;
+            case '--outputFile': out.outputFile = val; break;
+            case '--tableType': out.tableType = val; break;
+            case '--xField': out.xField = val; break;
+            case '--yField': out.yField = val; break;
+            case '--labelField': out.labelField = val; break;
+            case '--valueField': out.valueField = val || null; break;
+            case '--valueAgg': out.valueAgg = val; break;
+            case '--classField': out.classField = val || null; break;
+
+            case '--groupBy': out.groupBy = val || null; break;
+            case '--groupFooter':
+                out.groupFooter = !(val === 'false' || val === '0' || val === 'no');
+                break;
+        }
+    }
+
+    if (!out.jsonPath) out.jsonPath = positional[0] || './known-issues-summary.json';
+    if (!out.outputDir) out.outputDir = positional[1] || './docs';
+    if (positional[2]) out.tableType = positional[2];
+    return out;
+}
+
+// ─── ОСНОВНАЯ ФУНКЦИЯ ─────────────────────────────────────────
+function convertJsonToMdTable(opts) {
+    const {
+        jsonPath, outputDir, outputFile, tableType = 'extended',
+        xField, yField, labelField, valueField, valueAgg, classField, flat,
+        groupBy, groupFooter, groupPlain,
+    } = opts;
+
+    console.log(`[json-to-md] Чтение JSON из: ${jsonPath}`);
     if (!fs.existsSync(jsonPath)) {
         console.error(`❌ [json-to-md] Файл не найден: ${jsonPath}`);
         return { success: false };
@@ -88,45 +210,152 @@ function convertJsonToMdTable({ jsonPath, outputDir, tableType = 'extended' }) {
 
     let issues;
     try {
-        const rawData = fs.readFileSync(jsonPath, 'utf8');
-        issues = JSON.parse(rawData);
+        issues = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
     } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        console.error(`❌ [json-to-md] Ошибка чтения/парсинга JSON: ${msg}`);
+        console.error(`❌ [json-to-md] Ошибка чтения/парсинга JSON: ${err.message}`);
         return { success: false };
     }
 
-    // Создаём папку вывода, если её нет
-    if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
+    const mode = String(tableType).toLowerCase();
+
+    let content, defaultFileName;
+
+    if (mode === 'simple' || mode === 'standard') {
+        content = generateSimpleTable(issues);   // группировка в simple не поддерживается
+        defaultFileName = 'known-issues-simple.md';
+    } else if (mode === 'treemap') {
+        const mermaid = generateTreemap(issues, {
+            xField, yField, labelField, valueField, valueAgg, classField, flat,
+        });
+        content = wrapMermaid(mermaid);
+        defaultFileName = 'known-issues-treemap.md';
+    } else if (groupBy) {
+        content = generateGroupedTable(issues, { groupBy, groupFooter, groupPlain });
+        defaultFileName = `known-issues-by-${groupBy}.md`;
+    } else {
+        content = generateExtendedTable(issues);
+        defaultFileName = 'known-issues-summary.md';
     }
 
-    const mode = String(tableType).toLowerCase();
-    const isSimple = mode === 'simple' || mode === 'standard';
+    // ── резолвим путь: полный (с разделителем) или относительный к outputDir ──
+    let outputPath;
+    if (outputFile) {
+        // Абсолютный путь → как есть.
+        // Путь с разделителем ('./...', '../...', 'a/b', 'a\\b') → от cwd.
+        // Просто имя файла → от outputDir.
+        const hasSeparator = /[\\/]/.test(outputFile);
+        outputPath = hasSeparator
+            ? path.resolve(outputFile)              // ← от process.cwd()
+            : path.join(outputDir, outputFile);
+    } else {
+        outputPath = path.join(outputDir, defaultFileName);
+    }
 
-    const mdContent = isSimple ? generateSimpleTable(issues) : generateExtendedTable(issues);
-
-    const fileName = isSimple ? 'known-issues-simple.md' : 'known-issues-summary.md';
-    const outputPath = path.join(outputDir, fileName);
+    // ── гарантируем родительскую папку ──
+    const outputParent = path.dirname(outputPath);
+    if (!fs.existsSync(outputParent)) {
+        fs.mkdirSync(outputParent, { recursive: true });
+    }
 
     try {
-        fs.writeFileSync(outputPath, mdContent, 'utf8');
-        console.log(`✅ [json-to-md] Успешно создан файл (${isSimple ? 'простая' : 'расширенная'} таблица): ${outputPath}`);
+        fs.writeFileSync(outputPath, content, 'utf8');
+        console.log(`✅ [json-to-md] Создан: ${outputPath} (режим: ${mode})`);
         return { success: true, outputPath };
     } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        console.error(`❌ [json-to-md] Ошибка записи MD-файла: ${msg}`);
+        console.error(`❌ [json-to-md] Ошибка записи: ${err.message}`);
         return { success: false };
     }
 }
 
-if (require.main === module) {
-    const jsonPath = process.argv[2] || './known-issues-summary.json';
-    const outputDir = process.argv[3] || './docs';
-    // Допустимые значения для 3-го параметра: extended (по умолчанию) или simple
-    const tableType = process.argv[4] || 'extended';
+// ─── ГРУППИРОВАННАЯ ТАБЛИЦА ──────────────────────────────────
+/**
+ * Строит extended-таблицу с группировкой по значению одного поля.
+ * Колонка groupBy исключается; между группами вставляются
+ * сквозные строки заголовка и подвала (colspan).
+ *
+ * @param {Array<Object>} issues
+ * @param {Object}  [opts]
+ * @param {string}  [opts.groupBy='severity']  — имя поля-группы
+ * @param {boolean} [opts.groupFooter=true]    — показывать подвал группы
+ * @param {boolean} [opts.groupPlain=false]    — fallback без colspan
+ */
+function generateGroupedTable(issues, opts = {}) {
+    const { groupBy = 'severity', groupFooter = true, groupPlain = false } = opts;
 
-    convertJsonToMdTable({ jsonPath, outputDir, tableType });
+    if (!issues || issues.length === 0) return 'Нет данных для отображения.';
+
+    // Группируем, сохраняя порядок первого появления
+    const groups = new Map();
+    for (const issue of issues) {
+        const key = String(issue[groupBy] ?? '—');
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(issue);
+    }
+
+    // Колонки (без groupBy)
+    const ALL_COLUMNS = [
+        { key: 'id', label: '**ID**' },
+        { key: 'type', label: '**Тип**' },
+        { key: 'severity', label: '**Severity**' },
+        { key: 'module', label: '**Модуль**' },
+        { key: 'title', label: '**Кратко**' },
+        { key: 'details', label: '**Подробности**', isDetails: true },
+    ];
+    const columns = ALL_COLUMNS.filter(c => c.key !== groupBy);
+    const colCount = columns.length;
+
+    // Сквозная строка на всю ширину таблицы
+    const fullWidthRow = (content) => {
+        if (groupPlain) {
+            const cells = [content];
+            for (let i = 1; i < colCount; i++) cells.push('');
+            return '|| ' + cells.join(' | ') + ' ||\n';
+        }
+        return `|| ${content} {colspan="${colCount}"} ||\n`;
+    };
+
+    let result = '#|\n';
+
+    // Шапка (без groupBy-колонки)
+    result += '|| ' + columns.map(c => c.label).join(' | ') + ' ||\n';
+
+    for (const [groupValue, items] of groups) {
+        // Заголовок группы
+        result += fullWidthRow(`**${escMd(groupBy)}: ${escMd(groupValue)}**`);
+
+        // Строки данных
+        for (const issue of items) {
+            const cells = columns.map(col => {
+                if (col.isDetails) {
+                    return issue.details && issue.details.trim()
+                        ? `{% cut "Развернуть" %}\n\n${escMd(issue.details.trim())}\n\n{% endcut %}`
+                        : '—';
+                }
+                return escMd(issue[col.key]);
+            });
+            result += '||\n' + cells.join('\n|\n') + '\n||\n';
+        }
+
+        // Подвал группы
+        if (groupFooter) {
+            result += fullWidthRow(`_{Всего: ${items.length}}_`);
+        }
+    }
+
+    result += '|#\n';
+    return result;
+}
+
+// ─── CLI-ТОЧКА ВХОДА ──────────────────────────────────────────
+if (require.main === module) {
+    convertJsonToMdTable(parseArgs(process.argv.slice(2)));
 } else {
-    module.exports = { convertJsonToMdTable, generateExtendedTable, generateSimpleTable };
+    module.exports = {
+        convertJsonToMdTable,
+        generateExtendedTable,
+        generateSimpleTable,
+        generateTreemap,
+        generateGroupedTable,
+        wrapMermaid,
+    };
 }

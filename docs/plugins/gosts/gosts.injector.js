@@ -1,8 +1,9 @@
-// @ts-nocheck
+// gosts.injector.js
 const fs = require('fs');
 const path = require('path');
 const { loadGostDictionary, getGostDictionaryPath } = require('./gosts.dictionary');
 const { slugify_latin_alphanumeric } = require('../utils/encoding.slugify.js');
+const { collectGostReferences } = require('./gosts.collector'); // <-- ДОБАВЛЕНО
 
 function findBuildRoot(targetHtml) {
     let dir = path.dirname(path.resolve(targetHtml));
@@ -48,43 +49,55 @@ function injectGostsTable({ langDir, targetHtml, lang }) {
     const dataSrc = `/${relFromRoot}/gosts.data.js`;
     const jsSrc = `/${relFromRoot}/gosts.js`;
 
-    // --- ОБРАБОТКА ССЫЛОК В ДАННЫХ ---
     const dictPath = getGostDictionaryPath(langDir, lang);
-    const yamlDir = path.dirname(dictPath); // Папка, где лежит gosts.yaml
+    const yamlDir = path.dirname(dictPath);
     const resolvedLangDir = path.resolve(langDir);
-    const docsRoot = path.dirname(resolvedLangDir); // Корень docs/
+    const docsRoot = path.dirname(resolvedLangDir);
 
     const entries = loadGostDictionary(langDir, lang);
 
-    // Конвертируем ссылки во всех текстовых полях
     for (const item of entries) {
         if (item.description) item.description = resolveMarkdownLinks(item.description, yamlDir, docsRoot);
         if (item.title) item.title = resolveMarkdownLinks(item.title, yamlDir, docsRoot);
         if (item.status) item.status = resolveMarkdownLinks(item.status, yamlDir, docsRoot);
         if (item.code) item.anchorId = `gost-${slugify_latin_alphanumeric(item.code)}`;
     }
-    // ----------------------------------
 
-    // 1. Сохраняем данные рядом с HTML
-    const dataContent = `window.__GOSTS_DATA__ = ${JSON.stringify(entries)};`;
+    // --- СБОР ССЫЛОК НА ГОСТЫ ---
+    const refs = collectGostReferences(langDir, entries);
+    for (const item of entries) {
+        item.pages = refs[item.anchorId] || [];
+
+        //сортируем по алфавиту
+        item.pages.sort((a, b) => String(a.title).localeCompare(String(b.title), 'ru', { numeric: true }));
+
+        // // Сортируем: сначала по убыванию количества упоминаний, 
+        // // затем по алфавиту (если количество совпадает)
+        // item.pages.sort((a, b) => {
+        //     if (b.occurrences !== a.occurrences) {
+        //         return b.occurrences - a.occurrences;
+        //     }
+        //     return String(a.title).localeCompare(String(b.title), 'ru', { numeric: true });
+        // });
+    }
+    // ----------------------------
+
+    // Передаем язык в data.js
+    const dataContent = `window.__GOSTS_LANG__ = "${lang}";\nwindow.__GOSTS_DATA__ = ${JSON.stringify(entries)};`;
     fs.writeFileSync(path.join(targetDir, 'gosts.data.js'), dataContent, 'utf8');
 
-    // 2. Копируем скрипт и стили
     fs.copyFileSync(path.join(__dirname, 'gosts.js'), path.join(targetDir, 'gosts.js'));
     fs.copyFileSync(path.join(__dirname, 'gosts.css'), path.join(targetDir, 'gosts.css'));
 
-    // 3. Внедряем в HTML
     let html = fs.readFileSync(targetHtml, 'utf8');
     const original = html;
 
     if (!html.includes('gosts.css')) {
         html = html.replace('</head>', `<link rel="stylesheet" href="${cssHref}">\n</head>`);
     }
-
     if (!html.includes('gosts.data.js')) {
         html = html.replace('</body>', `<script src="${dataSrc}" defer></script>\n</body>`);
     }
-
     if (!html.includes('gosts.js')) {
         html = html.replace('</body>', `<script src="${jsSrc}" defer></script>\n</body>`);
     }
@@ -94,7 +107,6 @@ function injectGostsTable({ langDir, targetHtml, lang }) {
     }
 
     console.log(`✓ Таблица ГОСТов внедрена: ${targetHtml} (${entries.length} записей)`);
-
     return { success: true, count: entries.length };
 }
 

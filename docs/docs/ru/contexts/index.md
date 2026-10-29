@@ -129,26 +129,26 @@ sectionType: Page
       <rect class="rect-box" x="557" y="0" width="269" height="209" rx="6" fill="rgb(56, 49, 103)" stroke="#ffffff" stroke-width="1.5"/>
       <text class="heatmap-text" x="693" y="106" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>post-processing</title>
         <tspan x="693" dy="-0.7em">post-processing</tspan>
-        <tspan x="693" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">264 КБ / 15 ст.</tspan>
+        <tspan x="693" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">265 КБ / 15 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/client-runtime.html" class="rect-link" title="client-runtime">
       <rect class="rect-box" x="829" y="0" width="268" height="209" rx="6" fill="rgb(54, 57, 106)" stroke="#ffffff" stroke-width="1.5"/>
       <text class="heatmap-text" x="964.5" y="106" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>client-runtime</title>
         <tspan x="964.5" dy="-0.7em">client-runtime</tspan>
-        <tspan x="964.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">262 КБ / 14 ст.</tspan>
+        <tspan x="964.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">263 КБ / 14 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/html.html" class="rect-link" title="html">
       <rect class="rect-box" x="252" y="212" width="199" height="236" rx="6" fill="rgb(49, 81, 115)" stroke="#ffffff" stroke-width="1.5"/>
       <text class="heatmap-text" x="353" y="331.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>html</title>
         <tspan x="353" dy="-0.7em">html</tspan>
-        <tspan x="353" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">200 КБ / 11 ст.</tspan>
+        <tspan x="353" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">201 КБ / 11 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/section.html" class="rect-link" title="section">
-      <rect class="rect-box" x="252" y="451" width="199" height="223" rx="6" fill="rgb(43, 105, 124)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="353" y="564" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>section</title>
+      <rect class="rect-box" x="252" y="451" width="199" height="222" rx="6" fill="rgb(43, 105, 124)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="353" y="563.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>section</title>
         <tspan x="353" dy="-0.7em">section</tspan>
         <tspan x="353" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">183 КБ / 8 ст.</tspan>
       </text>
@@ -161,17 +161,17 @@ sectionType: Page
       </text>
     </a>
     <a href="ru/contexts/report.html" class="rect-link" title="report">
-      <rect class="rect-box" x="454" y="212" width="238" height="171" rx="6" fill="rgb(41, 113, 128)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="574.5" y="299" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>report</title>
-        <tspan x="574.5" dy="-0.7em">report</tspan>
-        <tspan x="574.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">163 КБ / 7 ст.</tspan>
+      <rect class="rect-box" x="453" y="212" width="238" height="171" rx="6" fill="rgb(41, 113, 128)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="573.5" y="299" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>report</title>
+        <tspan x="573.5" dy="-0.7em">report</tspan>
+        <tspan x="573.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">163 КБ / 7 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/browser.html" class="rect-link" title="browser">
-      <rect class="rect-box" x="695" y="212" width="209" height="171" rx="6" fill="rgb(43, 105, 124)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="801" y="299" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>browser</title>
-        <tspan x="801" dy="-0.7em">browser</tspan>
-        <tspan x="801" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">133 КБ / 8 ст.</tspan>
+      <rect class="rect-box" x="694" y="212" width="209" height="171" rx="6" fill="rgb(43, 105, 124)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="800" y="299" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>browser</title>
+        <tspan x="800" dy="-0.7em">browser</tspan>
+        <tspan x="800" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">134 КБ / 8 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/cli.html" class="rect-link" title="cli">
@@ -182,24 +182,24 @@ sectionType: Page
       </text>
     </a>
     <a href="ru/contexts/infrastructure.html" class="rect-link" title="infrastructure">
-      <rect class="rect-box" x="454" y="386" width="185" height="174" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="548" y="474.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>infrastructure</title>
-        <tspan x="548" dy="-0.7em">infrastructure</tspan>
-        <tspan x="548" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">114 КБ / 5 ст.</tspan>
+      <rect class="rect-box" x="453" y="386" width="185" height="174" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="547" y="474.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>infrastructure</title>
+        <tspan x="547" dy="-0.7em">infrastructure</tspan>
+        <tspan x="547" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">114 КБ / 5 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/link.html" class="rect-link" title="link">
-      <rect class="rect-box" x="454" y="563" width="185" height="168" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="548" y="648.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>link</title>
-        <tspan x="548" dy="-0.7em">link</tspan>
-        <tspan x="548" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">108 КБ / 5 ст.</tspan>
+      <rect class="rect-box" x="453" y="563" width="185" height="168" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="547" y="648.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>link</title>
+        <tspan x="547" dy="-0.7em">link</tspan>
+        <tspan x="547" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">108 КБ / 5 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/context.html" class="rect-link" title="context">
-      <rect class="rect-box" x="454" y="734" width="185" height="163" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="548" y="817" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>context</title>
-        <tspan x="548" dy="-0.7em">context</tspan>
-        <tspan x="548" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">103 КБ / 5 ст.</tspan>
+      <rect class="rect-box" x="453" y="734" width="185" height="163" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="547" y="817" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>context</title>
+        <tspan x="547" dy="-0.7em">context</tspan>
+        <tspan x="547" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">103 КБ / 5 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/footnote.html" class="rect-link" title="footnote">
@@ -238,17 +238,17 @@ sectionType: Page
       </text>
     </a>
     <a href="ru/contexts/abbr.html" class="rect-link" title="abbr">
-      <rect class="rect-box" x="779" y="564" width="162" height="124" rx="6" fill="rgb(33, 145, 140)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="861.5" y="627.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>abbr</title>
-        <tspan x="861.5" dy="-0.7em">abbr</tspan>
-        <tspan x="861.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">56 КБ / 3 ст.</tspan>
+      <rect class="rect-box" x="779" y="564" width="163" height="124" rx="6" fill="rgb(33, 145, 140)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="862" y="627.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>abbr</title>
+        <tspan x="862" dy="-0.7em">abbr</tspan>
+        <tspan x="862" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">56 КБ / 3 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/helptag.html" class="rect-link" title="helptag">
-      <rect class="rect-box" x="944" y="564" width="153" height="124" rx="6" fill="rgb(33, 145, 140)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="1022" y="627.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>helptag</title>
-        <tspan x="1022" dy="-0.7em">helptag</tspan>
-        <tspan x="1022" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">51 КБ / 3 ст.</tspan>
+      <rect class="rect-box" x="945" y="564" width="152" height="124" rx="6" fill="rgb(33, 145, 140)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="1022.5" y="627.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>helptag</title>
+        <tspan x="1022.5" dy="-0.7em">helptag</tspan>
+        <tspan x="1022.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">51 КБ / 3 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/lint.html" class="rect-link" title="lint">
@@ -266,17 +266,17 @@ sectionType: Page
       </text>
     </a>
     <a href="ru/contexts/modules.html" class="rect-link" title="modules">
-      <rect class="rect-box" x="958" y="691" width="139" height="124" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="1029" y="754.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>modules</title>
-        <tspan x="1029" dy="-0.7em">modules</tspan>
-        <tspan x="1029" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">44 КБ / 5 ст.</tspan>
+      <rect class="rect-box" x="957" y="691" width="140" height="124" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="1028.5" y="754.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>modules</title>
+        <tspan x="1028.5" dy="-0.7em">modules</tspan>
+        <tspan x="1028.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">45 КБ / 5 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/layer.html" class="rect-link" title="layer">
-      <rect class="rect-box" x="958" y="818" width="139" height="79" rx="6" fill="rgb(41, 113, 128)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="1029" y="859" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>layer</title>
-        <tspan x="1029" dy="-0.7em">layer</tspan>
-        <tspan x="1029" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">23 КБ / 7 ст.</tspan>
+      <rect class="rect-box" x="957" y="818" width="140" height="79" rx="6" fill="rgb(41, 113, 128)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="1028.5" y="859" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>layer</title>
+        <tspan x="1028.5" dy="-0.7em">layer</tspan>
+        <tspan x="1028.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">23 КБ / 7 ст.</tspan>
       </text>
     </a>
   </svg>

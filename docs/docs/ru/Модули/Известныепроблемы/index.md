@@ -38,11 +38,28 @@ context: 'modules, known-issues, meta'
 | `major`    | Неправильный результат или серьёзное неудобство в типичном сценарии |
 | `minor`    | Неправильный результат в редком сценарии или косметика              |
 
-## Реестр
+## Реестр по модулям
 
 {% cut "Развернуть" %}
 
-{% include [Known issues](./known-issues-summary.md) %}
+{% include [Known issues](./known-issues-by-module.md) %}
+
+{% endcut %}
+
+
+## Реестр по приоритетам
+
+{% cut "Развернуть" %}
+
+{% include [Known issues](./known-issues-by-severity.md) %}
+
+{% endcut %}
+
+## Реестр по типам
+
+{% cut "Развернуть" %}
+
+{% include [Known issues](./known-issues-by-type.md) %}
 
 {% endcut %}
 

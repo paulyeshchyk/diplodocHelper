@@ -1,0 +1,479 @@
+[
+  {
+    "id": "4.2-001",
+    "module": "breadcrumb",
+    "folder": "src/plugins/breadcrumb/",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "-"
+  },
+  {
+    "id": "3.1-002",
+    "module": "gosts",
+    "folder": "src/plugins/gosts/",
+    "layer": "pre-processing / post-processing",
+    "status": "active",
+    "catalog": "text-processing",
+    "family": "ГОСТы"
+  },
+  {
+    "id": "3.2-003",
+    "module": "abbrs",
+    "folder": "src/plugins/abbrs/",
+    "layer": "pre-processing / post-processing",
+    "status": "active",
+    "catalog": "text-processing",
+    "family": "Аббревиатуры"
+  },
+  {
+    "id": "5.2-004",
+    "module": "abbrs.client",
+    "folder": "src/plugins/abbrs/",
+    "layer": "client-runtime",
+    "status": "active",
+    "catalog": "text-processing",
+    "family": "Аббревиатуры"
+  },
+  {
+    "id": "3.2-005",
+    "module": "terms",
+    "folder": "src/plugins/terms/",
+    "layer": "pre-processing / post-processing",
+    "status": "active",
+    "catalog": "text-processing",
+    "family": "terms"
+  },
+  {
+    "id": "3.2-006",
+    "module": "terms.client",
+    "folder": "src/plugins/terms/",
+    "layer": "client-runtime",
+    "status": "active",
+    "catalog": "text-processing",
+    "family": "terms"
+  },
+  {
+    "id": "2.2-007",
+    "module": "figures",
+    "folder": "src/plugins/figures/",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "figures"
+  },
+  {
+    "id": "8.2-008",
+    "module": "helpMap",
+    "folder": "src/plugins/helpMap/",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "help-map"
+  },
+  {
+    "id": "3.2-009",
+    "module": "contexts",
+    "folder": "src/plugins/contexts/",
+    "layer": "pre-processing / client-runtime",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "contexts"
+  },
+  {
+    "id": "3.2-010",
+    "module": "helptags",
+    "folder": "src/plugins/helptags/",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "help-tags"
+  },
+  {
+    "id": "3.2-011",
+    "module": "footnotes",
+    "folder": "src/plugins/reindexer/reindexer.footnotes.js",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "footnotes"
+  },
+  {
+    "id": "4.2-012",
+    "module": "footnoteAnchors",
+    "folder": "src/plugins/footnoteAnchors/",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "footnotes"
+  },
+  {
+    "id": "4.2-013",
+    "module": "footnoteNumbering",
+    "folder": "src/plugins/footnoteNumbering/",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "footnotes"
+  },
+  {
+    "id": "4.2-014",
+    "module": "footnoteList",
+    "folder": "src/plugins/contentNavigator/ (часть)",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "footnotes"
+  },
+  {
+    "id": "4.2-015",
+    "module": "bytescounter",
+    "folder": "src/plugins/contentNavigator/ (часть)",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "content-navigator"
+  },
+  {
+    "id": "4.2-016",
+    "module": "contextmap",
+    "folder": "src/plugins/contentNavigator/ (часть)",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "content-navigator"
+  },
+  {
+    "id": "4.2-017",
+    "module": "helptagmap",
+    "folder": "src/plugins/contentNavigator/ (часть)",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "content-navigator"
+  },
+  {
+    "id": "8.2-018",
+    "module": "presetsStat",
+    "folder": "src/plugins/contentNavigator/Pagebuilder.Stats.js",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "content-navigator"
+  },
+  {
+    "id": "7.1-019",
+    "module": "linter.links",
+    "folder": "src/plugins/linter/",
+    "layer": "vscode-ui",
+    "status": "active",
+    "catalog": "tooling",
+    "family": "linter"
+  },
+  {
+    "id": "7.1-020",
+    "module": "linter.abbrs",
+    "folder": "src/plugins/abbrs/abbrs.linter.js",
+    "layer": "vscode-ui",
+    "status": "active",
+    "catalog": "tooling",
+    "family": "linter"
+  },
+  {
+    "id": "7.1-021",
+    "module": "linter.terms",
+    "folder": "src/plugins/terms/terms.linter.js",
+    "layer": "vscode-ui",
+    "status": "active",
+    "catalog": "tooling",
+    "family": "linter"
+  },
+  {
+    "id": "1.1-022",
+    "module": "sections.core",
+    "folder": "src/plugins/utils/ (diplodoc.flow · md.index · yaml.*)",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "sections"
+  },
+  {
+    "id": "1.1-023",
+    "module": "section.Create",
+    "folder": "src/commands/diplodoc-helper.section.Create.js",
+    "layer": "vscode-ui / pre-processing",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "section-commands"
+  },
+  {
+    "id": "1.1-024",
+    "module": "section.Delete",
+    "folder": "src/commands/diplodoc-helper.section.Delete.js",
+    "layer": "vscode-ui / pre-processing",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "section-commands"
+  },
+  {
+    "id": "1.1-025",
+    "module": "section.Move",
+    "folder": "src/commands/diplodoc-helper.section.Move.js",
+    "layer": "vscode-ui / pre-processing",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "section-commands"
+  },
+  {
+    "id": "1.1-026",
+    "module": "section.Rename",
+    "folder": "src/commands/diplodoc-helper.section.Rename.js",
+    "layer": "vscode-ui / pre-processing",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "section-commands"
+  },
+  {
+    "id": "2.2-027",
+    "module": "link.Copy",
+    "folder": "src/commands/diplodoc-helper.link.Copy.js",
+    "layer": "vscode-ui",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "link-commands"
+  },
+  {
+    "id": "2.1-028",
+    "module": "link.addAnchor",
+    "folder": "src/commands/diplodoc-helper.link.AddAnchor.js",
+    "layer": "vscode-ui",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "link-commands"
+  },
+  {
+    "id": "2.2-029",
+    "module": "link.Paste",
+    "folder": "src/commands/diplodoc-helper.link.Paste.js",
+    "layer": "vscode-ui",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "link-commands"
+  },
+  {
+    "id": "2.2-030",
+    "module": "image.PasteFromClipboard",
+    "folder": "src/commands/diplodoc-helper.image.PasteFromClipboard.js",
+    "layer": "vscode-ui",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "image-commands"
+  },
+  {
+    "id": "2.2-031",
+    "module": "image.PasteFromList",
+    "folder": "src/commands/diplodoc-helper.image.PasteFromList.js",
+    "layer": "vscode-ui",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "image-commands"
+  },
+  {
+    "id": "8.2-032",
+    "module": "roadmap",
+    "folder": "src/plugins/roadMap/ (генератор)",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "roadmap"
+  },
+  {
+    "id": "4.2-033",
+    "module": "roadmap.patcher",
+    "folder": "src/plugins/roadMap/patchers/, post-build.js",
+    "layer": "post-processing / client-runtime",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "roadmap"
+  },
+  {
+    "id": "5.1-034",
+    "module": "context-search.client",
+    "folder": "src/plugins/contexts/",
+    "layer": "client-runtime",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "contexts"
+  },
+  {
+    "id": "5.1-035",
+    "module": "gosts.client",
+    "folder": "src/plugins/gosts/client/_assets/scripts/",
+    "layer": "client-runtime",
+    "status": "active",
+    "catalog": "text-processing",
+    "family": "ГОСТы"
+  },
+  {
+    "id": "5.1-036",
+    "module": "footnoteList.client",
+    "folder": "src/plugins/contentNavigator/",
+    "layer": "client-runtime",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "footnotes"
+  },
+  {
+    "id": "5.2-037",
+    "module": "core-renderer",
+    "folder": "src/plugins/contentNavigator/",
+    "layer": "client-runtime",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "content-navigator"
+  },
+  {
+    "id": "5.1-038",
+    "module": "context-tags.client",
+    "folder": "src/plugins/context-tags/",
+    "layer": "client-runtime",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "context-tags"
+  },
+  {
+    "id": "1.2-039",
+    "module": "file.Delete",
+    "folder": "src/commands/",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "file-commands"
+  },
+  {
+    "id": "1.2-040",
+    "module": "smart.delete",
+    "folder": "src/commands/",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "editor-commands",
+    "family": "file-commands"
+  },
+  {
+    "id": "1.2-041",
+    "module": "reindexer.directories",
+    "folder": "src/plugins/reindexer/",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "reindexer"
+  },
+  {
+    "id": "1.2-042",
+    "module": "reindexer.figures",
+    "folder": "src/plugins/reindexer/",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "reindexer"
+  },
+  {
+    "id": "1.2-043",
+    "module": "reindexer.md",
+    "folder": "src/plugins/reindexer/",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "content-processing",
+    "family": "reindexer"
+  },
+  {
+    "id": "4.2-044",
+    "module": "tocCleanMode",
+    "folder": "src/plugins/tocCleanMode/",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "toc"
+  },
+  {
+    "id": "4.2-045",
+    "module": "context-tags",
+    "folder": "src/plugins/context-tags/",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "navigation",
+    "family": "context-tags"
+  },
+  {
+    "id": "6.2-046",
+    "module": "diplodoc-helper-cli",
+    "folder": "src/plugins/diplodoc-helper-cli.js",
+    "layer": "cli",
+    "status": "active",
+    "catalog": "infrastructure",
+    "family": "cli"
+  },
+  {
+    "id": "6.2-047",
+    "module": "docs-build",
+    "folder": "src/plugins/docs-build.js",
+    "layer": "cli",
+    "status": "active",
+    "catalog": "infrastructure",
+    "family": "build"
+  },
+  {
+    "id": "6.2-048",
+    "module": "manifest",
+    "folder": "src/plugins/manifest.builder/ + src/plugins/manifest/",
+    "layer": "cli",
+    "status": "active",
+    "catalog": "infrastructure",
+    "family": "manifest"
+  },
+  {
+    "id": "6.2-049",
+    "module": "installer",
+    "folder": "src/plugins/installer/ + src/commands/diplodoc-helper.installScripts.js",
+    "layer": "vscode-ui",
+    "status": "active",
+    "catalog": "infrastructure",
+    "family": "installer"
+  },
+  {
+    "id": "6.2-050",
+    "module": "build.js",
+    "folder": "build.js (корень)",
+    "layer": "build",
+    "status": "active",
+    "catalog": "infrastructure",
+    "family": "build"
+  },
+  {
+    "id": "5.3-051",
+    "module": "comments.client",
+    "folder": "src/plugins/comments/client",
+    "layer": "post-processing",
+    "status": "active",
+    "catalog": "comments",
+    "family": "comments"
+  },
+  {
+    "id": "6.2-052",
+    "module": "comments.server",
+    "folder": "../server/server.js",
+    "layer": "Infrastructure",
+    "status": "active",
+    "catalog": "comments",
+    "family": "comments"
+  },
+  {
+    "id": "5.1-053",
+    "module": "comments.admin",
+    "folder": "../server/admin",
+    "layer": "client-runtime",
+    "status": "active",
+    "catalog": "comments",
+    "family": "comments"
+  }
+]
