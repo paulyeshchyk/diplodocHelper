@@ -1,3 +1,4 @@
+// gosts.js (клиентский скрипт)
 (function () {
     function initGostsTable() {
         const container = document.getElementById('gosts-container');
@@ -5,6 +6,7 @@
         if (container.getAttribute('data-gosts-init') === '1') return true;
 
         const data = window.__GOSTS_DATA__ || [];
+        const lang = window.__GOSTS_LANG__ || 'ru'; // Получаем язык для ссылок
         container.setAttribute('data-gosts-init', '1');
 
         if (data.length === 0) {
@@ -32,6 +34,16 @@
         function esc(s) {
             return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
                 return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+            });
+        }
+
+        function formatMarkdown(text) {
+            if (!text) return '';
+            let safe = esc(text);
+            return safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+                const isExternal = url.startsWith('http');
+                const targetAttr = isExternal ? ' target="_blank" rel="noopener"' : '';
+                return `<a href="${url}"${targetAttr}>${linkText}</a>`;
             });
         }
 
@@ -81,22 +93,6 @@
             renderTable();
         }
 
-        function formatMarkdown(text) {
-            if (!text) return '';
-            let safe = String(text)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-
-            return safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
-                const isExternal = url.startsWith('http');
-                const targetAttr = isExternal ? ' target="_blank" rel="noopener"' : '';
-                return `<a href="${url}"${targetAttr}>${linkText}</a>`;
-            });
-        }
-
         function onRowClick(anchorId) {
             if (state.openCardId === anchorId) {
                 state.openCardId = null;
@@ -111,14 +107,10 @@
             let totalCount = 0;
 
             let currentHash = window.location.hash.replace('#', '');
-            try {
-                currentHash = decodeURIComponent(currentHash);
-            } catch { /* оставляем raw */ }
-
+            try { currentHash = decodeURIComponent(currentHash); } catch { }
             const shouldHandleHash = currentHash && currentHash !== state.handledHash;
 
             let html = '<div class="gost-table-wrapper"><table class="gost-table"><thead><tr>';
-
             for (let i = 0; i < COLUMNS.length; i++) {
                 const c = COLUMNS[i];
                 const cls = state.column === c.key ? c.className + ' is-active' : c.className;
@@ -135,13 +127,9 @@
 
                 for (let j = 0; j < items.length; j++) {
                     const item = items[j];
-                    const anchorId = item.anchorId || ('gost-' + (item.code || '').replace(/[^a-zA-Z0-9а-яА-Я]/g, '_').toLowerCase());
+                    const anchorId = item.anchorId;
                     const isOpen = state.openCardId === anchorId;
-
-                    const isTarget =
-                        currentHash === anchorId && state.flashedHash !== currentHash
-                            ? 'gost-flash'
-                            : '';
+                    const isTarget = currentHash === anchorId && state.flashedHash !== currentHash ? 'gost-flash' : '';
 
                     html += `<tr id="${anchorId}" class="gost-main-row ${isOpen ? 'is-expanded' : ''} ${isTarget}" data-id="${anchorId}">`;
                     html += `<td class="col-num">${rowNum++}</td>`;
@@ -163,6 +151,42 @@
                     html += `<div class="gost-card-item"><div class="gost-card-label">Статус:</div><div class="gost-card-value">${formatMarkdown(item.status || '—')}</div></div>`;
                     html += `<div class="gost-card-item"><div class="gost-card-label">Доп. информация:</div><div class="gost-card-value">${formatMarkdown(item.description || '—')}</div></div>`;
 
+                    // --- БЛОК ССЫЛАЮЩИХСЯ СТАТЕЙ ---
+                    if (item.pages && item.pages.length > 0) {
+                        const VISIBLE_LIMIT = 5;
+
+                        //сортируем по алфавиту
+                        const sortedPages = [...item.pages].sort((a, b) => String(a.title).localeCompare(String(b.title), 'ru', { numeric: true }));
+                        // // Сортируем страницы прямо на клиенте
+                        // const sortedPages = [...item.pages].sort((a, b) => {
+                        //     if (b.occurrences !== a.occurrences) {
+                        //         return b.occurrences - a.occurrences;
+                        //     }
+                        //     return String(a.title).localeCompare(String(b.title), 'ru', { numeric: true });
+                        // });
+
+                        html += `<div class="gost-card-item"><div class="gost-card-label">Ссылаются:</div><div class="gost-card-value">`;
+                        html += `<div class="gost-pages-list">`;
+
+                        sortedPages.forEach((page, idx) => { // Используем sortedPages
+                            const pageUrl = `/${lang}/${page.href.replace(/\.md$/i, '.html')}#${item.anchorId}`;
+                            const isHidden = idx >= VISIBLE_LIMIT ? 'is-hidden' : '';
+                            html += `<div class="gost-page-item ${isHidden}">
+                                <a href="${pageUrl}" target="_blank">${esc(page.title)}</a>
+                                <span class="gost-page-count" title="Количество упоминаний">${page.occurrences}</span>
+                            </div>`;
+                        });
+
+                        html += `</div>`;
+
+                        if (item.pages.length > VISIBLE_LIMIT) {
+                            html += `<button class="gost-pages-toggle" data-expanded="false">больше</button>`;
+                        }
+
+                        html += `</div></div>`;
+                    }
+                    // --------------------------------
+
                     html += `</div></div></div>`;
                     html += `</td></tr>`;
                 }
@@ -177,35 +201,68 @@
 
             container.innerHTML = html;
 
+            // Слушатели для сортировки
             const ths = container.querySelectorAll('th[data-col]');
             for (let k = 0; k < ths.length; k++) {
                 ths[k].addEventListener('click', function () { onHeaderClick(this.dataset.col); });
             }
 
+            // Слушатели для раскрытия карточек
             const rows = container.querySelectorAll('.gost-main-row');
             for (let r = 0; r < rows.length; r++) {
                 rows[r].addEventListener('click', function () { onRowClick(this.dataset.id); });
             }
 
-            // Единственный блок авто-раскрытия — строго внутри renderTable,
-            // строго когда shouldHandleHash === true (один раз на хэш).
+            // --- СЛУШАТЕЛИ ДЛЯ КНОПОК "БОЛЬШЕ/МЕНЬШЕ" ---
+            const toggleBtns = container.querySelectorAll('.gost-pages-toggle');
+            for (let b = 0; b < toggleBtns.length; b++) {
+                toggleBtns[b].addEventListener('click', function (e) {
+                    e.stopPropagation(); // Предотвращаем закрытие самой карточки ГОСТа
+
+                    const isExpanded = this.getAttribute('data-expanded') === 'true';
+                    const list = this.previousElementSibling; // .gost-pages-list
+                    const items = list.querySelectorAll('.gost-page-item');
+                    const limit = 5;
+
+                    if (!isExpanded) {
+                        // Раскрываем: показываем все скрытые
+                        for (let i = limit; i < items.length; i++) {
+                            items[i].classList.remove('is-hidden');
+                        }
+                        this.setAttribute('data-expanded', 'true');
+                        this.textContent = '[меньше]';
+                    } else {
+                        // Сворачиваем: скрываем всё после 5-го элемента
+                        for (let i = limit; i < items.length; i++) {
+                            items[i].classList.add('is-hidden');
+                        }
+                        this.setAttribute('data-expanded', 'false');
+                        this.textContent = '[больше]';
+                    }
+                });
+            }
+
+            // Обработка хэша...
             if (shouldHandleHash) {
-                const target = document.getElementById(currentHash);
-                if (target) {
+                if (document.getElementById(currentHash)) {
                     state.handledHash = currentHash;
-                    state.flashedHash = currentHash;
-                    setTimeout(() => {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 50);
                     if (state.openCardId !== currentHash) {
                         state.openCardId = currentHash;
-                        renderTable();   // второй (рекурсивный) рендер: shouldHandleHash уже false
+                        renderTable();
+                    }
+                    state.flashedHash = currentHash;
+                    const freshTarget = document.getElementById(currentHash);
+                    if (freshTarget) {
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                freshTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            });
+                        });
                     }
                 }
             }
         }
 
-        // Один-единственный hashchange-слушатель, со сбросом всех маркеров
         window.addEventListener('hashchange', function () {
             state.handledHash = null;
             state.flashedHash = null;
@@ -213,7 +270,6 @@
             renderTable();
         });
 
-        // Первый рендер — обязателен
         renderTable();
         return true;
     }
