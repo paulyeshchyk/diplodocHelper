@@ -161,6 +161,7 @@ function parseArgs(argv) {
         if (a === '--flat') { out.flat = true; continue; }
         if (a === '--groupPlain') { out.groupPlain = true; continue; }
         if (a === '--no-groupFooter') { out.groupFooter = false; continue; }
+        if (a === '--groupSplit') { out.groupSplit = true; continue; }
 
         if (!a.startsWith('--')) { positional.push(a); continue; }
 
@@ -194,12 +195,40 @@ function parseArgs(argv) {
     return out;
 }
 
+/**
+ * Режет строку по разделителям верхнего уровня (по умолчанию `,` и `;`).
+ * Не трогает содержимое `[] () {}` — поэтому `[text](url,with,commas)`
+ * остаётся одним элементом.
+ *
+ * @param {string} str
+ * @param {string[]} [separatorChars=[',',';']]
+ * @returns {string[]}
+ */
+function splitTopLevel(str, separatorChars = [',', ';']) {
+    const result = [];
+    let depth = 0;
+    let current = '';
+    for (const c of String(str)) {
+        if (c === '(' || c === '[' || c === '{') depth++;
+        else if (c === ')' || c === ']' || c === '}') depth = Math.max(0, depth - 1);
+
+        if (depth === 0 && separatorChars.includes(c)) {
+            if (current.trim()) result.push(current.trim());
+            current = '';
+        } else {
+            current += c;
+        }
+    }
+    if (current.trim()) result.push(current.trim());
+    return result;
+}
+
 // ─── ОСНОВНАЯ ФУНКЦИЯ ─────────────────────────────────────────
 function convertJsonToMdTable(opts) {
     const {
         jsonPath, outputDir, outputFile, tableType = 'extended',
         xField, yField, labelField, valueField, valueAgg, classField, flat,
-        groupBy, groupFooter, groupPlain,
+        groupBy, groupFooter, groupPlain, groupSplit,
     } = opts;
 
     console.log(`[json-to-md] Чтение JSON из: ${jsonPath}`);
@@ -230,7 +259,9 @@ function convertJsonToMdTable(opts) {
         content = wrapMermaid(mermaid);
         defaultFileName = 'known-issues-treemap.md';
     } else if (groupBy) {
-        content = generateGroupedTable(issues, { groupBy, groupFooter, groupPlain });
+        content = generateGroupedTable(issues, {
+            groupBy, groupFooter, groupPlain, groupSplit,   // ← прокинуть
+        });
         defaultFileName = `known-issues-by-${groupBy}.md`;
     } else {
         content = generateExtendedTable(issues);
@@ -280,16 +311,30 @@ function convertJsonToMdTable(opts) {
  * @param {boolean} [opts.groupPlain=false]    — fallback без colspan
  */
 function generateGroupedTable(issues, opts = {}) {
-    const { groupBy = 'severity', groupFooter = true, groupPlain = false } = opts;
+    const {
+        groupBy = 'severity',
+        groupFooter = true,
+        groupPlain = false,
+        groupSplit = false,   // ← новое
+    } = opts;
 
     if (!issues || issues.length === 0) return 'Нет данных для отображения.';
 
-    // Группируем, сохраняя порядок первого появления
+    // Раскрываем запись в N групп, если groupSplit=true
     const groups = new Map();
     for (const issue of issues) {
-        const key = String(issue[groupBy] ?? '—');
-        if (!groups.has(key)) groups.set(key, []);
-        groups.get(key).push(issue);
+        const raw = issue[groupBy];
+        const values = groupSplit && raw != null
+            ? splitTopLevel(String(raw))
+            : [String(raw ?? '—')];
+
+        for (const key of (values.length ? values : ['—'])) {
+            if (!groups.has(key)) groups.set(key, []);
+            // защита от двойного попадания одного issue в одну группу
+            if (!groups.get(key).includes(issue)) {
+                groups.get(key).push(issue);
+            }
+        }
     }
 
     // Колонки (без groupBy)
