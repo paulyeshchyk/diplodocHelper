@@ -1,2 +1,14 @@
 title: Известные проблемы
 href: index.yaml
+items:
+  - name: Общий
+    href: ./known-issues-summary.md
+
+  - name: Группировка по модулям
+    href: ./known-issues-by-module.md
+
+  - name: Группировка по приоритетам
+    href: ./known-issues-by-severity.md
+
+  - name: Группировка по типам
+    href: ./known-issues-by-type.md

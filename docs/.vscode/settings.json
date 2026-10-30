@@ -50,8 +50,6 @@
     "**/.git": true,
     "**/.gitignore": true,
     "**/.npmrc": true,
-    "**/package.json": true,
-    "**/Dockerfile": true,
     "**/.dockerignore": true,
     "**/app-config.json": true,
     "**/package-lock.json": true,

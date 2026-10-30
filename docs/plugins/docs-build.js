@@ -67,6 +67,14 @@ const STEPS = {
             '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
             '--outputDir', './docs/ru/Модули/Известныепроблемы',
             '--tableType', 'extended',
+        ),
+
+        node(
+            'jsonToMdTable',
+            './plugins/json-to-md/json-to-md-table.js',
+            '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
+            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--tableType', 'extended',
             '--groupBy', 'module'
         ),
 

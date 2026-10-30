@@ -168,10 +168,10 @@ sectionType: Page
       </text>
     </a>
     <a href="ru/contexts/browser.html" class="rect-link" title="browser">
-      <rect class="rect-box" x="694" y="212" width="209" height="171" rx="6" fill="rgb(43, 105, 124)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="800" y="299" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>browser</title>
-        <tspan x="800" dy="-0.7em">browser</tspan>
-        <tspan x="800" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">134 КБ / 8 ст.</tspan>
+      <rect class="rect-box" x="695" y="212" width="209" height="171" rx="6" fill="rgb(43, 105, 124)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="801" y="299" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>browser</title>
+        <tspan x="801" dy="-0.7em">browser</tspan>
+        <tspan x="801" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">134 КБ / 8 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/cli.html" class="rect-link" title="cli">
@@ -252,8 +252,8 @@ sectionType: Page
       </text>
     </a>
     <a href="ru/contexts/lint.html" class="rect-link" title="lint">
-      <rect class="rect-box" x="779" y="691" width="176" height="103" rx="6" fill="rgb(33, 145, 140)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="868.5" y="744" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>lint</title>
+      <rect class="rect-box" x="779" y="691" width="176" height="102" rx="6" fill="rgb(33, 145, 140)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="868.5" y="743.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>lint</title>
         <tspan x="868.5" dy="-0.7em">lint</tspan>
         <tspan x="868.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">47 КБ / 3 ст.</tspan>
       </text>
@@ -266,17 +266,17 @@ sectionType: Page
       </text>
     </a>
     <a href="ru/contexts/modules.html" class="rect-link" title="modules">
-      <rect class="rect-box" x="957" y="691" width="140" height="124" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="1028.5" y="754.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>modules</title>
-        <tspan x="1028.5" dy="-0.7em">modules</tspan>
-        <tspan x="1028.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">45 КБ / 5 ст.</tspan>
+      <rect class="rect-box" x="958" y="691" width="139" height="124" rx="6" fill="rgb(37, 129, 134)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="1029" y="754.5" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>modules</title>
+        <tspan x="1029" dy="-0.7em">modules</tspan>
+        <tspan x="1029" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">45 КБ / 5 ст.</tspan>
       </text>
     </a>
     <a href="ru/contexts/layer.html" class="rect-link" title="layer">
-      <rect class="rect-box" x="957" y="818" width="140" height="79" rx="6" fill="rgb(41, 113, 128)" stroke="#ffffff" stroke-width="1.5"/>
-      <text class="heatmap-text" x="1028.5" y="859" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>layer</title>
-        <tspan x="1028.5" dy="-0.7em">layer</tspan>
-        <tspan x="1028.5" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">23 КБ / 7 ст.</tspan>
+      <rect class="rect-box" x="958" y="818" width="139" height="79" rx="6" fill="rgb(41, 113, 128)" stroke="#ffffff" stroke-width="1.5"/>
+      <text class="heatmap-text" x="1029" y="859" fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="central"><title>layer</title>
+        <tspan x="1029" dy="-0.7em">layer</tspan>
+        <tspan x="1029" dy="1.4em" font-weight="400" font-size="13" opacity="0.92">23 КБ / 7 ст.</tspan>
       </text>
     </a>
   </svg>

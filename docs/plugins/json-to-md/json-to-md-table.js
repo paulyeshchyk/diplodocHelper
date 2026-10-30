@@ -151,6 +151,8 @@ function parseArgs(argv) {
         groupBy: null,
         groupFooter: true,
         groupPlain: false,
+        groupSplit: true,
+        groupSeparator: ','
     };
 
     const positional = [];
@@ -162,6 +164,7 @@ function parseArgs(argv) {
         if (a === '--groupPlain') { out.groupPlain = true; continue; }
         if (a === '--no-groupFooter') { out.groupFooter = false; continue; }
         if (a === '--groupSplit') { out.groupSplit = true; continue; }
+        if (a === '--no-groupSplit') { out.groupSplit = false; continue; }
 
         if (!a.startsWith('--')) { positional.push(a); continue; }
 
@@ -181,6 +184,7 @@ function parseArgs(argv) {
             case '--valueField': out.valueField = val || null; break;
             case '--valueAgg': out.valueAgg = val; break;
             case '--classField': out.classField = val || null; break;
+            case '--groupSeparator': out.groupSeparator = val || ','; break;
 
             case '--groupBy': out.groupBy = val || null; break;
             case '--groupFooter':
@@ -228,7 +232,7 @@ function convertJsonToMdTable(opts) {
     const {
         jsonPath, outputDir, outputFile, tableType = 'extended',
         xField, yField, labelField, valueField, valueAgg, classField, flat,
-        groupBy, groupFooter, groupPlain, groupSplit,
+        groupBy, groupFooter, groupPlain, groupSplit, groupSeparator,
     } = opts;
 
     console.log(`[json-to-md] Чтение JSON из: ${jsonPath}`);
@@ -260,7 +264,7 @@ function convertJsonToMdTable(opts) {
         defaultFileName = 'known-issues-treemap.md';
     } else if (groupBy) {
         content = generateGroupedTable(issues, {
-            groupBy, groupFooter, groupPlain, groupSplit,   // ← прокинуть
+            groupBy, groupFooter, groupSplit, groupSeparator,
         });
         defaultFileName = `known-issues-by-${groupBy}.md`;
     } else {
@@ -314,26 +318,24 @@ function generateGroupedTable(issues, opts = {}) {
     const {
         groupBy = 'severity',
         groupFooter = true,
-        groupPlain = false,
-        groupSplit = false,   // ← новое
+        groupSplit = true,
+        groupSeparator = ',',
     } = opts;
 
     if (!issues || issues.length === 0) return 'Нет данных для отображения.';
 
-    // Раскрываем запись в N групп, если groupSplit=true
+    const sepChars = [groupSeparator];
+
     const groups = new Map();
     for (const issue of issues) {
         const raw = issue[groupBy];
-        const values = groupSplit && raw != null
-            ? splitTopLevel(String(raw))
+        const values = (groupSplit && raw != null)
+            ? splitTopLevel(String(raw), sepChars)
             : [String(raw ?? '—')];
 
         for (const key of (values.length ? values : ['—'])) {
             if (!groups.has(key)) groups.set(key, []);
-            // защита от двойного попадания одного issue в одну группу
-            if (!groups.get(key).includes(issue)) {
-                groups.get(key).push(issue);
-            }
+            if (!groups.get(key).includes(issue)) groups.get(key).push(issue);
         }
     }
 
@@ -349,14 +351,11 @@ function generateGroupedTable(issues, opts = {}) {
     const columns = ALL_COLUMNS.filter(c => c.key !== groupBy);
     const colCount = columns.length;
 
-    // Сквозная строка на всю ширину таблицы
+    // Строка, объединённая по горизонтали (символ ">" в ячейках справа)
     const fullWidthRow = (content) => {
-        if (groupPlain) {
-            const cells = [content];
-            for (let i = 1; i < colCount; i++) cells.push('');
-            return '|| ' + cells.join(' | ') + ' ||\n';
-        }
-        return `|| ${content} {colspan="${colCount}"} ||\n`;
+        const firstCell = `${content} {.cell-align-top-left}`;
+        const mergeMarkers = Array(Math.max(0, colCount - 1)).fill('>');
+        return '|| ' + [firstCell, ...mergeMarkers].join(' | ') + ' ||\n';
     };
 
     let result = '#|\n';
@@ -365,8 +364,8 @@ function generateGroupedTable(issues, opts = {}) {
     result += '|| ' + columns.map(c => c.label).join(' | ') + ' ||\n';
 
     for (const [groupValue, items] of groups) {
-        // Заголовок группы
-        result += fullWidthRow(`**${escMd(groupBy)}: ${escMd(groupValue)}**`);
+        // Заголовок группы — одна объединённая ячейка
+        result += fullWidthRow(`<br>**${escMd(groupBy)}: ${escMd(groupValue)}**`);
 
         // Строки данных
         for (const issue of items) {
@@ -381,9 +380,9 @@ function generateGroupedTable(issues, opts = {}) {
             result += '||\n' + cells.join('\n|\n') + '\n||\n';
         }
 
-        // Подвал группы
+        // Подвал группы — тоже одна объединённая ячейка с именем группы
         if (groupFooter) {
-            result += fullWidthRow(`_{Всего: ${items.length}}_`);
+            result += fullWidthRow(`_Всего для ${escMd(groupValue)}: **${items.length}**_ <br><br>`);
         }
     }
 
