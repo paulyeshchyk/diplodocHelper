@@ -1,58 +1,63 @@
 title: Каталог (Capability map)
 href: index.yaml
 items:
-  - name: Каталог. Структура
+  - name: Структура
     href: КаталогСтруктура/index.md
     include:
       path: КаталогСтруктура/toc.yaml
       mode: link
-  - name: Каталог. Ссылки
+  - name: Ссылки
     href: КаталогСсылки/index.md
     include:
       path: КаталогСсылки/toc.yaml
       mode: link
-  - name: Каталог. Иллюстрации
+  - name: Иллюстрации
     href: КаталогИллюстрации/index.md
     include:
       path: КаталогИллюстрации/toc.yaml
       mode: link
-  - name: Каталог. Сноски
+  - name: Сноски
     href: КаталогСноски/index.md
     include:
       path: КаталогСноски/toc.yaml
       mode: link
-  - name: Каталог. Терминология
+  - name: Терминология
     href: КаталогТерминология/index.md
     include:
       path: КаталогТерминология/toc.yaml
       mode: link
-  - name: Каталог. Навигация
+  - name: Навигация
     href: КаталогНавигация/index.md
     include:
       path: КаталогНавигация/toc.yaml
       mode: link
-  - name: Каталог. Отчёты
+  - name: Отчёты
     href: КаталогОтчёты/index.md
     include:
       path: КаталогОтчёты/toc.yaml
       mode: link
-  - name: Каталог. Дорожная карта
+  - name: Дорожная карта
     href: КаталогДорожнаякарта/index.md
     include:
       path: КаталогДорожнаякарта/toc.yaml
       mode: link
-  - name: Каталог. Линтеры
+  - name: Линтеры
     href: КаталогЛинтеры/index.md
     include:
       path: КаталогЛинтеры/toc.yaml
       mode: link
-  - name: Каталог. Режимы отображения
+  - name: Режимы отображения
     href: КаталогРежимыотображения/index.md
     include:
       path: КаталогРежимыотображения/toc.yaml
       mode: link
-  - name: Каталог. Инфраструктура
+  - name: Инфраструктура
     href: КаталогИнфраструктура/index.md
     include:
       path: КаталогИнфраструктура/toc.yaml
+      mode: link
+  - name: Каталог. Представление данных
+    href: КаталогПредставлениеданных/index.md
+    include:
+      path: КаталогПредставлениеданных/toc.yaml
       mode: link

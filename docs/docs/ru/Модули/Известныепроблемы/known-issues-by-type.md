@@ -1,6 +1,6 @@
 #|
 || **ID** | **Severity** | **Модуль** | **Кратко** | **Подробности** ||
-|| <br>**type: bug** {.cell-align-top-left} | > | > | > | > ||
+|| <br>**Тип: bug** {.cell-align-top-left} | > | > | > | > ||
 ||
 KI-004
 |
@@ -160,7 +160,7 @@ minor
 —
 ||
 || _Всего для bug: **12**_ <br><br> {.cell-align-top-left} | > | > | > | > ||
-|| <br>**type: tradeoff** {.cell-align-top-left} | > | > | > | > ||
+|| <br>**Тип: tradeoff** {.cell-align-top-left} | > | > | > | > ||
 ||
 KI-071
 |
@@ -173,7 +173,7 @@ minor
 —
 ||
 || _Всего для tradeoff: **1**_ <br><br> {.cell-align-top-left} | > | > | > | > ||
-|| <br>**type: unknown** {.cell-align-top-left} | > | > | > | > ||
+|| <br>**Тип: unknown** {.cell-align-top-left} | > | > | > | > ||
 ||
 KI-100
 |

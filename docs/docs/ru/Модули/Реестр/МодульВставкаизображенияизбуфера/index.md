@@ -10,7 +10,7 @@ layer:
 
 |               |                                                                                                                                                                                                                                       |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [2.2-030](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                         |
+| ID            | [2.2-030](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                         |
 | Идентификатор | `image.PasteFromClipboard`                                                                                                                                                                                                            |
 | Наименование  | Вставка изображения из буфера                                                                                                                                                                                                         |
 | Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                                                                                                           |
@@ -30,7 +30,7 @@ layer:
 1. Извлекает растровое изображение из системного буфера (`PowerShell` на Windows, `osascript` на macOS, `xclip` на Linux).
 2. Спрашивает имя файла (`InputBox` с предзаполненным `<timestamp>_Скриншот`).
 3. Сохраняет картинку в `images/` рядом с текущим `.md` (создаёт папку, если нет).
-4. Вставляет в текст готовый `<figure>`-блок с `<figcaption class="imageDescription" id="fig-…">Рисунок 1. `.
+4. Вставляет в текст готовый `<figure>`-блок с `<figcaption class="imageDescription" id="fig-…">Рисунок 2. `.
 
 Без модуля пришлось бы:
 
@@ -307,7 +307,7 @@ vscode.window.showInformationMessage(translate(nls_ts.screenshot.saved.info, fil
 
 ![Скриншот настройки](./images/skrinshot_nastrojki.png)
 
-<figcaption class="imageDescription" id="fig-skrinshot_nastrojki">Рисунок 2. Скриншот настройки</figcaption>
+<figcaption class="imageDescription" id="fig-skrinshot_nastrojki">Рисунок 3. Скриншот настройки</figcaption>
 
 </figure>
 

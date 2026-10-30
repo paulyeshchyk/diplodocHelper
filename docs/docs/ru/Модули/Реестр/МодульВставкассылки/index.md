@@ -8,18 +8,18 @@ family:
 layer:
 ---
 
-|               |                                                                                                                                        |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [2.2-029](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                          |
-| Идентификатор | `link.Paste`                                                                                                                           |
-| Наименование  | Вставка ссылки                                                                                                                         |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                              |
-| Каталог       | [Ссылки](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md#ssylki)                                                                                                                                                                                |
-| Семейство     | [Ссылки](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md#fam-link)                                                                                                                                                                                                                                                                                                                                                                |
-| Расположение  | `src/commands/diplodoc-helper.link.Paste.js`                                                                                           |
-| Точка входа   | `ux_link_paste()` (VS Code), `parseClipboardLink(clipboardText)` (утилита)                                                             |
-| Версия        | `1.54.0`                                                                                                                               |
-| Назначение    | Читает JSON из буфера и вставляет в `.md`-документ готовую ссылку (markdown или HTML) с корректным относительным путём и выбором якоря |
+|               |                                                                                                                                                                                                 |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [2.2-029](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                   |
+| Идентификатор | `link.Paste`                                                                                                                                                                                    |
+| Наименование  | Вставка ссылки                                                                                                                                                                                  |
+| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                        |
+| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya) |
+| Семейство     | [Ссылки](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md#fam-link)       |
+| Расположение  | `src/commands/diplodoc-helper.link.Paste.js`                                                                                                                                                    |
+| Точка входа   | `ux_link_paste()` (VS Code), `parseClipboardLink(clipboardText)` (утилита)                                                                                                                      |
+| Версия        | `1.54.0`                                                                                                                                                                                        |
+| Назначение    | Читает JSON из буфера и вставляет в `.md`-документ готовую ссылку (markdown или HTML) с корректным относительным путём и выбором якоря                                                          |
 
 {: .page-legend }
 
@@ -386,14 +386,14 @@ CLI-команды нет. Модуль — только VS Code.
 
 `link.Paste` — центральный модуль «семейства ссылок». Связан с:
 
-| Модуль                                                             | Роль                                                                                                                                                             |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`link.Copy`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)                 | Кладёт JSON в буфер — **источник данных для `link.Paste`**                                                                                                       |
-| [`link.addAnchor`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)              | Создаёт якоря, которые `link.Paste` потом предлагает в QuickPick                                                                                                 |
-| `extension.js`                                                     | Регистрирует `canPasteMarkdownLink` (вызывает `parseClipboardLink`) — от него зависит видимость `pasteLink`                                                      |
-| `link.utils`                                                       | Дубликаты `extractAnchorsFromMdFile`, `promptAnchorSelection`, `calculateRelativeMdPath` — **своя версия** в `link.Paste`, но `link.utils` используется линтером |
-| [`image.PasteFromClipboard`](../МодульВставкаизображения/index.md) | Другой сценарий вставки — из растрового буфера, не из JSON                                                                                                       |
-| [`image.PasteFromList`](../МодульВставкаизображения/index.md)      | Другой сценарий — QuickPick по всем картинкам проекта                                                                                                            |
+| Модуль                                                                                                                                                                                                     | Роль                                                                                                                                                             |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`link.Copy`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md) | Кладёт JSON в буфер — **источник данных для `link.Paste`**                                                                                                       |
+| [`link.addAnchor`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%94%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%8F%D0%BA%D0%BE%D1%80%D1%8F/index.md)        | Создаёт якоря, которые `link.Paste` потом предлагает в QuickPick                                                                                                 |
+| `extension.js`                                                                                                                                                                                             | Регистрирует `canPasteMarkdownLink` (вызывает `parseClipboardLink`) — от него зависит видимость `pasteLink`                                                      |
+| `link.utils`                                                                                                                                                                                               | Дубликаты `extractAnchorsFromMdFile`, `promptAnchorSelection`, `calculateRelativeMdPath` — **своя версия** в `link.Paste`, но `link.utils` используется линтером |
+| [`image.PasteFromClipboard`](../МодульВставкаизображения/index.md)                                                                                                                                         | Другой сценарий вставки — из растрового буфера, не из JSON                                                                                                       |
+| [`image.PasteFromList`](../МодульВставкаизображения/index.md)                                                                                                                                              | Другой сценарий — QuickPick по всем картинкам проекта                                                                                                            |
 
 **Полный сценарий**:
 

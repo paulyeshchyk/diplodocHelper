@@ -1,4 +1,4 @@
 # CATALOG
 
 - Модули
-  - [Каталог (Capability map)](../Модули/КаталогCapabilitymap/index.md) (9.0 КБ)
+  - [Каталог (Capability map)](../Модули/КаталогCapabilitymap/index.md) (9.9 КБ)

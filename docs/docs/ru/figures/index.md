@@ -22,6 +22,93 @@ sectionType: Page
 <tbody>
 <tr>
   <td class="fig-num">1</td>
+  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.html#…">`), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
+
+Практический смысл: техписатель или читатель видит все иллюстрации в одной таблице с быстрым переходом к исходной статье и полноразмерному изображению. Номера иллюстраций идут в порядке появления в документе — совпадают с нумерацией, которую проставляет `reindexFigures` (отдельный модуль `reindexer/reindexer.figures.js`).
+
+Модуль работает исключительно в `pre-processing` — генерирует `docs/**/figures/index.md` с встроенной HTML-разметкой. Клиентской части нет: переключатель list/grid и лайтбокс подразумеваются разметкой, но требуют внешних скриптов темы (см. «Известные ограничения»).
+
+## Применение
+
+**Когда использовать:** в документации десятки+ иллюстраций, и нужен каталог «все рисунки в одном месте» с превью, номерами и ссылками на исходные статьи.
+
+**Когда НЕ использовать:** 2–3 картинки — хватит обычного списка; нужен только список для вставки — используйте `image.PasteFromList` (не генерирует каталог).
+
+**Альтернативы:**
+- Ручной `figures/index.md` — рассинхронизируется.
+- Только `reindexer.figures` — нумерует, но не собирает каталог.
+
+**Типичный сценарий:** `docs-build.js` → `pre` → `reindexFigures` (нумерация) → `createFigureContent` (`figures` собирает каталог с превью через `sharp`).
+
+## Как это работает
+
+```mermaid
+flowchart TB
+    subgraph md[Исходники]
+        MD[&quot;docs/**/*.md&quot;]
+        IMG[&quot;docs/**/images/*.png&quot;]
+    end
+    subgraph pre[Pre-processing]
+        EXT[&quot;extractorextractFiguresFromFile&quot;]
+        COL[&quot;collectorwalkMdFilesGetFigures&quot;]
+        THUMB[&quot;sharpcreateThumbnail&quot;]
+        WRI[&quot;writerwriteFigureList&quot;]
+    end
+    subgraph out[Выход]
+        IDX[&quot;figures/index.mdtoc.yamlindex.yaml&quot;]
+        THUMBS[&quot;figures/thumbs/*.webp&quot;]
+    end
+    MD --&gt; EXT
+    EXT --&gt; COL
+    COL --&gt; THUMB
+    COL --&gt; WRI
+    IMG -.-&gt; THUMB
+    THUMB --&gt; THUMBS
+    WRI --&gt; IDX
+```
+
+1. **Извлечение.** `extractFiguresFromFile` читает `.md`, находит все ``, ищет ближайшее markdown-изображение **слева** от каждого ``. Возвращает `{ id, caption, imagePath, imageAlt, sourcePath, figureNumber }`, где `figureNumber` вытаскивается из `Рисунок N` / `Figure N` / `Fig. N` в тексте подписи.
+
+2. **Сбор.** `walkMdFilesGetFigures` обходит `langDir`, пропускает `SKIP_DIRS` (`figures`, `contexts`, `helptags`). Собирает плоский массив записей по всем статьям.
+
+3. **Превью.** `processThumbnails` для каждой записи с `imagePath` (не `http:`, не `data:`, не `//`):
+   - резолвит абсолютный путь от директории `.md` + `imagePath`;
+   - проверяет существование через `toExtendedPath` (обход MAX_PATH на Windows);
+   - считает `md5`-хеш относительного пути (первые 12 символов) для имени превью;
+   - через `sharp` ресайзит до ширины 360px с `fit: 'inside'` (без увеличения) и сохраняет `figures/thumbs/_.webp` (quality 80);
+   - пропускает, если превью уже существует;
+   - записывает в `fig.thumbPath` абсолютный URL вида `/ru/figures/thumbs/_.webp`.
+
+4. **Запись.** `writeFigureList` сортирует по `figureNumber` (или алфавитно по `caption`, если номера нет), генерирует `index.md`:
+   - frontmatter `title: Перечень иллюстраций` (`List of figures` для `en`);
+   - переключатель `` (кнопки `Список` / `Сетка`);
+   - `` — по умолчанию видима (`data-view=&quot;list&quot;`);
+   - `` — второй вид того же набора;
+   - каждая запись — `` с номером, названием (ссылка на `article.html#fig-…`) и ``;
+   - `toc.yaml` / `index.yaml` — заголовок и `href`.
+
+### Файлы модуля
+
+| Файл                   | Ответственность                                 |
+| ---------------------- | ----------------------------------------------- |
+| `figures.js`           | `runGeneration(docsRoot)` — оркестратор (async) |
+| `figures.collector.js` | `walkMdFilesGetFigures` — обход `docs/`         |
+| `figures.extractor.js` | `extractFiguresFromFile`, `extractFigureNumber` |
+| `figures.writer.js`    | `writeFigureList` — генерация `index.md`        |
+| `figures.model.js`     | пустой (`module.exports = {}`)                  |
+
+### Ожидаемая разметка в `.md`
+
+```html
+
+
+![Описание](./images/foo.png)
+
+Рисунок 1. Описание</a></td>
+  <td class="fig-preview"><span class="fig-preview-empty">—</span></td>
+</tr>
+<tr>
+  <td class="fig-num">2</td>
   <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-…">`.
 
 Без модуля пришлось бы:
@@ -238,11 +325,6 @@ const figureBlock = buildFigure(relativePath, altText, customId);
 - **`customId`** — `fig-` (не ``, а `fig-`).
 - **`figureBlock`** — `\n\n![alt](url)\n\nalt</a></td>
   <td class="fig-preview"><span class="fig-preview-empty">—</span></td>
-</tr>
-<tr>
-  <td class="fig-num">2</td>
-  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-skrinshot_nastrojki">Скриншот настройки</a></td>
-  <td class="fig-preview"><img data-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" data-full-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" alt="Скриншот настройки" class="js-lightbox-trigger fig-preview-img" loading="lazy" /></td>
 </tr>
 <tr>
   <td class="fig-num">3</td>
@@ -495,90 +577,8 @@ const wrappedText = `${selectedText}`;
 </tr>
 <tr>
   <td class="fig-num">4</td>
-  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.html#…">`), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
-
-Практический смысл: техписатель или читатель видит все иллюстрации в одной таблице с быстрым переходом к исходной статье и полноразмерному изображению. Номера иллюстраций идут в порядке появления в документе — совпадают с нумерацией, которую проставляет `reindexFigures` (отдельный модуль `reindexer/reindexer.figures.js`).
-
-Модуль работает исключительно в `pre-processing` — генерирует `docs/**/figures/index.md` с встроенной HTML-разметкой. Клиентской части нет: переключатель list/grid и лайтбокс подразумеваются разметкой, но требуют внешних скриптов темы (см. «Известные ограничения»).
-
-## Применение
-
-**Когда использовать:** в документации десятки+ иллюстраций, и нужен каталог «все рисунки в одном месте» с превью, номерами и ссылками на исходные статьи.
-
-**Когда НЕ использовать:** 2–3 картинки — хватит обычного списка; нужен только список для вставки — используйте `image.PasteFromList` (не генерирует каталог).
-
-**Альтернативы:**
-- Ручной `figures/index.md` — рассинхронизируется.
-- Только `reindexer.figures` — нумерует, но не собирает каталог.
-
-**Типичный сценарий:** `docs-build.js` → `pre` → `reindexFigures` (нумерация) → `createFigureContent` (`figures` собирает каталог с превью через `sharp`).
-
-## Как это работает
-
-```mermaid
-flowchart TB
-    subgraph md[Исходники]
-        MD[&quot;docs/**/*.md&quot;]
-        IMG[&quot;docs/**/images/*.png&quot;]
-    end
-    subgraph pre[Pre-processing]
-        EXT[&quot;extractorextractFiguresFromFile&quot;]
-        COL[&quot;collectorwalkMdFilesGetFigures&quot;]
-        THUMB[&quot;sharpcreateThumbnail&quot;]
-        WRI[&quot;writerwriteFigureList&quot;]
-    end
-    subgraph out[Выход]
-        IDX[&quot;figures/index.mdtoc.yamlindex.yaml&quot;]
-        THUMBS[&quot;figures/thumbs/*.webp&quot;]
-    end
-    MD --&gt; EXT
-    EXT --&gt; COL
-    COL --&gt; THUMB
-    COL --&gt; WRI
-    IMG -.-&gt; THUMB
-    THUMB --&gt; THUMBS
-    WRI --&gt; IDX
-```
-
-1. **Извлечение.** `extractFiguresFromFile` читает `.md`, находит все ``, ищет ближайшее markdown-изображение **слева** от каждого ``. Возвращает `{ id, caption, imagePath, imageAlt, sourcePath, figureNumber }`, где `figureNumber` вытаскивается из `Рисунок N` / `Figure N` / `Fig. N` в тексте подписи.
-
-2. **Сбор.** `walkMdFilesGetFigures` обходит `langDir`, пропускает `SKIP_DIRS` (`figures`, `contexts`, `helptags`). Собирает плоский массив записей по всем статьям.
-
-3. **Превью.** `processThumbnails` для каждой записи с `imagePath` (не `http:`, не `data:`, не `//`):
-   - резолвит абсолютный путь от директории `.md` + `imagePath`;
-   - проверяет существование через `toExtendedPath` (обход MAX_PATH на Windows);
-   - считает `md5`-хеш относительного пути (первые 12 символов) для имени превью;
-   - через `sharp` ресайзит до ширины 360px с `fit: 'inside'` (без увеличения) и сохраняет `figures/thumbs/_.webp` (quality 80);
-   - пропускает, если превью уже существует;
-   - записывает в `fig.thumbPath` абсолютный URL вида `/ru/figures/thumbs/_.webp`.
-
-4. **Запись.** `writeFigureList` сортирует по `figureNumber` (или алфавитно по `caption`, если номера нет), генерирует `index.md`:
-   - frontmatter `title: Перечень иллюстраций` (`List of figures` для `en`);
-   - переключатель `` (кнопки `Список` / `Сетка`);
-   - `` — по умолчанию видима (`data-view=&quot;list&quot;`);
-   - `` — второй вид того же набора;
-   - каждая запись — `` с номером, названием (ссылка на `article.html#fig-…`) и ``;
-   - `toc.yaml` / `index.yaml` — заголовок и `href`.
-
-### Файлы модуля
-
-| Файл                   | Ответственность                                 |
-| ---------------------- | ----------------------------------------------- |
-| `figures.js`           | `runGeneration(docsRoot)` — оркестратор (async) |
-| `figures.collector.js` | `walkMdFilesGetFigures` — обход `docs/`         |
-| `figures.extractor.js` | `extractFiguresFromFile`, `extractFigureNumber` |
-| `figures.writer.js`    | `writeFigureList` — генерация `index.md`        |
-| `figures.model.js`     | пустой (`module.exports = {}`)                  |
-
-### Ожидаемая разметка в `.md`
-
-```html
-
-
-![Описание](./images/foo.png)
-
-Рисунок 1. Описание</a></td>
-  <td class="fig-preview"><span class="fig-preview-empty">—</span></td>
+  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-skrinshot_nastrojki">Скриншот настройки</a></td>
+  <td class="fig-preview"><img data-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" data-full-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" alt="Скриншот настройки" class="js-lightbox-trigger fig-preview-img" loading="lazy" /></td>
 </tr>
 <tr>
   <td class="fig-num">5</td>
@@ -765,7 +765,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -786,7 +786,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -805,7 +805,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -824,7 +824,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -843,7 +843,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -862,7 +862,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -888,7 +888,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -909,7 +909,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -928,7 +928,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -947,7 +947,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -966,7 +966,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -985,7 +985,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -1237,7 +1237,7 @@ KI-221
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -1256,7 +1256,7 @@ KI-222
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -1273,7 +1273,7 @@ KI-223
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -1290,7 +1290,7 @@ KI-224
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -1307,7 +1307,7 @@ KI-225
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -1324,7 +1324,7 @@ KI-226
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -1348,7 +1348,7 @@ KI-221
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -1367,7 +1367,7 @@ KI-222
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -1384,7 +1384,7 @@ KI-223
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -1401,7 +1401,7 @@ KI-224
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -1418,7 +1418,7 @@ KI-225
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -1435,7 +1435,7 @@ KI-226
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -1462,7 +1462,7 @@ KI-221
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -1481,7 +1481,7 @@ KI-222
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -1498,7 +1498,7 @@ KI-223
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -1515,7 +1515,7 @@ KI-224
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -1532,7 +1532,7 @@ KI-225
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -1549,7 +1549,7 @@ KI-226
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -1573,7 +1573,7 @@ KI-221
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -1592,7 +1592,7 @@ KI-222
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -1609,7 +1609,7 @@ KI-223
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -1626,7 +1626,7 @@ KI-224
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -1643,7 +1643,7 @@ KI-225
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -1660,7 +1660,7 @@ KI-226
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -1681,6 +1681,95 @@ const wrappedText = `${selectedText}`;
   <div class="fig-grid-preview"><span class="fig-grid-placeholder">—</span></div>
   <div class="fig-grid-meta">
     <span class="fig-grid-num">1</span>
+    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.html#…">`), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
+
+Практический смысл: техписатель или читатель видит все иллюстрации в одной таблице с быстрым переходом к исходной статье и полноразмерному изображению. Номера иллюстраций идут в порядке появления в документе — совпадают с нумерацией, которую проставляет `reindexFigures` (отдельный модуль `reindexer/reindexer.figures.js`).
+
+Модуль работает исключительно в `pre-processing` — генерирует `docs/**/figures/index.md` с встроенной HTML-разметкой. Клиентской части нет: переключатель list/grid и лайтбокс подразумеваются разметкой, но требуют внешних скриптов темы (см. «Известные ограничения»).
+
+## Применение
+
+**Когда использовать:** в документации десятки+ иллюстраций, и нужен каталог «все рисунки в одном месте» с превью, номерами и ссылками на исходные статьи.
+
+**Когда НЕ использовать:** 2–3 картинки — хватит обычного списка; нужен только список для вставки — используйте `image.PasteFromList` (не генерирует каталог).
+
+**Альтернативы:**
+- Ручной `figures/index.md` — рассинхронизируется.
+- Только `reindexer.figures` — нумерует, но не собирает каталог.
+
+**Типичный сценарий:** `docs-build.js` → `pre` → `reindexFigures` (нумерация) → `createFigureContent` (`figures` собирает каталог с превью через `sharp`).
+
+## Как это работает
+
+```mermaid
+flowchart TB
+    subgraph md[Исходники]
+        MD[&quot;docs/**/*.md&quot;]
+        IMG[&quot;docs/**/images/*.png&quot;]
+    end
+    subgraph pre[Pre-processing]
+        EXT[&quot;extractorextractFiguresFromFile&quot;]
+        COL[&quot;collectorwalkMdFilesGetFigures&quot;]
+        THUMB[&quot;sharpcreateThumbnail&quot;]
+        WRI[&quot;writerwriteFigureList&quot;]
+    end
+    subgraph out[Выход]
+        IDX[&quot;figures/index.mdtoc.yamlindex.yaml&quot;]
+        THUMBS[&quot;figures/thumbs/*.webp&quot;]
+    end
+    MD --&gt; EXT
+    EXT --&gt; COL
+    COL --&gt; THUMB
+    COL --&gt; WRI
+    IMG -.-&gt; THUMB
+    THUMB --&gt; THUMBS
+    WRI --&gt; IDX
+```
+
+1. **Извлечение.** `extractFiguresFromFile` читает `.md`, находит все ``, ищет ближайшее markdown-изображение **слева** от каждого ``. Возвращает `{ id, caption, imagePath, imageAlt, sourcePath, figureNumber }`, где `figureNumber` вытаскивается из `Рисунок N` / `Figure N` / `Fig. N` в тексте подписи.
+
+2. **Сбор.** `walkMdFilesGetFigures` обходит `langDir`, пропускает `SKIP_DIRS` (`figures`, `contexts`, `helptags`). Собирает плоский массив записей по всем статьям.
+
+3. **Превью.** `processThumbnails` для каждой записи с `imagePath` (не `http:`, не `data:`, не `//`):
+   - резолвит абсолютный путь от директории `.md` + `imagePath`;
+   - проверяет существование через `toExtendedPath` (обход MAX_PATH на Windows);
+   - считает `md5`-хеш относительного пути (первые 12 символов) для имени превью;
+   - через `sharp` ресайзит до ширины 360px с `fit: 'inside'` (без увеличения) и сохраняет `figures/thumbs/_.webp` (quality 80);
+   - пропускает, если превью уже существует;
+   - записывает в `fig.thumbPath` абсолютный URL вида `/ru/figures/thumbs/_.webp`.
+
+4. **Запись.** `writeFigureList` сортирует по `figureNumber` (или алфавитно по `caption`, если номера нет), генерирует `index.md`:
+   - frontmatter `title: Перечень иллюстраций` (`List of figures` для `en`);
+   - переключатель `` (кнопки `Список` / `Сетка`);
+   - `` — по умолчанию видима (`data-view=&quot;list&quot;`);
+   - `` — второй вид того же набора;
+   - каждая запись — `` с номером, названием (ссылка на `article.html#fig-…`) и ``;
+   - `toc.yaml` / `index.yaml` — заголовок и `href`.
+
+### Файлы модуля
+
+| Файл                   | Ответственность                                 |
+| ---------------------- | ----------------------------------------------- |
+| `figures.js`           | `runGeneration(docsRoot)` — оркестратор (async) |
+| `figures.collector.js` | `walkMdFilesGetFigures` — обход `docs/`         |
+| `figures.extractor.js` | `extractFiguresFromFile`, `extractFigureNumber` |
+| `figures.writer.js`    | `writeFigureList` — генерация `index.md`        |
+| `figures.model.js`     | пустой (`module.exports = {}`)                  |
+
+### Ожидаемая разметка в `.md`
+
+```html
+
+
+![Описание](./images/foo.png)
+
+Рисунок 1. Описание</a>
+  </div>
+</div>
+<div class="fig-grid-card">
+  <div class="fig-grid-preview"><span class="fig-grid-placeholder">—</span></div>
+  <div class="fig-grid-meta">
+    <span class="fig-grid-num">2</span>
     <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-…">`.
 
 Без модуля пришлось бы:
@@ -1896,13 +1985,6 @@ const figureBlock = buildFigure(relativePath, altText, customId);
 - **`altText`** — `userInput.trim()`, **не** `cleanName`. То есть alt в markdown-ссылке — с кириллицей и пробелами (`Привет Мир!`), а `id` — на латинице (`fig-privet_mir`). См. «Известные ограничения».
 - **`customId`** — `fig-` (не ``, а `fig-`).
 - **`figureBlock`** — `\n\n![alt](url)\n\nalt</a>
-  </div>
-</div>
-<div class="fig-grid-card">
-  <div class="fig-grid-preview"><img data-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" data-full-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" alt="Скриншот настройки" class="js-lightbox-trigger fig-grid-img" loading="lazy" /></div>
-  <div class="fig-grid-meta">
-    <span class="fig-grid-num">2</span>
-    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-skrinshot_nastrojki">Скриншот настройки</a>
   </div>
 </div>
 <div class="fig-grid-card">
@@ -2157,92 +2239,10 @@ const wrappedText = `${selectedText}`;
   </div>
 </div>
 <div class="fig-grid-card">
-  <div class="fig-grid-preview"><span class="fig-grid-placeholder">—</span></div>
+  <div class="fig-grid-preview"><img data-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" data-full-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" alt="Скриншот настройки" class="js-lightbox-trigger fig-grid-img" loading="lazy" /></div>
   <div class="fig-grid-meta">
     <span class="fig-grid-num">4</span>
-    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.html#…">`), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
-
-Практический смысл: техписатель или читатель видит все иллюстрации в одной таблице с быстрым переходом к исходной статье и полноразмерному изображению. Номера иллюстраций идут в порядке появления в документе — совпадают с нумерацией, которую проставляет `reindexFigures` (отдельный модуль `reindexer/reindexer.figures.js`).
-
-Модуль работает исключительно в `pre-processing` — генерирует `docs/**/figures/index.md` с встроенной HTML-разметкой. Клиентской части нет: переключатель list/grid и лайтбокс подразумеваются разметкой, но требуют внешних скриптов темы (см. «Известные ограничения»).
-
-## Применение
-
-**Когда использовать:** в документации десятки+ иллюстраций, и нужен каталог «все рисунки в одном месте» с превью, номерами и ссылками на исходные статьи.
-
-**Когда НЕ использовать:** 2–3 картинки — хватит обычного списка; нужен только список для вставки — используйте `image.PasteFromList` (не генерирует каталог).
-
-**Альтернативы:**
-- Ручной `figures/index.md` — рассинхронизируется.
-- Только `reindexer.figures` — нумерует, но не собирает каталог.
-
-**Типичный сценарий:** `docs-build.js` → `pre` → `reindexFigures` (нумерация) → `createFigureContent` (`figures` собирает каталог с превью через `sharp`).
-
-## Как это работает
-
-```mermaid
-flowchart TB
-    subgraph md[Исходники]
-        MD[&quot;docs/**/*.md&quot;]
-        IMG[&quot;docs/**/images/*.png&quot;]
-    end
-    subgraph pre[Pre-processing]
-        EXT[&quot;extractorextractFiguresFromFile&quot;]
-        COL[&quot;collectorwalkMdFilesGetFigures&quot;]
-        THUMB[&quot;sharpcreateThumbnail&quot;]
-        WRI[&quot;writerwriteFigureList&quot;]
-    end
-    subgraph out[Выход]
-        IDX[&quot;figures/index.mdtoc.yamlindex.yaml&quot;]
-        THUMBS[&quot;figures/thumbs/*.webp&quot;]
-    end
-    MD --&gt; EXT
-    EXT --&gt; COL
-    COL --&gt; THUMB
-    COL --&gt; WRI
-    IMG -.-&gt; THUMB
-    THUMB --&gt; THUMBS
-    WRI --&gt; IDX
-```
-
-1. **Извлечение.** `extractFiguresFromFile` читает `.md`, находит все ``, ищет ближайшее markdown-изображение **слева** от каждого ``. Возвращает `{ id, caption, imagePath, imageAlt, sourcePath, figureNumber }`, где `figureNumber` вытаскивается из `Рисунок N` / `Figure N` / `Fig. N` в тексте подписи.
-
-2. **Сбор.** `walkMdFilesGetFigures` обходит `langDir`, пропускает `SKIP_DIRS` (`figures`, `contexts`, `helptags`). Собирает плоский массив записей по всем статьям.
-
-3. **Превью.** `processThumbnails` для каждой записи с `imagePath` (не `http:`, не `data:`, не `//`):
-   - резолвит абсолютный путь от директории `.md` + `imagePath`;
-   - проверяет существование через `toExtendedPath` (обход MAX_PATH на Windows);
-   - считает `md5`-хеш относительного пути (первые 12 символов) для имени превью;
-   - через `sharp` ресайзит до ширины 360px с `fit: 'inside'` (без увеличения) и сохраняет `figures/thumbs/_.webp` (quality 80);
-   - пропускает, если превью уже существует;
-   - записывает в `fig.thumbPath` абсолютный URL вида `/ru/figures/thumbs/_.webp`.
-
-4. **Запись.** `writeFigureList` сортирует по `figureNumber` (или алфавитно по `caption`, если номера нет), генерирует `index.md`:
-   - frontmatter `title: Перечень иллюстраций` (`List of figures` для `en`);
-   - переключатель `` (кнопки `Список` / `Сетка`);
-   - `` — по умолчанию видима (`data-view=&quot;list&quot;`);
-   - `` — второй вид того же набора;
-   - каждая запись — `` с номером, названием (ссылка на `article.html#fig-…`) и ``;
-   - `toc.yaml` / `index.yaml` — заголовок и `href`.
-
-### Файлы модуля
-
-| Файл                   | Ответственность                                 |
-| ---------------------- | ----------------------------------------------- |
-| `figures.js`           | `runGeneration(docsRoot)` — оркестратор (async) |
-| `figures.collector.js` | `walkMdFilesGetFigures` — обход `docs/`         |
-| `figures.extractor.js` | `extractFiguresFromFile`, `extractFigureNumber` |
-| `figures.writer.js`    | `writeFigureList` — генерация `index.md`        |
-| `figures.model.js`     | пустой (`module.exports = {}`)                  |
-
-### Ожидаемая разметка в `.md`
-
-```html
-
-
-![Описание](./images/foo.png)
-
-Рисунок 1. Описание</a>
+    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-skrinshot_nastrojki">Скриншот настройки</a>
   </div>
 </div>
 <div class="fig-grid-card">
@@ -2433,7 +2433,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -2454,7 +2454,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -2473,7 +2473,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -2492,7 +2492,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -2511,7 +2511,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -2530,7 +2530,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -2558,7 +2558,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -2579,7 +2579,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -2598,7 +2598,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -2617,7 +2617,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -2636,7 +2636,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -2655,7 +2655,7 @@ unknown
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -2909,7 +2909,7 @@ KI-221
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -2928,7 +2928,7 @@ KI-222
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -2945,7 +2945,7 @@ KI-223
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -2962,7 +2962,7 @@ KI-224
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -2979,7 +2979,7 @@ KI-225
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -2996,7 +2996,7 @@ KI-226
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -3022,7 +3022,7 @@ KI-221
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -3041,7 +3041,7 @@ KI-222
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -3058,7 +3058,7 @@ KI-223
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -3075,7 +3075,7 @@ KI-224
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -3092,7 +3092,7 @@ KI-225
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -3109,7 +3109,7 @@ KI-226
 |
 unknown
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -3136,7 +3136,7 @@ KI-221
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -3155,7 +3155,7 @@ KI-222
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -3172,7 +3172,7 @@ KI-223
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -3189,7 +3189,7 @@ KI-224
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -3206,7 +3206,7 @@ KI-225
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -3223,7 +3223,7 @@ KI-226
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |
@@ -3249,7 +3249,7 @@ KI-221
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Класс `diplodocanchor` — стилизация?
 |
@@ -3268,7 +3268,7 @@ KI-222
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `isInsideHtmlTag` / `isInsideMarkdownLink` — только на текущей строке
 |
@@ -3285,7 +3285,7 @@ KI-223
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Транслитерация теряет смысл в некоторых языках
 |
@@ -3302,7 +3302,7 @@ KI-224
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `promptForAnchorId` — валидация без проверки на занятость
 |
@@ -3319,7 +3319,7 @@ KI-225
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 Усечённая поддержка `-` в `id`
 |
@@ -3336,7 +3336,7 @@ KI-226
 |
 major
 |
-[`МодульДобавлениеякоря`](../МодульДобавлениеякоря/index.md)
+[`МодульДобавлениеякоря`](../Реестр/МодульДобавлениеякоря/index.md)
 |
 `wrappedText` не экранирует `selectedText`
 |

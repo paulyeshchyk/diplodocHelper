@@ -10,11 +10,11 @@ layer:
 
 |               |                                                                                                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [5.1-038](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                     |
+| ID            | [5.1-038](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                     |
 | Идентификатор | `context-tags.client`                                                                                                                                                                                                                                             |
 | Наименование  | Клиент контекстных тегов                                                                                                                                                                                                                                          |
-| Слой          | [Клиентский runtime](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9runtime/index.md#naznachenie)                                                                                                                                                                             |
-| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya)                                                                                                                                                                                                                                                                  |
+| Слой          | [Клиентский runtime](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9runtime/index.md#naznachenie)                                                                                        |
+| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya)                                                                   |
 | Семейство     | [Контекстные теги](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md#fam-context-tags) |
 | Расположение  | `src/plugins/context-tags/context-tags.client.js` (инжектится через [`context-tags`](../МодульКонтекстныеТеги/index.md))                                                                                                                                          |
 | Точка входа   | IIFE на каждой HTML-странице с `window.__CONTEXT_ITEMS__`                                                                                                                                                                                                         |
@@ -215,7 +215,7 @@ const contextItems = contexts.map(c => {
 
 ```js
 const slug = slugify_filename(term);
-// slugify_filename: replace(/[^7]/gu, '_')
+// slugify_filename: replace(/[^12]/gu, '_')
 ```
 
 `slugify_filename` сохраняет кириллицу (`\p{L}` — все буквы Unicode). То есть `пост-обработка` → `пост-обработка` (без изменений). `encodeURIComponent` кодирует в `%D0%BF…`. Файл `contexts/пост-обработка.md` → `contexts/пост-обработка.html`. `href` с `%D0%BF…` — работает (браузер декодирует).

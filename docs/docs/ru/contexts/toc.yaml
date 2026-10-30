@@ -89,6 +89,8 @@ items:
     href: footnotes.md
   - name: gantt
     href: gantt.md
+  - name: generator
+    href: generator.md
   - name: gost
     href: gost.md
   - name: gosts
@@ -121,6 +123,8 @@ items:
     href: infrastructure.md
   - name: installer
     href: installer.md
+  - name: json
+    href: json.md
   - name: known-issues
     href: known-issues.md
   - name: layer
@@ -145,6 +149,8 @@ items:
     href: manifest.md
   - name: markdown
     href: markdown.md
+  - name: mermaid
+    href: mermaid.md
   - name: meta
     href: meta.md
   - name: moderation
@@ -179,6 +185,8 @@ items:
     href: roadmap.md
   - name: roadmap.patcher
     href: roadmap.patcher.md
+  - name: schema
+    href: schema.md
   - name: section
     href: section.md
   - name: section.create
@@ -199,6 +207,8 @@ items:
     href: smart.delete.md
   - name: sqlite
     href: sqlite.md
+  - name: table
+    href: table.md
   - name: term
     href: term.md
   - name: terms
@@ -207,13 +217,15 @@ items:
     href: terms.client.md
   - name: toccleanmode
     href: toccleanmode.md
+  - name: treemap
+    href: treemap.md
   - name: ui
     href: ui.md
   - name: vscode-ui
     href: vscode-ui.md
   - name: yaml
     href: yaml.md
-  - name: "Прочее (81 терм.)"
+  - name: "Прочее (87 терм.)"
     href: prochee.md
 navigation:
   logo:

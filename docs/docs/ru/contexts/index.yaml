@@ -132,6 +132,9 @@ links:
 - title: gantt
   description: "Rank: 1"
   href: gantt.md
+- title: generator
+  description: "Rank: 1"
+  href: generator.md
 - title: gost
   description: "Rank: 2"
   href: gost.md
@@ -180,6 +183,9 @@ links:
 - title: installer
   description: "Rank: 1"
   href: installer.md
+- title: json
+  description: "Rank: 1"
+  href: json.md
 - title: known-issues
   description: "Rank: 1"
   href: known-issues.md
@@ -214,8 +220,11 @@ links:
   description: "Rank: 1"
   href: manifest.md
 - title: markdown
-  description: "Rank: 21"
+  description: "Rank: 22"
   href: markdown.md
+- title: mermaid
+  description: "Rank: 1"
+  href: mermaid.md
 - title: meta
   description: "Rank: 7"
   href: meta.md
@@ -238,7 +247,7 @@ links:
   description: "Rank: 15"
   href: post-processing.md
 - title: pre-processing
-  description: "Rank: 21"
+  description: "Rank: 22"
   href: pre-processing.md
 - title: presetsstat
   description: "Rank: 1"
@@ -267,6 +276,9 @@ links:
 - title: roadmap.patcher
   description: "Rank: 1"
   href: roadmap.patcher.md
+- title: schema
+  description: "Rank: 1"
+  href: schema.md
 - title: section
   description: "Rank: 8"
   href: section.md
@@ -297,6 +309,9 @@ links:
 - title: sqlite
   description: "Rank: 1"
   href: sqlite.md
+- title: table
+  description: "Rank: 1"
+  href: table.md
 - title: term
   description: "Rank: 3"
   href: term.md
@@ -309,6 +324,9 @@ links:
 - title: toccleanmode
   description: "Rank: 1"
   href: toccleanmode.md
+- title: treemap
+  description: "Rank: 1"
+  href: treemap.md
 - title: ui
   description: "Rank: 2"
   href: ui.md
@@ -318,6 +336,6 @@ links:
 - title: yaml
   description: "Rank: 14"
   href: yaml.md
-- title: "Прочее (81 терм.)"
+- title: "Прочее (87 терм.)"
   description: "Контексты, встречающиеся реже 3 раз"
   href: prochee.md

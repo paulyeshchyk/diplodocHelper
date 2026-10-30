@@ -10,7 +10,7 @@ layer:
 
 |               |                                                                                                                                                                 |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [1.2-039](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                   |
+| ID            | [1.2-039](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                   |
 | Идентификатор | `file.Delete`                                                                                                                                                   |
 | Наименование  | Удаление файла                                                                                                                                                  |
 | Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie) / [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie) |
@@ -121,7 +121,7 @@ async function ux_file_delete(uri) {
 
 1. `allMdFiles = await findFiles(projectRoot, '.md')` — все `.md` в языке (рекурсивно, кроме папок с `.` в имени).
 2. Для каждого `filePath`, кроме **самого** `targetFilePath`:
-   - читает содержимое, парсит `parseMarkdownLinks(content)` (regex `(!?)\[([^30]]*)\]\(([^31]+)\)`);
+   - читает содержимое, парсит `parseMarkdownLinks(content)` (regex `(!?)\[([^29]]*)\]\(([^30]+)\)`);
    - для каждой ссылки:
      - `isExternalLink` → пропуск (`http://`, `#`, `mailto:`, `/`);
      - `splitMdPathQueryHash(rawPath)` → `pathPart` (без `?query#hash`);

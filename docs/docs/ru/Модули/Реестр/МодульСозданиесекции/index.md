@@ -10,7 +10,7 @@ layer:
 
 |               |                                                                                                                                                                 |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [1.1-023](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                   |
+| ID            | [1.1-023](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                   |
 | Идентификатор | `section.Create`                                                                                                                                                |
 | Наименование  | Создание секции                                                                                                                                                 |
 | Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie) / [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie) |
@@ -146,7 +146,7 @@ function isValidName(name) {
 }
 ```
 
-То есть проверяется только непустота и длина. Спецсимволы (`<`, `>`, `:`, `"`, `/`, `\`, `|`, `?`, `*`) **не** отсеиваются — они попадут в `title`, `pureTitle`, а в имени папки `TEMPLATE_FOLDER_NAME` их вырежет (`replace(/[^29]/g, '')`). См. «Известные ограничения».
+То есть проверяется только непустота и длина. Спецсимволы (`<`, `>`, `:`, `"`, `/`, `\`, `|`, `?`, `*`) **не** отсеиваются — они попадут в `title`, `pureTitle`, а в имени папки `TEMPLATE_FOLDER_NAME` их вырежет (`replace(/[^28]/g, '')`). См. «Известные ограничения».
 
 Если `undefined` — выход.
 
@@ -192,7 +192,7 @@ if (!folderResult) return;
 `createSectionFolder` (из `diplodoc.flow.js`):
 
 1. `folderName = TEMPLATE_FOLDER_NAME(sectionType, sectionName, sectionIndex)` — по правилам:
-   - `sectionType.value` + `sectionIndex` + `'.'` + `sectionName.replace(/[^29]/g, '')`;
+   - `sectionType.value` + `sectionIndex` + `'.'` + `sectionName.replace(/[^28]/g, '')`;
    - если `sectionType.value` нет — `sectionIndex + '.' + name`;
    - если `sectionIndex` нет — `sectionType.value + '.' + name`;
    - если ничего нет — `name`.

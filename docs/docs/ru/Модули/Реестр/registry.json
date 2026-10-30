@@ -475,5 +475,14 @@
     "status": "active",
     "catalog": "comments",
     "family": "comments"
+  },
+  {
+    "id": "8.2-054",
+    "module": "json-to-md",
+    "folder": "src/plugins/json-to-md",
+    "layer": "pre-processing",
+    "status": "active",
+    "catalog": "Data representation",
+    "family": "Generators"
   }
 ]

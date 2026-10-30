@@ -1,6 +1,6 @@
 #|
 || **ID** | **Тип** | **Модуль** | **Кратко** | **Подробности** ||
-|| <br>**severity: critical** {.cell-align-top-left} | > | > | > | > ||
+|| <br>**Severity: critical** {.cell-align-top-left} | > | > | > | > ||
 ||
 KI-004
 |
@@ -26,7 +26,7 @@ section.Rename / reindexer.directories — возврат старого име�
 {% endcut %}
 ||
 || _Всего для critical: **1**_ <br><br> {.cell-align-top-left} | > | > | > | > ||
-|| <br>**severity: major** {.cell-align-top-left} | > | > | > | > ||
+|| <br>**Severity: major** {.cell-align-top-left} | > | > | > | > ||
 ||
 KI-010
 |
@@ -11798,7 +11798,7 @@ document.querySelectorAll('.footnote-ref a[href^="#fn"]').forEach(function (link
 {% endcut %}
 ||
 || _Всего для major: **569**_ <br><br> {.cell-align-top-left} | > | > | > | > ||
-|| <br>**severity: minor** {.cell-align-top-left} | > | > | > | > ||
+|| <br>**Severity: minor** {.cell-align-top-left} | > | > | > | > ||
 ||
 KI-028
 |

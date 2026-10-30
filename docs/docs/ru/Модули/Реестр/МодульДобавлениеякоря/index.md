@@ -10,7 +10,7 @@ layer:
 
 |               |                                                                                                               |
 | ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [2.1-028](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
+| ID            | [2.1-028](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
 | Идентификатор | `link.addAnchor`                                                                                              |
 | Наименование  | Добавление якоря                                                                                              |
 | Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                     |
@@ -248,7 +248,7 @@ async function promptForAnchorId() {
             if (!value || value.trim().length === 0) {
                 return translate(nls_ts.plugin.link.addAnchor.input.error.empty);
             }
-            if (/[^2]/.test(value)) {
+            if (/[^22]/.test(value)) {
                 return translate(nls_ts.plugin.link.addAnchor.input.error.invalidChars);
             }
             return null;
@@ -285,7 +285,7 @@ if (!sanitizedId) {
 
 1. `transliterate(text)` — кириллица → латиница (`diplodocTransliterate`).
 2. `.toLowerCase()`.
-3. `replace(/[^3]+/g, '_')` — всё, что не латиница/цифра, → `_`.
+3. `replace(/[^23]+/g, '_')` — всё, что не латиница/цифра, → `_`.
 4. `replace(/_+/g, '_')` — схлопывание `__` в `_`.
 5. `replace(/^_+|_+$/g, '')` — трим подчёркиваний.
 
@@ -404,7 +404,7 @@ CLI-команды нет. Модуль — только VS Code.
 'diplodoc-helper.link.addAnchor': ux_add_anchor,
 ```
 
-С `link.utils` (`extractAnchorsFromMdFile` в `link.Paste`) — **не** пересекается напрямую, но логически связан: если пользователь создал якорь через `addAnchor`, `extractAnchorsFromMdFile` его **найдёт** (через `idRegex = /\bid\s*=\s*(["']?)([^4]+)\1/gi`), и `link.Paste` предложит его в QuickPick при выборе якоря для ссылки.
+С `link.utils` (`extractAnchorsFromMdFile` в `link.Paste`) — **не** пересекается напрямую, но логически связан: если пользователь создал якорь через `addAnchor`, `extractAnchorsFromMdFile` его **найдёт** (через `idRegex = /\bid\s*=\s*(["']?)([^24]+)\1/gi`), и `link.Paste` предложит его в QuickPick при выборе якоря для ссылки.
 
 То есть:
 

@@ -10,7 +10,7 @@ layer:
 
 |               |                                                                                                                                             |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [5.1-035](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                               |
+| ID            | [5.1-035](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                               |
 | Идентификатор | `gosts.client`                                                                                                                              |
 | Наименование  | Клиент ГОСТов                                                                                                                               |
 | Слой          | [Клиентский runtime](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9runtime/index.md#naznachenie)                                                         |
@@ -209,7 +209,7 @@ for (const type of sortedTypes) {
     html += `<tr class="gost-group-header"><td colspan="5">${esc(type)}</td></tr>`;
 
     for (const item of items) {
-        const anchorId = item.anchorId || ('gost-' + (item.code || '').replace(/[^6]/g, '_').toLowerCase());
+        const anchorId = item.anchorId || ('gost-' + (item.code || '').replace(/[^4]/g, '_').toLowerCase());
         const isOpen = state.openCardId === anchorId;
         const isTarget = currentHash === anchorId && state.flashedHash !== currentHash ? 'gost-flash' : '';
 
@@ -306,7 +306,7 @@ if (typeof MutationObserver !== 'undefined' && document.body) {
 
 `window.__GOSTS_DATA__ = [{ code, type, title, date, status, description, anchorId? }, ...]`.
 
-`anchorId` — предвычисленный в [`gosts.injector`](../МодульГОСТы/index.md) (`gost-${slugify_latin_alphanumeric(code)}`). Если его нет (старый `data.js`), клиент вычисляет fallback (`'gost-' + code.replace(/[^6]/g, '_').toLowerCase()`), но это даёт **другой** результат для кириллицы — расхождение с `gost.Insert` (см. [`gosts`](../МодульГОСТы/index.md) — bug #2).
+`anchorId` — предвычисленный в [`gosts.injector`](../МодульГОСТы/index.md) (`gost-${slugify_latin_alphanumeric(code)}`). Если его нет (старый `data.js`), клиент вычисляет fallback (`'gost-' + code.replace(/[^4]/g, '_').toLowerCase()`), но это даёт **другой** результат для кириллицы — расхождение с `gost.Insert` (см. [`gosts`](../МодульГОСТы/index.md) — bug #2).
 
 ## Режимы работы
 

@@ -1,78 +1,78 @@
 title: Семейство (family)
 href: index.yaml
 items:
-  - name: Семейство. Ссылки
+  - name: Ссылки
     href: СемействоСсылки/index.md
     include:
       path: СемействоСсылки/toc.yaml
       mode: link
-  - name: Семейство. Аббревиатуры
+  - name: Аббревиатуры
     href: СемействоАббревиатуры/index.md
     include:
       path: СемействоАббревиатуры/toc.yaml
       mode: link
-  - name: Семейство. Термины
+  - name: Термины
     href: СемействоТермины/index.md
     include:
       path: СемействоТермины/toc.yaml
       mode: link
-  - name: Семейство. ГОСТы
+  - name: ГОСТы
     href: СемействоГОСТы/index.md
     include:
       path: СемействоГОСТы/toc.yaml
       mode: link
-  - name: Семейство. Контекстные теги
+  - name: Контекстные теги
     href: СемействоКонтекстныетеги/index.md
     include:
       path: СемействоКонтекстныетеги/toc.yaml
       mode: link
-  - name: Семейство. Дорожная карта
+  - name: Дорожная карта
     href: СемействоДорожнаякарта/index.md
     include:
       path: СемействоДорожнаякарта/toc.yaml
       mode: link
-  - name: Семейство. Сноски
+  - name: Сноски
     href: СемействоСноски/index.md
     include:
       path: СемействоСноски/toc.yaml
       mode: link
-  - name: Семейство. Структура
+  - name: Структура
     href: СемействоСтруктура/index.md
     include:
       path: СемействоСтруктура/toc.yaml
       mode: link
-  - name: Семейство. Иллюстрации
+  - name: Иллюстрации
     href: СемействоИллюстрации/index.md
     include:
       path: СемействоИллюстрации/toc.yaml
       mode: link
-  - name: Семейство. Контексты
+  - name: Контексты
     href: СемействоКонтексты/index.md
     include:
       path: СемействоКонтексты/toc.yaml
       mode: link
-  - name: Семейство. Helptags
+  - name: Helptags
     href: СемействоHelptags/index.md
     include:
       path: СемействоHelptags/toc.yaml
       mode: link
-  - name: Семейство. Отчёты
-    href: СемействоОтчёты/index.md
+  - name: Комментарии
+    href: СемействоКомментариипользователей/index.md
     include:
-      path: СемействоОтчёты/toc.yaml
+      path: СемействоКомментариипользователей/toc.yaml
       mode: link
-  - name: Семейство. Линтеры
+  - name: Линтеры
     href: СемействоЛинтеры/index.md
     include:
       path: СемействоЛинтеры/toc.yaml
       mode: link
-  - name: Семейство. Инфраструктура
+  - name: Инфраструктура
     href: СемействоИнфраструктура/index.md
     include:
       path: СемействоИнфраструктура/toc.yaml
       mode: link
-  - name: Семейство. Комментарии пользователей
-    href: СемействоКомментариипользователей/index.md
+  - name: Семейство. JSON-генераторы
+    href: СемействоJSONгенераторы/index.md
     include:
-      path: СемействоКомментариипользователей/toc.yaml
+      path: СемействоJSONгенераторы/toc.yaml
       mode: link

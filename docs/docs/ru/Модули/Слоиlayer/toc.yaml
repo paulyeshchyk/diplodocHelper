@@ -1,42 +1,42 @@
 title: Слои (layer)
 href: index.yaml
 items:
-  - name: Слой. CLI
+  - name: CLI
     href: СлойCLI/index.md
     include:
       path: СлойCLI/toc.yaml
       mode: link
-  - name: Слой. Клиентский runtime
+  - name: Клиентский runtime
     href: СлойКлиентскийruntime/index.md
     include:
       path: СлойКлиентскийruntime/toc.yaml
       mode: link
-  - name: Слой. Post-processing
+  - name: Post-processing
     href: СлойPostprocessing/index.md
     include:
       path: СлойPostprocessing/toc.yaml
       mode: link
-  - name: Слой. Pre-processing
+  - name: Pre-processing
     href: СлойPreprocessing/index.md
     include:
       path: СлойPreprocessing/toc.yaml
       mode: link
-  - name: Слой. Общее ядро
+  - name: Общее ядро
     href: СлойОбщееядро/index.md
     include:
       path: СлойОбщееядро/toc.yaml
       mode: link
-  - name: Слой. VS Code UI
+  - name: VS Code UI
     href: СлойVSCodeUI/index.md
     include:
       path: СлойVSCodeUI/toc.yaml
       mode: link
-  - name: Слой. Клиентский runtime
+  - name: Клиентский runtime
     href: СлойКлиентскийruntime/index.md
     include:
       path: СлойКлиентскийruntime/toc.yaml
       mode: link
-  - name: Слой. Build
+  - name: Build
     href: СлойBuild/index.md
     include:
       path: СлойBuild/toc.yaml

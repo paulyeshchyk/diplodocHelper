@@ -10,7 +10,7 @@ layer:
 
 |               |                                                                                                                                                                                                     |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [7.1-021](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                       |
+| ID            | [7.1-021](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                       |
 | Идентификатор | `linter.terms`                                                                                                                                                                                      |
 | Наименование  | Линтер терминов                                                                                                                                                                                     |
 | Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                                                                         |
@@ -89,7 +89,7 @@ flowchart TB
      - пропускаются папки, начинающиеся с `_` или `.`;
      - для каждого `.md` — `lintFile(fullPath)`.
 4. **`lintFile`**:
-   - regex `<abbr(\b[^14]*\bclass\s*=\s*["'][^15]*\bterm\b[^15]*["'][^14]*)>([^16]+)<\/abbr>` — находит только `<abbr class="…term…">`;
+   - regex `<abbr(\b[^31]*\bclass\s*=\s*["'][^32]*\bterm\b[^32]*["'][^31]*)>([^33]+)<\/abbr>` — находит только `<abbr class="…term…">`;
    - пропускает `title=` (inline-override);
    - `lookupTerm = data-term || innerText`;
    - если `dictionary.has(lookupTerm)` — ок;

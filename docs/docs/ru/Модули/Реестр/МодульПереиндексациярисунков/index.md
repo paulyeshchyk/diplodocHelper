@@ -10,7 +10,7 @@ layer:
 
 |               |                                                                                                                                                                                                                                       |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [1.2-042](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                         |
+| ID            | [1.2-042](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                         |
 | Идентификатор | `reindexer.figures`                                                                                                                                                                                                                   |
 | Наименование  | Переиндексация рисунков                                                                                                                                                                                                               |
 | Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie)                                                                                                                                                |
@@ -177,7 +177,7 @@ for (const mdFilePath of allMdFiles) {
 **`processFigureCaptions(content, startCounter, prefix, mdFilePath)`**:
 
 ```js
-const regex = /<figcaption\s+class="imageDescription"([^17]*?)\s+id="([^18]+)"([^17]*?)>([\s\S]*?)<\/figcaption>/gi;
+const regex = /<figcaption\s+class="imageDescription"([^6]*?)\s+id="([^7]+)"([^6]*?)>([\s\S]*?)<\/figcaption>/gi;
 let counter = startCounter;
 const mapping = new Map();
 
@@ -233,7 +233,7 @@ for (const file of files) {
 **`updateFigureLinksInFile(filePath, figureNumberMap, defaultTemplate)`**:
 
 ```js
-const linkRegex = /\[([^19]]+)\]\(([^20]*?)(#fig-[^20]+)\)/g;
+const linkRegex = /\[([^8]]+)\]\(([^9]*?)(#fig-[^9]+)\)/g;
 
 const newContent = content.replace(linkRegex, (match, linkText, pathPart, anchor) => {
     const figId = anchor.substring(1);  // '#fig-abc' → 'fig-abc'
@@ -276,7 +276,7 @@ const newContent = content.replace(linkRegex, (match, linkText, pathPart, anchor
 });
 ```
 
-- **Regex** — `\[([^19]]+)\]\(([^20]*?)(#fig-[^20]+)\)`. Ищет `[text](path#fig-…)`.
+- **Regex** — `\[([^8]]+)\]\(([^9]*?)(#fig-[^9]+)\)`. Ищет `[text](path#fig-…)`.
 - **`figId`** — `#fig-abc` → `fig-abc`.
 - **`targetMdPath`** — резолвится от текущего файла + `pathPart`. Для same-file ссылок (`#fig-abc` без `pathPart`) — `path.resolve(filePath)`.
 - **`uniqueKey`** — `${targetMdPath}::${figId}` — совпадает с pass 1.

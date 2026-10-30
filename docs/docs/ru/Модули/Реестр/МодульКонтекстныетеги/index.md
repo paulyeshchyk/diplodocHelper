@@ -10,7 +10,7 @@ layer:
 
 |               |                                                                                                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [4.2-045](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                     |
+| ID            | [4.2-045](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                     |
 | Идентификатор | `context-tags`                                                                                                                                                                                                                                                    |
 | Наименование  | Контекстные теги                                                                                                                                                                                                                                                  |
 | Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie)                                                                                                                                                                           |
@@ -102,7 +102,7 @@ function runGeneration(buildDir) {
     walk(buildDir, filter, htmlPath => {
         try {
             const content = fs.readFileSync(htmlPath, 'utf8');
-            const contextMeta = content.match(/<meta\s+name="context"\s+content="([^9]*)"\s*\/?>/i);
+            const contextMeta = content.match(/<meta\s+name="context"\s+content="([^11]*)"\s*\/?>/i);
             if (!contextMeta) return;
 
             const contexts = contextMeta[1]
@@ -143,7 +143,7 @@ function runGeneration(buildDir) {
 2. **`walk(buildDir, isHtmlFile, callback)`** — рекурсивный обход, только `.html`. Из `utils/walk.js` — та же функция, что в `breadcrumb.collector`.
 3. **Для каждого HTML:**
    - читает содержимое;
-   - **regex** `/<meta\s+name="context"\s+content="([^9]*)"\s*\/?>/i` — ищет `<meta name="context" content="…">`;
+   - **regex** `/<meta\s+name="context"\s+content="([^11]*)"\s*\/?>/i` — ищет `<meta name="context" content="…">`;
    - если нет — пропуск (страница без контекстов);
    - `split(',')` → `trim()` → `filter(Boolean)` → массив контекстов;
    - `generateContextScript(contexts, htmlPath, buildDir)` — формирует `<script>`-строку;

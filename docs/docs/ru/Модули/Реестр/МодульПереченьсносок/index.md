@@ -8,18 +8,18 @@ family:
 layer:
 ---
 
-|               |                                                                                                                                                                                               |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [4.2-014](../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                 |
-| Идентификатор | `footnoteList`                                                                                                                                                                                |
-| Наименование  | Перечень сносок                                                                                                                                                                               |
-| Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie)                                                                                                       |
-| Каталог       | [Сноски](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md#snoski)                                                                                                                                                                                              |
-| Семейство     | [Сноски](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md#fam-footnote) |
-| Расположение  | `src/plugins/contentNavigator/Pagebuilder.Config.FootnoteList.js`, `footnoteList.collector.js`, `footnoteList.js`, `footnoteList.css`                                                         |
-| Точка входа   | `injectFootnoteList({ docsDir, targetHtml, lang, langPrefix })`                                                                                                                               |
-| Версия        | `1.54.0`                                                                                                                                                                                      |
-| Назначение    | Собирает сводную таблицу всех сносок проекта и встраивает её в готовую HTML-страницу                                                                                                          |
+|               |                                                                                                                                                                                                 |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | [4.2-014](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                   |
+| Идентификатор | `footnoteList`                                                                                                                                                                                  |
+| Наименование  | Перечень сносок                                                                                                                                                                                 |
+| Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie)                                                                              |
+| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya) |
+| Семейство     | [Сноски](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8/index.md#fam-footnote)   |
+| Расположение  | `src/plugins/contentNavigator/Pagebuilder.Config.FootnoteList.js`, `footnoteList.collector.js`, `footnoteList.js`, `footnoteList.css`                                                           |
+| Точка входа   | `injectFootnoteList({ docsDir, targetHtml, lang, langPrefix })`                                                                                                                                 |
+| Версия        | `1.54.0`                                                                                                                                                                                        |
+| Назначение    | Собирает сводную таблицу всех сносок проекта и встраивает её в готовую HTML-страницу                                                                                                            |
 
 {: .page-legend }
 
@@ -49,7 +49,7 @@ layer:
 flowchart TB
     subgraph pre[Pre-processing]
         TOC["docs/&lt;lang&gt;/toc.yaml"]
-        MD["docs/&lt;lang&gt;/**/*.md<br/>[^21] и [^N]: …"]
+        MD["docs/&lt;lang&gt;/**/*.md<br/>[^20] и [^N]: …"]
     end
     subgraph post[Post-processing]
         COL["collectFootnotes<br/>(docsDir, langPrefix, urlPrefix)"]
@@ -88,11 +88,11 @@ flowchart TB
 2. **Для каждого `.md`:**
    - читается содержимое;
    - frontmatter через `gray-matter` — берётся `title` (приоритет: `data.title` → `data.pureTitle` → имя папки);
-   - `extractFootnoteRefs(content)` — все ссылки `[^21]` (из `reindexer.footnotes`);
+   - `extractFootnoteRefs(content)` — все ссылки `[^20]` (из `reindexer.footnotes`);
    - `extractFootnoteDefs(content)` — все определения `[^N]: …`.
 
 3. **Сопоставление.**
-   - `idToNumber: Map<id, globalNumber>` — по порядку первого появления ссылки: первый `[^22]` получает `counter++`, второй новый id — следующий `counter`, и т.д. Глобальный счётчик сквозной по всему проекту.
+   - `idToNumber: Map<id, globalNumber>` — по порядку первого появления ссылки: первый `[^21]` получает `counter++`, второй новый id — следующий `counter`, и т.д. Глобальный счётчик сквозной по всему проекту.
    - `defsById: Map<id, content>` — первое определение для каждого id. Если id определён дважды, побеждает первое (молча, без предупреждения).
 
 4. **Запись.**
