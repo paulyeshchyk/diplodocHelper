@@ -1,0 +1,64 @@
+.gost-table-wrapper {
+    overflow-x: auto;
+    margin-top: 1.5rem;
+}
+
+.gost-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.gost-table th,
+.gost-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 14px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.gost-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.gost-table th[data-col] {
+    cursor: pointer;
+}
+
+.gost-table th[data-col]:hover {
+    background-color: #e9ecef;
+}
+
+.gost-table th.is-active {
+    background-color: #e2e8f0;
+}
+
+/* Индикатор сортировки */
+.sort-indicator {
+    display: inline-block;
+    margin-left: 6px;
+    opacity: 0.5;
+    font-size: 12px;
+}
+
+.gost-table th.is-active .sort-indicator {
+    opacity: 1;
+    color: #0055cc;
+}
+
+.gost-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.gost-table .col-code {
+    white-space: nowrap;
+}
+
+/* Подсветка при переходе по якорю */
+.gost-table tr:target {
+    background-color: #fff3cd;
+    outline: 2px solid #ffeeba;
+}

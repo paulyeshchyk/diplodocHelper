@@ -3,6 +3,3 @@
 **/dist
 **/coverage
 *.jar
-docs/plugins
-docs/robocopy
-docs/scripts

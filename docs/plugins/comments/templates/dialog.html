@@ -1,0 +1,34 @@
+<div class="dl-comment-dialog" role="dialog" aria-modal="true">
+  <div class="dl-comment-dialog__header">
+    <span class="dl-comment-dialog__title">{{TITLE}}</span>
+    <button type="button" class="dl-comment-dialog__close" aria-label="×">×</button>
+  </div>
+  <div class="dl-comment-dialog__quote">«{{QUOTE}}»</div>
+  <div class="dl-comment-dialog__compose">
+    {{AUTH_BLOCK}}
+    <input type="text" class="dl-comment-dialog__name" placeholder="{{NAME_PH}}" maxlength="100">
+    
+    <!-- Новый блок: Тип замечания -->
+    <div class="dl-comment-dialog__type-group">
+      <select class="dl-comment-dialog__type">
+        <option value="grammar">Грамматика</option>
+        <option value="document">Несоответствие документу-первоисточнику</option>
+      </select>
+      <div class="dl-comment-dialog__hint">Выберите тип: Грамматика (опечатка, пунктуация) или документу-первоисточнику (текст противоречит ТЗ, ГОСТ, классификатору).</div>
+    </div>
+
+    <textarea class="dl-comment-dialog__body" placeholder="{{BODY_PH}}" maxlength="4000"></textarea>
+    
+    <!-- Новый блок: Документ источник (скрыт по умолчанию) -->
+    <div class="dl-comment-dialog__source-group" hidden>
+      <textarea class="dl-comment-dialog__source-doc" placeholder="Например: ТЗ №67 п. 3.1; ГОСТ 2.105-95 п. 4.2; ТУ №32 п. 14.6; ТР №16 п. 45.2 и др." maxlength="500"></textarea>
+      <div class="dl-comment-dialog__hint">Укажите номер и пункт документа, которому противоречит текст (обязательно).</div>
+    </div>
+
+    <div class="dl-comment-dialog__actions">
+      <button type="button" class="dl-comment-dialog__cancel">{{CANCEL}}</button>
+      <button type="button" class="dl-comment-dialog__submit">{{SUBMIT}}</button>
+    </div>
+    <div class="dl-comment-dialog__error" role="alert"></div>
+  </div>
+</div>
