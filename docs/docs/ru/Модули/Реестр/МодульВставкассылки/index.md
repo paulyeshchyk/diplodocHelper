@@ -3,25 +3,21 @@ title: Модуль. Вставка ссылки
 sectionType: Page
 pureTitle: Вставка ссылки
 context: link.Paste, link, anchor, markdown, vscode-ui, clipboard
-capability: link
-family:
-layer:
+capability: ssylki, navigaciya
+family: fam-link
+layer: vscode-ui
+ID: 029
+ID_Group: 2
+ID_Type: 2
+Идентификатор: 'link.Paste'
+designation: 'Читает JSON из буфера и вставляет в .md-документ готовую ссылку (markdown или HTML) с корректным относительным путём и выбором якоря'
+folder: 'src/commands/diplodoc-helper.link.Paste.js'
+entrypoint: 'ux_link_paste() (VS Code), parseClipboardLink(clipboardText) (утилита)'
+role: 'Пара-2'
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                 |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [2.2-029](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                   |
-| Идентификатор | `link.Paste`                                                                                                                                                                                    |
-| Наименование  | Вставка ссылки                                                                                                                                                                                  |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                        |
-| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya) |
-| Семейство     | [Ссылки](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md#fam-link)       |
-| Расположение  | `src/commands/diplodoc-helper.link.Paste.js`                                                                                                                                                    |
-| Точка входа   | `ux_link_paste()` (VS Code), `parseClipboardLink(clipboardText)` (утилита)                                                                                                                      |
-| Версия        | `1.54.0`                                                                                                                                                                                        |
-| Назначение    | Читает JSON из буфера и вставляет в `.md`-документ готовую ссылку (markdown или HTML) с корректным относительным путём и выбором якоря                                                          |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -463,3 +459,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

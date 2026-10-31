@@ -3,25 +3,21 @@ title: Модуль. Контекстные теги
 sectionType: Page
 pureTitle: Контекстные теги
 context: context-tags, context, post-processing, html
-capability: navigation
-family:
-layer:
+capability: navigaciya
+family: fam-context-tags
+layer: post-processing
+ID: 045
+ID_Group: 4
+ID_Type: 2
+Идентификатор: 'context-tags'
+designation: 'Встраивает в HTML клиентский скрипт, который рисует в конце статьи чипы её context-тегов'
+folder: 'src/plugins/context-tags/context-tags.js (инжектор)'
+entrypoint: 'runGeneration(buildDir)'
+role: Пара-1
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                                                   |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [4.2-045](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                     |
-| Идентификатор | `context-tags`                                                                                                                                                                                                                                                    |
-| Наименование  | Контекстные теги                                                                                                                                                                                                                                                  |
-| Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie)                                                                                                                                                                           |
-| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya)                                                                                                                                                                                                                                                                  |
-| Семейство     | [Контекстные теги](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md#fam-context-tags) |
-| Расположение  | `src/plugins/context-tags/context-tags.js` (инжектор)                                                                                                                                                                                                             |
-| Точка входа   | `runGeneration(buildDir)`                                                                                                                                                                                                                                         |
-| Версия        | `1.54.0`                                                                                                                                                                                                                                                          |
-| Назначение    | Встраивает в HTML клиентский скрипт, который рисует в конце статьи чипы её `context`-тегов                                                                                                                                                                        |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -320,3 +316,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

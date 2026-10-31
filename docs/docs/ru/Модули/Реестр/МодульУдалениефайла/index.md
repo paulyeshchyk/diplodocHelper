@@ -3,25 +3,21 @@ title: Модуль. Удаление файла
 sectionType: Page
 pureTitle: Удаление файла
 context: file.Delete, file, link, pre-processing, vscode-ui, markdown
-capability: strukture
-family:
-layer:
+capability: struktura
+family: fam-sekciyi
+layer: pre-processing, vscode-ui
+ID: 039
+ID_Group: 1
+ID_Type: 2
+Идентификатор: 'file.Delete'
+designation: 'Удаляет файл или папку (не секцию) и заменяет все ссылки на неё заглушкой **удалено**'
+folder: 'src/commands/diplodoc-helper.file.Delete.js'
+entrypoint: 'ux_file_delete(uri)'
+role: 'Удаление файла'
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                 |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [1.2-039](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                   |
-| Идентификатор | `file.Delete`                                                                                                                                                   |
-| Наименование  | Удаление файла                                                                                                                                                  |
-| Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie) / [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie) |
-| Каталог       | [Структура](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#struktura)                                                                                                                                                                                |
-| Семейство     | [Структура](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#fam-structure)                                                                                                                                                                                |
-| Расположение  | `src/commands/diplodoc-helper.file.Delete.js`                                                                                                                   |
-| Точка входа   | `ux_file_delete(uri)`                                                                                                                                           |
-| Версия        | `1.54.0`                                                                                                                                                        |
-| Назначение    | Удаляет файл или папку (не секцию) и заменяет все ссылки на неё заглушкой `**удалено**`                                                                         |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -389,3 +385,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

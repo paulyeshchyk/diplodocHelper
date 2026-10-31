@@ -3,25 +3,21 @@ title: Модуль. Создание секции
 sectionType: Page
 pureTitle: Создание секции
 context: section.Create, section, pre-processing, vscode-ui, yaml, markdown
-capability: strukture
-family:
-layer:
+capability: struktura
+family: fam-sekciyi
+layer: vscode-ui
+ID: 023
+ID_Group: 1
+ID_Type: 1
+Идентификатор: 'section.Create'
+designation: 'Создаёт папку-секцию с тремя файлами (index.md, index.yaml, toc.yaml) и добавляет запись в родительский toc.yaml'
+folder: 'src/commands/diplodoc-helper.section.Create.js'
+entrypoint: 'ux_section_create(uri)'
+role: 'Операция'
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                 |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [1.1-023](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                   |
-| Идентификатор | `section.Create`                                                                                                                                                |
-| Наименование  | Создание секции                                                                                                                                                 |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie) / [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie) |
-| Каталог       | [Структура](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#struktura)                                                                                                                                                                                |
-| Семейство     | [Структура](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#fam-structure)                                                                                                                                                                                |
-| Расположение  | `src/commands/diplodoc-helper.section.Create.js`                                                                                                                |
-| Точка входа   | `ux_section_create(uri)`                                                                                                                                        |
-| Версия        | `1.54.0`                                                                                                                                                        |
-| Назначение    | Создаёт папку-секцию с тремя файлами (`index.md`, `index.yaml`, `toc.yaml`) и добавляет запись в родительский `toc.yaml`                                        |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -394,11 +390,11 @@ CLI-команды нет. Модуль — только VS Code.
 
 С другими командами семейства:
 
-| Команда                                                    | Что общего с `section.Create`                                                                                |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| [`section.Rename`](../МодульПереименованиесекции/index.md) | Использует те же `yaml.base`-функции (`IndexMdFilePatch`, `IndexYamlEntryPatch`), но для существующей секции |
-| [`section.Move`](../МодульПеремещениесекции/index.md)      | Использует `TocYamlEntry*`, но `Remove` + `InsertAtPosition`, а не `PatchItems`                              |
-| [`section.Delete`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md)       | Использует `TocYamlEntryRemove` (обратная операция к `TocYamlEntryPatchItems`)                               |
+| Команда                                                                                                                                                                                       | Что общего с `section.Create`                                                                                |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| [`section.Rename`](../МодульПереименованиесекции/index.md)                                                                                                                                    | Использует те же `yaml.base`-функции (`IndexMdFilePatch`, `IndexYamlEntryPatch`), но для существующей секции |
+| [`section.Move`](../МодульПеремещениесекции/index.md)                                                                                                                                         | Использует `TocYamlEntry*`, но `Remove` + `InsertAtPosition`, а не `PatchItems`                              |
+| [`section.Delete`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%A3%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D0%B8/index.md) | Использует `TocYamlEntryRemove` (обратная операция к `TocYamlEntryPatchItems`)                               |
 
 С [`reindexer.directories`](../МодульПереиндексация/index.md) — `calculateNextIndex` читает `sectionIndex` существующих дочерних папок. То есть `section.Create` **ожидает**, что уже существующие секции в родителе проиндексированы (`sectionIndex` заполнен). Если какая-то папка не проиндексирована — `calculateNextIndex` её проигнорирует, и новая секция может получить номер, занятый «забытой» папкой.
 
@@ -444,3 +440,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

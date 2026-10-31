@@ -7,11 +7,6 @@ items:
     include:
       path: СлойCLI/toc.yaml
       mode: link
-  - name: Клиентский runtime
-    href: СлойКлиентскийruntime/index.md
-    include:
-      path: СлойКлиентскийruntime/toc.yaml
-      mode: link
   - name: Post-processing
     href: СлойPostprocessing/index.md
     include:

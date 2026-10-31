@@ -3,25 +3,21 @@ title: Модуль. Вставка изображения из буфера
 sectionType: Page
 pureTitle: Вставка изображения из буфера
 context: image.PasteFromClipboard, image, figure, markdown, vscode-ui, clipboard
-capability: image
-family:
-layer:
+capability:  kontent
+family: fam-illustrations
+layer: vscode-ui
+ID: 030
+ID_Group: 2
+ID_Type: 2
+Идентификатор: 'image.PasteFromClipboard'
+designation: 'Сохраняет растровое изображение из буфера обмена в images/ и вставляет в .md готовый <figure>-блок'
+folder: 'src/commands/diplodoc-helper.image.PasteFromClipboard.js'
+entrypoint: 'ux_image_paste_clipboard()'
+role: 'Вставка из буфера'
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [2.2-030](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                         |
-| Идентификатор | `image.PasteFromClipboard`                                                                                                                                                                                                            |
-| Наименование  | Вставка изображения из буфера                                                                                                                                                                                                         |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                                                                                                           |
-| Каталог       | [Иллюстрации](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md#illyustracii)                       |
-| Семейство     | [Иллюстрации](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md#fam-illustrations) |
-| Расположение  | `src/commands/diplodoc-helper.image.PasteFromClipboard.js`                                                                                                                                                                            |
-| Точка входа   | `ux_image_paste_clipboard()`                                                                                                                                                                                                          |
-| Версия        | `1.54.0`                                                                                                                                                                                                                              |
-| Назначение    | Сохраняет растровое изображение из буфера обмена в `images/` и вставляет в `.md` готовый `<figure>`-блок                                                                                                                              |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -422,3 +418,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

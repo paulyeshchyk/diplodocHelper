@@ -3,25 +3,21 @@ title: Модуль. Добавление якоря
 sectionType: Page
 pureTitle: Добавление якоря
 context: link.addAnchor, link, anchor, markdown, vscode-ui
-capability: link
-family:
-layer:
+capability: ssylki
+family: fam-link
+layer: vscode-ui
+ID: 028
+ID_Group: 2
+ID_Type: 1
+Идентификатор: 'link.addAnchor'
+designation: 'Оборачивает выделенный текст в <div id=''…'' class=''diplodocanchor''>, создавая стабильный якорь'
+folder: 'src/commands/diplodoc-helper.link.AddAnchor.js'
+entrypoint: 'ux_add_anchor()'
+role: 'Свободный'
+version: '1.54.0'
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [2.1-028](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `link.addAnchor`                                                                                              |
-| Наименование  | Добавление якоря                                                                                              |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                     |
-| Каталог       | [Ссылки](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md#ssylki)                                                                                                                                                                                |
-| Семейство     | [Ссылки](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md#fam-link)                                                                                                                                                                                                                                                                                                                                                                |
-| Расположение  | `src/commands/diplodoc-helper.link.AddAnchor.js`                                                              |
-| Точка входа   | `ux_add_anchor()`                                                                                             |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Оборачивает выделенный текст в `<div id='…' class='diplodocanchor'>`, создавая стабильный якорь               |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -388,13 +384,13 @@ CLI-команды нет. Модуль — только VS Code.
 
 `link.addAnchor` — третья часть «семейства ссылок» (после [`link.Copy`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md) и [`link.Paste`](../МодульВставкассылки/index.md)). По смыслу — родственник [`link.Paste`](../МодульВставкассылки/index.md): там тоже выбирается якорь, но для **ссылки на существующий якорь**. `link.addAnchor` создаёт якорь, `link.Paste` использует.
 
-| Модуль                                                             | Роль                | Работает с          |
-| ------------------------------------------------------------------ | ------------------- | ------------------- |
-| [`link.Copy`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md)                 | Кладёт JSON в буфер | Только буфер        |
-| [`link.Paste`](../МодульВставкассылки/index.md)                    | Вставляет ссылку    | Буфер + редактор    |
-| **`link.addAnchor`**                                               | Создаёт якорь       | Только редактор     |
-| [`image.PasteFromClipboard`](../МодульВставкаизображения/index.md) | Картинка из буфера  | Буфер (изображение) |
-| [`image.PasteFromList`](../МодульВставкаизображения/index.md)      | Картинка из списка  | Редактор + FS       |
+| Модуль                                                                                                                                                                                                     | Роль                | Работает с          |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ------------------- |
+| [`link.Copy`](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9A%D0%BE%D0%BF%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D1%81%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md) | Кладёт JSON в буфер | Только буфер        |
+| [`link.Paste`](../МодульВставкассылки/index.md)                                                                                                                                                            | Вставляет ссылку    | Буфер + редактор    |
+| **`link.addAnchor`**                                                                                                                                                                                       | Создаёт якорь       | Только редактор     |
+| [`image.PasteFromClipboard`](../МодульВставкаизображения/index.md)                                                                                                                                         | Картинка из буфера  | Буфер (изображение) |
+| [`image.PasteFromList`](../МодульВставкаизображения/index.md)                                                                                                                                              | Картинка из списка  | Редактор + FS       |
 
 Функционально `link.addAnchor` независим: он не читает буфер, не пишет в него, не взаимодействует с другими модулями. Результат — HTML-разметка внутри `.md`.
 
@@ -457,3 +453,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

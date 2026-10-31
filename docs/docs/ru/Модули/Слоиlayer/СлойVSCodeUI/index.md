@@ -9,7 +9,7 @@ pureTitle: Слой. VS Code UI
 |               |                                                                                        |
 | ------------- | -------------------------------------------------------------------------------------- |
 | Идентификатор | `vscode-ui`                                                                            |
-| Назначение    | Точка входа из интерфейса VS Code                                                      |
+| designation   | Точка входа из интерфейса VS Code                                                      |
 | Время работы  | При редактировании (runtime VS Code)                                                   |
 | Состав        | `src/extension.js`, `src/commands/*`, `src/ContextMenuManager.js`, `src/nls_loader.js` |
 

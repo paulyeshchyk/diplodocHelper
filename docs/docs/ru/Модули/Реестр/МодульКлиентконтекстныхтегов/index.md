@@ -3,25 +3,21 @@ title: Модуль. Клиент контекстных тегов
 sectionType: Page
 pureTitle: Клиент контекстных тегов
 context: context-tags.client, context, client-runtime, browser
-capability: navigation
-family:
-layer:
+capability: navigaciya
+family: fam-context-tags
+layer: client-runtime
+ID: 038
+ID_Group: 5
+ID_Type: 1
+Идентификатор: 'context-tags.client'
+designation: 'Рисует в конце статьи блок «Контексты:» со ссылками на страницы контекстов'
+folder: 'src/plugins/context-tags/context-tags.client.js (инжектится через [context-tags](../МодульКонтекстныеТеги/index.md))'
+entrypoint: 'IIFE на каждой HTML-странице с window.__CONTEXT_ITEMS__'
+role: Пара-1
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                                                   |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [5.1-038](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                     |
-| Идентификатор | `context-tags.client`                                                                                                                                                                                                                                             |
-| Наименование  | Клиент контекстных тегов                                                                                                                                                                                                                                          |
-| Слой          | [Клиентский runtime](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9runtime/index.md#naznachenie)                                                                                        |
-| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya)                                                                   |
-| Семейство     | [Контекстные теги](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D1%82%D0%B5%D0%B3%D0%B8/index.md#fam-context-tags) |
-| Расположение  | `src/plugins/context-tags/context-tags.client.js` (инжектится через [`context-tags`](../МодульКонтекстныеТеги/index.md))                                                                                                                                          |
-| Точка входа   | IIFE на каждой HTML-странице с `window.__CONTEXT_ITEMS__`                                                                                                                                                                                                         |
-| Версия        | `1.54.0`                                                                                                                                                                                                                                                          |
-| Назначение    | Рисует в конце статьи блок «Контексты:» со ссылками на страницы контекстов                                                                                                                                                                                        |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -330,3 +326,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

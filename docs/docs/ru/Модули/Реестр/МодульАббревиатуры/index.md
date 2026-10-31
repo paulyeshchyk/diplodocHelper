@@ -4,24 +4,20 @@ sectionType: Page
 pureTitle: Модуль. Аббревиатуры
 context: abbrs, abbr, pre-processing, post-processing, yaml
 capability: terms
-family:
-layer:
+family: fam-abbr
+layer: pre-processing, post-processing
+ID: 003
+ID_Group: 3
+ID_Type: 2
+Идентификатор: 'abbrs'
+designation: 'Ведёт словарь сокращений, строит страницу-указатель и обогащает разметку <abbr> тултипами'
+folder: 'src/plugins/abbrs/'
+entrypoint: 'runGeneration(docsRoot) (генератор), runGeneration({ buildDir, docsRoot }) (инжектор), lintAbbrs(docsRoot) (линтер)'
+role: Пара-1
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                     |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [3.2-003](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                       |
-| Идентификатор | `abbrs`                                                                                                                                                                                                                             |
-| Наименование  | Аббревиатуры                                                                                                                                                                                                                        |
-| Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie) / [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie)                                                     |
-| Каталог       | [Терминология](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F/index.md#terminologiya)                                                                                                                                                                                                                                   |
-| Семейство     | [Аббревиатуры](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B/index.md#fam-abbr) |
-| Расположение  | `src/plugins/abbrs/`                                                                                                                                                                                                                |
-| Точка входа   | `runGeneration(docsRoot)` (генератор), `runGeneration({ buildDir, docsRoot })` (инжектор), `lintAbbrs(docsRoot)` (линтер)                                                                                                           |
-| Версия        | `1.54.0`                                                                                                                                                                                                                            |
-| Назначение    | Ведёт словарь сокращений, строит страницу-указатель и обогащает разметку `<abbr>` тултипами                                                                                                                                         |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -275,3 +271,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

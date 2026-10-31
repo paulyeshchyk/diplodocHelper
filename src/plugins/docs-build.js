@@ -60,6 +60,57 @@ const STEPS = {
         cli('gosts'),
         cli('createFigureContent'),
         cli('roadMap', '--dataPath', './plugins/roadMap/roadmap-data.json'),
+
+        node(
+            'jsonToMdTable',
+            './plugins/json-to-md/json-to-md-table.js',
+            '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
+            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--tableType', 'extended',
+        ),
+
+        node(
+            'jsonToMdTable',
+            './plugins/json-to-md/json-to-md-table.js',
+            '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
+            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--tableType', 'extended',
+            '--groupBy', 'module'
+        ),
+
+        node(
+            'jsonToMdTable',
+            './plugins/json-to-md/json-to-md-table.js',
+            '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
+            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--tableType', 'extended',
+            '--groupBy', 'severity'
+        ),
+
+        node(
+            'jsonToMdTable',
+            './plugins/json-to-md/json-to-md-table.js',
+            '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
+            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--tableType', 'extended',
+            '--groupBy', 'type'
+        ),
+
+        // Периодическая система модулей (treemap-beta)
+        node(
+            'registryTreemap',
+            './plugins/json-to-md/json-to-md-table.js',
+            '--jsonPath', './docs/ru/Модули/Реестр/registry.json',
+            '--outputDir', './docs/ru',
+            '--tableType', 'treemap',
+            '--xField', 'catalog',
+            '--yField', 'family',
+            '--labelField', 'id',
+            '--valueField', 'priority',   // если нужно — иначе size = count
+            // '--valueAgg', 'sum',
+            '--classField', 'status',     // активные/устаревшие — разными цветами
+            '--outputFile', './docs/ru/Модули/Реестр/registry-treemap.md'
+        ),
     ],
 
     // ── BUILD: ./docs → ./build ───────────────────────────────
@@ -91,6 +142,7 @@ const STEPS = {
             '--targetHtml',
             './build/ru/Дополнительнаяинформация/Переченьсносок/index.html'
         ),
+
         cli('gostsInject', '--docsDir', './docs/ru'), // 3. Внедряем таблицу в готовый HTML
 
         node(

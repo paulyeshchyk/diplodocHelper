@@ -3,25 +3,21 @@ title: Модуль. Вставка изображения из списка
 sectionType: Page
 pureTitle: Вставка изображения из списка
 context: image.PasteFromList, image, figure, markdown, vscode-ui
-capability: image
-family:
-layer:
+capability:  kontent
+family: fam-illustrations
+layer: vscode-ui
+ID: 031
+ID_Group: 2
+ID_Type: 2
+Идентификатор: 'image.PasteFromList'
+designation: 'Показывает список всех изображений проекта и вставляет ссылку на выбранное в текущий .md'
+folder: 'src/commands/diplodoc-helper.image.PasteFromList.js'
+entrypoint: 'ux_image_paste_list()'
+role: 'Вставка из списка'
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [2.2-031](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                         |
-| Идентификатор | `image.PasteFromList`                                                                                                                                                                                                                 |
-| Наименование  | Вставка изображения из списка                                                                                                                                                                                                         |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                                                                                                           |
-| Каталог       | [Иллюстрации](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md#illyustracii)                       |
-| Семейство     | [Иллюстрации](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md#fam-illustrations) |
-| Расположение  | `src/commands/diplodoc-helper.image.PasteFromList.js`                                                                                                                                                                                 |
-| Точка входа   | `ux_image_paste_list()`                                                                                                                                                                                                               |
-| Версия        | `1.54.0`                                                                                                                                                                                                                              |
-| Назначение    | Показывает список всех изображений проекта и вставляет ссылку на выбранное в текущий `.md`                                                                                                                                            |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -417,3 +413,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

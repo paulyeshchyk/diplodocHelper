@@ -26,7 +26,7 @@ const { runGeneration: generateTerms } = require('./terms/terms.js');
 const { runGeneration: injectTermTitles } = require('./terms/terms.injector.js');
 const { runGeneration: generateGosts } = require('./gosts/gosts.js');
 const { runGeneration: generateComments } = require('./comments/comments.js');
-const { convertJsonToMdTable } = require('./json-to-md-table.js');
+const { convertJsonToMdTable } = require('./json-to-md/json-to-md-table.js');
 
 
 const { injectGostsTable } = require('./gosts/gosts.injector.js');
@@ -63,11 +63,10 @@ if (require.main === module) {
     } else if (command === 'abbrTitles') {
         injectAbbrTitles({ buildDir: outputDir, docsRoot: docsDir });
     } else if (command === 'jsonToMdTable') {
-      const args = process.argv.slice(3);
-      // мини-парсер повторяет логику модуля
-      const { parseArgs } = require('./json-to-md-table.js'); // если экспортировать
-      convertJsonToMdTable(parseArgs(args));
-      break;
+        const args = process.argv.slice(3);
+        // мини-парсер повторяет логику модуля
+        const { parseArgs } = require('./json-to-md/json-to-md-table.js'); // если экспортировать
+        convertJsonToMdTable(parseArgs(args));
     } else if (command === 'terms') {
         generateTerms(docsDir);
     } else if (command === 'gosts') {

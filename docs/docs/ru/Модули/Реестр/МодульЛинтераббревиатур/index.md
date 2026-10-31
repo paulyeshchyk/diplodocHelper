@@ -3,25 +3,21 @@ title: Модуль. Линтер аббревиатур
 sectionType: Page
 pureTitle: Линтер аббревиатур
 context: linter.abbrs, abbr, lint, vscode-ui, markdown
-capability: lint
-family:
-layer:
+capability: lintery
+family: fam-abbr
+layer: vscode-ui
+ID: 020
+ID_Group: 7
+ID_Type: 1
+Идентификатор: 'linter.abbrs'
+designation: 'Находит &lt;abbr&gt; без определения в словаре и предлагает перейти к файлу'
+folder: 'src/plugins/abbrs/abbrs.linter.js, src/commands/diplodoc-helper.linter.abbrs.js'
+entrypoint: 'lintAbbrs(docsRoot, options) (ядро), ux_linter_abbrs(uri) (VS Code)'
+role: 'Сокращения'
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                     |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [7.1-020](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                       |
-| Идентификатор | `linter.abbrs`                                                                                                                                                                                      |
-| Наименование  | Линтер аббревиатур                                                                                                                                                                                  |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                                                                                                         |
-| Каталог       | [Линтеры](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9B%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%8B/index.md#lintery)                                                                                                                                                                                                    |
-| Семейство     | [Аббревиатуры](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%90%D0%B1%D0%B1%D1%80%D0%B5%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D1%8B/index.md#fam-abbr) |
-| Расположение  | `src/plugins/abbrs/abbrs.linter.js`, `src/commands/diplodoc-helper.linter.abbrs.js`                                                                                                                 |
-| Точка входа   | `lintAbbrs(docsRoot, options)` (ядро), `ux_linter_abbrs(uri)` (VS Code)                                                                                                                             |
-| Версия        | `1.54.0`                                                                                                                                                                                            |
-| Назначение    | Находит `&lt;abbr&gt;` без определения в словаре и предлагает перейти к файлу                                                                                                                       |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -228,3 +224,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

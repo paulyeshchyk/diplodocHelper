@@ -3,25 +3,21 @@ title: Модуль. Сервер комментариев
 sectionType: Page
 pureTitle: Модуль. Сервер комментариев
 context: server, api, sqlite, auth, docker
-capability:
-family:
+capability: kontent
+family: fam-kommentariji
 layer:
+ID: 052
+ID_Group: 6
+ID_Type: 2
+Идентификатор: 'comments.server'
+designation: 'Раздача статики, API для работы с комментариями, БД SQLite, Whitelist-авторизация'
+folder: 'server/'
+entrypoint: 'node server/server.js'
+role:
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                                                                                                        |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [6.2-052](../../Соглашения/index.md#identifikaciya-modulej)                                                                                                                                                                                                                                                            |
-| Идентификатор | `comments.server`                                                                                                                                                                                                                                                                                                      |
-| Наименование  | Сервер комментариев                                                                                                                                                                                                                                                                                                    |
-| Слой          | [Infrastructure](../Слоиlayer/Infrastructure/index.md#naznachenie)                                                                                                                                                                                                                                                     |
-| Каталог       |                                                                                                                                                                                                                                                                                                                        |
-| Семейство     | [Комментарии пользователей](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9A%D0%BE%D0%BC%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%80%D0%B8%D0%B8%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9/index.md#moduli) |
-| Расположение  | `server/`                                                                                                                                                                                                                                                                                                              |
-| Точка входа   | `node server/server.js`                                                                                                                                                                                                                                                                                                |
-| Версия        | `1.0.0`                                                                                                                                                                                                                                                                                                                |
-| Назначение    | Раздача статики, API для работы с комментариями, БД SQLite, Whitelist-авторизация                                                                                                                                                                                                                                      |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -91,3 +87,5 @@ flowchart LR
 | `PATCH` | `/api/threads/:id`  | Смена статуса (resolve/archive)                           |
 | `GET`   | `/api/admin/emails` | Управление Whitelist (только админ)                       |
 | `GET`   | `/admin/status`     | Проверка авторизации админа                               |
+
+{% include [legend](./page-legend.md) %}

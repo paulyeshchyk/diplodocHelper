@@ -7,8 +7,8 @@ context: registry, meta
 |               |                                  |
 | ------------- | -------------------------------- |
 | Идентификатор | `_registry`                      |
-| Слой          | shared-core                      |
-| Назначение    | Единый реестр ID и папок модулей |
+| layer         | `shared-core`                    |
+| designation   | Единый реестр ID и папок модулей |
 
 {: .page-legend }
 
@@ -48,3 +48,5 @@ context: registry, meta
 ```markdown
 | `<G>.<T>-<XXX>` | <идентификатор> | `src/plugins/<папка>/` | <слой> | active |
 ```
+
+{% include [legend](./page-legend.md) %}

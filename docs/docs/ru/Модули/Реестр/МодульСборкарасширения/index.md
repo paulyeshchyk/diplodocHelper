@@ -3,25 +3,21 @@ title: Модуль. Сборка расширения
 sectionType: Page
 pureTitle: Сборка расширения
 context: build.js, cli, infrastructure, build, esbuild
-capability: infrastructure
-family:
-layer:
+capability: infrastruktura
+family: fam-infrastructure
+layer: build
+ID: 050
+ID_Group: 6
+ID_Type: 2
+Идентификатор: 'build.js'
+designation: 'Собирает src/extension.js в dist/extension.js через esbuild для установки в VS Code'
+folder: 'build.js (корень)'
+entrypoint: 'node build.js [--watch] [--prod]'
+role: 'esbuild'
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                                                        |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [6.2-050](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                          |
-| Идентификатор | `build.js`                                                                                                                                                                                                                                                             |
-| Наименование  | Сборка расширения                                                                                                                                                                                                                                                      |
-| Слой          | [Build](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Build/index.md#build)                                                                                                                                                                                                              |
-| Каталог       | [Инфраструктура](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%98%D0%BD%D1%84%D1%80%D0%B0%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#infrastruktura)                                                                                                                                                                                                                                                                       |
-| Семейство     | [Инфраструктура](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%98%D0%BD%D1%84%D1%80%D0%B0%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#fam-infrastructure) |
-| Расположение  | `build.js` (корень)                                                                                                                                                                                                                                                    |
-| Точка входа   | `node build.js [--watch] [--prod]`                                                                                                                                                                                                                                     |
-| Версия        | `1.54.0`                                                                                                                                                                                                                                                               |
-| Назначение    | Собирает `src/extension.js` в `dist/extension.js` через esbuild для установки в VS Code                                                                                                                                                                                |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -365,3 +361,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

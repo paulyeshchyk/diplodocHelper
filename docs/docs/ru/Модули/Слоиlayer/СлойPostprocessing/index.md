@@ -9,7 +9,7 @@ pureTitle: Слой. Post-processing
 |               |                                                                                                                                                                                           |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Идентификатор | `post-processing`                                                                                                                                                                         |
-| Назначение    | Правка `.html` в `build/` после сборки                                                                                                                                                    |
+| designation   | Правка `.html` в `build/` после сборки                                                                                                                                                    |
 | Время работы  | После слоя `build`                                                                                                                                                                        |
 | Состав        | `breadcrumb`, `context-tags`, `tocCleanMode`, `footnoteAnchors`, `footnoteNumbering`, `abbrs` (injector), `terms` (injector), `gosts` (injector), `contentNavigator`, `roadmap` (patcher) |
 

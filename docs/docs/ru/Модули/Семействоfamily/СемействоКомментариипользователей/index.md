@@ -5,7 +5,7 @@ pureTitle: Семейство. Комментарии пользователей
 sectionIndex: ""
 ---
 
-### Модули
+### Модули {#fam-kommentarii_polzovateley}
 
 {% include [модули](modules.md) %}
 

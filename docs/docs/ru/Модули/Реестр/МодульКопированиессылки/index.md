@@ -3,25 +3,21 @@ title: Модуль. Копирование ссылки
 sectionType: Page
 pureTitle: Копирование ссылки
 context: link.Copy, link, markdown, vscode-ui, clipboard
-capability: link
-family:
-layer:
+capability: ssylki
+family: fam-link
+layer: vscode-ui
+ID: 027
+ID_Group: 2
+ID_Type: 2
+Идентификатор: 'link.Copy'
+designation: 'Сохраняет в буфер обмена JSON с именем и путём документа для последующей вставки'
+folder: 'src/commands/diplodoc-helper.link.Copy.js'
+entrypoint: 'ux_link_copy(uri)'
+role: 'Пара-1'
+version: '1.54.0'
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [2.2-027](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `link.Copy`                                                                                                   |
-| Наименование  | Копирование ссылки                                                                                            |
-| Слой          | [vscode-ui](../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie/index.md#naznachenie)                                     |
-| Каталог       | [Ссылки](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md#ssylki)                                                                                                                                                                                |
-| Семейство     | [Ссылки](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8/index.md#fam-link)                                                                                                                                                                                |
-| Расположение  | `src/commands/diplodoc-helper.link.Copy.js`                                                                   |
-| Точка входа   | `ux_link_copy(uri)`                                                                                           |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Сохраняет в буфер обмена JSON с именем и путём документа для последующей вставки                              |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -279,3 +275,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

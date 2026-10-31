@@ -3,25 +3,21 @@ title: Модуль. Комментарии (Клиент)
 sectionType: Page
 pureTitle: Модуль. Комментарии (Клиент)
 context: comments, ui, pre-processing, post-processing, client
-capability:
-family:
-layer:
+capability: kontent
+family: fam-kommentariji
+layer: post-processing, client-runtime
+ID: 051
+ID_Group: 5
+ID_Type: 3
+Идентификатор: 'comments'
+designation: 'Внедряет в HTML интерфейс комментариев, подсвечивает фрагменты и управляет выезжающей панелью тредов'
+folder: 'plugins/comments/'
+entrypoint: 'runGeneration(buildDir) (инжектор)'
+role:
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                                                                                                        |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [5.3-051](../../Соглашения/index.md#identifikaciya-modulej)                                                                                                                                                                                                                                                            |
-| Идентификатор | `comments`                                                                                                                                                                                                                                                                                                             |
-| Наименование  | Комментарии (Клиент)                                                                                                                                                                                                                                                                                                   |
-| Слой          | [post-processing](../Слоиlayer/PostProcessing/index.md#naznachenie) / [Client runtime](../Слоиlayer/ClientRuntime/index.md#naznachenie)                                                                                                                                                                                |
-| Каталог       |                                                                                                                                                                                                                                                                                                                        |
-| Семейство     | [Комментарии пользователей](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9A%D0%BE%D0%BC%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%80%D0%B8%D0%B8%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9/index.md#moduli) |
-| Расположение  | `plugins/comments/`                                                                                                                                                                                                                                                                                                    |
-| Точка входа   | `runGeneration(buildDir)` (инжектор)                                                                                                                                                                                                                                                                                   |
-| Версия        | `1.0.0`                                                                                                                                                                                                                                                                                                                |
-| Назначение    | Внедряет в HTML интерфейс комментариев, подсвечивает фрагменты и управляет выезжающей панелью тредов                                                                                                                                                                                                                   |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -95,3 +91,5 @@ flowchart TB
 2. **Несоответствие** — противоречие ТЗ/ГОСТ. Требует обязательное поле «Документ источник».
 
 Визуально такие комментарии помечаются бейджем `⚠️ Несоответствие документу`.
+
+{% include [legend](./page-legend.md) %}

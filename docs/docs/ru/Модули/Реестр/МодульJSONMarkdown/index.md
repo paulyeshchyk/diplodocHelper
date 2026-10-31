@@ -6,22 +6,18 @@ context: json, markdown, table, treemap, mermaid, generator, pre-processing, sch
 capability: json-to-md
 family: json-generator
 layer: pre-processing
+ID: 054
+ID_Group: 8
+ID_Type: 2
+Идентификатор: 'json-to-md'
+designation: 'Конвертирует массив JSON-записей в Markdown-таблицу или Mermaid treemap-beta'
+folder: 'src/plugins/json-to-md/'
+entrypoint: 'runGeneration({ jsonPath, outputDir, tableType, ... })'
+role:
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                                             |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [8.2-054](../../Соглашения/index.md#identifikaciya-modulej)                                                                                                                                                                                                 |
-| Идентификатор | `json-to-md`                                                                                                                                                                                                                                                |
-| Наименование  | JSON → Markdown                                                                                                                                                                                                                                             |
-| Слой          | [Pre-processing](../../Слоиlayer/СлойPreprocessing/index.md#naznachenie)                                                                                                                                                                                    |
-| Каталог       | [Представление данных](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9F%D1%80%D0%B5%D0%B4%D1%81%D1%82%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/index.md) |
-| Семейство     | [JSON-генераторы](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEJSON%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%8B/index.md#fam-json-generators)                   |
-| Расположение  | `src/plugins/json-to-md/`                                                                                                                                                                                                                                   |
-| Точка входа   | `runGeneration({ jsonPath, outputDir, tableType, ... })`                                                                                                                                                                                                    |
-| Версия        | `1.54.0`                                                                                                                                                                                                                                                    |
-| Назначение    | Конвертирует массив JSON-записей в Markdown-таблицу или Mermaid `treemap-beta`                                                                                                                                                                              |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -432,3 +428,5 @@ flowchart TB
 4. Если нужно новое **правило группировки** — параметр в `lib/generators/grouped-table.js`, флаг в `lib/args.js`.
 
 Схема — контракт; генераторы — стратегии. Добавление схемы не требует правки генераторов; добавление генератора — только новой ветки диспетчера.
+
+{% include [legend](./page-legend.md) %}

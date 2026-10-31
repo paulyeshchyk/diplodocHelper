@@ -3,25 +3,21 @@ title: Модуль. Переиндексация статей
 sectionType: Page
 pureTitle: Переиндексация статей
 context: reindexer.md, reindexer, section, pre-processing, markdown
-capability: strukture
-family:
-layer:
+capability: struktura
+family: fam-sekciyi
+layer: pre-processing
+ID: 043
+ID_Group: 1
+ID_Type: 2
+Идентификатор: 'reindexer.md'
+designation: 'Вычисляет следующий свободный sectionIndex для новой секции в указанной родительской папке'
+folder: 'src/plugins/reindexer/reindexer.md.js'
+entrypoint: 'calculateNextIndex(targetDir)'
+role: 'Следующий индекс'
+version: '1.54.0'
 ---
 
-|               |                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------- |
-| ID            | [1.2-043](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej) |
-| Идентификатор | `reindexer.md`                                                                                                |
-| Наименование  | Переиндексация статей                                                                                         |
-| Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie)                           |
-| Каталог       | [Структура](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#struktura)                                                                                                                                                                                |
-| Семейство     | [Структура](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/index.md#fam-structure)                                                                                                                                                                                |
-| Расположение  | `src/plugins/reindexer/reindexer.md.js`                                                                       |
-| Точка входа   | `calculateNextIndex(targetDir)`                                                                               |
-| Версия        | `1.54.0`                                                                                                      |
-| Назначение    | Вычисляет следующий свободный `sectionIndex` для новой секции в указанной родительской папке                  |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -236,3 +232,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

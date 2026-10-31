@@ -4,24 +4,20 @@ sectionType: Page
 pureTitle: Клиент ГОСТов
 context: gosts.client, gost, client-runtime, browser
 capability: terms
-family:
-layer:
+family: fam-gost
+layer: client-runtime
+ID: 035
+ID_Group: 5
+ID_Type: 1
+Идентификатор: 'gosts.client'
+designation: 'Строит интерактивную таблицу ГОСТов из window.__GOSTS_DATA__: группировка, сортировка, карточки с раскрытием, flash при переходе по якорю'
+folder: 'src/plugins/gosts/client/_assets/scripts/gosts.js (внедряется в HTML через [gosts.injector](../МодульГОСТы/index.md))'
+entrypoint: 'IIFE на странице Дополнительнаяинформация/ГОСТы/index.html'
+role: Пара-2
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                             |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [5.1-035](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                               |
-| Идентификатор | `gosts.client`                                                                                                                              |
-| Наименование  | Клиент ГОСТов                                                                                                                               |
-| Слой          | [Клиентский runtime](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9runtime/index.md#naznachenie)                                                         |
-| Каталог       | [Терминология](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%A2%D0%B5%D1%80%D0%BC%D0%B8%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F/index.md#terminologiya)                                                                                                                                                                                |
-| Семейство     | [ГОСТы](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%93%D0%9E%D0%A1%D0%A2%D1%8B/index.md#fam-gost)                                                                                                                                                                               |
-| Расположение  | `src/plugins/gosts/client/_assets/scripts/gosts.js` (внедряется в HTML через [`gosts.injector`](../МодульГОСТы/index.md))                   |
-| Точка входа   | IIFE на странице `Дополнительнаяинформация/ГОСТы/index.html`                                                                                |
-| Версия        | `1.54.0`                                                                                                                                    |
-| Назначение    | Строит интерактивную таблицу ГОСТов из `window.__GOSTS_DATA__`: группировка, сортировка, карточки с раскрытием, flash при переходе по якорю |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -369,3 +365,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

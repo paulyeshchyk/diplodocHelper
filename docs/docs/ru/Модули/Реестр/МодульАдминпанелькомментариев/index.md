@@ -3,25 +3,21 @@ title: Модуль. Админ-панель комментариев
 sectionType: Page
 pureTitle: Модуль. Админ-панель комментариев
 context: admin, comments, ui, moderation, notifications
-capability:
-family:
-layer:
+capability: kontent
+family: fam-kommentariji
+layer: client-runtime
+ID: 053
+ID_Group: 5
+ID_Type: 1
+Идентификатор: 'comments.admin'
+designation: 'Интерфейс модерации тредов, ответов на комментарии и управления Whitelist (списком читателей)'
+folder: 'server/admin/'
+entrypoint: 'Браузер: `http://<host>/admin`'
+role:
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                                                                                                        |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [5.1-053](../../Соглашения/index.md#identifikaciya-modulej)                                                                                                                                                                                                                                                            |
-| Идентификатор | `comments.admin`                                                                                                                                                                                                                                                                                                       |
-| Наименование  | Админ-панель комментариев                                                                                                                                                                                                                                                                                              |
-| Слой          | [Client runtime](../Слоиlayer/ClientRuntime/index.md#naznachenie)                                                                                                                                                                                                                                                      |
-| Каталог       |                                                                                                                                                                                                                                                                                                                        |
-| Семейство     | [Комментарии пользователей](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9A%D0%BE%D0%BC%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%80%D0%B8%D0%B8%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9/index.md#moduli) |
-| Расположение  | `server/admin/`                                                                                                                                                                                                                                                                                                        |
-| Точка входа   | Браузер: `http://<host>/admin`                                                                                                                                                                                                                                                                                         |
-| Версия        | `1.0.0`                                                                                                                                                                                                                                                                                                                |
-| Назначение    | Интерфейс модерации тредов, ответов на комментарии и управления Whitelist (списком читателей)                                                                                                                                                                                                                          |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -122,3 +118,5 @@ flowchart TB
 - Он не имеет прямого доступа к БД, а работает только через REST API.
 - Авторизация происходит через `HttpOnly` cookie `gulf_admin`, которая выдается сервером при успешном вводе `MODERATOR_TOKEN`.
 - При каждом запросе к API (например, `PATCH /api/threads/:id`) сервер проверяет HMAC-подпись cookie. Если она невалидна (например, токен был сротирован), админка выкидывает пользователя на экран логина.
+
+{% include [legend](./page-legend.md) %}

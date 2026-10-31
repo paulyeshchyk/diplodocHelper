@@ -3,25 +3,21 @@ title: Модуль. Справочные теги
 sectionType: Page
 pureTitle: Справочные теги
 context: helptags, helptag, pre-processing, yaml
-capability: navigation
-family:
-layer:
+capability: navigaciya
+family: fam-helptags
+layer: pre-processing
+ID: 010
+ID_Group: 3
+ID_Type: 2
+Идентификатор: 'helptags'
+designation: 'Собирает helptag:-теги из frontmatter и генерирует страницу-указатель с группировкой по тегам'
+folder: 'src/plugins/helptags/'
+entrypoint: 'runGeneration(docsRoot)'
+role: Страница-указатель
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                     |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ID            | [3.2-010](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                       |
-| Идентификатор | `helptags`                                                                                                                                                          |
-| Наименование  | Справочные теги                                                                                                                                                     |
-| Слой          | [Pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md#naznachenie)                                                                               |
-| Каталог       | [Навигация](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9D%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F/index.md#navigaciya)                                                                                                                                                                    |
-| Семейство     | [Helptags](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEHelptags/index.md#fam-helptags) |
-| Расположение  | `src/plugins/helptags/`                                                                                                                                             |
-| Точка входа   | `runGeneration(docsRoot)`                                                                                                                                           |
-| Версия        | `1.54.0`                                                                                                                                                            |
-| Назначение    | Собирает `helptag:`-теги из frontmatter и генерирует страницу-указатель с группировкой по тегам                                                                     |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -204,3 +200,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

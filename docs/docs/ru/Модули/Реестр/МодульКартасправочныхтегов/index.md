@@ -3,25 +3,21 @@ title: Модуль. Карта справочных тегов
 sectionType: Page
 pureTitle: Карта справочных тегов
 context: helptagmap, helptag, report, post-processing, client-runtime, html
-capability: report
-family:
-layer:
+capability: otchety
+family: fam-helptags
+layer: post-processing, client-runtime
+ID: 017
+ID_Group: 4
+ID_Type: 2
+Идентификатор: 'helptagmap'
+designation: 'Генерирует страницу с тепловой картой наличия helptag по разделам и главам'
+folder: 'src/plugins/contentNavigator/Pagebuilder.Config.HelptagMap.js, helptagmap.js, helptagmap.css'
+entrypoint: 'generateHelpTagPage({ mapDir, outputDir, lang })'
+role: Карта
+version: '1.54.0'
 ---
 
-|               |                                                                                                                                                                                                                                                                                                                                                                    |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ID            | [4.2-017](../../../%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%88%D0%B5%D0%BD%D0%B8%D1%8F/index.md#identifikaciya-modulej)                                                                                                                                                                                                                                                      |
-| Идентификатор | `helptagmap`                                                                                                                                                                                                                                                                                                                                                       |
-| Наименование  | Карта справочных тегов                                                                                                                                                                                                                                                                                                                                             |
-| Слой          | [Post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie) / [client-runtime](../%D0%A1%D0%BB%D0%BE%D0%B8layer/ClientRuntime/index.md#naznachenie)                                                                                                                                                                                    |
-| Каталог       | [Отчёты](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9E%D1%82%D1%87%D1%91%D1%82%D1%8B/index.md#otchety)                                                                                                                                                                                                                                                                                                                                                                   |
-| Семейство     | [Helptags](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEHelptags/index.md#fam-helptags)  |
-| Расположение  | `src/plugins/contentNavigator/Pagebuilder.Config.HelptagMap.js`, `helptagmap.js`, `helptagmap.css`                                                                                                                                                                                                                                                                 |
-| Точка входа   | `generateHelpTagPage({ mapDir, outputDir, lang })`                                                                                                                                                                                                                                                                                                                 |
-| Версия        | `1.54.0`                                                                                                                                                                                                                                                                                                                                                           |
-| Назначение    | Генерирует страницу с тепловой картой наличия `helptag` по разделам и главам                                                                                                                                                                                                                                                                                       |
-
-{: .page-legend }
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -318,3 +314,5 @@ flowchart TB
 ```
 
 {% endcut %}
+
+{% include [legend](./page-legend.md) %}

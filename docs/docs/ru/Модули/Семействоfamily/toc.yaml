@@ -36,10 +36,10 @@ items:
     include:
       path: СемействоСноски/toc.yaml
       mode: link
-  - name: Структура
-    href: СемействоСтруктура/index.md
+  - name: Секции
+    href: СемействоСекции/index.md
     include:
-      path: СемействоСтруктура/toc.yaml
+      path: СемействоСекции/toc.yaml
       mode: link
   - name: Иллюстрации
     href: СемействоИллюстрации/index.md
@@ -71,7 +71,7 @@ items:
     include:
       path: СемействоИнфраструктура/toc.yaml
       mode: link
-  - name: Семейство. JSON-генераторы
+  - name: JSON-генераторы
     href: СемействоJSONгенераторы/index.md
     include:
       path: СемействоJSONгенераторы/toc.yaml
