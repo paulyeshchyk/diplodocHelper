@@ -3,7 +3,7 @@ title: Модуль. Контексты
 sectionType: Page
 pureTitle: Контексты
 context: contexts, context, pre-processing, client-runtime, yaml
-capability: navigaciya
+capability: navigatsiya
 family: fam-contexts
 layer: pre-processing, client-runtime
 ID: 009
@@ -274,4 +274,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

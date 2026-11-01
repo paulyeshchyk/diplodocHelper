@@ -1,17 +1,15 @@
-|               |                                                                                          |
-| ------------- | ---------------------------------------------------------------------------------------- |
-| ID            | 31                                                                                       |
-| ID_Group      | 2                                                                                        |
-| ID_Type       | 2                                                                                        |
-| Идентификатор | `image.PasteFromList`                                                                    |
-| title         | Модуль. Вставка изображения из списка                                                    |
-| capability    | `kontent`                                                                                |
-| family        | `fam-illustrations`                                                                      |
-| layer         | `vscode-ui`                                                                              |
-| designation   | Показывает список всех изображений проекта и вставляет ссылку на выбранное в текущий .md |
-| folder        | `src/commands/diplodoc-helper.image.PasteFromList.js`                                    |
-| entrypoint    | `ux_image_paste_list()`                                                                  |
-| role          | Вставка из списка                                                                        |
-| version       | `1.54.0`                                                                                 |
+|               |                                                                                                                                                                                                                           |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | 31                                                                                                                                                                                                                        |
+| Идентификатор | `image.PasteFromList`                                                                                                                                                                                                     |
+| title         | Модуль. Вставка изображения из списка                                                                                                                                                                                     |
+| capability    | [kontent](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82/index.md)                                                    |
+| family        | [fam-illustrations](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md) |
+| layer         | [vscode-ui](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md)                                                                                                                                |
+| designation   | Показывает список всех изображений проекта и вставляет ссылку на выбранное в текущий .md                                                                                                                                  |
+| folder        | 'src/commands/diplodoc-helper.image.PasteFromList.js'                                                                                                                                                                     |
+| entrypoint    | `ux_image_paste_list()`                                                                                                                                                                                                   |
+| role          | Вставка из списка                                                                                                                                                                                                         |
+| version       | `1.54.0`                                                                                                                                                                                                                  |
 
 {: .page-legend }

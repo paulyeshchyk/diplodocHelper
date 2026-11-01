@@ -3,8 +3,8 @@ title: Модуль. Аббревиатуры
 sectionType: Page
 pureTitle: Модуль. Аббревиатуры
 context: abbrs, abbr, pre-processing, post-processing, yaml
-capability: terms
-family: fam-abbr
+capability: terminologiya
+family: fam-abbrs
 layer: pre-processing, post-processing
 ID: 003
 ID_Group: 3
@@ -272,4 +272,4 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}
+

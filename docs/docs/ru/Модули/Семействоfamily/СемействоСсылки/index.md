@@ -5,7 +5,7 @@ pureTitle: Семейство. Ссылки
 sectionIndex: ""
 ---
 
-### 1. Ссылки (`link`) {#fam-link}
+### 1. Ссылки (`link`) {#fam-links}
 
 Пара «скопировать → вставить». `link.Copy` кладёт JSON в буфер, `link.Paste` читает и вставляет с корректным путём. **По отдельности бессмысленны** — JSON в буфере некому прочитать.
 
@@ -22,6 +22,4 @@ flowchart LR
 
 ### Модули
 
-{% include [модули](modules.md) %}
-
-
+{% include [modules](./modules.md) %}

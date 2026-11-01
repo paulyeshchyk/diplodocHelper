@@ -4,7 +4,7 @@ sectionType: Page
 pureTitle: Копирование ссылки
 context: link.Copy, link, markdown, vscode-ui, clipboard
 capability: ssylki
-family: fam-link
+family: fam-links
 layer: vscode-ui
 ID: 027
 ID_Group: 2
@@ -276,4 +276,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

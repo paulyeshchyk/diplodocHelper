@@ -6,7 +6,7 @@ sectionIndex: ""
 ---
 
 
-### 4. ГОСТы (`gost`) {#fam-gost}
+### 4. ГОСТы (`gost`) {#fam-gosts}
 
 Третье зеркало — ГОСТы. Отличие: `gosts.client` рисует **таблицу с карточками**, а не тултипы. `abbrs`/`terms` — про inline-разметку, `gosts` — про отдельную страницу.
 
@@ -16,7 +16,7 @@ flowchart LR
   gc["gosts.client<br/>(client-runtime)"]
   g <-->|"пара"| gc
 ```
+
 ### Модули
 
-{% include [модули](modules.md) %}
-
+{% include [modules](./modules.md) %}

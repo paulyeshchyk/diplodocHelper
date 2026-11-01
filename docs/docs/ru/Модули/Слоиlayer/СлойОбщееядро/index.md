@@ -31,3 +31,5 @@ pureTitle: Слой. Общее ядро
 {% include [Cli](./modules.md) %}
 
 {% endcut %}
+
+{% include [modules](./modules.md) %}

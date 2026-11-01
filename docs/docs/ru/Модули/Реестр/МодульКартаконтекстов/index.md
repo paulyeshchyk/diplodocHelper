@@ -3,7 +3,7 @@ title: Модуль. Карта контекстов
 sectionType: Page
 pureTitle: Карта контекстов
 context: contextmap, context, report, post-processing, client-runtime, html
-capability: otchety
+capability: otchyoty
 family: fam-contexts
 layer: post-processing, client-runtime
 ID: 016
@@ -324,4 +324,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

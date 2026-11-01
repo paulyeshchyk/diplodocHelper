@@ -1,15 +1,15 @@
 title: Каталог (Capability map)
 href: index.yaml
 items:
-  - name: Дорожная карта
-    href: КаталогДорожнаякарта/index.md
-    include:
-      path: КаталогДорожнаякарта/toc.yaml
-      mode: link
   - name: Инфраструктура
     href: КаталогИнфраструктура/index.md
     include:
       path: КаталогИнфраструктура/toc.yaml
+      mode: link
+  - name: Конвертер
+    href: КаталогКонвертер/index.md
+    include:
+      path: КаталогКонвертер/toc.yaml
       mode: link
   - name: Контент
     href: КаталогКонтент/index.md
@@ -36,15 +36,15 @@ items:
     include:
       path: КаталогПредставлениеданных/toc.yaml
       mode: link
+  - name: Реестр
+    href: КаталогРеестр/index.md
+    include:
+      path: КаталогРеестр/toc.yaml
+      mode: link
   - name: Режимы отображения
     href: КаталогРежимыотображения/index.md
     include:
       path: КаталогРежимыотображения/toc.yaml
-      mode: link
-  - name: Сноски
-    href: КаталогСноски/index.md
-    include:
-      path: КаталогСноски/toc.yaml
       mode: link
   - name: Ссылки
     href: КаталогСсылки/index.md

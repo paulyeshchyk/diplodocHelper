@@ -3,8 +3,8 @@ title: Модуль. ГОСТы
 sectionType: Page
 pureTitle: ГОСТы
 context: gosts, gost, pre-processing, post-processing, yaml
-capability: terms
-family: fam-gost
+capability: terminologiya
+family: fam-gosts
 layer: pre-processing, post-processing
 ID: 002
 ID_Group: 3
@@ -228,4 +228,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

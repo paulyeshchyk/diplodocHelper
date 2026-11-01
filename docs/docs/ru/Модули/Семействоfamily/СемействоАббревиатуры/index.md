@@ -6,7 +6,7 @@ sectionIndex: ""
 ---
 
 
-### Аббревиатуры (`abbr`) {#fam-abbr}
+### Аббревиатуры (`abbr`) {#fam-abbrs}
 
 Пара «генератор → клиент». `abbrs` (pre) собирает словарь и генерирует указатель, `abbrs.injector` (post) обогащает `<abbr>` тултипами, `abbrs.client` (client) оживляет разметку в браузере. **`abbrs` без `abbrs.client`** — работает (страница-указатель есть), но тултипы не показываются.
 
@@ -19,5 +19,4 @@ flowchart LR
 
 ### Модули
 
-{% include [модули](modules.md) %}
-
+{% include [modules](./modules.md) %}

@@ -3,7 +3,7 @@ title: Модуль. Карта справочных тегов
 sectionType: Page
 pureTitle: Карта справочных тегов
 context: helptagmap, helptag, report, post-processing, client-runtime, html
-capability: otchety
+capability: otchyoty
 family: fam-helptags
 layer: post-processing, client-runtime
 ID: 017
@@ -315,4 +315,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

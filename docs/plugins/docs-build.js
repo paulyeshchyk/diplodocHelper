@@ -47,6 +47,14 @@ const STEPS = {
             fs.rmSync(buildDir, { recursive: true, force: true });
         }),
 
+
+        // --- реестр модулей / легенды / modules.md ---
+        cli('catalog', '--lang=ru'),
+        cli('pageLegend', '--lang=ru', '--rewrite', '--with-include',
+            '--ignore=sectionType,context,pureTitle,ID_Group,ID_Type'),
+        cli('renderModules', '--lang=ru', '--rewrite', '--with-include'),
+        // ---
+
         cli('reindexFigures', '--docsDir', './docs/ru'),
         cli('reindexFootnotes', '--docsDir', './docs/ru'),
         cli('helpMap'),

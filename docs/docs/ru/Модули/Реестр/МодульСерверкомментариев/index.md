@@ -87,5 +87,3 @@ flowchart LR
 | `PATCH` | `/api/threads/:id`  | Смена статуса (resolve/archive)                           |
 | `GET`   | `/api/admin/emails` | Управление Whitelist (только админ)                       |
 | `GET`   | `/admin/status`     | Проверка авторизации админа                               |
-
-{% include [legend](./page-legend.md) %}

@@ -35,6 +35,19 @@ if (require.main === module) {
     const args = process.argv.slice(2);
     const command = args[0];
 
+    const asyncHandlers = {
+        catalog:       { path: './docs-registry/collect-catalog/index.js',    fn: 'runCollectCatalog' },
+        pageLegend:    { path: './docs-registry/build-page-legend/index.js',  fn: 'runBuildPageLegend' },
+        renderModules: { path: './docs-registry/render-modules/index.js',     fn: 'runRenderModules' },
+    };
+    const asyncH = asyncHandlers[command];
+    if (asyncH) {
+        const mod = require(asyncH.path);
+        mod[asyncH.fn](args.slice(1))
+            .catch(e => { console.error(e.message || e); process.exit(1); });
+    }
+
+
     const docsDirIndex = args.indexOf('--docsDir');
     const docsDir = docsDirIndex !== -1 ? args[docsDirIndex + 1] : './docs';
 
@@ -202,4 +215,7 @@ module.exports = {
     generateAbbrs,
     generateTerms,
     generateGosts,
+    runCollectCatalog:    require('./docs-registry/collect-catalog').runCollectCatalog,
+    runBuildPageLegend:   require('./docs-registry/build-page-legend').runBuildPageLegend,
+    runRenderModules:     require('./docs-registry/render-modules').runRenderModules,
 };

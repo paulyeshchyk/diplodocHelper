@@ -12,7 +12,4 @@ pureTitle: Семейство. Секции
 
 ### Модули
 
-{% include [модули](modules.md) %}
-
-
-
+{% include [modules](./modules.md) %}

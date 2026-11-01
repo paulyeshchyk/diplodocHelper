@@ -4,7 +4,7 @@ sectionType: Page
 pureTitle: JSON → Markdown
 context: json, markdown, table, treemap, mermaid, generator, pre-processing, schema
 capability: json-to-md
-family: json-generator
+family: fam-json-generators
 layer: pre-processing
 ID: 054
 ID_Group: 8
@@ -429,4 +429,4 @@ flowchart TB
 
 Схема — контракт; генераторы — стратегии. Добавление схемы не требует правки генераторов; добавление генератора — только новой ветки диспетчера.
 
-{% include [legend](./page-legend.md) %}
+

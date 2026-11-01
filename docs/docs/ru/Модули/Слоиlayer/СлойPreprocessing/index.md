@@ -36,3 +36,5 @@ pureTitle: Слой. Pre-processing
 {% include [Preprocessing](./modules.md) %}
 
 {% endcut %}
+
+{% include [modules](./modules.md) %}

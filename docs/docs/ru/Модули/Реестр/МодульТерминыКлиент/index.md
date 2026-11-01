@@ -3,8 +3,8 @@ title: Модуль. Клиент терминов
 sectionType: Page
 pureTitle: Клиент терминов
 context: terms.client, term, client-runtime, browser
-capability: terms
-family: fam-term
+capability: terminologiya
+family: fam-terms
 layer: client-runtime
 ID: 006
 ID_Group: 3
@@ -217,5 +217,3 @@ flowchart TB
 ```
 
 {% endcut %}
-
-{% include [legend](./page-legend.md) %}

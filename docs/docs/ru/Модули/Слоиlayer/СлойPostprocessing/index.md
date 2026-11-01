@@ -33,3 +33,5 @@ pureTitle: Слой. Post-processing
 {% include [Postprocessing](./modules.md) %}
 
 {% endcut %}
+
+{% include [modules](./modules.md) %}

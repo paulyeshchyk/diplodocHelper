@@ -18,6 +18,7 @@ version: '1.54.0'
 ---
 
 {% include [legend](./page-legend.md) %}
+
 ## Назначение
 
 `docs-build` — «главный» скрипт сборки документации. Пользователь запускает `npm run build` (или `node ./plugins/docs-build.js`) — и модуль последовательно выполняет **~20 шагов** в трёх фазах:
@@ -464,5 +465,3 @@ flowchart TB
 ```
 
 {% endcut %}
-
-{% include [legend](./page-legend.md) %}

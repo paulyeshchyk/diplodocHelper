@@ -4,13 +4,13 @@ sectionType: Page
 pureTitle: Добавление якоря
 context: link.addAnchor, link, anchor, markdown, vscode-ui
 capability: ssylki
-family: fam-link
+family: fam-links
 layer: vscode-ui
 ID: 028
 ID_Group: 2
 ID_Type: 1
 Идентификатор: 'link.addAnchor'
-designation: 'Оборачивает выделенный текст в <div id=''…'' class=''diplodocanchor''>, создавая стабильный якорь'
+designation: 'Оборачивает выделенный текст в `<div id=''…'' class=''diplodocanchor''>`, создавая стабильный якорь'
 folder: 'src/commands/diplodoc-helper.link.AddAnchor.js'
 entrypoint: 'ux_add_anchor()'
 role: 'Свободный'
@@ -454,4 +454,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

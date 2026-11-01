@@ -1,17 +1,15 @@
-|               |                                                                                                 |
-| ------------- | ----------------------------------------------------------------------------------------------- |
-| ID            | 42                                                                                              |
-| ID_Group      | 1                                                                                               |
-| ID_Type       | 2                                                                                               |
-| Идентификатор | `reindexer.figures`                                                                             |
-| title         | Модуль. Переиндексация рисунков                                                                 |
-| capability    | `kontent`                                                                                       |
-| family        | `fam-illustrations`                                                                             |
-| layer         | `pre-processing`                                                                                |
-| designation   | Пересчитывает номера рисунков в `.md` (по порядку в `toc.yaml`) и обновляет текст ссылок на них |
-| folder        | `src/plugins/reindexer/reindexer.figures.js`                                                    |
-| entrypoint    | `reindexFigures(rootDir, targetLocale, configJsonOrObj)`                                        |
-| role          | Нумерация                                                                                       |
-| version       | `1.54.0`                                                                                        |
+|               |                                                                                                                                                                                                                           |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | 42                                                                                                                                                                                                                        |
+| Идентификатор | `reindexer.figures`                                                                                                                                                                                                       |
+| title         | Модуль. Переиндексация рисунков                                                                                                                                                                                           |
+| capability    | [kontent](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82/index.md)                                                    |
+| family        | [fam-illustrations](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.md) |
+| layer         | [pre-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Preprocessing/index.md)                                                                                                                      |
+| designation   | Пересчитывает номера рисунков в `.md` (по порядку в `toc.yaml`) и обновляет текст ссылок на них                                                                                                                           |
+| folder        | 'src/plugins/reindexer/reindexer.figures.js'                                                                                                                                                                              |
+| entrypoint    | `reindexFigures(rootDir, targetLocale, configJsonOrObj)`                                                                                                                                                                  |
+| role          | Нумерация                                                                                                                                                                                                                 |
+| version       | `1.54.0`                                                                                                                                                                                                                  |
 
 {: .page-legend }

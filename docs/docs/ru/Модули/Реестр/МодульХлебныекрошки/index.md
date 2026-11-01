@@ -4,8 +4,8 @@ sectionType: Page
 context: breadcrumb, post-processing, html
 pureTitle: Модуль. Хлебные крошки
 vars: false
-capability: navigaciya
-family: fam-link
+capability: navigatsiya
+family: fam-links
 layer: post-processing
 ID: 001
 ID_Group: 4
@@ -160,5 +160,3 @@ flowchart TB
 ```
 
 {% endcut %}
-
-{% include [legend](./page-legend.md) %}

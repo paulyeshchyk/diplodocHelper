@@ -17,7 +17,7 @@ role: 'CLI-диспетчер'
 version: '1.54.0'
 ---
 
-{% include [legend](./page-legend.md)}
+{% include [legend](./page-legend.md) %}
 
 ## Назначение
 
@@ -429,4 +429,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

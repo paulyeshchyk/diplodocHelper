@@ -3,7 +3,7 @@ title: Модуль. Патчер диаграммы Ганта
 sectionType: Page
 pureTitle: Патчер диаграммы Ганта
 context: roadmap.patcher, roadmap, gantt, report, post-processing, client-runtime, html
-capability: navigaciya
+capability: otchyoty
 family: fam-roadmap
 layer: post-processing, client-runtime
 ID: 033
@@ -384,5 +384,3 @@ flowchart TB
 ```
 
 {% endcut %}
-
-{% include [legend](./page-legend.md) %}

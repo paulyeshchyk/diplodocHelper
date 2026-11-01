@@ -36,3 +36,5 @@ pureTitle: Слой. CLI
 {% include [Cli](./modules.md) %}
 
 {% endcut %}
+
+{% include [modules](./modules.md) %}

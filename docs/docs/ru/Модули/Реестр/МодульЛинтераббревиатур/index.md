@@ -4,7 +4,7 @@ sectionType: Page
 pureTitle: Линтер аббревиатур
 context: linter.abbrs, abbr, lint, vscode-ui, markdown
 capability: lintery
-family: fam-abbr
+family: fam-abbrs
 layer: vscode-ui
 ID: 020
 ID_Group: 7
@@ -225,4 +225,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

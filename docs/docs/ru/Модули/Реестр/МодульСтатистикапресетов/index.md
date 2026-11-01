@@ -3,7 +3,7 @@ title: Модуль. Статистика пресетов
 sectionType: Page
 pureTitle: Статистика пресетов
 context: presetsStat, report, pre-processing, yaml
-capability: otchety
+capability: otchyoty
 family: fam-sekciyi
 layer: pre-processing
 ID: 018
@@ -357,5 +357,3 @@ flowchart TB
 ```
 
 {% endcut %}
-
-{% include [legend](./page-legend.md) %}

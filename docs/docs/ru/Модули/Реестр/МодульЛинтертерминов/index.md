@@ -4,7 +4,7 @@ sectionType: Page
 pureTitle: Линтер терминов
 context: linter.terms, term, lint, vscode-ui, markdown
 capability: lintery
-family: fam-term
+family: fam-terms
 layer: vscode-ui
 ID: 026
 ID_Group: 1
@@ -211,4 +211,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

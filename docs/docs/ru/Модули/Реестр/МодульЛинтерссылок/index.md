@@ -4,7 +4,7 @@ sectionType: Page
 pureTitle: Линтер ссылок
 context: linter.links, lint, vscode-ui, markdown
 capability: lintery
-family: fam-link
+family: fam-links
 layer: vscode-ui
 ID: 019
 ID_Group: 7
@@ -255,4 +255,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

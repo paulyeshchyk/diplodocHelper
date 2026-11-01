@@ -136,6 +136,21 @@ items:
     include:
       path: МодульКартапомощи/toc.yaml
       mode: link
+  - name: Реестр. Генератор легенды
+    href: МодульГенераторлегенды/index.md
+    include:
+      path: МодульГенераторлегенды/toc.yaml
+      mode: link
+  - name: Реестр. Рендерер модулей
+    href: МодульРендерермодулей/index.md
+    include:
+      path: МодульРендерермодулей/toc.yaml
+      mode: link
+  - name: Реестр. Сборщик каталога
+    href: МодульСборщиккаталога/index.md
+    include:
+      path: МодульСборщиккаталога/toc.yaml
+      mode: link
   - name: Режим без навигации
     href: МодульРежимбезнавигации/index.md
     include:

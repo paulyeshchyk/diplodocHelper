@@ -3,8 +3,8 @@ title: Модуль. Клиент ГОСТов
 sectionType: Page
 pureTitle: Клиент ГОСТов
 context: gosts.client, gost, client-runtime, browser
-capability: terms
-family: fam-gost
+capability: terminologiya
+family: fam-gosts
 layer: client-runtime
 ID: 035
 ID_Group: 5
@@ -366,4 +366,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

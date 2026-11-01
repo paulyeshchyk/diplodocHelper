@@ -6,15 +6,15 @@ default:
         start_date: "01.05.2026"
         version: "1.4"
     stats:
-        total_articles: "381"
-        avg_size: "11 092"
+        total_articles: "402"
+        avg_size: "10 810"
         reading_time: "5"
         total_sections: "0"
         total_chapters: "0"
-        total_contexts: "114"
+        total_contexts: "117"
         total_tags: "0"
-        last_update: "31.10.2026 11:52"
-        commit_hash: "7379d108c3f8724b2c3cea31c4bb05beeadb0e5d"
+        last_update: "31.10.2026 20:26"
+        commit_hash: "305cea12a157107f1a14212774d3237894ee895b"
 
 internal:
 
@@ -23,12 +23,12 @@ internal:
         start_date: "01.05.2026"
         version: "1.4"
     stats:
-        total_articles: "381"
-        avg_size: "11 092"
+        total_articles: "402"
+        avg_size: "10 810"
         reading_time: "5"
         total_sections: "0"
         total_chapters: "0"
-        total_contexts: "114"
+        total_contexts: "117"
         total_tags: "0"
-        last_update: "31.10.2026 11:52"
-        commit_hash: "7379d108c3f8724b2c3cea31c4bb05beeadb0e5d"
+        last_update: "31.10.2026 20:26"
+        commit_hash: "305cea12a157107f1a14212774d3237894ee895b"

@@ -7,5 +7,4 @@ sectionIndex: ""
 
 ### Модули {#fam-kommentarii_polzovateley}
 
-{% include [модули](modules.md) %}
-
+{% include [modules](./modules.md) %}

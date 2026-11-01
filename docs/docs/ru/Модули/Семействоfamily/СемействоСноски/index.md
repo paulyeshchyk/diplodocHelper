@@ -27,6 +27,4 @@ flowchart LR
 
 ### Модули
 
-{% include [модули](modules.md) %}
-
-
+{% include [modules](./modules.md) %}

@@ -3,7 +3,7 @@ title: Модуль. Клиентский поиск по контекстам
 sectionType: Page
 pureTitle: Клиентский поиск по контекстам
 context: context-search.client, context, client-runtime, browser
-capability: navigaciya
+capability: navigatsiya
 family: fam-contexts
 layer: client-runtime
 ID: 034
@@ -310,4 +310,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

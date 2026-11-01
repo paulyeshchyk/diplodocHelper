@@ -3,7 +3,7 @@ title: Модуль. Справочные теги
 sectionType: Page
 pureTitle: Справочные теги
 context: helptags, helptag, pre-processing, yaml
-capability: navigaciya
+capability: navigatsiya
 family: fam-helptags
 layer: pre-processing
 ID: 010
@@ -200,5 +200,3 @@ flowchart TB
 ```
 
 {% endcut %}
-
-{% include [legend](./page-legend.md) %}

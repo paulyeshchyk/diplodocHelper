@@ -3,8 +3,8 @@ title: Модуль. Вставка ссылки
 sectionType: Page
 pureTitle: Вставка ссылки
 context: link.Paste, link, anchor, markdown, vscode-ui, clipboard
-capability: ssylki, navigaciya
-family: fam-link
+capability: ssylki, navigatsiya
+family: fam-links
 layer: vscode-ui
 ID: 029
 ID_Group: 2
@@ -460,4 +460,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

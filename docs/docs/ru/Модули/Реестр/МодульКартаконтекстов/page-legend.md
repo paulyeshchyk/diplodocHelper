@@ -1,17 +1,15 @@
-|               |                                                                                                      |
-| ------------- | ---------------------------------------------------------------------------------------------------- |
-| ID            | 16                                                                                                   |
-| ID_Group      | 4                                                                                                    |
-| ID_Type       | 2                                                                                                    |
-| Идентификатор | `contextmap`                                                                                         |
-| title         | Модуль. Карта контекстов                                                                             |
-| capability    | `otchety`                                                                                            |
-| family        | `fam-contexts`                                                                                       |
-| layer         | `post-processing` / `client-runtime`                                                                 |
-| designation   | Генерирует страницу с тепловой картой количества context-тегов по разделам и главам                  |
-| folder        | `src/plugins/contentNavigator/Pagebuilder.Config.ContextMap.js` ; `contextmap.js` ; `contextmap.css` |
-| entrypoint    | `generateContextsPage({ mapDir, outputDir, lang })`                                                  |
-| role          | Карта                                                                                                |
-| version       | `1.54.0`                                                                                             |
+|               |                                                                                                                                                                                                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID            | 16                                                                                                                                                                                                                                                                  |
+| Идентификатор | `contextmap`                                                                                                                                                                                                                                                        |
+| title         | Модуль. Карта контекстов                                                                                                                                                                                                                                            |
+| capability    | [otchyoty](../../%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3Capabilitymap/%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%9E%D1%82%D1%87%D1%91%D1%82%D1%8B/index.md)                                                                                                   |
+| family        | [fam-contexts](../../%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BEfamily/%D0%A1%D0%B5%D0%BC%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%BE%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82%D1%8B/index.md)                                                            |
+| layer         | [post-processing](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md) / [client-runtime](../../%D0%A1%D0%BB%D0%BE%D0%B8layer/%D0%A1%D0%BB%D0%BE%D0%B9%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9runtime/index.md) |
+| designation   | Генерирует страницу с тепловой картой количества context-тегов по разделам и главам                                                                                                                                                                                 |
+| folder        | 'src/plugins/contentNavigator/Pagebuilder.Config.ContextMap.js' + 'contextmap.js' + 'contextmap.css'                                                                                                                                                                |
+| entrypoint    | `generateContextsPage({ mapDir, outputDir, lang })`                                                                                                                                                                                                                 |
+| role          | Карта                                                                                                                                                                                                                                                               |
+| version       | `1.54.0`                                                                                                                                                                                                                                                            |
 
 {: .page-legend }

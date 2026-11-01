@@ -3,16 +3,6 @@ title: Реестр модулей
 sectionType: Page
 context: registry, meta
 ---
-
-|               |                                  |
-| ------------- | -------------------------------- |
-| Идентификатор | `_registry`                      |
-| layer         | `shared-core`                    |
-| designation   | Единый реестр ID и папок модулей |
-
-{: .page-legend }
-
-
 {% include [tree](./registry-treemap.md) %}
 
 
@@ -49,4 +39,4 @@ context: registry, meta
 | `<G>.<T>-<XXX>` | <идентификатор> | `src/plugins/<папка>/` | <слой> | active |
 ```
 
-{% include [legend](./page-legend.md) %}
+

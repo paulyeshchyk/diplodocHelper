@@ -3,8 +3,8 @@ title: Модуль. Аббревиатуры. Клиент
 sectionType: Page
 pureTitle: Модуль. Аббревиатуры. Клиент
 context: abbrs.client, abbr, client-runtime, browser
-capability: terms
-family: fam-abbr
+capability: terminologiya
+family: fam-abbrs
 layer: client-runtime
 ID: 004
 ID_Group: 5
@@ -231,4 +231,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

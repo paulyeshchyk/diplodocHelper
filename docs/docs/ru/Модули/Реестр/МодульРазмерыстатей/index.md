@@ -3,7 +3,7 @@ title: Модуль. Размеры статей
 sectionType: Page
 pureTitle: Размеры статей
 context: bytescounter, report, post-processing, client-runtime, html
-capability: otchety
+capability: otchyoty
 family: fam-sekciyi
 layer: post-processing, client-runtime
 ID: 015

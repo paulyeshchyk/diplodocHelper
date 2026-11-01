@@ -3,7 +3,7 @@ title: Модуль. Карта помощи
 sectionType: Page
 pureTitle: Карта помощи
 context: helpMap, helptag, pre-processing, yaml
-capability: navigaciya
+capability: navigatsiya
 family: fam-helptags, fam-contexts
 layer: pre-processing, post-processing
 ID: 008
@@ -219,4 +219,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

@@ -3,7 +3,7 @@ title: Модуль. Клиент контекстных тегов
 sectionType: Page
 pureTitle: Клиент контекстных тегов
 context: context-tags.client, context, client-runtime, browser
-capability: navigaciya
+capability: navigatsiya
 family: fam-context-tags
 layer: client-runtime
 ID: 038
@@ -327,4 +327,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

@@ -13,5 +13,4 @@ sectionIndex: ""
 
 ### Модули
 
-{% include [модули](modules.md) %}
-
+{% include [modules](./modules.md) %}

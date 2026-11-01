@@ -3,7 +3,7 @@ title: Модуль. Контекстные теги
 sectionType: Page
 pureTitle: Контекстные теги
 context: context-tags, context, post-processing, html
-capability: navigaciya
+capability: navigatsiya
 family: fam-context-tags
 layer: post-processing
 ID: 045
@@ -317,4 +317,3 @@ flowchart TB
 
 {% endcut %}
 
-{% include [legend](./page-legend.md) %}

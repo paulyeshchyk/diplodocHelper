@@ -3,7 +3,7 @@ title: Модуль. Общий рендерер
 sectionType: Page
 pureTitle: Общий рендерер
 context: core-renderer, report, client-runtime, browser
-capability: otchety
+capability: otchyoty
 family: fam-helptags, fam-contexts, fam-sekciyi
 layer: client-runtime
 ID: 037
@@ -348,5 +348,3 @@ flowchart TB
 ```
 
 {% endcut %}
-
-{% include [legend](./page-legend.md) %}

@@ -3,8 +3,8 @@ title: Модуль. Термины
 sectionType: Page
 pureTitle: Модуль. Термины
 context: terms, term, pre-processing, post-processing, yaml
-capability: terms
-family: fam-term
+capability: terminologiya
+family: fam-terms
 layer: pre-processing, post-processing
 ID: 005
 ID_Group: 3
@@ -250,5 +250,3 @@ flowchart TB
 ```
 
 {% endcut %}
-
-{% include [legend](./page-legend.md) %}

@@ -61,11 +61,6 @@ items:
     include:
       path: СемействоКомментариипользователей/toc.yaml
       mode: link
-  - name: Линтеры
-    href: СемействоЛинтеры/index.md
-    include:
-      path: СемействоЛинтеры/toc.yaml
-      mode: link
   - name: Инфраструктура
     href: СемействоИнфраструктура/index.md
     include:
@@ -75,4 +70,9 @@ items:
     href: СемействоJSONгенераторы/index.md
     include:
       path: СемействоJSONгенераторы/toc.yaml
+      mode: link
+  - name: Реестр
+    href: СемействоDocsRegistry/index.md
+    include:
+      path: СемействоDocsRegistry/toc.yaml
       mode: link
