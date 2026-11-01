@@ -33,10 +33,4 @@ pureTitle: Слой. Клиентский runtime
 
 ## Состав
 
-{% cut "Развернуть" %}
-
-{% include [Client-runtime](./modules.md) %}
-
-{% endcut %}
-
 {% include [modules](./modules.md) %}

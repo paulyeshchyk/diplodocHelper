@@ -6,37 +6,39 @@ dimensions:
     columns:
       - { label: ID,          field: id }
       - { label: Модуль,      field: ident }
+      - { label: Роль,    field: role }
       - { label: Что делает,  field: designation }
     items:
-      fam-json-generators: { dir: "Семействоfamily/СемействоJSONгенераторы",                        title: "JSON генераторы"}
-      fam-footnote:       { dir: "Семействоfamily/СемействоСноски",                        title: "Сноски" }
-      fam-helptags:       { dir: "Семействоfamily/СемействоHelptags",                      title: "Helptags" }
-      fam-json:           { dir: "Семействоfamily/СемействоJSONгенераторы",                title: "JSON генераторы" }
-      fam-abbrs:          { dir: "Семействоfamily/СемействоАббревиатуры",                  title: "Аббревиатуры" }
-      fam-gosts:          { dir: "Семействоfamily/СемействоГОСТы",                         title: "ГОСТы" }
-      fam-roadmap:        { dir: "Семействоfamily/СемействоДорожнаякарта",                 title: "Дорожная карта" }
-      fam-figures:        { dir: "Семействоfamily/СемействоИллюстрации",                   title: "Иллюстрации" }
-      fam-infrastructure: { dir: "Семействоfamily/СемействоИнфраструктура",                title: "Инфраструктура" }
-      fam-kommentariji:   { dir: "Семействоfamily/СемействоКомментариипользователей",      title: "Комментарии пользователей" }
-      fam-context-tags:   { dir: "Семействоfamily/СемействоКонтекстныетеги",               title: "Контекстные теги" }
-      fam-contexts:       { dir: "Семействоfamily/СемействоКонтексты",                     title: "Контексты" }
-      fam-sekciyi:        { dir: "Семействоfamily/СемействоСекции",                        title: "Секции" }
-      fam-links:          { dir: "Семействоfamily/СемействоСсылки",                        title: "Ссылки" }
-      fam-terms:          { dir: "Семействоfamily/СемействоТермины",                       title: "Термины" }
-      fam-illustrations: { dir: "Семействоfamily/СемействоИллюстрации",                       title: "Иллюстрации" }
-      fam-docs-registry: { dir: "Семействоfamily/СемействоDocsRegistry",      title: "Docs Registry" }
+      fam-json-generators: { dir: "Семействоfamily/СемействоJSONгенераторы",            title: "JSON генераторы"}
+      fam-footnote:        { dir: "Семействоfamily/СемействоСноски",                    title: "Сноски" }
+      fam-helptags:        { dir: "Семействоfamily/СемействоHelptags",                  title: "Helptags" }
+      fam-json:            { dir: "Семействоfamily/СемействоJSONгенераторы",            title: "JSON генераторы" }
+      fam-abbrs:           { dir: "Семействоfamily/СемействоАббревиатуры",              title: "Аббревиатуры" }
+      fam-gosts:           { dir: "Семействоfamily/СемействоГОСТы",                     title: "ГОСТы" }
+      fam-roadmap:         { dir: "Семействоfamily/СемействоДорожнаякарта",             title: "Дорожная карта" }
+      fam-figures:         { dir: "Семействоfamily/СемействоИллюстрации",               title: "Иллюстрации" }
+      fam-infrastructure:  { dir: "Семействоfamily/СемействоИнфраструктура",            title: "Инфраструктура" }
+      fam-kommentariji:    { dir: "Семействоfamily/СемействоКомментариипользователей",  title: "Комментарии пользователей" }
+      fam-context-tags:    { dir: "Семействоfamily/СемействоКонтекстныетеги",           title: "Контекстные теги" }
+      fam-contexts:        { dir: "Семействоfamily/СемействоКонтексты",                 title: "Контексты" }
+      fam-sekciyi:         { dir: "Семействоfamily/СемействоСекции",                    title: "Секции" }
+      fam-links:           { dir: "Семействоfamily/СемействоСсылки",                    title: "Ссылки" }
+      fam-terms:           { dir: "Семействоfamily/СемействоТермины",                   title: "Термины" }
+      fam-illustrations:   { dir: "Семействоfamily/СемействоИллюстрации",               title: "Иллюстрации" }
+      fam-docs-registry:   { dir: "Семействоfamily/СемействоDocsRegistry",              title: "Docs Registry" }
 
   layer:
     title: Слой
     columns:
       - { label: ID,      field: id }
       - { label: Модуль,  field: ident }
-      - { label: Роль,    field: role, fallback: designation }
+      - { label: Роль,    field: role }
+      - { label: Что делает,    field: designation }
     items:
       build:           { dir: "Слоиlayer/СлойBuild",              title: "Build" }
       cli:             { dir: "Слоиlayer/СлойCLI",                title: "CLI" }
-      post-processing: { dir: "Слоиlayer/СлойPostprocessing",     title: "Postprocessing" }
-      pre-processing:  { dir: "Слоиlayer/СлойPreprocessing",      title: "Preprocessing" }
+      post-processing: { dir: "Слоиlayer/СлойPostprocessing",     title: "HTML обработка <br> 'post-processing'" }
+      pre-processing:  { dir: "Слоиlayer/СлойPreprocessing",      title: "MD обработка <br> 'pre-processing'" }
       vscode-ui:       { dir: "Слоиlayer/СлойVSCodeUI",           title: "VSCode UI" }
       client-runtime:  { dir: "Слоиlayer/СлойКлиентскийruntime",  title: "Клиентский runtime" }
       shared-core:     { dir: "Слоиlayer/СлойОбщееядро",          title: "Общее ядро" }
@@ -46,6 +48,7 @@ dimensions:
     columns:
       - { label: ID,          field: id }
       - { label: Модуль,      field: ident }
+      - { label: Роль,    field: role }
       - { label: Что делает,  field: designation }
     items:
       json-to-md:            { dir: "КаталогCapabilitymap/КаталогКонвертер",            title: "Конвертер" }

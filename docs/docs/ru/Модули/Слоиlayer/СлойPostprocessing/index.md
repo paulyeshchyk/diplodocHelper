@@ -28,10 +28,4 @@ pureTitle: Слой. Post-processing
 
 ## Состав
 
-{% cut "Развернуть" %}
-
-{% include [Postprocessing](./modules.md) %}
-
-{% endcut %}
-
 {% include [modules](./modules.md) %}

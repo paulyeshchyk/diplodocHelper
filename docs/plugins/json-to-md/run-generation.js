@@ -9,6 +9,8 @@ const { generateExtendedTable } = require('./lib/generators/extended-table');
 const { generateSimpleTable } = require('./lib/generators/simple-table');
 const { generateGroupedTable } = require('./lib/generators/grouped-table');
 const { generateTreemap, wrapMermaid } = require('./lib/generators/treemap');
+const { generateMatrix } = require('./lib/generators/matrix');
+
 
 /**
  * Главная точка входа.
@@ -26,6 +28,7 @@ function runGeneration(opts) {
     tableType = 'extended',
     xField, yField, labelField, valueField, valueAgg, classField, flat,
     groupBy, groupFooter, groupSplit, groupSeparator,
+    rowField, colField, cellLabelField, cellHrefField, emptyCell, cellSeparator, omitEmpty
   } = opts;
 
   console.log(`[json-to-md] Чтение JSON из: ${jsonPath}`);
@@ -49,10 +52,14 @@ function runGeneration(opts) {
 
   const mode = String(tableType).toLowerCase();
 
-  // Схема нужна всем режимам, кроме treemap
+  // Схема нужна режимам: extended, simple, grouped.
+  // Не нужна: treemap, matrix.
+  const MODES_WITHOUT_SCHEMA = new Set(['treemap', 'matrix']);
+  const needsSchema = !MODES_WITHOUT_SCHEMA.has(mode);
+
   let schema = null;
   let validation = { ok: true, missing: {} };
-  if (mode !== 'treemap') {
+  if (needsSchema) {
     try {
       schema = loadSchema(schemaName);
     } catch (err) {
@@ -71,6 +78,13 @@ function runGeneration(opts) {
       xField, yField, labelField, valueField, valueAgg, classField, flat,
     }));
     defaultFileName = 'known-issues-treemap.md';
+  } else if (mode === 'matrix') {
+    content = generateMatrix(issues, {
+      rowField, colField, cellLabelField, cellHrefField,
+      emptyCell, cellSeparator, omitEmpty,
+    });
+    defaultFileName = `matrix-${rowField}-${colField}.md`;
+
   } else if (groupBy) {
     content = generateGroupedTable(issues, {
       schema, groupBy, groupFooter, groupSplit, groupSeparator,

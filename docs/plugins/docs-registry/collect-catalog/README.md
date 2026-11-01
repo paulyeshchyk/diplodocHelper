@@ -15,6 +15,8 @@ folder: 'plugins/docs-registry/collect-catalog/index.js'
 entrypoint: 'runCollectCatalog(argv)'
 role: 'Индексер'
 version: '1.0.0'
+input:
+output:
 ---
 
 # README: collect-catalog

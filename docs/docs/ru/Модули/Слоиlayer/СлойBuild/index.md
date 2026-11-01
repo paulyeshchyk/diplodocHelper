@@ -15,10 +15,4 @@ sectionIndex: ""
 
 **Модули**:
 
-{% cut "Развернуть" %}
-
-{% include [Build](./modules.md) %}
-
-{% endcut %}
-
 {% include [modules](./modules.md) %}

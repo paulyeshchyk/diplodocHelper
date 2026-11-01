@@ -22,7 +22,7 @@ sectionType: Page
 <tbody>
 <tr>
   <td class="fig-num">1</td>
-  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.html#…">`), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
+  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.html#…">`), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
 
 Практический смысл: техписатель или читатель видит все иллюстрации в одной таблице с быстрым переходом к исходной статье и полноразмерному изображению. Номера иллюстраций идут в порядке появления в документе — совпадают с нумерацией, которую проставляет `reindexFigures` (отдельный модуль `reindexer/reindexer.figures.js`).
 
@@ -109,7 +109,7 @@ flowchart TB
 </tr>
 <tr>
   <td class="fig-num">2</td>
-  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-…">`.
+  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-…">`.
 
 Без модуля пришлось бы:
 
@@ -577,12 +577,12 @@ const wrappedText = `${selectedText}`;
 </tr>
 <tr>
   <td class="fig-num">4</td>
-  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-skrinshot_nastrojki">Скриншот настройки</a></td>
-  <td class="fig-preview"><img data-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" data-full-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" alt="Скриншот настройки" class="js-lightbox-trigger fig-preview-img" loading="lazy" /></td>
+  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-skrinshot_nastrojki">Скриншот настройки</a></td>
+  <td class="fig-preview"><img data-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" data-full-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" alt="Скриншот настройки" class="js-lightbox-trigger fig-preview-img" loading="lazy" /></td>
 </tr>
 <tr>
   <td class="fig-num">5</td>
-  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.html#…">`:
+  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.html#…">`:
    - очищает текущую подпись от `Рисунок N.` / `Figure N.` / `Рис. N.`;
    - ставит **сквозной** номер ` N. `;
    - запоминает `id → N` в глобальный `mapping`.
@@ -747,7 +747,7 @@ const newContent = content.replace(regex, (match, beforeId, id, afterId, caption
 </tr>
 <tr>
   <td class="fig-num">6</td>
-  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.html#…">…</a></td>
+  <td class="fig-title"><a href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.html#…">…</a></td>
   <td class="fig-preview"><span class="fig-preview-empty">—</span></td>
 </tr>
 <tr>
@@ -1681,7 +1681,7 @@ const wrappedText = `${selectedText}`;
   <div class="fig-grid-preview"><span class="fig-grid-placeholder">—</span></div>
   <div class="fig-grid-meta">
     <span class="fig-grid-num">1</span>
-    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.html#…">`), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
+    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%98%D0%BB%D0%BB%D1%8E%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D0%B8/index.html#…">`), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
 
 Практический смысл: техписатель или читатель видит все иллюстрации в одной таблице с быстрым переходом к исходной статье и полноразмерному изображению. Номера иллюстраций идут в порядке появления в документе — совпадают с нумерацией, которую проставляет `reindexFigures` (отдельный модуль `reindexer/reindexer.figures.js`).
 
@@ -1770,7 +1770,7 @@ flowchart TB
   <div class="fig-grid-preview"><span class="fig-grid-placeholder">—</span></div>
   <div class="fig-grid-meta">
     <span class="fig-grid-num">2</span>
-    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-…">`.
+    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-…">`.
 
 Без модуля пришлось бы:
 
@@ -2239,17 +2239,17 @@ const wrappedText = `${selectedText}`;
   </div>
 </div>
 <div class="fig-grid-card">
-  <div class="fig-grid-preview"><img data-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" data-full-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" alt="Скриншот настройки" class="js-lightbox-trigger fig-grid-img" loading="lazy" /></div>
+  <div class="fig-grid-preview"><img data-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" data-full-src="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/images/skrinshot_nastrojki.png" alt="Скриншот настройки" class="js-lightbox-trigger fig-grid-img" loading="lazy" /></div>
   <div class="fig-grid-meta">
     <span class="fig-grid-num">4</span>
-    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-skrinshot_nastrojki">Скриншот настройки</a>
+    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%92%D1%81%D1%82%D0%B0%D0%B2%D0%BA%D0%B0%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%B8%D0%B7%D0%B1%D1%83%D1%84%D0%B5%D1%80%D0%B0/index.html#fig-skrinshot_nastrojki">Скриншот настройки</a>
   </div>
 </div>
 <div class="fig-grid-card">
   <div class="fig-grid-preview"><span class="fig-grid-placeholder">—</span></div>
   <div class="fig-grid-meta">
     <span class="fig-grid-num">5</span>
-    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.html#…">`:
+    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.html#…">`:
    - очищает текущую подпись от `Рисунок N.` / `Figure N.` / `Рис. N.`;
    - ставит **сквозной** номер ` N. `;
    - запоминает `id → N` в глобальный `mapping`.
@@ -2416,7 +2416,7 @@ const newContent = content.replace(regex, (match, beforeId, id, afterId, caption
   <div class="fig-grid-preview"><span class="fig-grid-placeholder">—</span></div>
   <div class="fig-grid-meta">
     <span class="fig-grid-num">6</span>
-    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.html#…">…</a>
+    <a class="fig-grid-title" href="/ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9F%D0%B5%D1%80%D0%B5%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D0%B8%D1%8F%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BA%D0%BE%D0%B2/index.html#…">…</a>
   </div>
 </div>
 <div class="fig-grid-card">

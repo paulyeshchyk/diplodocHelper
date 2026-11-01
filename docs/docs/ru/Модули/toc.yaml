@@ -1,10 +1,10 @@
 title: Модули
 href: index.yaml
 items:
-  - name: Реестр модулей (registry)
-    href: Реестр/index.md
+  - name: Registry
+    href: Registry/index.md
     include:
-      path: Реестр/toc.yaml
+      path: Registry/toc.yaml
       mode: link
   - name: Каталог (Capability map)
     href: КаталогCapabilitymap/index.md

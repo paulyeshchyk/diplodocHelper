@@ -27,10 +27,4 @@ pureTitle: Слой. VS Code UI
 
 ## Состав
 
-{% cut "Развернуть" %}
-
-{% include [VS Code ui](./modules.md) %}
-
-{% endcut %}
-
 {% include [modules](./modules.md) %}

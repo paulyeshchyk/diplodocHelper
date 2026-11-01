@@ -31,10 +31,4 @@ pureTitle: Слой. Pre-processing
 
 ## Состав
 
-{% cut "Развернуть" %}
-
-{% include [Preprocessing](./modules.md) %}
-
-{% endcut %}
-
 {% include [modules](./modules.md) %}

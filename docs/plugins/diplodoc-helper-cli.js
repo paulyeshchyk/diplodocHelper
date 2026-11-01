@@ -39,6 +39,7 @@ if (require.main === module) {
         catalog:       { path: './docs-registry/collect-catalog/index.js',    fn: 'runCollectCatalog' },
         pageLegend:    { path: './docs-registry/build-page-legend/index.js',  fn: 'runBuildPageLegend' },
         renderModules: { path: './docs-registry/render-modules/index.js',     fn: 'runRenderModules' },
+        emitModulesTable: { path: './docs-registry/emit-modules-table/index.js',    fn: 'runEmitModulesTable' },
     };
     const asyncH = asyncHandlers[command];
     if (asyncH) {
@@ -218,4 +219,5 @@ module.exports = {
     runCollectCatalog:    require('./docs-registry/collect-catalog').runCollectCatalog,
     runBuildPageLegend:   require('./docs-registry/build-page-legend').runBuildPageLegend,
     runRenderModules:     require('./docs-registry/render-modules').runRenderModules,
+    emitModulesTable: require('./docs-registry/emit-modules-table/index.js').runEmitModulesTable,
 };

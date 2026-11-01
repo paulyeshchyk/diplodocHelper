@@ -101,7 +101,7 @@ flowchart TB
 
 **«Что работает в VS Code?»** — [Слой. VS Code UI](./%D0%A1%D0%BB%D0%BE%D0%B9VSCodeUI/index.md#naznachenie). Все команды, доступные пользователю.
 
-**«Почему у меня не работает clean mode?»** — [Слой. Post-processing](./%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie). И `tocCleanMode` в `docs-build.js` в **pre**-фазе — известный баг (см. [Модуль Оркестратор сборки](../%D0%A0%D0%B5%D0%B5%D1%81%D1%82%D1%80/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)).
+**«Почему у меня не работает clean mode?»** — [Слой. Post-processing](./%D0%A1%D0%BB%D0%BE%D0%B9Postprocessing/index.md#naznachenie). И `tocCleanMode` в `docs-build.js` в **pre**-фазе — известный баг (см. [Модуль Оркестратор сборки](../Registry/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%9E%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D0%B8/index.md)).
 
 **«Что исполняется в браузере?»** — [Слой. Клиентский runtime](./%D0%A1%D0%BB%D0%BE%D0%B9%D0%9A%D0%BB%D0%B8%D0%B5%D0%BD%D1%82%D1%81%D0%BA%D0%B8%D0%B9runtime/index.md#naznachenie). Список всех клиентских скриптов.
 
@@ -110,4 +110,4 @@ flowchart TB
 - [Модули](../index.md) — точка входа в раздел.
 - [Каталог (Capability map)](../КаталогCapabilitymap/index.md) — 11 capability.
 - [Семейство (family)](../Семействоfamily/index.md) — модули в парах.
-- [Реестр модулей](../Реестр/index.html#naznachenie) — плоский список.
+- [Реестр](../Registry/index.md#naznachenie) — плоский список.

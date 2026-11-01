@@ -5,3 +5,8 @@
 *.jar
 
 docs/docs/_generated
+docs/docs/ru/contexts
+docs/docs/ru/Модули/Реестр/registry-matrix-family-capability.md
+docs/docs/ru/Модули/Реестр/registry-matrix-family-layer.md
+docs/docs/ru/Модули/Реестр/registry-matrix-layer-capability.md
+docs/**/page-legend.md

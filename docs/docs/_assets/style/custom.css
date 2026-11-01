@@ -402,36 +402,41 @@ figure.zoom-card img:focus {
 
 .page-legend {
     font-size: 0.82rem;
-    line-height: 1.35;
-    margin: 0.75rem 0 1.5rem;
+    line-height: 1.4;
+    margin: 1rem 0 1.5rem;
     border-collapse: collapse;
     width: 100%;
     max-width: 720px;
 }
 
-/* без заголовка */
+/* Скрываем шапку таблицы */
 .page-legend thead { display: none; }
 
-.page-legend {
+/* Обнуляем стандартные рамки */
+.page-legend, 
+.page-legend th, 
+.page-legend td {
     border: none !important;
+    background: transparent !important;
 }
 
-/* минимальные паддинги */
+/* Комфортные отступы */
 .page-legend th,
 .page-legend td {
-    padding: 0.15rem 0.55rem !important;
-    border: 1px solid #e3e6eb;
+    padding: 0.35rem 0.75rem !important;
     vertical-align: top;
     text-align: left;
-    border: none !important;
+    /* Тонкая горизонтальная линия между строками */
+    border-bottom: 1px solid #edf2f7 !important; 
 }
 
-/* первая колонка — метка */
+/* Тончайшая вертикальная линия только между первой и второй колонкой */
 .page-legend td:first-child {
-    font-weight: 600;
-    color: #4a5568;
+    font-weight: 500;
+    color: #64748b; /* slate-500 */
     white-space: nowrap;
-    width: 1%;
+    border-right: 1px solid #e2e8f0 !important;
+    padding-right: 1rem !important;
 }
 
 /* запрет чередующихся полос */
@@ -441,11 +446,22 @@ figure.zoom-card img:focus {
     background: transparent !important;
 }
 
-/* код в ячейках чуть компактнее */
-.page-legend code {
-    font-size: 0.78rem;
-    padding: 0 0.15rem;
+/* Отступ для второй колонки от разделительной линии */
+.page-legend td:nth-child(2) {
+    padding-left: 1rem !important;
 }
 
-/* без внешней рамки по умолчанию у некоторых тем */
+/* Убираем нижнюю границу у последней строки для аккуратности */
+.page-legend tr:last-child td {
+    border-bottom: none !important;
+}
+
+/* Код внутри ячеек */
+.page-legend code {
+    font-size: 0.78rem;
+    padding: 0.1rem 0.3rem;
+    background-color: rgba(100, 116, 139, 0.08);
+    border-radius: 4px;
+}
+
 .page-legend.table-wrapper { border: none; }

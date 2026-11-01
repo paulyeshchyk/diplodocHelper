@@ -31,10 +31,4 @@ pureTitle: Слой. CLI
 
 ## Состав
 
-{% cut "Развернуть" %}
-
-{% include [Cli](./modules.md) %}
-
-{% endcut %}
-
 {% include [modules](./modules.md) %}

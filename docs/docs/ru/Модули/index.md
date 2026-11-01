@@ -24,17 +24,17 @@ context: modules, index, meta
 | `capability` | **Ради чего** модуль существует? | [Каталог (Capability map)](./КаталогCapabilitymap/index.md)      |
 | `layer`      | **Когда** модуль запускается?    | [Слои (layer)](./Слоиlayer/index.md)                             |
 | `family`     | **С кем** в паре/цепочке?        | [Семейство (family)](./Семействоfamily/index.md)                 |
-| `context`    | **Какими тегами** найти?         | [Контексты](../Контексты/index.md) (генерируются из frontmatter) |
+| `context`    | **Какими тегами** найти?         | [Контексты](../contexts/index.md) (генерируются из frontmatter) |
 
 Плюс — плоский список всех модулей с ID:
 
-- [Реестр модулей](./Реестр/index.html#naznachenie) — 50 строк «ID → модуль → папка → слой → статус».
+- [Реестр модулей](Registry/index.html#naznachenie) — 50 строк «ID → модуль → папка → слой → статус».
 
 ## С чего начать
 
 **Если вы впервые видите раздел** — начните с [Каталога](./КаталогCapabilitymap/index.md). Он отвечает на главный вопрос: «что умеет расширение?». 11 capability — 11 «задач», которые решает `diplodoc-helper`.
 
-**Если ищете конкретный модуль** — [Реестр](./Реестр/index.html#naznachenie). Алфавитный список с ID.
+**Если ищете конкретный модуль** — [Реестр](Registry/index.html#naznachenie). Алфавитный список с ID.
 
 **Если разбираетесь, как модули работают вместе** — [Семейство](./Семействоfamily/index.md). Например, `link.Copy` бесполезен без `link.Paste` — это семья.
 
@@ -134,14 +134,37 @@ flowchart TB
 
 Сводный реестр известных дефектов, компромиссов и пробелов — в отдельной статье:
 
-**[Известные проблемы](%D0%98%D0%B7%D0%B2%D0%B5%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D0%BF%D1%80%D0%BE%D0%B1%D0%BB%D0%B5%D0%BC%D1%8B/index.html#naznachenie)**
+**[Известные проблемы](%D0%98%D0%B7%D0%B2%D0%B5%D1%81%D1%82%D0%BD%D1%8B%D0%B5%D0%BF%D1%80%D0%BE%D0%B1%D0%BB%D0%B5%D0%BC%D1%8B/index.md)**
 
 В реестре — ~70 записей: `bug`, `tradeoff`, `gap`, `by-design`. Каждая — с ссылкой на модуль(и), где проблема проявляется. Из статей модулей обратной ссылки нет — статья описывает «как должно быть», реестр — «что не так».
+
+
+## Матрицы
+
+{% list tabs %}
+
+- Слои - Семейства
+  
+    {% include [tree](./Registry/registry-matrix-family-layer.md) %}
+
+- Каталоги - Семейства
+  
+    {% include [tree](./Registry/registry-matrix-family-capability.md) %}
+
+- Слои - Каталоги
+  
+    {% include [tree](./Registry/registry-matrix-layer-capability.md) %}
+
+- Реестр
+  
+    {% include [registry](./Registry/registry-table.md) %}
+
+{% endlist %}
 
 ## См. также
 
 - [Каталог (Capability map)](./КаталогCapabilitymap/index.md) — 11 capability с таблицами модулей.
 - [Слои (layer)](./Слоиlayer/index.md) — 7 слоёв, от VS Code до client-runtime.
 - [Семейство (family)](./Семействоfamily/index.md) — модули в парах и цепочках.
-- [Реестр модулей](./Реестр/index.html#naznachenie) — плоский список 50 модулей.
+- [Реестр модулей](Registry/index.html#naznachenie) — плоский список 50 модулей.
 - [Соглашения](../Соглашения/index.md) — формат статей, ID-схема, оформление.
