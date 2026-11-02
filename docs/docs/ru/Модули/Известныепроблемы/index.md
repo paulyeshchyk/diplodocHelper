@@ -49,10 +49,10 @@ context: 'modules, known-issues, meta'
 
 ## Списки
 
-  [Общий](./known-issues-summary.md)
+  [Общий](../../../_generated/ru/known-issues-summary.md)
 
-  [Группировка по модулям](./known-issues-by-module.md)
+  [Группировка по модулям](../../../_generated/ru/known-issues-by-module.md)
 
-  [Группировка по приоритетам](./known-issues-by-severity.md)
+  [Группировка по приоритетам](../../../_generated/ru/known-issues-by-severity.md)
 
-  [Группировка по типам](./known-issues-by-type.md)  
+  [Группировка по типам](../../../_generated/ru/known-issues-by-type.md)  

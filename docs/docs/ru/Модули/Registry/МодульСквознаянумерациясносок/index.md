@@ -12,7 +12,7 @@ ID_Type: 2
 Идентификатор: 'footnoteNumbering'
 designation: 'Делает нумерацию сносок сквозной по всей документации в собранном HTML'
 folder: 'src/plugins/footnoteNumbering/'
-entrypoint: 'renumberFootnotes({ docsDir, outputDir })'
+entrypoint: 'renumberFootnotes({ docsDir outputDir })'
 role: 'Шаг 3: сквозные номера'
 version: '1.54.0'
 input:

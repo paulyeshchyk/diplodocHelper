@@ -28,14 +28,14 @@ output:
 1. Извлекает растровое изображение из системного буфера (`PowerShell` на Windows, `osascript` на macOS, `xclip` на Linux).
 2. Спрашивает имя файла (`InputBox` с предзаполненным `<timestamp>_Скриншот`).
 3. Сохраняет картинку в `images/` рядом с текущим `.md` (создаёт папку, если нет).
-4. Вставляет в текст готовый `<figure>`-блок с `<figcaption class="imageDescription" id="fig-…">Рисунок 2. `.
+4. Вставляет в текст готовый <code>&#x3C;figure&#x3E;</code>-блок с <code>&#x3C;figcaption class=&#x22;imageDescription&#x22; id=&#x22;fig-…&#x22;&#x3E;Рисунок 2. </code>.
 
 Без модуля пришлось бы:
 
 1. Сохранить скриншот в файл (через системный редактор).
 2. Найти нужную папку `images/`, перенести файл, придумать имя.
 3. Открыть `.md`, написать `![alt](images/foo.png)`.
-4. Обернуть в `<figure>` + `<figcaption class="imageDescription" id="fig-…">` — иначе `reindexer.figures` не пронумерует, `figures` не соберёт в каталог, тултипы не появятся.
+4. Обернуть в <code>&#x3C;figure&#x3E;</code> + <code>&#x3C;figcaption class=&#x22;imageDescription&#x22; id=&#x22;fig-…&#x22;&#x3E;Рисунок 2.</code> — иначе `reindexer.figures` не пронумерует, `figures` не соберёт в каталог, тултипы не появятся.
 
 Модуль делает это за одно действие. Ограничение — работает только при наличии графической сессии (без `DISPLAY`/`SESSIONNAME` — `getImageFromClipboard` вернёт `null`).
 
@@ -242,7 +242,7 @@ const figureBlock = buildFigure(relativePath, altText, customId);
 
 - **`altText`** — `userInput.trim()`, **не** `cleanName`. То есть alt в markdown-ссылке — с кириллицей и пробелами (`Привет Мир!`), а `id` — на латинице (`fig-privet_mir`). См. «Известные ограничения».
 - **`customId`** — `fig-<slug>` (не `<slug>`, а `fig-<slug>`).
-- **`figureBlock`** — `<figure>\n\n![alt](url)\n\n<figcaption class="imageDescription" id="fig-…">alt</figcaption>\n\n</figure>\n\n`.
+- **`figureBlock`** — `<figure>\n\n![alt](url)\n\n<figcaption class="imageDescription" id="fig-…">Рисунок 1. alt</figcaption>\n\n</figure>\n\n`.
 
 ### Фаза 6. Вставка в редактор
 
@@ -300,16 +300,15 @@ vscode.window.showInformationMessage(translate(nls_ts.screenshot.saved.info, fil
 
 При вставке на пустую строку внутри `.md`:
 
-```md
-<figure>
+<code class="language-markup">
+&#x3C;figure&#x3E;
 
 ![Скриншот настройки](./images/skrinshot_nastrojki.png)
 
-<figcaption class="imageDescription" id="fig-skrinshot_nastrojki">Рисунок 3. Скриншот настройки</figcaption>
+&#x3C;figcaption class=&#x22;imageDescription&#x22; id=&#x22;fig-skrinshot_nastrojki&#x22;&#x3E;Рисунок 2. Скриншот настройки&#x3C;/figcaption&#x3E;
 
-</figure>
-
-```
+&#x3C;/figure&#x3E;
+</code>
 
 - `![alt](url)` — markdown-ссылка (внутри `<figure>`);
 - `<figcaption class="imageDescription" id="fig-…">` — обёртка с id, которую ищет `reindexer.figures` и `figures` для нумерации и каталога;

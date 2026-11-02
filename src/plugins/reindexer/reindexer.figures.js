@@ -11,12 +11,12 @@ const { collectMdFilesInOrder } = require('../utils/toc.order');
  * @import { DiplodocConfig } from '../manifest/config/diplodoc.config.model'
  */
 
-/** @param {string} rootDir
+/** 
+ * @param {string} rootDir
  * @param {string | undefined} targetLocale
  * @param {string | object | undefined} configJsonOrObj
  */
 function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
-    // console.log('Переиндексация рисунков...');
     const figureCaptionTemplate = readFigureCaptionTemplate(configJsonOrObj, targetLocale);
     const figureReferenceCaptionTemplate = readFigureReferenceCaptionTemplate(configJsonOrObj, targetLocale);
 
@@ -60,7 +60,6 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
 
             if (newContent !== content) {
                 fs.writeFileSync(mdFilePath, newContent, 'utf8');
-                console.log(`${path.relative(rootDir, mdFilePath)} — +${newCounter - figureCounter} рис.`);
             }
             figureCounter = newCounter;
         } catch (err) {
@@ -71,7 +70,6 @@ function reindexFigures(rootDir, targetLocale, configJsonOrObj) {
     // ---- ВТОРОЙ ПРОХОД: обновляем ссылки ----
     updateAllLinks(allMdFiles, globalFigureMapping, figureReferenceCaptionTemplate);
 
-    console.log(`Готово. Всего пронумеровано: ${figureCounter - 1}`);
     return { success: true, total: figureCounter - 1, reason: '' };
 }
 
@@ -117,16 +115,24 @@ function GetPrefixOrDefault(config, activeLocale, targetLocale) {
  * @param {string} content
  * @param {number} startCounter
  * @param {string} prefix
- * @returns {{newContent: string;newCounter: number;figureMapping: Map<string, number>;}}
  * @param {string} mdFilePath
+ * @returns {{newContent: string; newCounter: number; figureMapping: Map<string, number>;}}
  */
 function processFigureCaptions(content, startCounter, prefix, mdFilePath) {
     let counter = startCounter;
     const mapping = new Map();
 
-    const regex = /<figcaption\s+class="imageDescription"([^>]*?)\s+id="([^"]+)"([^>]*?)>([\s\S]*?)<\/figcaption>/gi;
+    // Группа 1: Любые блоки кода (`...`, ````...````, <code>...</code>), которые ИГНОРИРУЕМ.
+    // Группа 2: Сам тег <figcaption>, который ОБРАБАТЫВАЕМ.
+    const skipAndMatchRegex = /(```[\s\S]*?```|`[^`\n]+`|<code\b[^>]*>[\s\S]*?<\/code>)|(<figcaption\s+class="imageDescription"([^>]*?)\s+id="([^"]+)"([^>]*?)>([\s\S]*?)<\/figcaption>)/gi;
 
-    const newContent = content.replace(regex, (match, beforeId, id, afterId, captionText) => {
+    const newContent = content.replace(skipAndMatchRegex, (fullMatch, codeBlock, figCaptionBlock, beforeId, id, afterId, captionText) => {
+        // Если сработал захват кодового экрана (группа 1) — возвращаем фрагмент без изменений
+        if (codeBlock) {
+            return codeBlock;
+        }
+
+        // Иначе обработка тега <figcaption> (группа 2)
         let cleaned = captionText
             .replace(/^(Рисунок|Figure|Fig\.|Рис\.)\s*\d+\.?\s*/i, '')
             .replace(/^\d+\.\s*/, '')
@@ -135,7 +141,6 @@ function processFigureCaptions(content, startCounter, prefix, mdFilePath) {
         const newCaption = `${prefix} ${counter}. ${cleaned}`;
         const replacement = `<figcaption class="imageDescription" id="${id}"${afterId}>${newCaption}</figcaption>`;
 
-        // Формируем уникальный ключ для глобальной карты
         const uniqueKey = `${path.resolve(mdFilePath)}::${id}`;
         mapping.set(uniqueKey, counter);
 
@@ -156,33 +161,32 @@ function updateFigureLinksInFile(filePath, figureNumberMap, defaultTemplate) {
     let content = fs.readFileSync(filePath, 'utf8');
     let updated = false;
 
-    // Ищем markdown-ссылки: [текст](путь#anchor)
-    const linkRegex = /\[([^\]]+)\]\(([^)]*?)(#fig-[^)]+)\)/g;
+    // Регулярка также защищена маской экранов (код блоки / inline бэктики / <code>)
+    const linkRegex = /(```[\s\S]*?```|`[^`\n]+`|<code\b[^>]*>[\s\S]*?<\/code>)|(\[([^\]]+)\]\(([^)]*?)(#fig-[^)]+)\))/g;
 
-    const newContent = content.replace(linkRegex, (match, linkText, pathPart, anchor) => {
+    const newContent = content.replace(linkRegex, (fullMatch, codeBlock, linkMatch, linkText, pathPart, anchor) => {
+        // Игнорируем ссылки внутри экранов кода
+        if (codeBlock) {
+            return codeBlock;
+        }
+
         const figId = anchor.substring(1);
 
-        // ВЫЧИСЛЯЕМ АБСОЛЮТНЫЙ ПУТЬ К ЦЕЛЕВОМУ MD-ФАЙЛУ
         let targetMdPath;
         if (!pathPart || pathPart.trim() === '') {
-            // Ссылка внутри того же файла
             targetMdPath = path.resolve(filePath);
         } else {
-            // Ссылка на другой файл (вычисляем относительно текущего filePath)
             targetMdPath = path.resolve(path.dirname(filePath), pathPart);
         }
 
-        // Собираем составной ключ для поиска в глобальном маппинге
         const uniqueKey = `${targetMdPath}::${figId}`;
 
-        // Проверяем по составному ключу
-        if (!figureNumberMap.has(uniqueKey)) return match;
+        if (!figureNumberMap.has(uniqueKey)) return fullMatch;
         const newNumber = figureNumberMap.get(uniqueKey);
 
         let innerText = linkText;
         const formatPatterns = [
-            { regex: /^(\*{1,2})(.*?)\1$/, wrapper: '$1' },
-            { regex: /^(_{1,2})(.*?)\1$/, wrapper: '$1' },
+            { regex: /^(\*{1,2})(.*?)\1$/, wrapper: '$1' }, { regex: /^(_{1,2})(.*?)\1$/, wrapper: '$1' },
         ];
         for (const pattern of formatPatterns) {
             const matchFormat = linkText.match(pattern.regex);
@@ -207,7 +211,6 @@ function updateFigureLinksInFile(filePath, figureNumberMap, defaultTemplate) {
 
     if (updated) {
         fs.writeFileSync(filePath, newContent, 'utf8');
-        // console.log(`Обновлены ссылки в ${path.relative(process.cwd(), filePath)}`);
     }
 }
 
@@ -225,4 +228,5 @@ function updateAllLinks(files, figureNumberMap, defaultPrefix) {
         }
     }
 }
+
 module.exports = { reindexFigures };

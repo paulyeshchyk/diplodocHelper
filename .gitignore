@@ -6,7 +6,13 @@
 
 docs/docs/_generated
 docs/docs/ru/contexts
-docs/docs/ru/Модули/Реестр/registry-matrix-family-capability.md
-docs/docs/ru/Модули/Реестр/registry-matrix-family-layer.md
-docs/docs/ru/Модули/Реестр/registry-matrix-layer-capability.md
 docs/**/page-legend.md
+docs/docs/ru/Модули/Registry/registry-matrix-family-capability.md
+docs/docs/ru/Модули/Registry/registry-matrix-family-layer.md
+docs/docs/ru/Модули/Registry/registry-matrix-layer-capability.md
+docs/docs/ru/Модули/Registry/registry-table.md
+docs/docs/**/modules.md
+docs/docs/ru/Модули/Известныепроблемы/known-issues-by-module.md
+docs/docs/ru/Модули/Известныепроблемы/known-issues-by-severity.md
+docs/docs/ru/Модули/Известныепроблемы/known-issues-by-type.md
+docs/docs/ru/Модули/Известныепроблемы/known-issues-summary.md

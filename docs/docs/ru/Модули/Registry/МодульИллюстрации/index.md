@@ -23,7 +23,7 @@ output:
 
 ## Назначение
 
-Модуль `figures` обходит документацию, собирает все блоки `<figure>` (по маркеру `<figcaption class="imageDescription" id="…">Рисунок 1. `), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
+Модуль `figures` обходит документацию, собирает все блоки <code>&#x3C;figure&#x3E;</code> (по маркеру <code>&#x3C;figcaption class=&#x22;imageDescription&#x22; id=&#x22;…&#x22;&#x3E;Рисунок 1.</code>), генерирует уменьшенные превью каждого изображения через `sharp` и строит страницу-каталог с таблицей иллюстраций: номер, название, мини-превью, ссылка на полноразмерный оригинал.
 
 Практический смысл: техписатель или читатель видит все иллюстрации в одной таблице с быстрым переходом к исходной статье и полноразмерному изображению. Номера иллюстраций идут в порядке появления в документе — совпадают с нумерацией, которую проставляет `reindexFigures` (отдельный модуль `reindexer/reindexer.figures.js`).
 
@@ -68,7 +68,7 @@ flowchart TB
     WRI --> IDX
 ```
 
-1. **Извлечение.** `extractFiguresFromFile` читает `.md`, находит все `<figcaption class="imageDescription" … id="…">`, ищет ближайшее markdown-изображение **слева** от каждого `<figcaption>`. Возвращает `{ id, caption, imagePath, imageAlt, sourcePath, figureNumber }`, где `figureNumber` вытаскивается из `Рисунок N` / `Figure N` / `Fig. N` в тексте подписи.
+1. **Извлечение.** `extractFiguresFromFile` читает `.md`, находит все <code>&#x3C;figcaption class=&#x22;imageDescription&#x22; id=&#x22;…&#x22;&#x3E;Рисунок 1. </code>, ищет ближайшее markdown-изображение **слева** от каждого `<figcaption>`. Возвращает `{ id, caption, imagePath, imageAlt, sourcePath, figureNumber }`, где `figureNumber` вытаскивается из `Рисунок N` / `Figure N` / `Fig. N` в тексте подписи.
 
 2. **Сбор.** `walkMdFilesGetFigures` обходит `langDir`, пропускает `SKIP_DIRS` (`figures`, `contexts`, `helptags`). Собирает плоский массив записей по всем статьям.
 
@@ -101,21 +101,21 @@ flowchart TB
 ### Ожидаемая разметка в `.md`
 
 ```html
-<figure>
+&#x3C;figure&#x3E;
 
 ![Описание](./images/foo.png)
 
-<figcaption class="imageDescription" id="fig-opisanie">Рисунок 1. Описание</figcaption>
+&#x3C;figcaption class=&#x22;imageDescription&#x22; id=&#x22;fig-opisanie&#x22;&#x3E;Рисунок 1. Описание&#x3C;/figcaption&#x3E;
 
-</figure>
+&#x3C;/figure&#x3E;
 ```
 
 Требования:
 
-- `<figcaption>` должен иметь **оба** атрибута: `class="imageDescription"` и `id="…"`. Без `class="imageDescription"` — запись в каталог не попадёт.
+- <code>&#x3C;figcaption&#x3E;</code> должен иметь **оба** атрибута: `class="imageDescription"` и `id="…"`. Без `class="imageDescription"` — запись в каталог не попадёт.
 - Атрибуты — **только в двойных кавычках**. Одинарные не сработают (regex жёстко ждёт `"`).
 - Тег должен быть на **одной строке** (`[^5]*?` не проглатывает `\n` до `>`).
-- Markdown-изображение — **до** `<figcaption>`, не после. Связка «изображение → подпись» однонаправленная.
+- Markdown-изображение — **до** <code>&#x3C;figcaption&#x3E;</code>, не после. Связка «изображение → подпись» однонаправленная.
 
 ### Формат имени файла превью
 

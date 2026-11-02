@@ -10,7 +10,7 @@ ID: 012
 ID_Group: 4
 ID_Type: 2
 Идентификатор: 'footnoteAnchors'
-designation: 'Превращает относительные якоря #fn… / #fnref… в абсолютные URL страницы'
+designation: 'Превращает относительные якоря `#fn…` / `#fnref…` в абсолютные URL страницы'
 folder: 'src/plugins/footnoteAnchors/'
 entrypoint: 'fixFootnoteAnchors(buildDir)'
 role: 'Шаг 2: якоря .html'

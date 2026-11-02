@@ -76,7 +76,7 @@ const STEPS = {
             'jsonToMdTable',
             './plugins/json-to-md/json-to-md-table.js',
             '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
-            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--outputDir', './docs/_generated/ru',
             '--tableType', 'extended',
         ),
 
@@ -84,7 +84,7 @@ const STEPS = {
             'jsonToMdTable',
             './plugins/json-to-md/json-to-md-table.js',
             '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
-            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--outputDir', './docs/_generated/ru',
             '--tableType', 'extended',
             '--groupBy', 'module'
         ),
@@ -93,7 +93,7 @@ const STEPS = {
             'jsonToMdTable',
             './plugins/json-to-md/json-to-md-table.js',
             '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
-            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--outputDir', './docs/_generated/ru',
             '--tableType', 'extended',
             '--groupBy', 'severity'
         ),
@@ -102,7 +102,7 @@ const STEPS = {
             'jsonToMdTable',
             './plugins/json-to-md/json-to-md-table.js',
             '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
-            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--outputDir', './docs/_generated/ru',
             '--tableType', 'extended',
             '--groupBy', 'type'
         ),

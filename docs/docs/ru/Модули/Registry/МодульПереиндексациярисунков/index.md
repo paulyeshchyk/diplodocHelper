@@ -26,7 +26,7 @@ output:
 `reindexer.figures` — «массовая» операция над рисунками. Пользователь вызывает **Diplodoc → Переиндексировать рисунки** на `docs/ru/` — и модуль:
 
 1. **Читает `toc.yaml`** (рекурсивно через `include`) — получает список `.md` в **порядке чтения**.
-2. **Идёт по файлам** в этом порядке, для каждого `<figcaption class="imageDescription" id="…">Рисунок 4. `:
+2. **Идёт по файлам** в этом порядке, для каждого <code>&#x3C;figcaption class=&#x22;imageDescription&#x22; id=&#x22;…&#x22;&#x3E;Рисунок 4. </code>:
    - очищает текущую подпись от `Рисунок N.` / `Figure N.` / `Рис. N.`;
    - ставит **сквозной** номер `<prefix> N. <текст>`;
    - запоминает `id → N` в глобальный `mapping`.
@@ -38,7 +38,7 @@ output:
 
 Без модуля пришлось бы вручную:
 
-- найти все `<figcaption>`;
+- найти все <code>&#x3C;figcaption&#x3E;</code>;
 - пронумеровать по порядку;
 - найти все ссылки на рисунки (в том числе между статьями);
 - пересчитать текст ссылки.
@@ -47,7 +47,7 @@ output:
 
 ## Применение
 
-**Когда использовать:** после добавления/удаления/перемещения рисунков — пересчитать номера в `<figcaption>` и обновить текст ссылок `[Рисунок N](…#fig-…)` по всему проекту.
+**Когда использовать:** после добавления/удаления/перемещения рисунков — пересчитать номера в <code>&#x3C;figcaption&#x3E;</code> и обновить текст ссылок `[Рисунок N](…#fig-…)` по всему проекту.
 
 **Когда НЕ использовать:** рисунков нет; нужен только каталог — `figures`.
 
@@ -174,31 +174,52 @@ for (const mdFilePath of allMdFiles) {
 
 **`processFigureCaptions(content, startCounter, prefix, mdFilePath)`**:
 
-```js
-const regex = /<figcaption\s+class="imageDescription"([^6]*?)\s+id="([^7]+)"([^6]*?)>([\s\S]*?)<\/figcaption>/gi;
-let counter = startCounter;
-const mapping = new Map();
+`````js
+function processFigureCaptions(content, startCounter, prefix, mdFilePath) {
+    let counter = startCounter;
+    const mapping = new Map();
 
-const newContent = content.replace(regex, (match, beforeId, id, afterId, captionText) => {
-    let cleaned = captionText
-        .replace(/^(Рисунок|Figure|Fig\.|Рис\.)\s*\d+\.?\s*/i, '')
-        .replace(/^\d+\.\s*/, '')
-        .trim();
+    // 1. Вырезаем все типы кодовых экранов и сохраняем их в массив
+    const codeBlocks = [];
 
-    const newCaption = `${prefix} ${counter}. ${cleaned}`;
-    const replacement = `<figcaption class="imageDescription" id="${id}"${afterId}>${newCaption}</figcaption>`;
+    // Порядок: блоки кода (``` и ~~~), inline-код на одной или нескольких строках (`...`), HTML <code>...</code>
+    const codePattern = /(```[\s\S]*?```|~~~[\s\S]*?~~~|`{1,}[\s\S]*?`{1,}|<code\b[^6]*>[\s\S]*?<\/code>)/gi;
 
-    const uniqueKey = `${path.resolve(mdFilePath)}::${id}`;
-    mapping.set(uniqueKey, counter);
+    const maskedContent = content.replace(codePattern, (match) => {
+        const placeholder = `___CODE_BLOCK_${codeBlocks.length}___`;
+        codeBlocks.push(match);
+        return placeholder;
+    });
 
-    counter++;
-    return replacement;
-});
+    // 2. Ищем и переиндексируем ТОЛЬКО реальные теги <figcaption>
+    const figcaptionRegex = /<figcaption\s+class="imageDescription"([^6]*?)\s+id="([^7]+)"([^6]*?)>([\s\S]*?)<\/figcaption>/gi;
 
-return { newContent, newCounter: counter, figureMapping: mapping };
-```
+    const processedMaskedContent = maskedContent.replace(figcaptionRegex, (match, beforeId, id, afterId, captionText) => {
+        let cleaned = captionText
+            .replace(/^(Рисунок|Figure|Fig\.|Рис\.)\s*\d+\.?\s*/i, '')
+            .replace(/^\d+\.\s*/, '')
+            .trim();
 
-- **Regex** — ищет `<figcaption class="imageDescription" id="…">Рисунок 5. …</figcaption>` (многострочно).
+        const newCaption = `${prefix} ${counter}. ${cleaned}`;
+        const replacement = `<figcaption class="imageDescription" id="${id}"${afterId}>${newCaption}</figcaption>`;
+
+        const uniqueKey = `${path.resolve(mdFilePath)}::${id}`;
+        mapping.set(uniqueKey, counter);
+
+        counter++;
+        return replacement;
+    });
+
+    // 3. Возвращаем вырезанный код обратно
+    const finalContent = processedMaskedContent.replace(/___CODE_BLOCK_(\d+)___/g, (_, index) => {
+        return codeBlocks[Number(index)];
+    });
+
+    return { newContent: finalContent, newCounter: counter, figureMapping: mapping };
+}
+`````
+
+- **figcaptionRegex** — ищет <code>&#x3C;figcaption class=&#x22;imageDescription&#x22; id=&#x22;…&#x22;&#x3E;Рисунок 4. …&#x3C;/figcaption&#x3E;</code> (многострочно).
 - **`cleaned`** — удаляет старый префикс (`Рисунок N.` / `Figure N.` / `Fig. N.` / `Рис. N.`) и `N. ` в начале. Опционально.
 - **`newCaption`** — `${prefix} ${counter}. ${cleaned}` (например, `Рисунок 42. Схема архитектуры`).
 - **`uniqueKey`** — `${абсолютныйПуть}::${id}` — глобальный ключ для `mapping`. Нужен, потому что `id` могут совпадать в разных файлах.
