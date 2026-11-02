@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @ts-nocheck
 'use strict';
 
 const fs = require('fs/promises');
@@ -75,10 +76,11 @@ const PROPERTY_FORMAT = {
   layer:         'backtick',
   capability:    'backtick',
   family:        'backtick',
-  folder:        'backtick',
+  folder:        'double',
   entrypoint:    'backtick',
   version:       'backtick',
-  entrypoint:    'single'
+  input:         'backtick',
+  output:        'backtick',
 };
 
 // ---------- Тип значения ----------
@@ -90,6 +92,8 @@ const PROPERTY_TYPE = {
   capability: 'array',
   family:     'array',
   folder:     'array',
+  input:     'array',
+  output:     'array',
 };
 
 // Разделитель между элементами массива

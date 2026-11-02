@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 async function checkAuth() {
   const token = getToken();
   if (!token) { state.isAuthenticated = false; state.email = null; return; }

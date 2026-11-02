@@ -19,7 +19,7 @@ context: modules, capability, catalog, meta
 
 Capability — **самая полезная** ось навигации. Читатель приходит с задачей, а не с «хочу посмотреть на слой post-processing».
 
-Список [capabilities](#capability) — 10. Один модуль может попадать в **две** (см. [Многочлены](#многочлены)).
+Список [capabilities](#capability) — 10. Один модуль может попадать в **две** (см. [Многочлены](#mnogochleny)).
 
 ## Capability
 

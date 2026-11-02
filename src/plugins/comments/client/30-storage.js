@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 const TOKEN_KEY = 'dl-comment-token';
 const HIDDEN_KEY = 'dl-comments-hidden';
 const NAME_KEY = 'dl-comment-name';

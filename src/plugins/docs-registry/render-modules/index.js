@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+
+// @ts-nocheck
+
 'use strict';
 
 require('../_paths.js')

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use strict';
 
 const escMd = (s) => String(s ?? '—').replace(/\|/g, '&#124;');

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use strict';
 
 function parseArgs(argv) {
@@ -16,6 +18,14 @@ function parseArgs(argv) {
     valueAgg: 'count',
     classField: null,
     flat: false,
+
+    rowField:        'capabilities_arr',
+    colField:        'families_arr',
+    cellLabelField:  'treemapLabel',
+    cellHrefField:   'id_href',
+    emptyCell:       '—',
+    cellSeparator:   '<br>',
+    omitEmpty:       'both',
 
     // grouped
     groupBy: null,
@@ -57,6 +67,13 @@ function parseArgs(argv) {
       case '--groupFooter':
         out.groupFooter = !(val === 'false' || val === '0' || val === 'no');
         break;
+      case '--rowField':         out.rowField = val; break;
+      case '--colField':         out.colField = val; break;
+      case '--cellLabelField':   out.cellLabelField = val; break;
+      case '--cellHrefField':    out.cellHrefField = val; break;
+      case '--emptyCell':        out.emptyCell = val; break;
+      case '--cellSeparator':    out.cellSeparator = val; break;
+      case '--omitEmpty':        out.omitEmpty = val; break;
     }
   }
 

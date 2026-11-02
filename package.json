@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "1.54.0",
+    "version": "1.56.1",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -240,7 +240,7 @@
             "editor/context": [
                 {
                     "submenu": "diplodoc.editor.context.menu",
-                    "when": "editorTextFocus && !editorReadonly",
+                    "when": "(editorTextFocus && !editorReadonly)",
                     "group": "8.diplodoc.menu@1"
                 }
             ],
@@ -295,7 +295,7 @@
             "diplodoc.editor.context.menu": [
                 {
                     "command": "diplodoc-helper.link.addAnchor",
-                    "when": "editorLangId == markdown && editorHasSelection",
+                    "when": "(editorLangId == markdown && editorHasSelection)",
                     "group": "7.diplodoc.section@1"
                 },
                 {
@@ -305,12 +305,12 @@
                 },
                 {
                     "command": "diplodoc-helper.pasteImageFromClipboard",
-                    "when": "editorTextFocus && resourceExtname == .md",
+                    "when": "(editorTextFocus && resourceExtname == .md)",
                     "group": "7.diplodoc.section@3"
                 },
                 {
                     "command": "diplodoc-helper.pasteImageFromList",
-                    "when": "editorTextFocus && resourceExtname == .md",
+                    "when": "(editorTextFocus && resourceExtname == .md)",
                     "group": "7.diplodoc.section@4"
                 },
                 {
@@ -319,27 +319,27 @@
                 },
                 {
                     "command": "diplodoc-helper.footnote.add",
-                    "when": "editorLangId == markdown && editorHasSelection",
+                    "when": "(editorLangId == markdown && editorHasSelection)",
                     "group": "7.diplodoc.section@5"
                 },
                 {
                     "command": "diplodoc-helper.abbr.Add",
-                    "when": "editorLangId == markdown && editorHasSelection",
+                    "when": "(editorLangId == yaml || editorLangId == markdown)",
                     "group": "7.diplodoc.section@6"
                 },
                 {
                     "command": "diplodoc-helper.term.Add",
-                    "when": "editorLangId == markdown && editorHasSelection",
+                    "when": "(editorLangId == markdown && editorHasSelection)",
                     "group": "7.diplodoc.section@7"
                 },
                 {
                     "command": "diplodoc-helper.gost.Insert",
-                    "when": "editorTextFocus && !editorReadonly",
+                    "when": "(editorLangId == yaml || editorLangId == markdown)",
                     "group": "7.diplodoc.section@8"
                 },
                 {
                     "command": "diplodoc-helper.gost.Add",
-                    "when": "editorTextFocus && !editorReadonly",
+                    "when": "(editorLangId == yaml || editorLangId == markdown)",
                     "group": "7.diplodoc.section@9"
                 }
             ],

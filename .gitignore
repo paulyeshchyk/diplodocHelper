@@ -16,3 +16,4 @@ docs/docs/ru/Модули/Известныепроблемы/known-issues-by-mod
 docs/docs/ru/Модули/Известныепроблемы/known-issues-by-severity.md
 docs/docs/ru/Модули/Известныепроблемы/known-issues-by-type.md
 docs/docs/ru/Модули/Известныепроблемы/known-issues-summary.md
+*.vsix

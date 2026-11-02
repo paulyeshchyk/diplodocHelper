@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use strict';
 
 const { escMdLine } = require('../escape');

@@ -150,7 +150,7 @@ async function ux_abbr_add(argument) {
     }
 
     const document = editor.document;
-    if (document.languageId !== 'markdown') {
+    if (!(document.languageId === 'markdown' || document.languageId === 'yaml')) {
         vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.notMarkdown));
         return;
     }

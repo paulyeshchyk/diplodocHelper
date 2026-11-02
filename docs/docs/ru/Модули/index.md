@@ -145,19 +145,19 @@ flowchart TB
 
 - Слои - Семейства
   
-    {% include [tree](./Registry/registry-matrix-family-layer.md) %}
+    {% include [tree](../../_generated/ru/registry-matrix-family-layer.md) %}
 
 - Каталоги - Семейства
   
-    {% include [tree](./Registry/registry-matrix-family-capability.md) %}
+    {% include [tree](../../_generated/ru/registry-matrix-family-capability.md) %}
 
 - Слои - Каталоги
   
-    {% include [tree](./Registry/registry-matrix-layer-capability.md) %}
+    {% include [tree](../../_generated/ru/registry-matrix-layer-capability.md) %}
 
 - Реестр
   
-    {% include [registry](./Registry/registry-table.md) %}
+    {% include [registry](../../_generated/ru/registry-table.md) %}
 
 {% endlist %}
 

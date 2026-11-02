@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // src/plugins/reindexer/reindexer.figures.js
 
 const fs = require('fs');
@@ -122,17 +124,22 @@ function processFigureCaptions(content, startCounter, prefix, mdFilePath) {
     let counter = startCounter;
     const mapping = new Map();
 
-    // Группа 1: Любые блоки кода (`...`, ````...````, <code>...</code>), которые ИГНОРИРУЕМ.
-    // Группа 2: Сам тег <figcaption>, который ОБРАБАТЫВАЕМ.
-    const skipAndMatchRegex = /(```[\s\S]*?```|`[^`\n]+`|<code\b[^>]*>[\s\S]*?<\/code>)|(<figcaption\s+class="imageDescription"([^>]*?)\s+id="([^"]+)"([^>]*?)>([\s\S]*?)<\/figcaption>)/gi;
+    // 1. Вырезаем все типы кодовых экранов и сохраняем их в массив
+    const codeBlocks = [];
 
-    const newContent = content.replace(skipAndMatchRegex, (fullMatch, codeBlock, figCaptionBlock, beforeId, id, afterId, captionText) => {
-        // Если сработал захват кодового экрана (группа 1) — возвращаем фрагмент без изменений
-        if (codeBlock) {
-            return codeBlock;
-        }
+    // Порядок: блоки кода (``` и ~~~), inline-код на одной или нескольких строках (`...`), HTML <code>...</code>
+    const codePattern = /(```[\s\S]*?```|~~~[\s\S]*?~~~|`{1,}[\s\S]*?`{1,}|<code\b[^>]*>[\s\S]*?<\/code>)/gi;
 
-        // Иначе обработка тега <figcaption> (группа 2)
+    const maskedContent = content.replace(codePattern, (match) => {
+        const placeholder = `___CODE_BLOCK_${codeBlocks.length}___`;
+        codeBlocks.push(match);
+        return placeholder;
+    });
+
+    // 2. Ищем и переиндексируем ТОЛЬКО реальные теги <figcaption>
+    const figcaptionRegex = /<figcaption\s+class="imageDescription"([^>]*?)\s+id="([^"]+)"([^>]*?)>([\s\S]*?)<\/figcaption>/gi;
+
+    const processedMaskedContent = maskedContent.replace(figcaptionRegex, (match, beforeId, id, afterId, captionText) => {
         let cleaned = captionText
             .replace(/^(Рисунок|Figure|Fig\.|Рис\.)\s*\d+\.?\s*/i, '')
             .replace(/^\d+\.\s*/, '')
@@ -148,7 +155,12 @@ function processFigureCaptions(content, startCounter, prefix, mdFilePath) {
         return replacement;
     });
 
-    return { newContent, newCounter: counter, figureMapping: mapping };
+    // 3. Возвращаем вырезанный код обратно
+    const finalContent = processedMaskedContent.replace(/___CODE_BLOCK_(\d+)___/g, (_, index) => {
+        return codeBlocks[Number(index)];
+    });
+
+    return { newContent: finalContent, newCounter: counter, figureMapping: mapping };
 }
 
 /**

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 function onClickDocument(e) {
   if (e.button !== 0) return;
   if (e.target.closest('.dl-comment-panel, .dl-comment-dialog, .dl-comment-overlay, .dl-comment-popup')) return;

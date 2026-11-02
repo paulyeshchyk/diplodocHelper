@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// @ts-nocheck
+
 'use strict';
 
 const http = require('node:http');

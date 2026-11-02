@@ -35,5 +35,4 @@ async function runGeneration(options) {
 
 module.exports = {
     runGeneration,
-    generateGanttFixScroll: runGeneration,
 };

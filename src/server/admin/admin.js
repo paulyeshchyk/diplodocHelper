@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 (async function () {
   'use strict';
   const state = { threads: [], filter: 'open', isMod: false };

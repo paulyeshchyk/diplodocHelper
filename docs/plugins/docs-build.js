@@ -50,13 +50,10 @@ const STEPS = {
 
         // --- реестр модулей / легенды / modules.md ---
         cli('catalog', '--lang=ru'),
-        cli('pageLegend', '--lang=ru', '--rewrite', '--with-include',
-            '--ignore=sectionType,context,pureTitle,ID_Group,ID_Type,vars'),
+        cli('pageLegend', '--lang=ru', '--rewrite', '--with-include', '--ignore=sectionType,context,pureTitle,ID_Group,ID_Type,vars'),
         cli('renderModules', '--lang=ru', '--rewrite', '--with-include'),
         // ---
-        cli('emitModulesTable', '--lang=ru',
-            '--anchor=naznachenie',
-            '--out-dir=./docs/ru/Модули/Реестр'),
+        cli('emitModulesTable', '--lang=ru', '--anchor=naznachenie', '--out-dir=./docs/ru/Модули/Registry'),
 
         cli('reindexFigures', '--docsDir', './docs/ru'),
         cli('reindexFootnotes', '--docsDir', './docs/ru'),
@@ -118,7 +115,7 @@ const STEPS = {
             '--cellLabelField', 'ident_plain',
             '--cellHrefField', 'id_href',
             '--omitEmpty', 'both',
-            '--outputFile', './docs/ru/Модули/Registry/registry-matrix-family-capability.md'
+            '--outputFile', './docs/_generated/ru/registry-matrix-family-capability.md'
         ),
 
         // --- Матрица: family × layer ---
@@ -133,7 +130,7 @@ const STEPS = {
             '--cellLabelField', 'ident_plain',
             '--cellHrefField', 'id_href',
             '--omitEmpty', 'both',
-            '--outputFile', './docs/ru/Модули/Registry/registry-matrix-family-layer.md'
+            '--outputFile', './docs/_generated/ru/registry-matrix-family-layer.md'
         ),
 
         // --- Матрица: capability × layer  ---
@@ -148,7 +145,7 @@ const STEPS = {
             '--cellLabelField', 'ident_plain',
             '--cellHrefField', 'id_href',
             '--omitEmpty', 'both',
-            '--outputFile', './docs/ru/Модули/Registry/registry-matrix-layer-capability.md'
+            '--outputFile', './docs/_generated/ru/registry-matrix-layer-capability.md'
         ),
         // // Периодическая система модулей (treemap-beta)
         // node(
@@ -171,7 +168,7 @@ const STEPS = {
             '--outputDir', './docs/ru',
             '--tableType', 'simple',
             '--schema', 'modules',
-            '--outputFile', './docs/ru/Модули/Registry/registry-table.md'
+            '--outputFile', './docs/_generated/ru/registry-table.md'
         ),
     ],
 

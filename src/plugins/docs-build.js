@@ -50,10 +50,10 @@ const STEPS = {
 
         // --- реестр модулей / легенды / modules.md ---
         cli('catalog', '--lang=ru'),
-        cli('pageLegend', '--lang=ru', '--rewrite', '--with-include',
-            '--ignore=sectionType,context,pureTitle,ID_Group,ID_Type'),
+        cli('pageLegend', '--lang=ru', '--rewrite', '--with-include', '--ignore=sectionType,context,pureTitle,ID_Group,ID_Type,vars'),
         cli('renderModules', '--lang=ru', '--rewrite', '--with-include'),
         // ---
+        cli('emitModulesTable', '--lang=ru', '--anchor=naznachenie', '--out-dir=./docs/ru/Модули/Registry'),
 
         cli('reindexFigures', '--docsDir', './docs/ru'),
         cli('reindexFootnotes', '--docsDir', './docs/ru'),
@@ -73,7 +73,7 @@ const STEPS = {
             'jsonToMdTable',
             './plugins/json-to-md/json-to-md-table.js',
             '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
-            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--outputDir', './docs/_generated/ru',
             '--tableType', 'extended',
         ),
 
@@ -81,7 +81,7 @@ const STEPS = {
             'jsonToMdTable',
             './plugins/json-to-md/json-to-md-table.js',
             '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
-            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--outputDir', './docs/_generated/ru',
             '--tableType', 'extended',
             '--groupBy', 'module'
         ),
@@ -90,7 +90,7 @@ const STEPS = {
             'jsonToMdTable',
             './plugins/json-to-md/json-to-md-table.js',
             '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
-            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--outputDir', './docs/_generated/ru',
             '--tableType', 'extended',
             '--groupBy', 'severity'
         ),
@@ -99,25 +99,76 @@ const STEPS = {
             'jsonToMdTable',
             './plugins/json-to-md/json-to-md-table.js',
             '--jsonPath', './docs/ru/Модули/Известныепроблемы/known-issues-summary.json',
-            '--outputDir', './docs/ru/Модули/Известныепроблемы',
+            '--outputDir', './docs/_generated/ru',
             '--tableType', 'extended',
             '--groupBy', 'type'
         ),
-
-        // Периодическая система модулей (treemap-beta)
+        // --- Матрица: family × capability ---
         node(
-            'registryTreemap',
+            'registryMatrixFamilyCapability',
             './plugins/json-to-md/json-to-md-table.js',
-            '--jsonPath', './docs/ru/Модули/Реестр/registry.json',
+            '--jsonPath', './docs/_generated/modules-table.ru.json',
             '--outputDir', './docs/ru',
-            '--tableType', 'treemap',
-            '--xField', 'catalog',
-            '--yField', 'family',
-            '--labelField', 'id',
-            '--valueField', 'priority',   // если нужно — иначе size = count
-            // '--valueAgg', 'sum',
-            '--classField', 'status',     // активные/устаревшие — разными цветами
-            '--outputFile', './docs/ru/Модули/Реестр/registry-treemap.md'
+            '--tableType', 'matrix',
+            '--rowField', 'families_arr',
+            '--colField', 'capabilities_arr',
+            '--cellLabelField', 'ident_plain',
+            '--cellHrefField', 'id_href',
+            '--omitEmpty', 'both',
+            '--outputFile', './docs/_generated/ru/registry-matrix-family-capability.md'
+        ),
+
+        // --- Матрица: family × layer ---
+        node(
+            'registryMatrixFamilyLayer',
+            './plugins/json-to-md/json-to-md-table.js',
+            '--jsonPath', './docs/_generated/modules-table.ru.json',
+            '--outputDir', './docs/ru',
+            '--tableType', 'matrix',
+            '--rowField', 'families_arr',
+            '--colField', 'layers_arr',
+            '--cellLabelField', 'ident_plain',
+            '--cellHrefField', 'id_href',
+            '--omitEmpty', 'both',
+            '--outputFile', './docs/_generated/ru/registry-matrix-family-layer.md'
+        ),
+
+        // --- Матрица: capability × layer  ---
+        node(
+            'registryMatrixLayerCapability',
+            './plugins/json-to-md/json-to-md-table.js',
+            '--jsonPath', './docs/_generated/modules-table.ru.json',
+            '--outputDir', './docs/ru',
+            '--tableType', 'matrix',
+            '--rowField', 'capabilities_arr',
+            '--colField', 'layers_arr',
+            '--cellLabelField', 'ident_plain',
+            '--cellHrefField', 'id_href',
+            '--omitEmpty', 'both',
+            '--outputFile', './docs/_generated/ru/registry-matrix-layer-capability.md'
+        ),
+        // // Периодическая система модулей (treemap-beta)
+        // node(
+        //     'registryTreemap',
+        //     './plugins/json-to-md/json-to-md-table.js',
+        //     '--jsonPath', './docs/_generated/modules-table.ru.json',
+        //     '--outputDir', './docs/ru',
+        //     '--tableType', 'treemap',
+        //     '--yField', 'family_plain',           // строки
+        //     '--xField', 'capability_plain',       // столбцы
+        //     '--labelField', 'treemapLabel',       // лист = "4.2-001 breadcrumb"
+        //     '--outputFile', './docs/ru/Модули/Registry/registry-treemap.md'
+        // ),
+
+        // Кликабельная таблица-индекс — расширенная, со всеми ссылками
+        node(
+            'registryTable',
+            './plugins/json-to-md/json-to-md-table.js',
+            '--jsonPath', './docs/_generated/modules-table.ru.json',
+            '--outputDir', './docs/ru',
+            '--tableType', 'simple',
+            '--schema', 'modules',
+            '--outputFile', './docs/_generated/ru/registry-table.md'
         ),
     ],
 

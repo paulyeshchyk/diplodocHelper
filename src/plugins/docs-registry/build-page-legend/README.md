@@ -15,6 +15,8 @@ folder: 'plugins/docs-registry/build-page-legend/index.js'
 entrypoint: 'runBuildPageLegend(argv)'
 role: 'Генератор'
 version: '1.0.0'
+input:
+output:
 ---
 
 # README: build-page-legend

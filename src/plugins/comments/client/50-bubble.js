@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 function showPopup(rect) {
   hidePopup();
   const el = document.createElement('div');

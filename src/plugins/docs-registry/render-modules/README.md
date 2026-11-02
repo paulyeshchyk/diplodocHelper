@@ -15,6 +15,8 @@ folder: 'plugins/docs-registry/render-modules/index.js'
 entrypoint: 'runRenderModules(argv)'
 role: 'Генератор'
 version: '1.0.0'
+input:
+output:
 ---
 
 # README: render-modules
