@@ -1,1 +1,0 @@
-<span class="dl-term-occ-list">{{LINKS}}</span>

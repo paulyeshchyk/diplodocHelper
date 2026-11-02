@@ -1,1 +1,0 @@
-<strong id="{{ANCHOR_ID}}">{{TERM}}</strong> — {{DEFINITION}}

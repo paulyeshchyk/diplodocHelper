@@ -1,1 +1,0 @@
-<a class="dl-term-occ" href="{{HREF}}">[{{N}}]</a>

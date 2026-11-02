@@ -1,1 +1,0 @@
-<span class="dl-abbr-occ-list">{{LINKS}}</span>

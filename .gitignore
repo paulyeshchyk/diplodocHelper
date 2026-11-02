@@ -17,3 +17,5 @@ docs/docs/ru/Модули/Известныепроблемы/known-issues-by-sev
 docs/docs/ru/Модули/Известныепроблемы/known-issues-by-type.md
 docs/docs/ru/Модули/Известныепроблемы/known-issues-summary.md
 *.vsix
+docs/plugins
+docs/server

@@ -1,4 +1,0 @@
----
-title: {{TITLE}}
-sectionType: Page
----
