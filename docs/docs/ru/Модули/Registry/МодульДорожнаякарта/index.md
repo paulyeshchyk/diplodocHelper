@@ -3,7 +3,7 @@ title: Модуль. Дорожная карта
 sectionType: Page
 pureTitle: Дорожная карта
 context: roadmap, report, pre-processing, markdown, yaml
-capability: otchyoty
+capability: otchyoty, dorozhnaya-karta
 family: fam-roadmap
 layer: pre-processing
 ID: 032

@@ -9,23 +9,23 @@ dimensions:
       - { label: Роль,    field: role }
       - { label: Что делает,  field: designation }
     items:
-      fam-json-generators: { dir: "/ru/Модули/Семействоfamily/СемействоJSONгенераторы",            title: "JSON генераторы"}
-      fam-footnote:        { dir: "/ru/Модули/Семействоfamily/СемействоСноски",                    title: "Сноски" }
-      fam-helptags:        { dir: "/ru/Модули/Семействоfamily/СемействоHelptags",                  title: "Helptags" }
-      fam-json:            { dir: "/ru/Модули/Семействоfamily/СемействоJSONгенераторы",            title: "JSON генераторы" }
-      fam-abbrs:           { dir: "/ru/Модули/Семействоfamily/СемействоАббревиатуры",              title: "Аббревиатуры" }
-      fam-gosts:           { dir: "/ru/Модули/Семействоfamily/СемействоГОСТы",                     title: "ГОСТы" }
-      fam-roadmap:         { dir: "/ru/Модули/Семействоfamily/СемействоДорожнаякарта",             title: "Дорожная карта" }
-      fam-figures:         { dir: "/ru/Модули/Семействоfamily/СемействоИллюстрации",               title: "Иллюстрации" }
-      fam-infrastructure:  { dir: "/ru/Модули/Семействоfamily/СемействоИнфраструктура",            title: "Инфраструктура" }
-      fam-kommentariji:    { dir: "/ru/Модули/Семействоfamily/СемействоКомментариипользователей",  title: "Комментарии пользователей" }
-      fam-context-tags:    { dir: "/ru/Модули/Семействоfamily/СемействоКонтекстныетеги",           title: "Контекстные теги" }
-      fam-contexts:        { dir: "/ru/Модули/Семействоfamily/СемействоКонтексты",                 title: "Контексты" }
-      fam-sekciyi:         { dir: "/ru/Модули/Семействоfamily/СемействоСекции",                    title: "Секции" }
-      fam-links:           { dir: "/ru/Модули/Семействоfamily/СемействоСсылки",                    title: "Ссылки" }
-      fam-terms:           { dir: "/ru/Модули/Семействоfamily/СемействоТермины",                   title: "Термины" }
-      fam-illustrations:   { dir: "/ru/Модули/Семействоfamily/СемействоИллюстрации",               title: "Иллюстрации" }
-      fam-docs-registry:   { dir: "/ru/Модули/Семействоfamily/СемействоDocsRegistry",              title: "Docs Registry" }
+      fam-json-generators: { dir: "Семействоfamily/СемействоJSONгенераторы",            title: "JSON генераторы"}
+      fam-footnote:        { dir: "Семействоfamily/СемействоСноски",                    title: "Сноски" }
+      fam-helptags:        { dir: "Семействоfamily/СемействоHelptags",                  title: "Helptags" }
+      fam-json:            { dir: "Семействоfamily/СемействоJSONгенераторы",            title: "JSON генераторы" }
+      fam-abbrs:           { dir: "Семействоfamily/СемействоАббревиатуры",              title: "Аббревиатуры" }
+      fam-gosts:           { dir: "Семействоfamily/СемействоГОСТы",                     title: "ГОСТы" }
+      fam-roadmap:         { dir: "Семействоfamily/СемействоДорожнаякарта",             title: "Дорожная карта" }
+      fam-figures:         { dir: "Семействоfamily/СемействоИллюстрации",               title: "Иллюстрации" }
+      fam-infrastructure:  { dir: "Семействоfamily/СемействоИнфраструктура",            title: "Инфраструктура" }
+      fam-kommentariji:    { dir: "Семействоfamily/СемействоКомментариипользователей",  title: "Комментарии пользователей" }
+      fam-context-tags:    { dir: "Семействоfamily/СемействоКонтекстныетеги",           title: "Контекстные теги" }
+      fam-contexts:        { dir: "Семействоfamily/СемействоКонтексты",                 title: "Контексты" }
+      fam-sekciyi:         { dir: "Семействоfamily/СемействоСекции",                    title: "Секции" }
+      fam-links:           { dir: "Семействоfamily/СемействоСсылки",                    title: "Ссылки" }
+      fam-terms:           { dir: "Семействоfamily/СемействоТермины",                   title: "Термины" }
+      fam-illustrations:   { dir: "Семействоfamily/СемействоИллюстрации",               title: "Иллюстрации" }
+      fam-docs-registry:   { dir: "Семействоfamily/СемействоDocsRegistry",              title: "Docs Registry" }
 
   layer:
     title: Слой
@@ -35,13 +35,13 @@ dimensions:
       - { label: Роль,    field: role }
       - { label: Что делает,    field: designation }
     items:
-      build:           { dir: "/ru/Модули/Слоиlayer/СлойBuild",              title: "Build" }
-      cli:             { dir: "/ru/Модули/Слоиlayer/СлойCLI",                title: "CLI" }
-      post-processing: { dir: "/ru/Модули/Слоиlayer/СлойPostprocessing",     title: "HTML обработка <br> 'post-processing'" }
-      pre-processing:  { dir: "/ru/Модули/Слоиlayer/СлойPreprocessing",      title: "MD обработка <br> 'pre-processing'" }
-      vscode-ui:       { dir: "/ru/Модули/Слоиlayer/СлойVSCodeUI",           title: "VSCode UI" }
-      client-runtime:  { dir: "/ru/Модули/Слоиlayer/СлойКлиентскийruntime",  title: "Клиентский runtime" }
-      shared-core:     { dir: "/ru/Модули/Слоиlayer/СлойОбщееядро",          title: "Общее ядро" }
+      build:           { dir: "Слоиlayer/СлойBuild",              title: "Build" }
+      cli:             { dir: "Слоиlayer/СлойCLI",                title: "CLI" }
+      post-processing: { dir: "Слоиlayer/СлойPostprocessing",     title: "HTML обработка <br> 'post-processing'" }
+      pre-processing:  { dir: "Слоиlayer/СлойPreprocessing",      title: "MD обработка <br> 'pre-processing'" }
+      vscode-ui:       { dir: "Слоиlayer/СлойVSCodeUI",           title: "VSCode UI" }
+      client-runtime:  { dir: "Слоиlayer/СлойКлиентскийruntime",  title: "Клиентский runtime" }
+      shared-core:     { dir: "Слоиlayer/СлойОбщееядро",          title: "Общее ядро" }
 
   capability:
     title: Capability
@@ -51,16 +51,16 @@ dimensions:
       - { label: Роль,    field: role }
       - { label: Что делает,  field: designation }
     items:
-      json-to-md:            { dir: "/ru/Модули/КаталогCapabilitymap/КаталогКонвертер",            title: "Конвертер" }
-      rezhimy-otobrazheniya: { dir: "/ru/Модули/КаталогCapabilitymap/КаталогРежимыотображения",    title: "Режимы отображения" }
-      dorozhnaya-karta:      { dir: "/ru/Модули/КаталогCapabilitymap/КаталогДорожнаякарта",        title: "Дорожная карта" }
-      infrastruktura:        { dir: "/ru/Модули/КаталогCapabilitymap/КаталогИнфраструктура",       title: "Инфраструктура" }
-      kontent:               { dir: "/ru/Модули/КаталогCapabilitymap/КаталогКонтент",              title: "Контент" }
-      lintery:               { dir: "/ru/Модули/КаталогCapabilitymap/КаталогЛинтеры",              title: "Линтеры" }
-      navigatsiya:           { dir: "/ru/Модули/КаталогCapabilitymap/КаталогНавигация",            title: "Навигация" }
-      otchyoty:              { dir: "/ru/Модули/КаталогCapabilitymap/КаталогОтчёты",               title: "Отчёты" }
-      predstavlenie-dannykh: { dir: "/ru/Модули/КаталогCapabilitymap/КаталогПредставлениеданных",  title: "Представление данных" }
-      ssylki:                { dir: "/ru/Модули/КаталогCapabilitymap/КаталогСсылки",               title: "Ссылки" }
-      struktura:             { dir: "/ru/Модули/КаталогCapabilitymap/КаталогСтруктура",            title: "Структура" }
-      terminologiya:         { dir: "/ru/Модули/КаталогCapabilitymap/КаталогТерминология",         title: "Терминология" }
-      reestr:                { dir: "/ru/Модули/КаталогCapabilitymap/КаталогРеестр",               title: "Реестр" }
+      json-to-md:            { dir: "КаталогCapabilitymap/КаталогКонвертер",            title: "Конвертер" }
+      rezhimy-otobrazheniya: { dir: "КаталогCapabilitymap/КаталогРежимыотображения",    title: "Режимы отображения" }
+      dorozhnaya-karta:      { dir: "КаталогCapabilitymap/КаталогДорожнаякарта",        title: "Дорожная карта" }
+      infrastruktura:        { dir: "КаталогCapabilitymap/КаталогИнфраструктура",       title: "Инфраструктура" }
+      kontent:               { dir: "КаталогCapabilitymap/КаталогКонтент",              title: "Контент" }
+      lintery:               { dir: "КаталогCapabilitymap/КаталогЛинтеры",              title: "Линтеры" }
+      navigatsiya:           { dir: "КаталогCapabilitymap/КаталогНавигация",            title: "Навигация" }
+      otchyoty:              { dir: "КаталогCapabilitymap/КаталогОтчёты",               title: "Отчёты" }
+      predstavlenie-dannykh: { dir: "КаталогCapabilitymap/КаталогПредставлениеданных",  title: "Представление данных" }
+      ssylki:                { dir: "КаталогCapabilitymap/КаталогСсылки",               title: "Ссылки" }
+      struktura:             { dir: "КаталогCapabilitymap/КаталогСтруктура",            title: "Структура" }
+      terminologiya:         { dir: "КаталогCapabilitymap/КаталогТерминология",         title: "Терминология" }
+      reestr:                { dir: "КаталогCapabilitymap/КаталогРеестр",               title: "Реестр" }

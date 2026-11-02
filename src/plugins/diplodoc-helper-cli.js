@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+ 
 // @ts-nocheck
 // diplodoc-helper-cli.js
 const path = require('path');

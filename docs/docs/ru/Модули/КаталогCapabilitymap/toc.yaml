@@ -1,6 +1,11 @@
 title: Каталог (Capability map)
 href: index.yaml
 items:
+  - name: Дорожная карта
+    href: КаталогДорожнаякарта/index.md
+    include:
+      path: КаталогДорожнаякарта/toc.yaml
+      mode: link
   - name: Инфраструктура
     href: КаталогИнфраструктура/index.md
     include:
