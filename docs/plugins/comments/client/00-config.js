@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 if (typeof window === 'undefined') return;
 
 const cfg = window.__DL_COMMENTS_CFG__ || {};

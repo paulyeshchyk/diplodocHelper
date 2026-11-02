@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "1.56.1",
+    "version": "1.57.0",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -45,7 +45,8 @@
         "format": "prettier --write .",
         "release:patch": "npm run build:prod && node scripts/bump-version.js",
         "release:minor": "npm run build:prod && node scripts/bump-minor.js",
-        "test": "jest"
+        "test": "jest",
+        "watch": "node build.js --watch"
     },
     "contributes": {
         "commands": [

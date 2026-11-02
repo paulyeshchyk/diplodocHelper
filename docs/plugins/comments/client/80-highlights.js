@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 function addThread(t) { state.threads.push(t); recompute(); }
 
 function recompute() {

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 function resetDialogState() {
   if (state.dialog) { state.dialog.remove(); state.dialog = null; }
 }

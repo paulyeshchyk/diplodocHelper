@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // src/plugins/reindexer/reindexer.figures.js
 
 const fs = require('fs');

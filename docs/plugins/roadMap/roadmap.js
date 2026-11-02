@@ -107,7 +107,6 @@ async function runGeneration(options) {
         typeof options === 'object'
             ? options.data ?? options.dataPath ?? options.dataRaw ?? null
             : null;
-
     const engine = (typeof options === 'object' && options.engine) || CURRENT_ENGINE;
 
     let data = null;

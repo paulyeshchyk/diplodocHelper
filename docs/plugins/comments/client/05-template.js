@@ -1,3 +1,4 @@
+// @ts-nocheck
 function renderTemplate(name, data) {
   const el = document.getElementById('dl-tpl-' + name);
   if (!el) { console.warn('[comments] template not found:', name); return ''; }

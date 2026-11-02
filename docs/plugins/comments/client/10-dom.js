@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 function findArticleBody() {
   return document.querySelector('.dc-doc-page__body')
     || document.querySelector('.dc-doc-page__content')

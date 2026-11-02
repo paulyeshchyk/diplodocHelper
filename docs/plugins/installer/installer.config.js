@@ -11,7 +11,7 @@ module.exports = {
     // Например, мы хотим перенести всю папку со скриптами сборки
     items: [
         {
-            src: 'src/plugins', 
+            src: 'src/plugins',
             dest: './plugins' // Скопирует папку plugins целиком в <выбранная_папка>/plugins
         },
         {
@@ -19,11 +19,11 @@ module.exports = {
             dest: './server'
         },
         {
-            src: 'src/scripts/build-docs.js', 
+            src: 'src/scripts/build-docs.js',
             dest: './build-docs.js' // Скопирует конкретный файл в корень
         },
         {
-            src: 'src/scripts/utils', 
+            src: 'src/scripts/utils',
             dest: './utils' // Скопирует папку utils
         }
     ],

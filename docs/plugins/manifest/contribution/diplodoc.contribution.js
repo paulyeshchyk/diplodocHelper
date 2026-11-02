@@ -57,12 +57,14 @@ const WHEN = {
     EXPLORER_IS_FOLDER: 'explorerResourceIsFolder',
     EXPLORER_IS_FOLDER_OR_MD_OR_IMAGES:
         'explorerResourceIsFolder || resourceExtname == .md || resourceExtname == .png || resourceExtname == .jpg || resourceExtname == .svg',
-    EXPLORER_IS_FOLDER_OR_NOT_MD: 'explorerResourceIsFolder || resourceExtname != .md',
-    EDITOR_LANG_MD_AND_SELECTION: 'editorLangId == markdown && editorHasSelection',
+    EXPLORER_IS_FOLDER_OR_NOT_MD: '(explorerResourceIsFolder || resourceExtname != .md)',
+    EDITOR_LANG_MD_AND_SELECTION: '(editorLangId == markdown && editorHasSelection)',
+    EDITOR_LANG_YAML_AND_SELECTION: '(editorLangId == yaml && editorHasSelection)',
+    EDITOR_LANG_YAML_MD_YAML: '(editorLangId == yaml || editorLangId == markdown)',
     EDITOR_TEXT_FOCUS_READONLY_AND_CAN_PASTE:
         'editorTextFocus && !editorReadonly && (diplodoc-helper:canPasteMarkdownLink || resourceFilename =~ /^(gosts|abbreviations)\\.yaml$/)',
-    EDITOR_TEXT_FOCUS_AND_EXTNAME_MD: 'editorTextFocus && resourceExtname == .md',
-    EDITOR_TEXT_FOCUS_AND_NOT_READONLY: 'editorTextFocus && !editorReadonly',
+    EDITOR_TEXT_FOCUS_AND_EXTNAME_MD: '(editorTextFocus && resourceExtname == .md)',
+    EDITOR_TEXT_FOCUS_AND_NOT_READONLY: '(editorTextFocus && !editorReadonly)',
 };
 
 const explorerSubmenu = new ManifestSubmenu(SUBMENU.EXPLORER, '%submenu.diplodoc%');
@@ -200,7 +202,7 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.abbr.Add',
-            WHEN.EDITOR_LANG_MD_AND_SELECTION,
+            WHEN.EDITOR_LANG_MD_AND_SELECTION && WHEN.EDITOR_LANG_YAML_MD_YAML,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             6
@@ -218,7 +220,7 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.gost.Insert',
-            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY,
+            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY && WHEN.EDITOR_LANG_YAML_MD_YAML,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             8 // Следующий порядковый номер
@@ -227,7 +229,7 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.gost.Add',
-            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY,
+            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY && WHEN.EDITOR_LANG_YAML_MD_YAML,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             9

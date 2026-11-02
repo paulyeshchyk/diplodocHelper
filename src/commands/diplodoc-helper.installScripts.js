@@ -2,14 +2,39 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-// Загружаем конфиг установщика
 const installerConfig = require('../plugins/installer/installer.config.js');
 
 /**
- * Рекурсивное копирование с игнорированием ненужных файлов
+ * Валидирует выбранную папку на наличие структуры Diplodoc/YFM.
+ * 
+ * @param {string} targetDir 
+ * @returns {{ isValid: boolean, isInsideDocs: boolean, missingMarkers: string[] }}
+ */
+function validateTargetDirectory(targetDir) {
+    const hasPackageJson = fs.existsSync(path.join(targetDir, 'package.json'));
+    const docsDir = path.join(targetDir, 'docs');
+    const hasDocsFolder = fs.existsSync(docsDir) && fs.statSync(docsDir).isDirectory();
+
+    // Проверяем маркерные файлы YFM/Diplodoc внутри docs
+    const yfmMarkers = ['.yfm', 'presets.yaml', 'theme.yaml'];
+    const hasYfmInDocs = hasDocsFolder && yfmMarkers.some(marker => fs.existsSync(path.join(docsDir, marker)));
+
+    // Проверяем, не выбрал ли пользователь непосредственно папку docs
+    const isInsideDocs = yfmMarkers.some(marker => fs.existsSync(path.join(targetDir, marker)));
+
+    const isValid = (hasPackageJson || hasDocsFolder) && (hasYfmInDocs || isInsideDocs);
+    
+    const missingMarkers = [];
+    if (!hasPackageJson) missingMarkers.push('package.json');
+    if (!hasDocsFolder && !isInsideDocs) missingMarkers.push('папка docs/');
+
+    return { isValid, isInsideDocs, missingMarkers };
+}
+
+/**
  * @param {string} src
  * @param {string} dest
- * @param {any[]} ignorePatterns
+ * @param {string[]} ignorePatterns
  */
 function copyRecursiveSync(src, dest, ignorePatterns) {
     if (!src || !dest) {
@@ -25,7 +50,6 @@ function copyRecursiveSync(src, dest, ignorePatterns) {
         fs.readdirSync(src).forEach(childItemName => {
             const childPath = path.join(src, childItemName);
             
-            // Проверка на игнорирование
             if (ignorePatterns && ignorePatterns.some((/** @type {string} */ pattern) => childItemName.includes(pattern))) {
                 return;
             }
@@ -39,8 +63,6 @@ function copyRecursiveSync(src, dest, ignorePatterns) {
 }
 
 async function ux_install_scripts() {
-    // 1. Получаем ID расширения из package.json
-    // ВАЖНО: Замените 'paulyestchick.diplodoc-helper' на ваш реальный ID (publisher.name)
     const extensionId = 'paulyestchick.diplodochelper'; 
     const extension = vscode.extensions.getExtension(extensionId);
 
@@ -51,42 +73,92 @@ async function ux_install_scripts() {
 
     const extensionPath = extension.extensionPath;
 
-    // 2. Просим пользователя выбрать папку назначения
+    // 1. Предварительное модальное окно с краткой инструкцией для ориентирования
+    const guideChoice = await vscode.window.showInformationMessage(
+        `📁 Инструкция по установке скриптов сборки\n\n` +
+        `Вам потребуется выбрать КОРНЕВУЮ папку проекта Diplodoc/YFM.\n\n` +
+        `Признаки правильной папки:\n` +
+        `• Содержит файл package.json\n` +
+        `• Содержит папку docs (внутри которой лежат .yfm, presets.yaml или папки ru/en)\n\n` +
+        `Скрипты (plugins и server) будут скопированы прямо в выбранную директорию.`,
+        { modal: true },
+        'Выбрать папку'
+    );
+
+    // Если пользователь закрыл модалку или нажал встроенную "Отмена"
+    if (guideChoice !== 'Выбрать папку') {
+        return;
+    }
+
+    // 2. Открываем выбор директории
     const uri = await vscode.window.showOpenDialog({
         canSelectFiles: false,
         canSelectFolders: true,
         canSelectMany: false,
-        openLabel: 'Выбрать папку для установки скриптов',
-        title: 'Куда установить скрипты сборки?'
+        openLabel: 'Установить в эту папку',
+        title: 'Выберите корень проекта Diplodoc'
     });
 
     if (!uri || uri.length === 0) return;
-    const targetDir = uri[0].fsPath;
+    let targetDir = uri[0].fsPath;
 
+    // 3. Проверка и валидация
+    let validation = validateTargetDirectory(targetDir);
+
+    if (validation.isInsideDocs) {
+        const parentDir = path.dirname(targetDir);
+        const choice = await vscode.window.showWarningMessage(
+            `Вы выбрали папку "docs". Установить плагины в корень проекта (${path.basename(parentDir)})?`,
+            { modal: true },
+            'Да, в корень проекта',
+            'Оставить выбранную папку'
+        );
+
+        if (!choice) return;
+        if (choice === 'Да, в корень проекта') {
+            targetDir = parentDir;
+            validation = validateTargetDirectory(targetDir);
+        }
+    }
+
+    if (!validation.isValid) {
+        const missingText = validation.missingMarkers.join(', ');
+        const confirm = await vscode.window.showWarningMessage(
+            `⚠️ Выбранная папка не похожа на корень проекта Diplodoc (не найдены: ${missingText}). Всё равно продолжить установку?`,
+            { modal: true },
+            'Установить всё равно'
+        );
+
+        if (confirm !== 'Установить всё равно') {
+            return;
+        }
+    }
+
+    // 4. Выполнение установки
     try {
         let copiedCount = 0;
 
-        // 3. Проходимся по конфигу и копируем
         for (const item of installerConfig.items) {
-            if (!item.src || !item.dest) {
-                console.warn(`[Installer] Пропущен элемент конфига без src или dest`, item);
-                continue;
-            }
+            if (!item.src || !item.dest) continue;
 
             const srcPath = path.join(extensionPath, item.src);
             const destPath = path.join(targetDir, item.dest);
 
-            if (!fs.existsSync(srcPath)) {
-                console.warn(`[Installer] Источник не найден: ${srcPath}`);
-                continue;
-            }
+            if (!fs.existsSync(srcPath)) continue;
 
             copyRecursiveSync(srcPath, destPath, installerConfig.ignorePatterns);
             copiedCount++;
         }
 
         if (copiedCount > 0) {
-            vscode.window.showInformationMessage(`✅ Скрипты успешно установлены в ${targetDir}`);
+            const action = await vscode.window.showInformationMessage(
+                `✅ Скрипты (plugins, server) успешно установлены в:\n${targetDir}`,
+                'Показать в проводнике'
+            );
+
+            if (action === 'Показать в проводнике') {
+                vscode.env.openExternal(vscode.Uri.file(targetDir));
+            }
         } else {
             vscode.window.showWarningMessage('⚠️ Ни один скрипт не был скопирован. Проверьте конфигурацию.');
         }
@@ -97,4 +169,7 @@ async function ux_install_scripts() {
     }
 }
 
-module.exports = { ux_install_scripts };
+module.exports = { 
+    ux_install_scripts,
+    validateTargetDirectory 
+};

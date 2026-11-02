@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // gosts.js (клиентский скрипт)
 (function () {
     function initGostsTable() {

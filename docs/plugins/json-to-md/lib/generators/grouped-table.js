@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use strict';
 
 const { escMd, splitTopLevel } = require('../escape');

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Комментарии — Админ</title>
+<link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+<header>
+  <h1>Комментарии — Админ</h1>
+  <span class="spacer"></span>
+  <button id="logout-btn" hidden>Выйти</button>
+</header>
+
+<main>
+  <section id="login-view" hidden>
+    <h2>Вход для техписа</h2>
+    <div id="login-warn" hidden></div>
+    <form id="login-form">
+      <input type="password" id="login-password" placeholder="MODERATOR_TOKEN" autocomplete="current-password" autofocus>
+      <button type="submit">Войти</button>
+    </form>
+    <div id="login-error"></div>
+  </section>
+
+  <section id="app-view" hidden>
+    <nav class="admin-tabs">
+      <button data-tab="threads" class="active">Комментарии</button>
+      <button data-tab="emails">Комментаторы</button>
+    </nav>
+
+    <div id="tab-threads">
+      <div class="toolbar">
+        <button data-filter="all">Все</button>
+        <button data-filter="open" class="active">Открытые</button>
+        <button data-filter="resolved">Разрешённые</button>
+        <button data-filter="archived">Архив</button>
+        <button data-filter="orphaned">Сироты</button>
+        <span class="spacer"></span>
+        <button id="notify-btn" type="button">🔕 Уведомления: выкл</button>
+        <button id="rotate-btn">Ротировать токен</button>
+        <button id="refresh-btn">Обновить</button>
+      </div>
+      <div id="new-token-banner" hidden></div>
+      <div id="threads"></div>
+    </div>
+
+    <div id="tab-emails" hidden>
+      <div class="toolbar">
+        <button id="add-email-btn">+ Добавить email</button>
+        <button id="refresh-emails-btn">Обновить</button>
+      </div>
+      <table class="emails-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Примечание</th>
+            <th>Статус</th>
+            <th>Код</th>
+            <th>Сессии</th>
+            <th>Активность</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody id="emails-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<script src="/admin/admin.js"></script>
+</body>
+</html>

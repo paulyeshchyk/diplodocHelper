@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @ts-nocheck
 
 // plugins/docs-registry/emit-modules-table/index.js
 

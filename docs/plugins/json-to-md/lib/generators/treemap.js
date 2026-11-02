@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use strict';
 
 const { escMermaid } = require('../escape');

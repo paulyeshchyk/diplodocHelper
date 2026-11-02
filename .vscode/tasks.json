@@ -47,7 +47,7 @@
       "type": "shell",
       "command": "npm run watch",
       "group": {
-        "kind": "build",
+        "kind": "none",
         "isDefault": true
       },
       "isBackground": true,
@@ -63,7 +63,7 @@
       },
       "presentation": {
         "clear": true,
-        "reveal": "silent",
+        "reveal": "never",
         "panel": "shared",
         "focus": false
       }

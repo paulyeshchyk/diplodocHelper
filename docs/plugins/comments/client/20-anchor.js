@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 function buildAnchor(range) {
   const root = getRoot();
   const start = textOffset(root, range.startContainer, range.startOffset);
