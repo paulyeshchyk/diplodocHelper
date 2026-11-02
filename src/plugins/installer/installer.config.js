@@ -25,7 +25,7 @@ module.exports = {
         {
             src: 'src/scripts/utils',
             dest: './utils' // Скопирует папку utils
-        }
+        },
     ],
     // Файлы, которые не нужно копировать (например, node_modules, тесты)
     ignorePatterns: [
@@ -34,6 +34,5 @@ module.exports = {
         '.test.js',
         '.spec.js',
         'test',
-        'data',
     ]
 };
