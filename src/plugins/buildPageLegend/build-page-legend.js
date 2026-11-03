@@ -69,18 +69,18 @@ function splitList(s) {
 
 // ---------- Правила форматирования ----------
 const PROPERTY_FORMAT = {
-  ID:            'plain',
-  pureTitle:     'plain',
-  designation:   'plain',
+  ID: 'plain',
+  pureTitle: 'plain',
+  designation: 'plain',
   Идентификатор: 'backtick',
-  layer:         'backtick',
-  capability:    'backtick',
-  family:        'backtick',
-  folder:        'double',
-  entrypoint:    'backtick',
-  version:       'backtick',
-  input:         'backtick',
-  output:        'backtick',
+  layer: 'backtick',
+  capability: 'backtick',
+  family: 'backtick',
+  folder: 'double',
+  entrypoint: 'backtick',
+  version: 'backtick',
+  input: 'backtick',
+  output: 'backtick',
 };
 
 // ---------- Тип значения ----------
@@ -88,17 +88,18 @@ const PROPERTY_FORMAT = {
 // 'array' — значение разбирается как массив; каждый элемент форматируется
 //           по PROPERTY_FORMAT[key], элементы склеиваются PROPERTY_JOIN[key]
 const PROPERTY_TYPE = {
-  layer:      'array',
+  layer: 'array',
   capability: 'array',
-  family:     'array',
-  folder:     'array',
-  input:     'array',
-  output:     'array',
+  family: 'array',
+  folder: 'array',
+  input: 'array',
+  output: 'array',
+  actor: 'array'
 };
 
 // Разделитель между элементами массива
 const PROPERTY_JOIN = {
-  layer:  ' / ',
+  layer: ' / ',
   folder: ' ; ',
   // capability, family, кастомные → DEFAULT_JOIN
 };
@@ -121,6 +122,7 @@ const CUSTOM_ORDER = [
   'entrypoint',
   'role',
   'version',
+  'actor'
 ];
 
 // ---------- Общие утилиты ----------

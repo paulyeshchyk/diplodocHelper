@@ -259,6 +259,7 @@ async function runCollectCatalog(argv) {
             families: parseListValue(fm.family),
             layers: parseListValue(fm.layer),
             capabilities: parseListValue(fm.capability),
+            actors: parseListValue(fm.actor),
         };
     });
 
@@ -270,7 +271,7 @@ async function runCollectCatalog(argv) {
     }
 
     // Строгая проверка: все slug в модулях должны быть в реестре
-    const dimToField = { family: 'families', layer: 'layers', capability: 'capabilities' };
+    const dimToField = { family: 'families', layer: 'layers', capability: 'capabilities', actor: 'actors', };
     const unknown = [];
     for (const [modDir, mod] of Object.entries(modules)) {
         for (const [dimName, field] of Object.entries(dimToField)) {

@@ -215,6 +215,9 @@ async function runEmitModulesTable(argv) {
         : renderId(mod, outDirRel, opts.anchor),   // fallback
       ident: codeWrap(mod.ident || ''),
       folder: renderFolder(mod),
+      actor: effectivePrefix
+        ? renderDimensions(mod, 'actors', 'actor', catalog, effectivePrefix)
+        : renderDimensions(mod, 'actors', 'actor', catalog, outDirRel),
       layer: effectivePrefix
         ? renderDimensions(mod, 'layers', 'layer', catalog, effectivePrefix)
         : renderDimensions(mod, 'layers', 'layer', catalog, outDirRel),
@@ -229,6 +232,9 @@ async function runEmitModulesTable(argv) {
         ? moduleHref(mod, effectivePrefix, opts.anchor)
         : moduleHref(mod, outDirRel, opts.anchor),
 
+      actors_arr: effectivePrefix
+        ? dimArray(mod, 'actors', 'actor', catalog, effectivePrefix)
+        : dimArray(mod, 'actors', 'actor', catalog, outDirRel),
       families_arr: effectivePrefix
         ? dimArray(mod, 'families', 'family', catalog, effectivePrefix)
         : dimArray(mod, 'families', 'family', catalog, outDirRel),

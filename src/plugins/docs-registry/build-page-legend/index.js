@@ -85,6 +85,7 @@ const PROPERTY_ALIASES = {
     family: 'Семейство',
     layer: 'Слой',
     designation: 'Предназначение',
+    actor: 'Актор',
 };
 
 const PROPERTY_FORMAT = {
@@ -109,6 +110,7 @@ const PROPERTY_TYPE = {
     folder: 'array',
     input: 'array',
     output: 'array',
+    actor: 'array'
 };
 
 const PROPERTY_JOIN = { layer: ' / ', folder: '; ', entrypoint: '; ' };
@@ -129,6 +131,7 @@ const CUSTOM_ORDER = [
     'entrypoint',
     'role',
     'version',
+    'actor',
 ];
 const INCLUDE_LINE = '{% include [legend](./page-legend.md) %}';
 
@@ -270,12 +273,12 @@ function isEmptyValue(val) {
 
 function renderLegend(frontmatter, opts, ctx) {
     let entries = Object.entries(frontmatter);
-    
+
     // Исключаем по --ignore
     if (opts.ignore.size) {
         entries = entries.filter(([k]) => !opts.ignore.has(k));
     }
-    
+
     // Исключаем свойства с пустыми значениями
     entries = entries.filter(([k, v]) => !isEmptyValue(v));
 
