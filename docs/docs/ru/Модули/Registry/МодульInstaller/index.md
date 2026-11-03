@@ -15,6 +15,7 @@ folder: '`src/plugins/installer/installer.config.js` `src/commands/diplodoc-help
 entrypoint: 'ux_install_scripts()'
 role: 'Экспорт скриптов'
 version: '1.54.0'
+actor: admin
 input:
 output:
 ---

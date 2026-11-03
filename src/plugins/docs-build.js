@@ -53,7 +53,8 @@ const STEPS = {
         cli('pageLegend', '--lang=ru', '--rewrite', '--with-include', '--ignore=sectionType,context,pureTitle,ID_Group,ID_Type,vars'),
         cli('renderModules', '--lang=ru', '--rewrite', '--with-include'),
         // ---
-        cli('emitModulesTable', '--lang=ru', '--anchor=naznachenie', '--out-dir=./docs/docs/ru/Модули/Реестр'),
+        cli('emitModulesTable', '--lang=ru', '--anchor=naznachenie'),
+        cli('emitFeatureMap',   '--lang=ru', '--out=./docs/ru/Модули/FM/feature-map.md'),
 
         cli('reindexFigures', '--docsDir', './docs/ru'),
         cli('reindexFootnotes', '--docsDir', './docs/ru'),
@@ -190,6 +191,7 @@ const STEPS = {
 
     // ── POST: пост-обработка ./build ──────────────────────────
     post: [
+        cli('featureMapInject', '--buildDir', './build'),
         cli('footnoteAnchors', './build'),
         cli('abbrTitles', './build', '--docsDir', './docs'),
         cli('termTitles', './build', '--docsDir', './docs'),

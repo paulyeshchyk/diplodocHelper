@@ -17,6 +17,7 @@ role: 'Шаг 5: таблица'
 version: '1.54.0'
 input:
 output:
+actor: reader
 ---
 
 {% include [legend](./page-legend.md) %}

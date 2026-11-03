@@ -17,6 +17,7 @@ role: 'Пара для <a href="ru/%D0%9C%D0%BE%D0%B4%D1%83%D0%BB%D0%B8/Registry
 version: '1.54.0'
 input: text
 output: yaml, html
+actor: reader
 ---
 
 {% include [legend](./page-legend.md) %}

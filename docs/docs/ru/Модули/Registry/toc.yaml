@@ -1,6 +1,11 @@
 title: Registry
 href: index.yaml
 items:
+  - name: Feature Map (Карта модулей)
+    href: МодульFeatureMapКартамодулей/index.md
+    include:
+      path: МодульFeatureMapКартамодулей/toc.yaml
+      mode: link
   - name: Аббревиатуры
     href: МодульАббревиатуры/index.md
     include:

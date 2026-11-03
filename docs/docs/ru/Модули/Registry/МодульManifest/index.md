@@ -15,6 +15,7 @@ folder: '`src/plugins/manifest.builder/`, `src/plugins/manifest/`'
 entrypoint: 'node scripts/generate-manifest.js'
 role: 'contributes'
 version: '1.54.0'
+actor: ci
 input: js
 output: json
 ---

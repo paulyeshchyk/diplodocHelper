@@ -17,6 +17,7 @@ role:
 version: '1.54.0'
 input:
 output:
+actor: admin
 ---
 
 {% include [legend](./page-legend.md) %}

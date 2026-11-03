@@ -1,12 +1,24 @@
 version: 1
 
 dimensions:
+  actor:
+    title: Актор
+    columns:
+      - { label: ID, field: id }
+      - { label: Модуль, field: ident }
+      - { label: Роль, field: role }
+      - { label: Что делает, field: designation }
+    items:
+      reader:     { dir: Акторы/АкторЧитатель,       title: Читатель }
+      techwriter: { dir: Акторы/АкторТехписатель,    title: Техписатель }
+      admin:      { dir: Акторы/АкторАдминистратор,  title: Администратор }
+      ci:         { dir: Акторы/АкторCI,             title: CI }
   family:
     title: Семейство
     columns:
       - { label: ID,          field: id }
       - { label: Модуль,      field: ident }
-      - { label: Роль,    field: role }
+      - { label: Роль,        field: role }
       - { label: Что делает,  field: designation }
     items:
       fam-json-generators: { dir: "Семействоfamily/СемействоJSONгенераторы",            title: "JSON генераторы"}
@@ -37,8 +49,8 @@ dimensions:
     items:
       build:           { dir: "Слоиlayer/СлойBuild",              title: "Build" }
       cli:             { dir: "Слоиlayer/СлойCLI",                title: "CLI" }
-      post-processing: { dir: "Слоиlayer/СлойPostprocessing",     title: "HTML обработка <br> 'post-processing'" }
-      pre-processing:  { dir: "Слоиlayer/СлойPreprocessing",      title: "MD обработка <br> 'pre-processing'" }
+      post-processing: { dir: "Слоиlayer/СлойPostprocessing",     title: "HTML" }
+      pre-processing:  { dir: "Слоиlayer/СлойPreprocessing",      title: "MD" }
       vscode-ui:       { dir: "Слоиlayer/СлойVSCodeUI",           title: "VSCode UI" }
       client-runtime:  { dir: "Слоиlayer/СлойКлиентскийruntime",  title: "Клиентский runtime" }
       shared-core:     { dir: "Слоиlayer/СлойОбщееядро",          title: "Общее ядро" }

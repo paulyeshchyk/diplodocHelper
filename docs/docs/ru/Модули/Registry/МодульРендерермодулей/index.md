@@ -17,6 +17,7 @@ role: 'Генератор'
 version: '1.0.0'
 input:
 output:
+actor: ci
 ---
 
 {% include [legend](./page-legend.md) %}

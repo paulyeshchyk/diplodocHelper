@@ -1,0 +1,23 @@
+title: Акторы
+href: index.yaml
+items:
+  - name: Актор. Читатель
+    href: АкторЧитатель/index.md
+    include:
+      path: АкторЧитатель/toc.yaml
+      mode: link
+  - name: Актор. Техписатель
+    href: АкторТехписатель/index.md
+    include:
+      path: АкторТехписатель/toc.yaml
+      mode: link
+  - name: Актор. Администратор
+    href: АкторАдминистратор/index.md
+    include:
+      path: АкторАдминистратор/toc.yaml
+      mode: link
+  - name: Актор. CI
+    href: АкторCI/index.md
+    include:
+      path: АкторCI/toc.yaml
+      mode: link

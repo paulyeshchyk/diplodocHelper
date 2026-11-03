@@ -17,6 +17,7 @@ role: 'Генератор страниц'
 version: '1.54.0'
 input:
 output:
+actor: ci, techwriter
 ---
 
 {% include [legend](./page-legend.md) %}

@@ -17,6 +17,7 @@ role: 'esbuild'
 version: '1.54.0'
 input:
 output:
+actor: ci, admin
 ---
 
 {% include [legend](./page-legend.md) %}

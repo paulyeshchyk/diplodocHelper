@@ -15,6 +15,7 @@ designation: 'Диспетчер CLI-подкоманд: принимает `arg
 entrypoint: 'node ./plugins/diplodoc-helper-cli.js <command> [options]'
 role: 'CLI-диспетчер'
 version: '1.54.0'
+actor: ci
 input:
 output:
 ---
