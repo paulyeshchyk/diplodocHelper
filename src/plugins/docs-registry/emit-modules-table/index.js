@@ -54,6 +54,14 @@ function parseArgv(argv) {
   return opts;
 }
 
+function getUrlPrefix(docsRoot) {
+  const rel = path.relative(DOCS_DIR, docsRoot);
+  if (rel.startsWith('..') || path.isAbsolute(rel)) {
+    return null;  // docsRoot вне DOCS_DIR — откатываемся на старый режим
+  }
+  return '/' + toPosix(rel).replace(/^\/+|\/+$/g, '');
+}
+
 function toPosix(p) { return p.split(path.sep).join('/'); }
 
 function naturalCompare(a, b) {
@@ -86,15 +94,15 @@ function codeWrap(value) {
 }
 
 // ID модуля → ссылка на его index.md (опционально с якорем)
-function renderId(mod, outDirRel, anchor) {
+function renderId(mod, urlPrefix, anchor) {
   if (!mod.id) return '';
-  let href = path.posix.relative(outDirRel, mod.path);
+  let href = `${urlPrefix}/${mod.path}`.replace(/\.md$/, '.html');
   if (anchor) href += '#' + anchor;
   return makeLink(mod.id, href);
 }
 
 // Поле массива slug'ов → ссылки на index.md измерений, склейка " / "
-function renderDimensions(mod, field, dimName, catalog, outDirRel) {
+function renderDimensions(mod, field, dimName, catalog, urlPrefix) {
   const slugs = mod[field] || [];
   if (slugs.length === 0) return '';
   const items = (catalog.dimensions[dimName]?.items) || {};
@@ -102,15 +110,14 @@ function renderDimensions(mod, field, dimName, catalog, outDirRel) {
   for (const slug of slugs) {
     const item = items[slug];
     if (!item) { parts.push(codeWrap(slug)); continue; }
-    const dimIndexRel = path.posix.join(item.dir, 'index.md');
-    const href = path.posix.relative(outDirRel, dimIndexRel);
+    const href = `${urlPrefix}/${item.dir}/index.md`.replace(/\.md$/, '.html');
     parts.push(makeLink(item.title || slug, href));
   }
   return parts.join(' / ');
 }
 
 // Хелпер: массив измерений
-function dimArray(mod, field, dimName, catalog, outDirRel) {
+function dimArray(mod, field, dimName, catalog, urlPrefix) {
   const slugs = mod[field] || [];
   if (slugs.length === 0) return [];
   const items = (catalog.dimensions[dimName]?.items) || {};
@@ -121,8 +128,7 @@ function dimArray(mod, field, dimName, catalog, outDirRel) {
       out.push({ slug, title: slug, link: codeWrap(slug) });
       continue;
     }
-    const dimIndexRel = path.posix.join(item.dir, 'index.md');
-    const href = path.posix.relative(outDirRel, dimIndexRel);
+    const href = `${urlPrefix}/${item.dir}/index.md`.replace(/\.md$/, '.html');
     out.push({
       slug,
       title: item.title || slug,
@@ -133,8 +139,8 @@ function dimArray(mod, field, dimName, catalog, outDirRel) {
 }
 
 // Хелпер: сырой href модуля
-function moduleHref(mod, outDirRel, anchor) {
-  let href = path.posix.relative(outDirRel, mod.path);
+function moduleHref(mod, urlPrefix, anchor) {
+  let href = `${urlPrefix}/${mod.path}`.replace(/\.md$/, '.html');
   if (anchor) href += '#' + anchor;
   return encodeURI(href);
 }
@@ -177,49 +183,69 @@ async function runEmitModulesTable(argv) {
   const outPath = opts.out
     ? path.resolve(opts.out)
     : path.join(GENERATED_DIR, `modules-table.${opts.lang}.json`);
-  const outDirAbs = opts.outDir
-    ? path.resolve(opts.outDir)
-    : path.join(DOCS_DIR, opts.lang, 'Модули', 'Реестр');
 
   console.log('=== emit-modules-table ===');
   console.log(`catalog: ${catalogPath}`);
-  console.log(`out:     ${outPath}`);
-  console.log(`outDir:  ${outDirAbs}`);
 
   let catalog;
   try { catalog = JSON.parse(await fs.readFile(catalogPath, 'utf8')); }
   catch (e) { console.error(`Не удалось прочитать каталог: ${e.message}`); process.exit(1); }
 
   const docsRoot = path.resolve(catalog.docsRoot);
+  const urlPrefix = getUrlPrefix(docsRoot);
+
+  // fallback, если docsRoot вне DOCS_DIR — используем старую логику
+  const outDirAbs = opts.outDir
+    ? path.resolve(opts.outDir)
+    : path.join(DOCS_DIR, opts.lang, 'Модули', 'Реестр');
   const outDirRel = toPosix(path.relative(docsRoot, outDirAbs));
+
+  const effectivePrefix = urlPrefix || null;
+
   console.log(`docsRoot: ${docsRoot}`);
-  console.log(`outDirRel: ${outDirRel}`);
-  console.log('');
+  console.log(`urlPrefix: ${effectivePrefix || '(relative, outDirRel=' + outDirRel + ')'}`);
+  console.log(`out:     ${outPath}`);
+  console.log(`outDir:  ${outDirAbs}`);
 
   const rows = [];
   for (const mod of Object.values(catalog.modules || {})) {
     rows.push({
-      // --- существующие (markdown) для registry-table.md ---
-      id:         renderId(mod, outDirRel, opts.anchor),
-      ident:      codeWrap(mod.ident || ''),
-      folder:     renderFolder(mod),
-      layer:      renderDimensions(mod, 'layers',       'layer',      catalog, outDirRel),
-      family:     renderDimensions(mod, 'families',     'family',     catalog, outDirRel),
-      capability: renderDimensions(mod, 'capabilities', 'capability', catalog, outDirRel),
+      id: effectivePrefix
+        ? renderId(mod, effectivePrefix, opts.anchor)
+        : renderId(mod, outDirRel, opts.anchor),   // fallback
+      ident: codeWrap(mod.ident || ''),
+      folder: renderFolder(mod),
+      layer: effectivePrefix
+        ? renderDimensions(mod, 'layers', 'layer', catalog, effectivePrefix)
+        : renderDimensions(mod, 'layers', 'layer', catalog, outDirRel),
+      family: effectivePrefix
+        ? renderDimensions(mod, 'families', 'family', catalog, effectivePrefix)
+        : renderDimensions(mod, 'families', 'family', catalog, outDirRel),
+      capability: effectivePrefix
+        ? renderDimensions(mod, 'capabilities', 'capability', catalog, effectivePrefix)
+        : renderDimensions(mod, 'capabilities', 'capability', catalog, outDirRel),
 
-      id_href:         moduleHref(mod, outDirRel, opts.anchor),        // NEW
-      families_arr:    dimArray(mod, 'families',     'family',     catalog, outDirRel), // NEW
-      capabilities_arr:dimArray(mod, 'capabilities', 'capability', catalog, outDirRel), // NEW
-      layers_arr:      dimArray(mod, 'layers',       'layer',      catalog, outDirRel), // NEW
+      id_href: effectivePrefix
+        ? moduleHref(mod, effectivePrefix, opts.anchor)
+        : moduleHref(mod, outDirRel, opts.anchor),
 
-      // --- NEW: plain-поля для treemap и других non-markdown визуализаций ---
-      id_plain:         mod.id || '',
-      ident_plain:      mod.ident || '',
-      layer_plain:      plainDim(mod, 'layers',       catalog, 'layer'),
-      family_plain:     plainDim(mod, 'families',     catalog, 'family'),
+      families_arr: effectivePrefix
+        ? dimArray(mod, 'families', 'family', catalog, effectivePrefix)
+        : dimArray(mod, 'families', 'family', catalog, outDirRel),
+      capabilities_arr: effectivePrefix
+        ? dimArray(mod, 'capabilities', 'capability', catalog, effectivePrefix)
+        : dimArray(mod, 'capabilities', 'capability', catalog, outDirRel),
+      layers_arr: effectivePrefix
+        ? dimArray(mod, 'layers', 'layer', catalog, effectivePrefix)
+        : dimArray(mod, 'layers', 'layer', catalog, outDirRel),
+
+      // ... остальные поля без изменений
+      id_plain: mod.id || '',
+      ident_plain: mod.ident || '',
+      layer_plain: plainDim(mod, 'layers', catalog, 'layer'),
+      family_plain: plainDim(mod, 'families', catalog, 'family'),
       capability_plain: plainDim(mod, 'capabilities', catalog, 'capability'),
-      treemapLabel:     treemapLabel(mod),
-
+      treemapLabel: treemapLabel(mod),
       _sortKey: mod.id || '',
     });
   }

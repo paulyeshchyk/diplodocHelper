@@ -53,7 +53,7 @@ const STEPS = {
         cli('pageLegend', '--lang=ru', '--rewrite', '--with-include', '--ignore=sectionType,context,pureTitle,ID_Group,ID_Type,vars'),
         cli('renderModules', '--lang=ru', '--rewrite', '--with-include'),
         // ---
-        cli('emitModulesTable', '--lang=ru', '--anchor=naznachenie', '--out-dir=./docs/ru/Модули/Registry'),
+        cli('emitModulesTable', '--lang=ru', '--anchor=naznachenie', '--out-dir=./docs/docs/ru/Модули/Реестр'),
 
         cli('reindexFigures', '--docsDir', './docs/ru'),
         cli('reindexFootnotes', '--docsDir', './docs/ru'),
