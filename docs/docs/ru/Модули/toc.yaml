@@ -1,6 +1,9 @@
 title: Модули
 href: index.yaml
 items:
+  - name: FM
+    href: FM/feature-map.md
+
   - name: Registry
     href: Registry/index.md
     include:
@@ -25,4 +28,9 @@ items:
     href: Известныепроблемы/index.md
     include:
       path: Известныепроблемы/toc.yaml
+      mode: link
+  - name: Акторы
+    href: Акторы/index.md
+    include:
+      path: Акторы/toc.yaml
       mode: link

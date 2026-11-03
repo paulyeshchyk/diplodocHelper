@@ -21,12 +21,14 @@ resources:
         #исправляет проблему `<base href="../../">`
         - ../plugins/mdedit_fixes/fix-footnote-links.js
         - ./_assets/scripts/flash.js
+        - ./_assets/scripts/feature-map.js
         - ./_assets/scripts/no-cache.js
         - ./_assets/scripts/context-search.js
         - ./_assets/scripts/lightbox.js
     style:
         - _assets/style/custom.css
         - _assets/style/breadcrumb.css
+        - _assets/scripts/feature-map.css
         - _assets/style/context-search.css
         - _assets/style/tableautoincrement.css
         - _assets/style/lightbox.css

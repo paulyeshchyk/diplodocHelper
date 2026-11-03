@@ -15,6 +15,7 @@ folder: 'server/admin/'
 entrypoint: "Браузер: 'http://<host>/admin'"
 role:
 version: '1.54.0'
+actor: admin
 input: 
 output: 
 ---

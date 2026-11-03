@@ -1,5 +1,5 @@
 #!/usr/bin/env node
- 
+
 // @ts-nocheck
 // diplodoc-helper-cli.js
 const path = require('path');
@@ -27,7 +27,8 @@ const { runGeneration: injectTermTitles } = require('./terms/terms.injector.js')
 const { runGeneration: generateGosts } = require('./gosts/gosts.js');
 const { runGeneration: generateComments } = require('./comments/comments.js');
 const { convertJsonToMdTable } = require('./json-to-md/json-to-md-table.js');
-
+const { runEmitFeatureMap } = require('./docs-registry/emit-feature-map/index.js');
+const { runGeneration: injectFeatureMap } = require('./docs-registry/emit-feature-map/feature-map.injector.js');
 
 const { injectGostsTable } = require('./gosts/gosts.injector.js');
 // Если запускают как cli
@@ -130,6 +131,13 @@ if (require.main === module) {
         generateGanttFixScroll({ docsRoot: outputDir, engine: DiagramEngine.MERMAID });
     } else if (command === 'reindexFootnotes') {
         reindexFootnotes(docsDir);
+    } else if (command === 'emitFeatureMap') {
+        const { runEmitFeatureMap } = require('./docs-registry/emit-feature-map/index.js');
+        runEmitFeatureMap(args.slice(1)).catch(e => { console.error(e.message || e); process.exit(1); });
+    } else if (command === 'featureMapInject') {
+        const buildDirIdx = args.indexOf('--buildDir');
+        const buildDir = buildDirIdx !== -1 ? args[buildDirIdx + 1] : outputDir;
+        injectFeatureMap(buildDir);
     } else if (command === 'footnoteNumbering') {
         renumberFootnotes({ docsDir, outputDir });
     } else if (command === 'roadMap') {

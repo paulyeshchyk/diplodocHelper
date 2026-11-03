@@ -17,6 +17,7 @@ role: 'Вставка из буфера'
 version: '1.54.0'
 input:
 output:
+actor: techwriter
 ---
 
 {% include [legend](./page-legend.md) %}

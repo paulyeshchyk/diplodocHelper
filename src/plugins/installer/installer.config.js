@@ -26,6 +26,14 @@ module.exports = {
             src: 'src/scripts/utils',
             dest: './utils' // Скопирует папку utils
         },
+        {
+            src:  'src/plugins/docs-registry/emit-feature-map/feature-map.client.js',
+            dest: './docs/_assets/scripts/feature-map.js',
+        },
+        {
+            src:  'src/plugins/docs-registry/emit-feature-map/feature-map.css',
+            dest: './docs/_assets/style/feature-map.css',
+        },
     ],
     // Файлы, которые не нужно копировать (например, node_modules, тесты)
     ignorePatterns: [

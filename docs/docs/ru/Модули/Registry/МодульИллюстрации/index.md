@@ -17,6 +17,7 @@ role: 'Каталог'
 version: '1.54.0'
 input:
 output:
+actor: ci
 ---
 
 {% include [legend](./page-legend.md) %}

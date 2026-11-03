@@ -8,6 +8,7 @@
 const fs = require('fs/promises');
 const path = require('path');
 const { GENERATED_DIR, DOCS_DIR } = require('../_paths.js');
+const { loadFields } = require('../_fields.js');
 
 const HELP = `
 Использование: node emit-modules-table.js [options]
@@ -161,6 +162,17 @@ function treemapLabel(mod) {
   return parts.join(' ');
 }
 
+function formatScalar(style, value) {
+  const str = String(value).trim();
+  if (!str) return '';
+  switch (style) {
+    case 'backtick': return '`' + str.replace(/`/g, '\\`') + '`';
+    case 'double':   return '"' + str.replace(/"/g, '\\"') + '"';
+    case 'plain':
+    default:         return str;
+  }
+}
+
 // Папка: строка с запятыми → массив → `a` / `b`
 function renderFolder(mod) {
   const raw = mod.folder != null ? String(mod.folder) : '';
@@ -208,53 +220,46 @@ async function runEmitModulesTable(argv) {
   console.log(`outDir:  ${outDirAbs}`);
 
   const rows = [];
-  for (const mod of Object.values(catalog.modules || {})) {
-    rows.push({
-      id: effectivePrefix
+for (const mod of Object.values(catalog.modules || {})) {
+  const row = {};
+
+  for (const [key, f] of Object.entries(loadFields())) {
+    if (f.kind === 'multi' && f.dimension) {
+      // два вида: строка (для simple) и массив (для matrix)
+      row[key] = effectivePrefix
+        ? renderDimensions(mod, f.dimField, f.dimension, catalog, effectivePrefix)
+        : renderDimensions(mod, f.dimField, f.dimension, catalog, outDirRel);
+      row[`${f.dimField}_arr`] = effectivePrefix
+        ? dimArray(mod, f.dimField, f.dimension, catalog, effectivePrefix)
+        : dimArray(mod, f.dimField, f.dimension, catalog, outDirRel);
+    } else if (key === 'id') {
+      row.id = effectivePrefix
         ? renderId(mod, effectivePrefix, opts.anchor)
-        : renderId(mod, outDirRel, opts.anchor),   // fallback
-      ident: codeWrap(mod.ident || ''),
-      folder: renderFolder(mod),
-      actor: effectivePrefix
-        ? renderDimensions(mod, 'actors', 'actor', catalog, effectivePrefix)
-        : renderDimensions(mod, 'actors', 'actor', catalog, outDirRel),
-      layer: effectivePrefix
-        ? renderDimensions(mod, 'layers', 'layer', catalog, effectivePrefix)
-        : renderDimensions(mod, 'layers', 'layer', catalog, outDirRel),
-      family: effectivePrefix
-        ? renderDimensions(mod, 'families', 'family', catalog, effectivePrefix)
-        : renderDimensions(mod, 'families', 'family', catalog, outDirRel),
-      capability: effectivePrefix
-        ? renderDimensions(mod, 'capabilities', 'capability', catalog, effectivePrefix)
-        : renderDimensions(mod, 'capabilities', 'capability', catalog, outDirRel),
-
-      id_href: effectivePrefix
-        ? moduleHref(mod, effectivePrefix, opts.anchor)
-        : moduleHref(mod, outDirRel, opts.anchor),
-
-      actors_arr: effectivePrefix
-        ? dimArray(mod, 'actors', 'actor', catalog, effectivePrefix)
-        : dimArray(mod, 'actors', 'actor', catalog, outDirRel),
-      families_arr: effectivePrefix
-        ? dimArray(mod, 'families', 'family', catalog, effectivePrefix)
-        : dimArray(mod, 'families', 'family', catalog, outDirRel),
-      capabilities_arr: effectivePrefix
-        ? dimArray(mod, 'capabilities', 'capability', catalog, effectivePrefix)
-        : dimArray(mod, 'capabilities', 'capability', catalog, outDirRel),
-      layers_arr: effectivePrefix
-        ? dimArray(mod, 'layers', 'layer', catalog, effectivePrefix)
-        : dimArray(mod, 'layers', 'layer', catalog, outDirRel),
-
-      // ... остальные поля без изменений
-      id_plain: mod.id || '',
-      ident_plain: mod.ident || '',
-      layer_plain: plainDim(mod, 'layers', catalog, 'layer'),
-      family_plain: plainDim(mod, 'families', catalog, 'family'),
-      capability_plain: plainDim(mod, 'capabilities', catalog, 'capability'),
-      treemapLabel: treemapLabel(mod),
-      _sortKey: mod.id || '',
-    });
+        : renderId(mod, outDirRel, opts.anchor);
+    } else if (key === 'ident') {
+      row.ident = codeWrap(mod.ident || '');
+    } else if (key === 'folder') {
+      row.folder = renderFolder(mod);
+    } else if (f.format === 'plain' || f.format === 'backtick' || f.format === 'double') {
+      row[key] = formatScalar(f.format, mod[key] != null ? mod[key] : '');
+    }
   }
+
+  row.id_href = effectivePrefix
+    ? moduleHref(mod, effectivePrefix, opts.anchor)
+    : moduleHref(mod, outDirRel, opts.anchor);
+
+  // дополнительные plain-поля, специфичные для json-to-md
+  row.id_plain         = mod.id || '';
+  row.ident_plain      = mod.ident || '';
+  row.layer_plain      = plainDim(mod, 'layers',       catalog, 'layer');
+  row.family_plain     = plainDim(mod, 'families',     catalog, 'family');
+  row.capability_plain = plainDim(mod, 'capabilities', catalog, 'capability');
+  row.treemapLabel     = treemapLabel(mod);
+  row._sortKey         = mod.id || '';
+
+  rows.push(row);
+}
 
   // Sort: natural по id, пустые — в конец
   rows.sort((a, b) => {

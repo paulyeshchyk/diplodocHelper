@@ -4,11 +4,13 @@
 'use strict';
 
 require('../_paths.js');
+require('../_fields.js');
 
 const fs = require('fs/promises');
 const path = require('path');
 const yaml = require('js-yaml');
 const { DOCS_DIR, REGISTRY_DIR, GENERATED_DIR } = require('../_paths.js');
+const {loadFields } = require('../_fields.js');
 
 const HELP = `
 Использование: node collect-catalog.js [options]
@@ -244,23 +246,17 @@ async function runCollectCatalog(argv) {
         }
 
         const relDir = toPosix(path.relative(docsRoot, dir));
-        modules[relDir] = {
-            dir: relDir,
-            path: relDir + '/index.md',
-            id: fm.ID != null ? String(fm.ID) : '',
-            ident: fm['Идентификатор'] != null ? String(fm['Идентификатор']) : '',
-            title: fm.title || '',
-            pureTitle: fm.pureTitle || '',
-            designation: fm.designation || '',
-            role: fm.role || '',
-            folder: fm.folder != null ? String(fm.folder) : '', // NEW
-            entrypoint: fm.entrypoint != null ? String(fm.entrypoint) : '', // NEW
-            version: fm.version != null ? String(fm.version) : '', // NEW
-            families: parseListValue(fm.family),
-            layers: parseListValue(fm.layer),
-            capabilities: parseListValue(fm.capability),
-            actors: parseListValue(fm.actor),
-        };
+        const mod = { dir: relDir, path: relDir + '/index.md' };
+        for (const [key, f] of Object.entries(loadFields())) {
+          const fmKey = f.frontmatterKey || key;
+          const raw = fm[fmKey];
+          if (f.kind === 'multi') {
+            mod[f.dimField || key] = parseListValue(raw);
+          } else {
+            mod[key] = raw != null ? String(raw) : '';
+          }
+        }
+        modules[relDir] = mod;
     });
 
     console.log(`Найдено папок "${opts.modulePrefix} *": ${foundDirs.length}`);
@@ -271,7 +267,11 @@ async function runCollectCatalog(argv) {
     }
 
     // Строгая проверка: все slug в модулях должны быть в реестре
-    const dimToField = { family: 'families', layer: 'layers', capability: 'capabilities', actor: 'actors', };
+    const dimToField = {};
+    for (const f of Object.values(loadFields())) {
+      if (f.dimension) dimToField[f.dimension] = f.dimField;
+    }
+    
     const unknown = [];
     for (const [modDir, mod] of Object.entries(modules)) {
         for (const [dimName, field] of Object.entries(dimToField)) {
