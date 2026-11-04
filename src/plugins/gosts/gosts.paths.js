@@ -89,6 +89,7 @@ function getGostSubdir(lang) {
 /**
  * @param {string} langDir
  * @param {string} lang
+ * @returns {string}
  */
 function getGostOutputDir(langDir, lang) {
     return path.join(langDir, getGostSubdir(lang || inferLang(langDir)));

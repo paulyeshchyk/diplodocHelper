@@ -1,8 +1,8 @@
 // @ts-nocheck
-
 // gosts.collector.js
 const fs = require('fs');
 const path = require('path');
+const { Fs_Walk_Directory } = require('../utils/fs/Fs_Walk_Directory.ts');
 const { getGostOutputDir } = require('./gosts.paths');
 const { getTitleFromMetadata } = require('../utils/frontmatter.utils');
 // Используем маскировку кода из модуля abbrs (или замените на локальную копию)
@@ -33,55 +33,45 @@ function collectGostReferences(langDir, gostsList) {
     skipFullPaths = new Set();
   }
 
-  /** @param {string} dir */
-  function walk(dir) {
-    if (!fs.existsSync(dir)) return;
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
+  
+  Fs_Walk_Directory.walkSync({
+    dir: langDir,
+    skipHidden: true,
+    skipUnderscore: true,
+    skipFullPaths,
+    filterFile: fullPath => fullPath.endsWith('.md'),
+    onFile: fullPath => {
+      try {
+        const raw = fs.readFileSync(fullPath, 'utf8');
+        const content = InlineAnnotation_Mask.maskCodeInMarkdown(raw);
+        const href = path.relative(langDir, fullPath).replace(/\\/g, '/');
+        const title = getTitleFromMetadata(fullPath) || path.basename(path.dirname(fullPath));
 
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        if (skipFullPaths.has(path.resolve(fullPath))) continue;
-        if (!entry.name.startsWith('_') && !entry.name.startsWith('.')) {
-          walk(fullPath);
-        }
-      } else if (entry.name.endsWith('.md')) {
-        try {
-          const raw = fs.readFileSync(fullPath, 'utf8');
-          const content = InlineAnnotation_Mask.maskCodeInMarkdown(raw);
-          const href = path.relative(langDir, fullPath).replace(/\\/g, '/');
-          const title = getTitleFromMetadata(fullPath) || path.basename(path.dirname(fullPath));
+        for (const gost of gostsList) {
+          let count = 0;
+          const escapedCode = gost.code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const codeRe = new RegExp(`(?<![a-zA-Zа-яА-Я0-9-])${escapedCode}(?![a-zA-Zа-яА-Я0-9-])`, 'gi');
+          let m;
+          while ((m = codeRe.exec(content)) !== null) count++;
 
-          for (const gost of gostsList) {
-            let count = 0;
+          const anchorRe = new RegExp(`#${gost.anchorId}(?![a-zA-Z0-9-])`, 'gi');
+          let anchorCount = 0;
+          while ((m = anchorRe.exec(content)) !== null) anchorCount++;
 
-            // 1. Ищем точное совпадение кода (например, "ГОСТ 3.1201-85")
-            const escapedCode = gost.code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const codeRe = new RegExp(`(?<![a-zA-Zа-яА-Я0-9-])${escapedCode}(?![a-zA-Zа-яА-Я0-9-])`, 'gi');
-            let m;
-            while ((m = codeRe.exec(content)) !== null) count++;
+          const totalCount = Math.max(count, anchorCount);
 
-            // 2. Ищем ссылки на якорь (например, [текст](../gosts/index.md#gost-31201-85))
-            const anchorRe = new RegExp(`#${gost.anchorId}(?![a-zA-Z0-9-])`, 'gi');
-            let anchorCount = 0;
-            while ((m = anchorRe.exec(content)) !== null) anchorCount++;
-
-            // Берем максимум, чтобы не посчитать дважды, если ссылка обернута вокруг кода
-            const totalCount = Math.max(count, anchorCount);
-
-            if (totalCount > 0) {
-              refs[gost.anchorId].push({ title, href, occurrences: totalCount });
-            }
+          if (totalCount > 0) {
+            refs[gost.anchorId].push({ title, href, occurrences: totalCount });
           }
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : String(err);
-          console.error(`[gosts] Ошибка обработки ${fullPath}:`, msg);
         }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error(`[gosts] Ошибка обработки ${fullPath}:`, msg);
       }
-    }
-  }
+    },
+  });
 
-  walk(langDir);
+
   return refs;
 }
 

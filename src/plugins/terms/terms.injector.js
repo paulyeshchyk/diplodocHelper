@@ -11,8 +11,8 @@ const { Html_Escape_Text } = require('../utils/html/Html_Escape_Text.ts');
 const { Html_Escape_JsonString } = require('../utils/html/Html_Escape_JsonString.ts');
 
 const maskCodeBlocks = InlineAnnotation_Mask.maskCodeBlocks;
-const termAnchorId = (s) => InlineAnnotation_Make_AnchorId.makeAnchorId('abbr', s);
-const termOccurrenceId = (s, n) => InlineAnnotation_Make_AnchorId.makeOccurrenceId('terms', s, n);
+const termAnchorId = (s) => InlineAnnotation_Make_AnchorId.makeAnchorId('term', s);
+const termOccurrenceId = (s, n) => InlineAnnotation_Make_AnchorId.makeOccurrenceId('term', s, n);
 const escapeHtml = Html_Escape_Text.escape;
 const jsonEscapeHtmlForDiplodoc = Html_Escape_JsonString.escape;
 

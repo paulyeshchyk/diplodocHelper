@@ -117,6 +117,7 @@ function generateFilesForLang(lang, langDir, contextMap) {
     }
 }
 
+/** @typedef {import('./contexts.types.ts').ContextMapByLang} ContextMapByLang */
 function buildAllContexts(docsRoot) {
     const LANGUAGES = ['ru', 'en'];
     const results = { success: [], failed: [] };

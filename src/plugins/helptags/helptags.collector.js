@@ -1,39 +1,27 @@
-// @ts-nocheck
-
-// plugins/helptags/helptags.collector.js
-
-const fs = require('fs');
-const path = require('path');
+const { Fs_Walk_Directory } = require('../utils/fs/Fs_Walk_Directory.ts');
 const { extractHelptagTagValue } = require('./helptags.extractor');
 
+/** @typedef {import('./helptags.types.ts').HelptagMap} HelptagMap */
+
+const SKIP_DIRS = new Set(['helptags', 'contexts']);
+
 /**
- * Собирает все helptags из директории языка
  * @param {string} langDir
- * @returns {Object}
+ * @returns {HelptagMap}
  */
 function walkMdFilesGetHelptags(langDir) {
+    /** @type {HelptagMap} */
     const helptagMap = {};
 
-    function walk(dir) {
-        if (!fs.existsSync(dir)) return;
-        const files = fs.readdirSync(dir);
+    Fs_Walk_Directory.walkSync({
+        dir: langDir,
+        skipHidden: false,
+        skipUnderscore: false,
+        skipDirNames: SKIP_DIRS,
+        filterFile: fullPath => fullPath.endsWith('.md'),
+        onFile: fullPath => extractHelptagTagValue(fullPath, langDir, helptagMap),
+    });
 
-        for (const file of files) {
-            const fullPath = path.join(dir, file);
-            const stat = fs.lstatSync(fullPath);
-
-            if (stat.isDirectory()) {
-                // Исключаем собственную папку helptags, чтобы избежать зацикливания
-                if (file !== 'helptags' && file !== 'contexts') {
-                    walk(fullPath);
-                }
-            } else if (file.endsWith('.md')) {
-                extractHelptagTagValue(fullPath, langDir, helptagMap);
-            }
-        }
-    }
-
-    walk(langDir);
     return helptagMap;
 }
 

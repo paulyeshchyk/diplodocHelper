@@ -1,13 +1,11 @@
-// contexts/generateContexts.collector.js
-
-const fs = require('fs');
-const path = require('path');
+const { Fs_Walk_Directory } = require('../utils/fs/Fs_Walk_Directory.ts');
 const { extractContextTagValue } = require('./contexts.extractor');
 
-/** @import {ContextMap} from '../model/contextmap.model' */
+/** @typedef {import('./contexts.types.ts').ContextMap} ContextMap */
+
+const SKIP_DIRS = new Set(['contexts']);
 
 /**
- * Собирает все контексты из директории языка
  * @param {string} langDir
  * @returns {ContextMap}
  */
@@ -15,28 +13,15 @@ function walkMdFilesGetContexts(langDir) {
     /** @type {ContextMap} */
     const contextMap = {};
 
-    /**
-     * @param {string} dir
-     */
-    function walk(dir) {
-        if (!fs.existsSync(dir)) return;
-        const files = fs.readdirSync(dir);
+    Fs_Walk_Directory.walkSync({
+        dir: langDir,
+        skipHidden: false,
+        skipUnderscore: false,
+        skipDirNames: SKIP_DIRS,
+        filterFile: fullPath => fullPath.endsWith('.md'),
+        onFile: fullPath => extractContextTagValue(fullPath, langDir, contextMap),
+    });
 
-        for (const file of files) {
-            const fullPath = path.join(dir, file);
-            const stat = fs.lstatSync(fullPath);
-
-            if (stat.isDirectory()) {
-                if (file !== 'contexts') {
-                    walk(fullPath);
-                }
-            } else if (file.endsWith('.md')) {
-                extractContextTagValue(fullPath, langDir, contextMap);
-            }
-        }
-    }
-
-    walk(langDir);
     return contextMap;
 }
 

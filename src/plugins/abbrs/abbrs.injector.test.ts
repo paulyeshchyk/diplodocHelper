@@ -19,6 +19,27 @@ describe('abbrs.injector.injectAbbrTitlesIntoHtml', () => {
         expect(r.html).toContain('abbr-gost-1');
         expect(r.html).not.toContain('<abbr>GOST</abbr>');
     });
+    
+    it('00.5.4#06b (+3) should produce id/anchor prefixes matching abbrs.model.js', () => {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const abbrsModel = require('./abbrs.model');
+
+        const r = injectAbbrTitlesIntoHtml(
+            '<abbr>GOST</abbr>',
+            dict([['GOST', 'State standard']]),
+            'ru',
+        );
+
+        expect(r.html).toContain(`id="${abbrsModel.abbrOccurrenceId('GOST', 1)}"`);
+        expect(r.html).toContain(`#${abbrsModel.abbrAnchorId('GOST')}"`);
+    });
+    it('00.5.4#06b (+3) should produce id/anchor prefixes matching abbrs.model.js', () => {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const abbrsModel = require('./abbrs.model');
+        const r = injectAbbrTitlesIntoHtml('<abbr>API</abbr>', dict([['API', 'D']]), 'ru');
+        expect(r.html).toContain(`id="${abbrsModel.abbrOccurrenceId('API', 1)}"`);
+        expect(r.html).toContain(`#${abbrsModel.abbrAnchorId('API')}"`);
+    });
 
     it('00.5.4#07 (+3) should mark undefined <abbr> as unmatched', () => {
         const html = '<p><abbr>NOPE</abbr></p>';

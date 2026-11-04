@@ -3,6 +3,7 @@ import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { collectGostReferences } from './gosts.collector';
+import type { GostRefs } from './gosts.types';
 
 
 let root: string;
@@ -27,6 +28,39 @@ function writeMd(relPath: string, body: string): void {
 const gostList = [
     { anchorId: 'gost-gost-11371-78', code: 'ГОСТ 11371-78' },
 ];
+
+describe('gosts.collector.collectGostReferences — skip semantics (+2)', () => {
+    it('00.4.2#28 (+2) should skip .hidden dirs (skipHidden)', () => {
+        writeMd('.hidden/page.md', '---\ntitle: H\n---\n\nГОСТ 11371-78');
+        const refs: GostRefs = collectGostReferences(langDir, gostList);
+        expect(refs['gost-gost-11371-78']).toHaveLength(0);
+    });
+
+    it('00.4.2#29 (+2) should skip _underscore dirs (skipUnderscore)', () => {
+        writeMd('_assets/page.md', '---\ntitle: A\n---\n\nГОСТ 11371-78');
+        const refs: GostRefs = collectGostReferences(langDir, gostList);
+        expect(refs['gost-gost-11371-78']).toHaveLength(0);
+    });
+
+    it('00.4.2#30 (+2) should skip generated gosts output dir (skipFullPaths)', () => {
+        // per gosts.paths.yaml: ru → 'Дополнительнаяинформация/ГОСТы'
+        writeMd('Дополнительнаяинформация/ГОСТы/index.md', '---\ntitle: D\n---\n\nГОСТ 11371-78');
+        writeMd('page.md', '---\ntitle: Page\n---\n\nГОСТ 11371-78');
+        const refs: GostRefs = collectGostReferences(langDir, gostList);
+        // только page.md, output-dir исключён
+        expect(refs['gost-gost-11371-78']).toHaveLength(1);
+        expect(refs['gost-gost-11371-78'][0].href).toBe('page.md');
+    });
+
+    it('00.4.2#31 (+2) should walk nested dirs and aggregate by file', () => {
+        writeMd('section/chapter/page.md', '---\ntitle: P\n---\n\nГОСТ 11371-78 ГОСТ 11371-78');
+        writeMd('other.md', '---\ntitle: O\n---\n\nГОСТ 11371-78');
+        const refs: GostRefs = collectGostReferences(langDir, gostList);
+        expect(refs['gost-gost-11371-78']).toHaveLength(2);
+        const total = refs['gost-gost-11371-78'].reduce((s, r) => s + r.occurrences, 0);
+        expect(total).toBe(3);
+    });
+});
 
 describe('gosts.collector.collectGostReferences (+2)', () => {
     it('00.5.4#17 should find code occurrences in plain text', () => {
