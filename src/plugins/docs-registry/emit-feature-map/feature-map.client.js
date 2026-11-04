@@ -34,16 +34,34 @@
         var counterEl = root.querySelector('.fm-counter');
         var resetBtn = root.querySelector('.fm-reset-all');
 
-        console.log(
-            '[feature-map] found: filterChips=' +
-                filterChips.length +
-                ' moduleChips=' +
-                moduleChips.length +
-                ' cells=' +
-                cells.length +
-                ' resetBtn=' +
-                !!resetBtn
-        );
+        // --- Расчёт высоты и колонок для "Таблицы Менделеева" ---
+        var maxRows = 1;
+        cells.forEach(function (td) {
+            var chips = td.querySelectorAll('.fm-chip');
+            var count = chips.length;
+
+            if (count > 0) {
+                // Строим квадрат: сколько колонок нужно?
+                var cols = Math.ceil(Math.sqrt(count));
+                // Сколько рядов получится при таком количестве колонок?
+                var rows = Math.ceil(count / cols);
+
+                // Записываем количество колонок в CSS-переменную для этой конкретной ячейки
+                td.style.setProperty('--fm-cell-cols', cols);
+
+                if (rows > maxRows) maxRows = rows;
+            }
+        });
+
+        // Высота строки: примерно 24px на один ряд чипов + отступы (минимум 60px)
+        var rowHeight = Math.max(60, maxRows * 26 + 10);
+        root.style.setProperty('--fm-row-height', rowHeight + 'px');
+        // --------------------------------------------------------
+
+        console.log('[feature-map] found: filterChips=' + filterChips.length +
+            ' moduleChips=' + moduleChips.length +
+            ' cells=' + cells.length +
+            ' maxModules=' + ' (row height: ' + rowHeight + 'px)');
 
         function attrsOf(chip) {
             return {

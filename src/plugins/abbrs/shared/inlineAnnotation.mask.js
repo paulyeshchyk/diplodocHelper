@@ -1,47 +1,15 @@
-const PH_OPEN = String.fromCodePoint(0xe000);
-const PH_CLOSE = String.fromCodePoint(0xe001);
+const { InlineAnnotation_Mask } = require('../../utils/inline-annotation/InlineAnnotation_Mask.ts');
 
 /**
- * Маскирует code-спаны в Markdown (fenced, inline, <code>/<pre>),
- * чтобы их содержимое не участвовало в поиске тегов.
- * @param {string} text
- * @returns {string}
+ * @deprecated Импортируйте `InlineAnnotation_Mask` напрямую.
+ * Shim оставлен до wave 4b/4c, пока `abbrs/shared/index.js` ещё
+ * спредит локальные реализации для `textRange` / `template` / `model`.
+ *
+ * Regression: 00.5.1#17, #19 (+3).
  */
-function maskCodeInMarkdown(text) {
-  let idx = 0;
-  const mk = () => `${PH_OPEN}${idx++}${PH_CLOSE}`;
+const maskCodeInMarkdown = InlineAnnotation_Mask.maskCodeInMarkdown;
+const maskCodeBlocks = InlineAnnotation_Mask.maskCodeBlocks;
 
-  let masked = text.replace(/(^|\n)(```|~~~)[\s\S]*?\2/g, () => mk());
-  masked = masked.replace(/``[^`\n]+``|`[^`\n]+`/g, () => mk());
-  masked = masked.replace(/<(code|pre)\b[^>]*>[\s\S]*?<\/\1>/gi, () => mk());
-  return masked;
-}
-
-/**
- * Маскирует <code>/<pre>-блоки в HTML.
- * @param {string} html
- * @returns {{ masked: string, unmask: (s: string) => string }}
- */
-function maskCodeBlocks(html) {
-  const UNMASK_RE = new RegExp(`${PH_OPEN}(\\d+)${PH_CLOSE}`, 'g');
-
-  /** @type {{ ph: string, m: string }[]} */
-  const placeholders = [];
-  let idx = 0;
-  const masked = html.replace(/<(code|pre)\b[^>]*>[\s\S]*?<\/\1>/gi, m => {
-    const ph = `${PH_OPEN}${idx++}${PH_CLOSE}`;
-    placeholders.push({ ph, m });
-    return ph;
-  });
-
-  return {
-    masked,
-    unmask: s =>
-      s.replace(UNMASK_RE, (_, i) => {
-        const entry = placeholders[Number(i)];
-        return entry ? entry.m : _;
-      }),
-  };
-}
-
-module.exports = { maskCodeInMarkdown, maskCodeBlocks, PH_OPEN, PH_CLOSE };
+// PH_OPEN/PH_CLOSE больше не экспортируются: консьюмеров в src/ нет
+// (проверено grep), а публичная площадь сокращается.
+module.exports = { maskCodeInMarkdown, maskCodeBlocks };

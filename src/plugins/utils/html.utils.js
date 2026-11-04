@@ -1,24 +1,10 @@
-const path = require('node:path');
+const { Html_Classify_File } = require('./html/Html_Classify_File.ts');
 
 /**
- * Проверяет, является ли файл HTML
- * @param {string} filePath
+ * @deprecated Импортируйте `Html_Classify_File` напрямую.
+ * Regression: 00.4.1#01..#08, #09.
  */
-function isHtmlFile(filePath) {
-    return filePath.toLowerCase().endsWith('.html');
-}
+const isHtmlFile = Html_Classify_File.isHtmlFile;
+const isRootIndex = Html_Classify_File.isRootIndex;
 
-/**
- * Проверяет, является ли путь корневым index.html
- * @param {string} buildDir
- * @param {string} htmlPath
- */
-function isRootIndex(buildDir, htmlPath) {
-    const fileName = path.basename(htmlPath);
-    return fileName === 'index.html' && path.dirname(htmlPath) === buildDir;
-}
-
-module.exports = {
-    isHtmlFile,
-    isRootIndex,
-};
+module.exports = { isHtmlFile, isRootIndex };

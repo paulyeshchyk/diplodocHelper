@@ -1,12 +1,12 @@
+const { String_Slice_Middle } = require('../plugins/utils/string/String_Slice_Middle.ts');
+
 /**
- * @param {string | any[]} str
+ * @deprecated Импортируйте `String_Slice_Middle` напрямую.
+ * Shim оставлен для backward-compat с `test/commands/diplodoc-helper.string.test.js`.
+ * @param {string} str
  */
 function truncateMiddle(str, maxLength = 52, separator = '...') {
-    if (str.length <= maxLength) return str;
-    const keep = Math.floor((maxLength - separator.length) / 2);
-    const start = str.slice(0, keep);
-    const end = str.slice(-keep);
-    return start + separator + end;
+    return String_Slice_Middle.truncate(str, maxLength, separator);
 }
 
-exports.truncateMiddle = truncateMiddle;
+ exports.truncateMiddle = truncateMiddle;

@@ -83,16 +83,19 @@ async function runEmitFeatureMap(argv) {
         const capsAttr = (mod.capabilities || []).join(' ');
         const famsAttr = (mod.families || []).join(' ');
         const layersAttr = (mod.layers || []).join(' ');
-        return (
-            `<a class="fm-chip" href="${encodeURI(hrefOfModule(dir))}" ` +
+
+        // БЫЛО: const label = `${escHtml((mod.id || '') + ' ' + (mod.ident || ''))}`.trim();
+        // СТАЛО:
+        const label = `${escHtml(mod.ident || '')}`.trim();
+
+        return `<a class="fm-chip" href="${encodeURI(hrefOfModule(dir))}" ` +
             `data-actor="${escHtml(actorsAttr)}" ` +
             `data-cap="${escHtml(capsAttr)}" ` +
             `data-family="${escHtml(famsAttr)}" ` +
             `data-layer="${escHtml(layersAttr)}" ` +
             `data-module="${escHtml(dir)}" ` +
             `title="${escHtml(mod.designation || '')}">` +
-            `${escHtml((mod.id || '') + ' ' + (mod.ident || ''))}</a>`
-        );
+            `${label}</a>`;
     };
 
     const stripHtml = (name, label, items, countMap) =>
@@ -110,7 +113,7 @@ async function runEmitFeatureMap(argv) {
                     `${escHtml(title)} <small>${countMap[slug] || 0}</small></button>` +
                     (href
                         ? `<a class="fm-strip-link" href="${encodeURI(href)}" target="_blank" rel="noopener" ` +
-                          `title="Открыть страницу «${escHtml(title)}»">→</a>`
+                        `title="Открыть страницу «${escHtml(title)}»">→</a>`
                         : '') +
                     `</span>`
                 );
@@ -136,7 +139,7 @@ async function runEmitFeatureMap(argv) {
                     `${escHtml(title)}</button>` +
                     (href
                         ? `<a class="fm-hdr-link" href="${encodeURI(href)}" target="_blank" rel="noopener" ` +
-                          `title="Открыть страницу «${escHtml(title)}»">→</a>`
+                        `title="Открыть страницу «${escHtml(title)}»">→</a>`
                         : '') +
                     `</th>`
                 );
@@ -144,36 +147,28 @@ async function runEmitFeatureMap(argv) {
             .join('') +
         `</tr></thead>`;
 
-    const tbody =
-        `<tbody>` +
-        fams
-            .map(([fSlug, fIt]) => {
-                const tds = layers
-                    .map(([lSlug]) => {
-                        const list = cells.get(`${lSlug}::${fSlug}`) || [];
-                        if (!list.length) return `<td class="is-empty">·</td>`;
-                        return `<td>${list.map(chipHtml).join('')}</td>`;
-                    })
-                    .join('');
+    const tbody = `<tbody>` + fams.map(([fSlug, fIt]) => {
+        const tds = layers.map(([lSlug]) => {
+            const list = cells.get(`${lSlug}::${fSlug}`) || [];
+            // Оборачиваем в div для flexbox-сетки внутри ячейки
+            if (!list.length) return `<td class="is-empty"><div class="fm-cell-content">·</div></td>`;
+            return `<td><div class="fm-cell-content">${list.map(chipHtml).join('')}</div></td>`;
+        }).join('');
 
-                const href = hrefOfDim('family', fSlug);
-                const title = fIt.title || fSlug;
-                const th =
-                    `<th class="fm-hdr">` +
-                    `<button type="button" class="fm-hdr-btn" ` +
-                    `data-strip="family" data-value="${escHtml(fSlug)}" ` +
-                    `title="Клик — фильтр по семейству «${escHtml(title)}»">` +
-                    `${escHtml(title)}</button>` +
-                    (href
-                        ? `<a class="fm-hdr-link" href="${encodeURI(href)}" target="_blank" rel="noopener" ` +
-                          `title="Открыть страницу «${escHtml(title)}»">→</a>`
-                        : '') +
-                    `</th>`;
+        const href = hrefOfDim('family', fSlug);
+        const title = fIt.title || fSlug;
+        const th =
+            `<th class="fm-hdr">` +
+            `<button type="button" class="fm-hdr-btn" ` +
+            `data-strip="family" data-value="${escHtml(fSlug)}" ` +
+            `title="Клик — фильтр по семейству «${escHtml(title)}»">` +
+            `${escHtml(title)}</button>` +
+            (href ? `<a class="fm-hdr-link" href="${encodeURI(href)}" target="_blank" rel="noopener" ` +
+                `title="Открыть страницу «${escHtml(title)}»">→</a>` : '') +
+            `</th>`;
 
-                return `<tr>${th}${tds}</tr>`;
-            })
-            .join('') +
-        `</tbody>`;
+        return `<tr>${th}${tds}</tr>`;
+    }).join('') + `</tbody>`;
 
     const grid = `<table class="fm-grid" data-modules>${thead}${tbody}</table>`;
 
@@ -208,7 +203,7 @@ ${grid}
 
     console.log(
         `✅ feature-map: ${outPath}\n` +
-            `   actors=${actors.length}  caps=${caps.length}  grid=${fams.length}×${layers.length}`
+        `   actors=${actors.length}  caps=${caps.length}  grid=${fams.length}×${layers.length}`
     );
 }
 

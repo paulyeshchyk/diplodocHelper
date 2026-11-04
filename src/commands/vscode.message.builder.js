@@ -1,5 +1,5 @@
 const { translate, nls_ts } = require('../nls_ts');
-const { truncateMiddle } = require('./diplodoc-helper.string');
+const { String_Slice_Middle } = require('../plugins/utils/string/String_Slice_Middle.ts');
 
 /** @import {Reference} from './diplodoc-helper.files.js' */
 
@@ -82,7 +82,7 @@ class MessageBuilder {
         for (const ref of references.slice(0, maxCount)) {
             const pathStr = String(ref.relativePath);
             const cleanedPath = pathStr.replace(/[/\\]index\.md$/i, '');
-            const displayPath = truncateMiddle(cleanedPath, lineMaxLength);
+            const displayPath = String_Slice_Middle.truncate(cleanedPath, lineMaxLength);
             const countText = this.linkCount(ref.linkCount);
             lines.push(`- ${displayPath} ${countText}`);
         }

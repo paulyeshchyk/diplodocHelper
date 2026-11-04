@@ -9,6 +9,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const { GENERATED_DIR, DOCS_DIR } = require('../_paths.js');
 const { loadFields } = require('../_fields.js');
+const { String_Compare_Natural } = require('../../utils/string/String_Compare_Natural.ts');
 
 const HELP = `
 Использование: node emit-modules-table.js [options]
@@ -65,20 +66,7 @@ function getUrlPrefix(docsRoot) {
 
 function toPosix(p) { return p.split(path.sep).join('/'); }
 
-function naturalCompare(a, b) {
-  const re = /(\d+)|(\D+)/g;
-  const ax = String(a).match(re) || [];
-  const bx = String(b).match(re) || [];
-  const n = Math.max(ax.length, bx.length);
-  for (let i = 0; i < n; i++) {
-    const x = ax[i] || ''; const y = bx[i] || '';
-    const nx = /^\d+$/.test(x) ? parseInt(x, 10) : null;
-    const ny = /^\d+$/.test(y) ? parseInt(y, 10) : null;
-    if (nx !== null && ny !== null) { if (nx !== ny) return nx - ny; }
-    else { if (x < y) return -1; if (x > y) return 1; }
-  }
-  return 0;
-}
+const naturalCompare = String_Compare_Natural.compare;
 
 function escapeLinkText(s) {
   return String(s).replace(/\r?\n/g, ' ').replace(/\[/g, '\\[').replace(/\]/g, '\\]');

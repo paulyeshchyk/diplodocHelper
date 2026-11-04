@@ -9,6 +9,7 @@ const { generateMapContent, generateRankingContent } = require('./modules/map');
 const { generateListContent } = require('./modules/list');
 const { generateSearchContent } = require('./modules/search');
 const { generateTabsMarkup } = require('./modules/tabs');
+const { String_Format_Size } = require('../utils/string/String_Format_Size.ts');
 
 const {
     INDEX_MD_DEFAULT_CONTENT,
@@ -117,29 +118,6 @@ function buildTree(pages, langDir) {
     return root;
 }
 
-/**
- * Форматирует размер в читаемый вид (Б, КБ, МБ)
- */
-function formatSize(bytes) {
-    if (typeof bytes !== 'number' || bytes < 0) return '';
-    if (bytes === 0) return ' (0 Б)';
-    const units = ['Б', 'КБ', 'МБ'];
-    let value = bytes;
-    let unitIndex = 0;
-    while (value >= 1024 && unitIndex < units.length - 1) {
-        value /= 1024;
-        unitIndex++;
-    }
-    let display;
-    if (unitIndex === 0) {
-        // Байты — целое число
-        display = Math.round(value);
-    } else {
-        // КБ и МБ — один знак после запятой, если меньше 10, иначе целое
-        display = value >= 10 ? Math.round(value) : value.toFixed(1);
-    }
-    return ` (${display} ${units[unitIndex]})`;
-}
 
 /**
  * Рекурсивно рендерит дерево в Markdown-список с отступами.
@@ -163,7 +141,7 @@ function renderTree(node, depth) {
 
     for (const child of sorted) {
         if (child.isPage && child.href) {
-            const sizeStr = formatSize(child.size);
+            const sizeStr = String_Format_Size.format(child.size, { formatted: 'bracket' });
             const link = `../${child.href}`;
             result += `${indent}- [${child.title || child.name}](${link})${sizeStr}\n`;
             if (child.children && child.children.length > 0) {

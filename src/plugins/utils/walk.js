@@ -1,28 +1,26 @@
-const fs = require('fs');
-const path = require('node:path');
+const { Fs_Walk_Directory } = require('./fs/Fs_Walk_Directory.ts');
+
 
 /**
- * Рекурсивный обход директории с фильтром
- * @param {string} dir
- * @param {(fullPath: string, entry: fs.Dirent) => boolean} filter
- * @param {(fullPath: string) => void} callback
+ * @deprecated Импортируйте `Fs_Walk_Directory` напрямую.
+ *
+ * Shim сохраняет **legacy-поведение**: `skipHidden: false` (исторический
+ * `walk` не пропускал `.`-директории, что для `build/`-потребителей
+ * безопасно, но неверно для `docs/`).
+ *
+ * Regression: 00.4.2#12, #13.
+ * 
+ * @param {any} dir
+ * @param {any} filter
+ * @param {any} callback
  */
 function walk(dir, filter, callback) {
-    if (!fs.existsSync(dir)) return;
-
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-    for (const entry of entries) {
-        const fullPath = path.join(dir, entry.name);
-
-        if (entry.isDirectory()) {
-            walk(fullPath, filter, callback);
-        } else if (filter(fullPath, entry)) {
-            callback(fullPath);
-        }
-    }
+    Fs_Walk_Directory.walkSync({
+        dir,
+        skipHidden: false,
+        filterFile: filter,
+        onFile: callback,
+    });
 }
 
-module.exports = {
-    walk,
-};
+module.exports = { walk };

@@ -3,6 +3,10 @@
     "node": ">=22",
     "npm": ">=11.5.1"
   },
+  "scripts": {
+    "test": "jest"
+  },
+  "preset": "ts-jest",
   "dependencies": {
     "@diplodoc/cli": "^5.44.0",
     "@diplodoc/latex-extension": "^1.4.1",
@@ -20,9 +24,15 @@
     "transliteration": "^2.6.1"
   },
   "devDependencies": {
+    "@babel/core": "^8.1.0",
+    "@babel/preset-env": "^8.0.7",
     "@diplodoc/folding-headings-extension": "^0.2.0",
     "@diplodoc/mermaid-extension": "^1.4.2",
     "@diplodoc/utils": "^2.2.2",
+    "@jest/globals": "^30.5.2",
+    "@types/jest": "^30.0.0",
+    "@types/mocha": "^10.0.10",
+    "babel-jest": "^30.5.2",
     "html-export-pdf-cli": "^1.2.0",
     "i": "^0.3.7"
   },

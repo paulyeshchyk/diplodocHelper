@@ -125,6 +125,8 @@
         results.parentNode.insertBefore(summaryDiv, results);
 
         function formatSize(bytes) {
+            // KEEP IN SYNC with String_Format_Size.format(..., { formatted: 'plain' })
+            // Drift guard: test 00.3.2#15 (+34).
             if (typeof bytes !== 'number' || bytes < 0) return '';
             if (bytes === 0) return '0 Б';
             var units = ['Б', 'КБ', 'МБ'];
