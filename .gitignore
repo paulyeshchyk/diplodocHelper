@@ -19,3 +19,4 @@ docs/docs/ru/Модули/Известныепроблемы/known-issues-summar
 *.vsix
 docs/plugins
 docs/server
+docs/plugins.bak

@@ -22,9 +22,9 @@ function getCursorContext(editor) {
     const position = editor.selection.active;
     const currentLineNo = position.line;
     const currentLineText = document.lineAt(currentLineNo).text;
-
+    const languageId = editor.document.languageId;
     return {
-        isHtml: checkIsInsideHtml(document, position),
+        isHtml: (checkIsInsideHtml(document, position) || languageId === 'yaml'),
         ...checkListContext(document, currentLineNo),
         isTable: checkIsTable(currentLineText),
         ...checkCustomBlockContext(document, currentLineNo),
