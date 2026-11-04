@@ -1,11 +1,13 @@
-const { makeAnchorId, makeOccurrenceId, escapeHtml, jsonEscapeHtmlForDiplodoc } = require('./shared');
+const { InlineAnnotation_Make_AnchorId } = require('../utils/inline-annotation/InlineAnnotation_Make_AnchorId.ts');
+const { Html_Escape_Text } = require('../utils/html/Html_Escape_Text.ts');
+const { Html_Escape_JsonString } = require('../utils/html/Html_Escape_JsonString.ts');
 
 /**
  * @param {string} term
  * @returns {string}
  */
 function termAnchorId(term) {
-  return makeAnchorId('term', term);
+  return InlineAnnotation_Make_AnchorId.makeAnchorId('term', term);
 }
 
 /**
@@ -14,12 +16,12 @@ function termAnchorId(term) {
  * @returns {string}
  */
 function termOccurrenceId(term, n) {
-  return makeOccurrenceId('term', term, n);
+  return InlineAnnotation_Make_AnchorId.makeOccurrenceId('term', term, n);
 }
 
 module.exports = {
   termAnchorId,
   termOccurrenceId,
-  escapeHtml,
-  jsonEscapeHtmlForDiplodoc,
+  escapeHtml: Html_Escape_Text.escape,
+  jsonEscapeHtmlForDiplodoc: Html_Escape_JsonString.escape,
 };

@@ -5,9 +5,16 @@ const { loadAbbrDictionary } = require('./abbrs.dictionary');
 const { renderTemplate } = require('./abbrs.template.js');
 const ABBR_CONFIG = require('./abbrs.config.js');
 const { getAbbrOutputUrl, getAbbrLanguages } = require('./abbrs.paths');
-const { maskCodeBlocks } = require('./shared');
+const { InlineAnnotation_Mask } = require('../utils/inline-annotation/InlineAnnotation_Mask.ts');
+const { InlineAnnotation_Make_AnchorId } = require('../utils/inline-annotation/InlineAnnotation_Make_AnchorId.ts');
+const { Html_Escape_Text } = require('../utils/html/Html_Escape_Text.ts');
+const { Html_Escape_JsonString } = require('../utils/html/Html_Escape_JsonString.ts');
 
-const { abbrAnchorId, abbrOccurrenceId, escapeHtml, jsonEscapeHtmlForDiplodoc } = require('./abbrs.model');
+const maskCodeBlocks = InlineAnnotation_Mask.maskCodeBlocks;
+const abbrAnchorId = (s) => InlineAnnotation_Make_AnchorId.makeAnchorId('abbr', s);
+const abbrOccurrenceId = (s, n) => InlineAnnotation_Make_AnchorId.makeOccurrenceId('abbr', s, n);
+const escapeHtml = Html_Escape_Text.escape;
+const jsonEscapeHtmlForDiplodoc = Html_Escape_JsonString.escape;
 
 function isInsideAnchor(html, matchIndex) {
     const before = html.substring(0, matchIndex);

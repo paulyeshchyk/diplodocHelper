@@ -1,5 +1,6 @@
-const { makeAnchorId, makeOccurrenceId, escapeHtml, jsonEscapeHtmlForDiplodoc } = require('./shared');
-
+const { InlineAnnotation_Make_AnchorId } = require('../utils/inline-annotation/InlineAnnotation_Make_AnchorId.ts');
+const { Html_Escape_Text } = require('../utils/html/Html_Escape_Text.ts');
+const { Html_Escape_JsonString } = require('../utils/html/Html_Escape_JsonString.ts');
 
 /**
  * @typedef {Object} AbbrPage
@@ -37,7 +38,7 @@ const { makeAnchorId, makeOccurrenceId, escapeHtml, jsonEscapeHtmlForDiplodoc } 
  * @returns {string}
  */
 function abbrAnchorId(abbr) {
-    return makeAnchorId('abbr', abbr);
+    return InlineAnnotation_Make_AnchorId.makeAnchorId('abbr', abbr);
 }
 
 /**
@@ -46,12 +47,12 @@ function abbrAnchorId(abbr) {
  * @returns {string}
  */
 function abbrOccurrenceId(abbr, n) {
-    return makeOccurrenceId('abbr', abbr, n);
+    return InlineAnnotation_Make_AnchorId.makeOccurrenceId('abbr', abbr, n);
 }
 
 module.exports = {
     abbrAnchorId,
     abbrOccurrenceId,
-    escapeHtml,
-    jsonEscapeHtmlForDiplodoc,
+    escapeHtml: Html_Escape_Text.escape,
+    jsonEscapeHtmlForDiplodoc: Html_Escape_JsonString.escape,
 };

@@ -6,19 +6,26 @@ const path = require('path');
 const { getGostOutputDir } = require('./gosts.paths');
 const { getTitleFromMetadata } = require('../utils/frontmatter.utils');
 // Используем маскировку кода из модуля abbrs (или замените на локальную копию)
-const { maskCodeInMarkdown } = require('../abbrs/shared');
+const { InlineAnnotation_Mask } = require('../utils/inline-annotation/InlineAnnotation_Mask.ts');
+
+/** @typedef {import('./gosts.types.ts').GostEntryWithAnchor} GostEntryWithAnchor */
+/** @typedef {import('./gosts.types.ts').GostRef} GostRef */
+/** @typedef {import('./gosts.types.ts').GostRefs} GostRefs */
 
 /**
  * Сканирует документацию и ищет упоминания ГОСТов.
  * @param {string} langDir 
- * @param {Array} gostsList 
+ * @param {GostEntryWithAnchor[]} gostsList
+ * @returns {GostRefs}
  */
 function collectGostReferences(langDir, gostsList) {
+  /** @type {GostRefs} */
   const refs = {};
   for (const gost of gostsList) {
     refs[gost.anchorId] = [];
   }
 
+  /** @type {Set<string>} */
   let skipFullPaths;
   try {
     skipFullPaths = new Set([path.resolve(getGostOutputDir(langDir))]);
@@ -26,6 +33,7 @@ function collectGostReferences(langDir, gostsList) {
     skipFullPaths = new Set();
   }
 
+  /** @param {string} dir */
   function walk(dir) {
     if (!fs.existsSync(dir)) return;
     const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -40,7 +48,7 @@ function collectGostReferences(langDir, gostsList) {
       } else if (entry.name.endsWith('.md')) {
         try {
           const raw = fs.readFileSync(fullPath, 'utf8');
-          const content = maskCodeInMarkdown(raw);
+          const content = InlineAnnotation_Mask.maskCodeInMarkdown(raw);
           const href = path.relative(langDir, fullPath).replace(/\\/g, '/');
           const title = getTitleFromMetadata(fullPath) || path.basename(path.dirname(fullPath));
 
@@ -65,8 +73,9 @@ function collectGostReferences(langDir, gostsList) {
               refs[gost.anchorId].push({ title, href, occurrences: totalCount });
             }
           }
-        } catch (e) {
-          console.error(`[gosts] Ошибка обработки ${fullPath}:`, e.message);
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : String(err);
+          console.error(`[gosts] Ошибка обработки ${fullPath}:`, msg);
         }
       }
     }

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const { InlineAnnotation_Mask } = require('../utils/inline-annotation/InlineAnnotation_Mask.ts');
 const { getTitleFromMetadata } = require('../utils/frontmatter.utils');
-const { maskCodeInMarkdown } = require('./shared');
 
 /**
  * @param {string} attrs
@@ -19,7 +19,7 @@ function extractDataTerm(attrs) {
  */
 function extractTermsFromFile(fullPath, langDir) {
     const raw = fs.readFileSync(fullPath, 'utf8');
-    const content = maskCodeInMarkdown(raw);
+    const content = InlineAnnotation_Mask.maskCodeInMarkdown(raw);
 
     const occurrences = new Map();
     const re = /<abbr\b([^>]*)>([^<]+)<\/abbr>/gi;

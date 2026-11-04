@@ -1,4 +1,4 @@
-const { findAroundOffset } = require('./shared');
+const { InlineAnnotation_TextRange } = require('../utils/inline-annotation/InlineAnnotation_TextRange.ts');
 
 /**
  * @param {string} text
@@ -6,7 +6,7 @@ const { findAroundOffset } = require('./shared');
  * @returns {{ startOffset: number, endOffset: number, abbr: string, visibleText: string, dataAbbr: string } | null}
  */
 function findAbbrAroundOffset(text, offset) {
-    const found = findAroundOffset(text, offset, 'abbr');
+    const found = InlineAnnotation_TextRange.findAroundOffset(text, offset, 'abbr');
     if (!found) return null;
 
     const startTagEnd = text.indexOf('>', found.startOffset);

@@ -5,9 +5,16 @@ const { loadTermDictionary } = require('./terms.dictionary');
 const { renderTemplate } = require('./terms.template.js');
 const TERM_CONFIG = require('./terms.config.js');
 const { getTermOutputUrl, getTermLanguages } = require('./terms.paths');
-const { maskCodeBlocks } = require('./shared');
+const { InlineAnnotation_Mask } = require('../utils/inline-annotation/InlineAnnotation_Mask.ts');
+const { InlineAnnotation_Make_AnchorId } = require('../utils/inline-annotation/InlineAnnotation_Make_AnchorId.ts');
+const { Html_Escape_Text } = require('../utils/html/Html_Escape_Text.ts');
+const { Html_Escape_JsonString } = require('../utils/html/Html_Escape_JsonString.ts');
 
-const { termAnchorId, termOccurrenceId, escapeHtml, jsonEscapeHtmlForDiplodoc } = require('./terms.model');
+const maskCodeBlocks = InlineAnnotation_Mask.maskCodeBlocks;
+const termAnchorId = (s) => InlineAnnotation_Make_AnchorId.makeAnchorId('abbr', s);
+const termOccurrenceId = (s, n) => InlineAnnotation_Make_AnchorId.makeOccurrenceId('terms', s, n);
+const escapeHtml = Html_Escape_Text.escape;
+const jsonEscapeHtmlForDiplodoc = Html_Escape_JsonString.escape;
 
 function isInsideAnchor(html, matchIndex) {
   const before = html.substring(0, matchIndex);

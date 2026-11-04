@@ -1,4 +1,4 @@
-const { maskCodeInMarkdown } = require('./shared');
+const { InlineAnnotation_Mask } = require('../utils/inline-annotation/InlineAnnotation_Mask.ts');
 const { getTitleFromMetadata } = require('../utils/frontmatter.utils');
 const fs = require('fs');
 const path = require('path');
@@ -18,7 +18,7 @@ function extractDataAbbr(attrs) {
  */
 function extractAbbrsFromFile(fullPath, langDir) {
     const raw = fs.readFileSync(fullPath, 'utf8');
-    const content = maskCodeInMarkdown(raw);
+    const content = InlineAnnotation_Mask.maskCodeInMarkdown(raw);
 
     const occurrences = new Map();
     const re = /<abbr(\b[^>]*)>([^<]+)<\/abbr>/gi;

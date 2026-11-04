@@ -1,4 +1,4 @@
-const { findAroundOffset } = require('./shared');
+const { InlineAnnotation_TextRange } = require('../utils/inline-annotation/InlineAnnotation_TextRange.ts');
 
 /**
  * Находит <abbr class="...term...">…</abbr> вокруг смещения.
@@ -11,7 +11,7 @@ const { findAroundOffset } = require('./shared');
  * @returns {{ startOffset: number, endOffset: number, term: string, visibleText: string, dataTerm: string } | null}
  */
 function findTermAroundOffset(text, offset) {
-  const found = findAroundOffset(text, offset, 'abbr');
+  const found = InlineAnnotation_TextRange.findAroundOffset(text, offset, 'abbr');
   if (!found) return null;
 
   const startTagEnd = text.indexOf('>', found.startOffset);

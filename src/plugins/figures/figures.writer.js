@@ -2,6 +2,15 @@
 
 const fs = require('fs');
 const path = require('path');
+const { Html_Escape_Text } = require('../utils/html/Html_Escape_Text.ts');
+
+/**
+ * @deprecated Используйте `Html_Escape_Text.escape`.
+ * Shim сохраняет локальное имя для минимального диффа; будет удалён
+ * в следующей волне (при переводе `figures.writer.js` на TS).
+ * Regression: 00.5.3#21 (+7).
+ */
+const escapeHtml = Html_Escape_Text.escape;
 
 function encodePath(relPath) {
     return relPath
@@ -53,10 +62,6 @@ function stripFigurePrefix(caption) {
     return String(caption)
         .replace(/^(Рисунок|Figure|Fig\.?|Рис\.?)\s*\d+\.?\s*/i, '')
         .trim();
-}
-
-function escapeHtml(s) {
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 /** Возвращает src для <img data-src>, либо null */
