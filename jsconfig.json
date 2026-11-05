@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
+    "allowImportingTsExtensions": true,
     "target": "ES2022",
     "checkJs": true,
     "lib": [
