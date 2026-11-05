@@ -1,5 +1,6 @@
 const { Url_Transform_Segment } = require('./url/Url_Transform_Segment.ts');
 const { diplodocTransliterate: transliterate } = require('./transliterate');
+const { Url_Transform_Reference } = require('./url/Url_Transform_Reference.ts');
 
 /**
  * Slug для имён файлов (сохраняет кириллицу, не транслитерирует).
@@ -34,20 +35,12 @@ function slugify_latin(urlPath) {
 const slugify_latin_alphanumeric = Url_Transform_Segment.slugify;
 
 /**
- * Slug для anchor'ов в md-ссылках (разделитель `-`, другие правила).
- * Мигрирует в Track B, волна B-3.
- * @param {string} text
+ * @deprecated Импортируйте `Url_Transform_Reference.slugify` напрямую.
+ * Shim сохранён до конца Track B для минимального диффа в потребителях.
+ *
+ * Regression: 00.6.3#17, #19.
  */
-function slugify_diplodoc_reference(text) {
-    if (!text || typeof text !== 'string') return '';
-    let cleanText = text.replace(/^#+\s*/, '');
-    let slug = transliterate(cleanText);
-    slug = slug.toLowerCase();
-    slug = slug.replace(/\s+/g, '-');
-    slug = slug.replace(/[^a-z0-9\/=\\ -]/g, '');
-    slug = slug.replace(/-+/g, '-');
-    return slug;
-}
+const slugify_diplodoc_reference = Url_Transform_Reference.slugify;
 
 module.exports = {
     slugify_diplodoc_reference,

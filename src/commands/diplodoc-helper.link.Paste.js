@@ -4,8 +4,8 @@ const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs').promises;
+const { Url_Transform_Reference } = require('../plugins/utils/url/Url_Transform_Reference.ts');
 const { buildImageLink } = require('../plugins/utils/md.links.figure.js');
-const { slugify_diplodoc_reference } = require('../plugins/utils/encoding.slugify.js');
 const { getCursorContext, indentMultilinedText } = require('./diplodoc-helper.cursor.Context.js');
 
 const INDEX_MD = 'index.md';
@@ -195,18 +195,11 @@ async function promptAnchorSelection(anchors) {
 // =============================================================================
 
 /**
- * Преобразует заголовок в slug для якоря
- * @param {string} text
- * @returns {string}
+ * @deprecated Импортируйте `Url_Transform_Reference.slugify` напрямую.
+ *
+ * Regression: 00.6.3#19.
  */
-function generateSlug(text) {
-    // let slug = text
-    //     .toLowerCase()
-    //     .replace(/[^\w\u0400-\u04FF]+/g, '-')
-    //     .replace(/^-+|-+$/g, '');
-    // return slugify_diplodoc_reference(slug);
-    return slugify_diplodoc_reference(text);
-}
+const generateSlug = Url_Transform_Reference.slugify;
 
 /**
  * Извлекает якоря из Markdown-файла (заголовки, {#якоря}, HTML id)

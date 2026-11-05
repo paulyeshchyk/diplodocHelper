@@ -3,17 +3,17 @@
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs').promises;
-const { slugify_diplodoc_reference } = require('./encoding.slugify.js');
+const { Url_Transform_Reference } = require('./url/Url_Transform_Reference.ts');
 
 const INDEX_MD = 'index.md';
 
 /**
- * Генерирует slug из заголовка
- * @param {string} text
+ * @deprecated Импортируйте `Url_Transform_Reference.slugify` напрямую.
+ * Shim сохранён для внутренних потребителей (`extractAnchorsFromMdFile`).
+ *
+ * Regression: 00.6.3#18, #19.
  */
-function generateSlug(text) {
-    return slugify_diplodoc_reference(text);
-}
+const generateSlug = Url_Transform_Reference.slugify;
 
 /**
  * Извлекает якоря из Markdown-файла (заголовки, {#якоря}, HTML id)
