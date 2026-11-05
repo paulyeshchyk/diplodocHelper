@@ -16,11 +16,13 @@
     },
     "include": [
         "src/**/*.js",
+        "src/**/*.ts",
         "global.d.ts"
     ],
     "exclude": [
         "**/*breadcrumb.template.js",
         "**/*.test.js",
+        "**/*.test.ts",
         "**/contentNavigator/**"
     ]
 }

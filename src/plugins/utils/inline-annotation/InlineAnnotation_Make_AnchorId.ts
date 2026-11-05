@@ -1,4 +1,4 @@
-import { slugify_latin_alphanumeric } from '../encoding.slugify';
+import { slugify_latin_alphanumeric } from '../encoding.slugify.js';
 
 export type InlineAnnotationPrefix = 'abbr' | 'term';
 

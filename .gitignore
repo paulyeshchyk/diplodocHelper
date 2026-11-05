@@ -20,3 +20,5 @@ docs/docs/ru/Модули/Известныепроблемы/known-issues-summar
 docs/plugins
 docs/server
 docs/plugins.bak
+docs/package-lock.json
+package-lock.json
