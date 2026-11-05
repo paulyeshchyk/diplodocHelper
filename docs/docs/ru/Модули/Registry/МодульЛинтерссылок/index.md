@@ -216,8 +216,8 @@ CLI-команды нет. Модуль — только VS Code.
 | Модуль             | Что проверяет                     | Через что показывает      |
 | ------------------ | --------------------------------- | ------------------------- |
 | **`linter.links`** | Markdown-ссылки и якоря           | `Diagnostic` + CodeAction |
-| `linter.abbrs`     | `<abbr>` без словаря              | `QuickPick`               |
-| `linter.terms`     | `<abbr class="term">` без словаря | `QuickPick`               |
+| `linter.abbrs`     | <code>&#60;abbr&#62;</code> без словаря              | `QuickPick`               |
+| `linter.terms`     | <code>&#60;abbr class=&#34;term&#34;&#62;</code> без словаря | `QuickPick`               |
 
 Все три зарегистрированы как команды в одном подменю `diplodoc.lint.explorer.context.menu` (Explorer → Diplodoc → Очистка и проверки), но логически независимы.
 

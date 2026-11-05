@@ -24,15 +24,16 @@ actor: techwriter
 
 ## Назначение
 
-Модуль `terms` — структурный «двойник» `abbrs`, но со своей зоной разметки: он работает исключительно с `<abbr class="term">`, а всё «простое» `<abbr>` без класса оставляет `abbrs`. Разделение придумано для того, чтобы в одной и той же статье могли соседствовать аббревиатуры (сокращения) и термины (полноценные понятия с определениями) — не пересекаясь ни в словаре, ни в шаблонах, ни в клиентских CSS-классах.
+Модуль `terms` — структурный «двойник» `abbrs`, но со своей зоной разметки: он работает исключительно с <code>&#60;abbr class=&#34;term&#34;&#62;</code>, а всё «простое» <code>&#60;abbr&#62;</code> без класса оставляет `abbrs`. 
+Разделение придумано для того, чтобы в одной и той же статье могли соседствовать аббревиатуры (сокращения) и термины (полноценные понятия с определениями) — не пересекаясь ни в словаре, ни в шаблонах, ни в клиентских CSS-классах.
 
 Модуль даёт:
 
 - **словарь** — YAML (`terms.yaml`) с полями `term`, `definition`, `category`, `description`;
-- **разметку в статьях** — `<abbr class="term" data-term="…">`, с опциональным `data-term` для случаев, когда видимое слово отличается от канонического термина;
+- **разметку в статьях** — <code>&#60;abbr class=&#34;term&#34; data-term=&#34;…&#34;&#62;</code>, с опциональным `data-term` для случаев, когда видимое слово отличается от канонического термина;
 - **страницу-указатель** — генерируется из словаря + обхода `docs/`, с алфавитной навигацией, определениями и вхождениями под `{% cut %}`;
-- **тултипы в готовом HTML** — на этапе пост-обработки каждый `<abbr class="term">` получает определение и ссылку на анкор страницы-указателя;
-- **линтер** — проверяет, что каждый `<abbr class="term">` определён в словаре.
+- **тултипы в готовом HTML** — на этапе пост-обработки каждый <code>&#60;abbr class=&#34;term&#34;&#62;</code> получает определение и ссылку на анкор страницы-указателя;
+- **линтер** — проверяет, что каждый <code>&#60;abbr class=&#34;term&#34;&#62;</code> определён в словаре.
 
 Клиентская часть (сворачивание длинных списков вхождений, позиционирование тултипов) — в отдельной статье: [Модуль. Клиент терминов](../../Модули/МодульКлиентатерминов/index.md).
 
@@ -44,9 +45,9 @@ actor: techwriter
 
 **Альтернативы:**
 - Сноска на глоссарий вручную — не масштабируется, нет тултипов.
-- `<abbr title="определение">` — inline, но без страницы-указателя.
+- <code>&#60;abbr title=&#34;…&#34;&#62;</code> — inline, но без страницы-указателя.
 
-**Типичный сценарий:** `<abbr class="term">Абстракция</abbr>` в тексте → **Diplodoc → Термин: вставить / создать** → определение + категория → `generateTerms` → `termTitles` в `post` → `terms.client` рисует тултипы.
+**Типичный сценарий:** <code>&#60;abbr class=&#34;term&#34;&#62;Абстракция&#60;/abbr&#62;</code> в тексте → **Diplodoc → Термин: вставить / создать** → определение + категория → `generateTerms` → `termTitles` в `post` → `terms.client` рисует тултипы.
 
 ## Как это работает
 
@@ -87,13 +88,13 @@ flowchart TB
 **Pre-processing** (генерация страницы-указателя):
 
 1. **Словарь.** `loadTermDictionary(langDir)` читает `terms.yaml`; ключ — `term`. Все записи попадают в `termMap` с `definedInDictionary: true`.
-2. **Извлечение.** `extractTermsFromFile` маскирует код-блоки и находит `<abbr>` **только с `class="term"`**. Ключ — `data-term` или видимый текст. Возвращает `{ title, href, occurrences }`.
+2. **Извлечение.** `extractTermsFromFile` маскирует код-блоки и находит <code>&#60;abbr&#62;</code> **только с `class="term"`**. Ключ — `data-term` или видимый текст. Возвращает `{ title, href, occurrences }`.
 3. **Сбор.** `walkMdFilesGetTerms` обходит `langDir`, пропускает `SKIP_DIRS` (`terms`, `abbrs`, `contexts`, `helptags`, `figures`, `roadmap`) и собственную выходную папку модуля.
 4. **Запись.** `writeTermsIndex` собирает `index.md`: frontmatter `title: Список терминов`, баннер «Нет в словаре» (если `showWarnings: true`), разделы `## БУКВА`, записи вида `<strong id="term-slug">ТЕРМИН</strong> — Определение`, список вхождений под `{% cut "Встречается в" %}`.
 
 **Post-processing** (тултипы):
 
-5. `injectTermTitlesIntoHtml` читает `terms.yaml`, маскирует `<code>`/`<pre>` и заменяет каждый `<abbr class="term">` на `<div class="dl-term">` с тултипом и стабильным `id` (`term-slug-N`). Аббревиатуры без `class` не трогаются — их оставляем `abbrs.injector`.
+5. `injectTermTitlesIntoHtml` читает `terms.yaml`, маскирует `<code>`/`<pre>` и заменяет каждый <code>&#60;abbr class=&#34;term&#34;&#62;</code> на `<div class="dl-term">` с тултипом и стабильным `id` (`term-slug-N`). Аббревиатуры без `class` не трогаются — их оставляем `abbrs.injector`.
 6. В каждую HTML-страницу инжектится клиентский скрипт `terms.client.js` (см. отдельную статью).
 
 ### Файлы модуля
@@ -111,7 +112,7 @@ flowchart TB
 | `terms.model.js`                      | `termAnchorId`, `termOccurrenceId`                                                                                                                                 |
 | `terms.paths.js` + `terms.paths.yaml` | путь к папке модуля по языкам                                                                                                                                      |
 | `terms.template.js` + `templates/*`   | MD-шаблоны `cut.md`, `entry.md`, `letter.md`, `occ.line.md`, `occ.link.md`, `occ.list.md`, `frontmatter.md`, `unused.md`, `entry.undefined.md`, `entry.warning.md` |
-| `terms.textRange.js`                  | `findTermAroundOffset` — поиск `<abbr class="term">` под курсором                                                                                                  |
+| `terms.textRange.js`                  | `findTermAroundOffset` — поиск <code>&#60;abbr class=&#34;term&#34;&#62;</code> под курсором                                                                                                  |
 | `terms.config.js`                     | `showWarnings`, `showUnused`, `usageCutTitle`, `usageVisibleCount`                                                                                                 |
 | `shared/*`                            | общие с `abbrs`: маскирование кода, модель анкоров, шаблонизатор, `findAroundOffset`                                                                               |
 
@@ -152,7 +153,7 @@ flowchart TB
 <abbr class="term" data-term="Абстракция">абстракций</abbr>
 ```
 
-`class="term"` — единственный признак, по которому модуль отличает «свои» теги от аббревиатур. `<abbr>` без `class` (или с другим `class`) `terms` игнорирует.
+`class="term"` — единственный признак, по которому модуль отличает «свои» теги от аббревиатур. <code>&#60;abbr&#62;</code> без `class` (или с другим `class`) `terms` игнорирует.
 
 ## Режимы работы
 
@@ -203,7 +204,9 @@ node ./plugins/diplodoc-helper-cli.js termTitles --docsDir ./docs --outputDir ./
 
 ## Связи
 
-Модуль `terms` живёт в двух слоях: `pre-processing` (генератор) и `post-processing` (инжектор). С клиентом (`terms.client`) общается через готовую HTML-разметку. Общие с `abbrs` утилиты (`terms/shared/*` — идентичная копия `abbrs/shared/*`) не связывают модули в рантайме. Ключевое отличие от `abbrs`: `terms` работает с `<abbr class="term">`, `abbrs` — с `<abbr>` без `class`.
+Модуль `terms` живёт в двух слоях: `pre-processing` (генератор) и `post-processing` (инжектор). 
+С клиентом (`terms.client`) общается через готовую HTML-разметку. Общие с `abbrs` утилиты (`terms/shared/*` — идентичная копия `abbrs/shared/*`) не связывают модули в рантайме. 
+Ключевое отличие от `abbrs`: `terms` работает с <code>&#60;abbr class=&#34;term&#34;&#62;</code>, `abbrs` — с <code>&#60;abbr&#62;</code> без `class`.
 
 {% cut "Диаграмма связей" %}
 

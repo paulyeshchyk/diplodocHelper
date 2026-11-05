@@ -160,8 +160,8 @@ const STEPS = {
 
 - **`post` (14 шагов)** — пост-обработка `.html`. Порядок:
   1. `footnoteAnchors` — абсолютные якоря (до `footnoteNumbering`).
-  2. `abbrTitles` — тултипы для `<abbr>`.
-  3. `termTitles` — тултипы для `<abbr class="term">`.
+  2. `abbrTitles` — тултипы для <code>&#60;abbr&#62;</code>.
+  3. `termTitles` — тултипы для <code>&#60;abbr class=&#34;term&#34;&#62;</code>.
   4. `footnoteNumbering` — сквозная нумерация (после `footnoteAnchors`).
   5. `footnoteList` — сводный перечень (после `footnoteNumbering`).
   6. `gostsInject` — таблица ГОСТов.

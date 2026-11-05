@@ -8,7 +8,7 @@ sectionIndex: ""
 
 ### 3. Термины (`term`) {#fam-terms}
 
-Точное зеркало `abbr`: та же структура, другой словарь (`terms.yaml` вместо `abbreviations.yaml`). `<abbr class="term">` — маркер, по которому модули отличают «свой» тег.
+Точное зеркало `abbr`: та же структура, другой словарь (`terms.yaml` вместо `abbreviations.yaml`). <code>&#60;abbr class=&#34;term&#34;&#62;</code> — маркер, по которому модули отличают «свой» тег.
 
 ```mermaid
 flowchart LR
