@@ -1,18 +1,15 @@
 const { Url_Transform_Segment } = require('./url/Url_Transform_Segment.ts');
 const { diplodocTransliterate: transliterate } = require('./transliterate');
+const { Url_Transform_Filename } = require('./url/Url_Transform_Filename.ts');
 const { Url_Transform_Reference } = require('./url/Url_Transform_Reference.ts');
 
 /**
- * Slug для имён файлов (сохраняет кириллицу, не транслитерирует).
- * Мигрирует в Track B, волна B-4.
- * @param {string} str
+ * @deprecated Импортируйте `Url_Transform_Filename.slugify` напрямую.
+ * Shim сохранён до конца Track B для минимального диффа в потребителях.
+ *
+ * Regression: 00.6.4#19, #20.
  */
-function slugify_filename(str) {
-    return str
-        .replace(/[^\p{L}\p{N}\-._]/gu, '_')
-        .replace(/_+/g, '_')
-        .replace(/^_+|_+$/g, '');
-}
+const slugify_filename = Url_Transform_Filename.slugify;
 
 /**
  * Транслит по сегментам URL-пути (B-5, помечен на dead-code check).
