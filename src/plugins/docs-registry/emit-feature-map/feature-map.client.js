@@ -1,3 +1,4 @@
+// @ts-nocheck
 (function () {
   function init() {
     var root = document.querySelector('[data-feature-map]');
