@@ -10,7 +10,7 @@ ID: 026
 ID_Group: 1
 ID_Type: 1
 Идентификатор: 'linter.terms'
-designation: 'Находит <abbr class="term"></abbr> без определения в terms.yaml и предлагает перейти к файлу'
+designation: 'Находит <code>&#60;abbr class=&#34;term&#34;&#62;&#60;/abbr&#62;</code> без определения в terms.yaml и предлагает перейти к файлу'
 folder: 'src/plugins/terms/terms.linter.js, src/commands/diplodoc-helper.linter.terms.js'
 entrypoint: 'lintTerms(docsRoot, options) (ядро), ux_linter_terms(uri) (VS Code)'
 role: 'Термины'
