@@ -1,36 +1,46 @@
 // @ts-nocheck
-const fs = require('fs');
-const path = require('path');
+const { Fs_Walk_Directory } = require('../utils/fs/Fs_Walk_Directory.ts');
 const { extractFiguresFromFile } = require('./figures.extractor');
+
+/** @typedef {import('./figures.types.ts').FigureList} FigureList */
 
 // Чтобы не зациклиться и не тащить служебные страницы
 const SKIP_DIRS = new Set(['figures', 'contexts', 'helptags']);
 
 /**
+ * Собирает все рисунки из `.md`-файлов `langDir`.
+ *
+ * Асимметрии к другим коллекторам (см. 5a/5c):
+ *   - ходит в `.` и `_` (skipHidden: false, skipUnderscore: false) —
+ *     как `helptags` и `сontexts`;
+ *   - `SKIP_DIRS` содержит только `figures`, `contexts`, `helptags` —
+ *     `abbrs`, `terms`, `roadmap` **обходятся** (в них тоже бывают рисунки);
+ *   - нет `skipFullPaths`: `figures/` исключается по basename, отдельного
+ *     `path.resolve` нет.
+ *
  * @param {string} langDir
- * @returns {import('./figures.model').FigureInfo[]}
+ * @returns {FigureList}
  */
 function walkMdFilesGetFigures(langDir) {
+    /** @type {FigureList} */
     const figures = [];
 
-    function walk(dir) {
-        if (!fs.existsSync(dir)) return;
-        const entries = fs.readdirSync(dir, { withFileTypes: true });
-        for (const entry of entries) {
-            const fullPath = path.join(dir, entry.name);
-            if (entry.isDirectory()) {
-                if (!SKIP_DIRS.has(entry.name)) walk(fullPath);
-            } else if (entry.name.endsWith('.md')) {
-                try {
-                    figures.push(...extractFiguresFromFile(fullPath, langDir));
-                } catch (e) {
-                    console.error(`❌ [Figures] Ошибка обработки ${fullPath}:`, e.message);
-                }
+    Fs_Walk_Directory.walkSync({
+        dir: langDir,
+        skipHidden: false,
+        skipUnderscore: false,
+        skipDirNames: SKIP_DIRS,
+        filterFile: fullPath => fullPath.endsWith('.md'),
+        onFile: fullPath => {
+            try {
+                figures.push(...extractFiguresFromFile(fullPath, langDir));
+            } catch (e) {
+                const msg = e instanceof Error ? e.message : String(e);
+                console.error(`❌ [Figures] Ошибка обработки ${fullPath}:`, msg);
             }
-        }
-    }
+        },
+    });
 
-    walk(langDir);
     return figures;
 }
 
