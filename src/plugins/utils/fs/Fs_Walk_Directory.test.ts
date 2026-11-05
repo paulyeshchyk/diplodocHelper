@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { Fs_Walk_Directory } from './Fs_Walk_Directory';
+import { Fs_Walk_Directory } from './Fs_Walk_Directory.ts';
 
 let root: string;
 

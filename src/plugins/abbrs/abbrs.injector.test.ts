@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { injectAbbrTitlesIntoHtml } from './abbrs.injector';
+import { injectAbbrTitlesIntoHtml } from './abbrs.injector.js';
 
 function dict(entries: Array<[string, string]>): Map<string, any> {
     const m = new Map<string, any>();

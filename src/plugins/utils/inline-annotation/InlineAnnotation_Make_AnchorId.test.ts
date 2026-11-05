@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { InlineAnnotation_Make_AnchorId } from './InlineAnnotation_Make_AnchorId';
+import { InlineAnnotation_Make_AnchorId } from './InlineAnnotation_Make_AnchorId.ts';
 
 describe('InlineAnnotation_Make_AnchorId.makeAnchorId', () => {
     it('00.5.3#13 should build abbr anchor from ASCII name', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { String_Compare_Natural } from './String_Compare_Natural';
+import { String_Compare_Natural } from './String_Compare_Natural.ts';
 
 describe('String_Compare_Natural.compare', () => {
     it('00.1.1#01 should return 0 for identical strings', () => {

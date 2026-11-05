@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { Html_Escape_Text } from './Html_Escape_Text';
+import { Html_Escape_Text } from './Html_Escape_Text.ts';
 
 describe('Html_Escape_Text.escape', () => {
     it('00.5.3#01 should return empty string for empty input', () => {

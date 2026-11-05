@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { InlineAnnotation_TextRange } from './InlineAnnotation_TextRange';
+import { InlineAnnotation_TextRange } from './InlineAnnotation_TextRange.ts';
 
 const find = (text: string, offset: number) =>
     InlineAnnotation_TextRange.findAroundOffset(text, offset, 'abbr');

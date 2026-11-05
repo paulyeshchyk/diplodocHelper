@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { walkMdFilesGetTerms } from './terms.collector';
-import type { TermMap } from './terms.types';
+import { walkMdFilesGetTerms } from './terms.collector.js';
+import type { TermMap } from './terms.types.ts';
 
 let root: string;
 let langDir: string;

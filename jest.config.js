@@ -12,6 +12,10 @@ const config = {
     preset: 'ts-jest',
     testMatch: ['**/*.test.ts', '**/*.test.js'], // временно: и TS, и старые JS-заглушки
     moduleFileExtensions: ['ts', 'js', 'json'],
+     testPathIgnorePatterns: [
+         '/node_modules/',
+         '<rootDir>/docs/',
+     ],    
 };
 
 

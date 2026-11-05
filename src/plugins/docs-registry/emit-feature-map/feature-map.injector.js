@@ -3,8 +3,8 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { walk }       = require('../../utils/walk');
-const { isHtmlFile } = require('../../utils/html.utils');
+const { Fs_Walk_Directory }  = require('../../utils/fs/Fs_Walk_Directory.ts');
+const { Html_Classify_File } = require('../../utils/html/Html_Classify_File.ts');
 
 const STYLE_MARKER  = 'dl-feature-map-style';
 const CLIENT_MARKER = 'dl-feature-map-client';
@@ -23,26 +23,33 @@ function runGeneration(buildDir) {
 
   const results = { success: [], failed: [] };
 
-  walk(buildDir, (p) => isHtmlFile(p), (htmlPath) => {
-    try {
-      let html = fs.readFileSync(htmlPath, 'utf8');
-      if (!html.includes('data-feature-map')) return;
+  Fs_Walk_Directory.walkSync({
+    dir: buildDir,
+    // legacy `walk.js` не пропускал `.`-директории; сохраняем поведение 1:1
+    skipHidden: false,
+    filterFile: Html_Classify_File.isHtmlFile,
+    onFile: (htmlPath) => {
+      try {
+        let html = fs.readFileSync(htmlPath, 'utf8');
+        if (!html.includes('data-feature-map')) return;
 
-      const before = html;
-      if (!html.includes(`id="${STYLE_MARKER}"`)) {
-        html = html.replace('</head>', styleTag + '</head>');
+        const before = html;
+        if (!html.includes(`id="${STYLE_MARKER}"`)) {
+          html = html.replace('</head>', styleTag + '</head>');
+        }
+        if (!html.includes(`id="${CLIENT_MARKER}"`)) {
+          html = html.replace('</body>', clientTag + '</body>');
+        }
+        if (html !== before) {
+          fs.writeFileSync(htmlPath, html, 'utf8');
+          results.success.push(htmlPath);
+        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error(`❌ [feature-map] ${htmlPath}: ${msg}`);
+        results.failed.push(htmlPath);
       }
-      if (!html.includes(`id="${CLIENT_MARKER}"`)) {
-        html = html.replace('</body>', clientTag + '</body>');
-      }
-      if (html !== before) {
-        fs.writeFileSync(htmlPath, html, 'utf8');
-        results.success.push(htmlPath);
-      }
-    } catch (e) {
-      console.error(`❌ [feature-map] ${htmlPath}:`, e.message || e);
-      results.failed.push(htmlPath);
-    }
+    },
   });
 
   console.log(`[feature-map] CSS+JS инжектированы в ${results.success.length} HTML, ошибок: ${results.failed.length}`);

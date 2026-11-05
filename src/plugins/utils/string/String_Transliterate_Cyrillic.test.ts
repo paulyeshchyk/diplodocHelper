@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { String_Transliterate_Cyrillic } from './String_Transliterate_Cyrillic';
+import { String_Transliterate_Cyrillic } from './String_Transliterate_Cyrillic.ts';
 
 describe('String_Transliterate_Cyrillic.toLatin', () => {
     it('00.6.1#01 should transliterate lowercase cyrillic', () => {

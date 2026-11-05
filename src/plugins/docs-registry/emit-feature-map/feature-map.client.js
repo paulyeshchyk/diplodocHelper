@@ -1,4 +1,16 @@
 // @ts-nocheck
+
+// TODO(step-3): функции ниже дублируют FeatureMap_Filter_Engine.ts.
+// При переходе client.js → client.ts (через esbuild-бандл) заменить:
+//   attrsOf(chip)          → FeatureMap_Filter_Engine.attrsOf(chip.dataset)
+//   needs(k)               → FeatureMap_Filter_Engine.needs(state, k)
+//   chipMatches(chip)      → (удалить, dead code)
+//   anyActive()            → FeatureMap_Filter_Engine.anyActive(state)
+//   inline chip-class      → FeatureMap_Filter_Engine.computeChipClass(attrs, state)
+//   inline cell-class      → FeatureMap_Filter_Engine.computeCellClass(attrs[], state)
+//   inline counter         → FeatureMap_Filter_Engine.computeVisibility(attrs[], state)
+// Контракт зафиксирован тестами 57.3#01..#27.
+
 (function () {
   function init() {
     var root = document.querySelector('[data-feature-map]');

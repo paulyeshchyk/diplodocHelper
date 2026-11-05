@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { walkMdFilesGetHelptags } from './helptags.collector';
-import type { HelptagMap } from './helptags.types';
+import { walkMdFilesGetHelptags } from './helptags.collector.js';
+import type { HelptagMap } from './helptags.types.ts';
 
 let root: string;
 let langDir: string;

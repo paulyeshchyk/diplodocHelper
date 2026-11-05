@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "allowImportingTsExtensions": true,
+    "target": "ES2022",
+    "checkJs": true,
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "noImplicitAny": true,
+    "strictNullChecks": true
+  },
+  "include": [
+    "src/**/*",
+    "src/extension.js",
+    "global.d.ts"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "src/plugins/breadcrumb/breadcrumb.template.js"
+  ]
+}

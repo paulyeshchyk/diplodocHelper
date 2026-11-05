@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import type { ContextMap } from './contexts.types';
-import { walkMdFilesGetContexts } from './сontexts.collector';
+import type { ContextMap } from './contexts.types.ts';
+import { walkMdFilesGetContexts } from './сontexts.collector.js';
 
 let root: string;
 let langDir: string;

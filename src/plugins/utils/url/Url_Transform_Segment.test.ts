@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
-import { Url_Transform_Segment } from './Url_Transform_Segment';
-const { InlineAnnotation_Make_AnchorId } = require('../inline-annotation/InlineAnnotation_Make_AnchorId');
-const { buildFigureId } = require('../md.links.figure');
+import { InlineAnnotation_Make_AnchorId } from '../inline-annotation/InlineAnnotation_Make_AnchorId.ts';
+import { buildFigureId } from '../md.links.figure.js';
+import { Url_Transform_Segment } from './Url_Transform_Segment.ts';
 
 describe('Url_Transform_Segment.slugify — basics', () => {
     it('00.6.2#01 should return empty string for empty input', () => {

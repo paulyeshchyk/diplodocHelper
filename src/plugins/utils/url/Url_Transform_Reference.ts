@@ -1,4 +1,4 @@
-import { String_Transliterate_Cyrillic } from '../string/String_Transliterate_Cyrillic';
+import { String_Transliterate_Cyrillic } from '../string/String_Transliterate_Cyrillic.ts';
 
 /**
  * Slug для anchor'ов в Markdown-ссылках (`#my-heading`).

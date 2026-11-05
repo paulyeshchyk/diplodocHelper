@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { InlineAnnotation_Mask } from './InlineAnnotation_Mask';
+import { InlineAnnotation_Mask } from './InlineAnnotation_Mask.ts';
 
 describe('InlineAnnotation_Mask.maskCodeInMarkdown', () => {
     it('00.5.1#01 should return input untouched for plain text', () => {

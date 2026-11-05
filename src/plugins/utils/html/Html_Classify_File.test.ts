@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { Html_Classify_File } from './Html_Classify_File';
+import { Html_Classify_File } from './Html_Classify_File.ts';
 
 describe('Html_Classify_File.isHtmlFile', () => {
     it('00.4.1#01 should accept lowercase .html', () => {

@@ -4,12 +4,19 @@
 const fs = require('fs/promises');
 const path = require('path');
 const { GENERATED_DIR, DOCS_DIR, ASSETS_DIR } = require('../_paths.js');
+const { Html_Escape_Text } = require('../../utils/html/Html_Escape_Text.ts');
 
-function escHtml(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
+/**
+ * @deprecated См. `Html_Escape_Text.escape` — единая точка экранирования.
+ *
+ * Shim сохраняет **исторический контракт feature-map**: `null`/`undefined`
+ * → `''` (а не `'null'`/`'undefined'`, как в `Html_Escape_Text.escape`).
+ * Это единственное отличие от 4-й копии; для всех остальных входов
+ * поведение идентично.
+ *
+ * Regression: 57.1#07.
+ */
+const escHtml = (s) => (s == null ? '' : Html_Escape_Text.escape(s));
 
 function pickUsable(dim, index) {
   return Object.entries(dim.items || {})

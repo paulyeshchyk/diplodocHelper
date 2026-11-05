@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import { Url_Transform_Reference } from './Url_Transform_Reference';
-const { slugify_diplodoc_reference } = require('../encoding.slugify');
-const linkPaste = require('../../../commands/diplodoc-helper.link.Paste');
-const linkUtils = require('../link.utils');
+import linkPaste from '../../../commands/diplodoc-helper.link.Paste.js';
+import { slugify_diplodoc_reference } from '../encoding.slugify.js';
+import linkUtils from '../link.utils.js';
+import { Url_Transform_Reference } from './Url_Transform_Reference.ts';
 
 describe('Url_Transform_Reference.slugify — basics', () => {
     it('00.6.3#01 should return empty string for empty input', () => {

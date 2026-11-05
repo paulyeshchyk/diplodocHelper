@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { String_Slice_Middle } from './String_Slice_Middle';
+import { String_Slice_Middle } from './String_Slice_Middle.ts';
 
 describe('String_Slice_Middle.truncate', () => {
     it('00.3.1#01 should return input untouched when within maxLength', () => {

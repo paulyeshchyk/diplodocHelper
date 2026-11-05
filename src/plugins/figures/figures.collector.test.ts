@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { walkMdFilesGetFigures } from './figures.collector';
-import type { FigureList } from './figures.types';
+import { walkMdFilesGetFigures } from './figures.collector.js';
+import type { FigureList } from './figures.types.ts';
 
 let root: string;
 let langDir: string;

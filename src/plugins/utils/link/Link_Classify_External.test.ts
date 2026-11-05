@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { Link_Classify_External } from './Link_Classify_External';
+import { Link_Classify_External } from './Link_Classify_External.ts';
 
 describe('Link_Classify_External.classify', () => {
     it('00.2.1#01 should classify http scheme', () => {

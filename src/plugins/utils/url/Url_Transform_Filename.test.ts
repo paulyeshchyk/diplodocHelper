@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { Url_Transform_Filename } from './Url_Transform_Filename';
-const { slugify_filename } = require('../encoding.slugify');
+import { slugify_filename } from '../encoding.slugify.js';
+import { Url_Transform_Filename } from './Url_Transform_Filename.ts';
 
 describe('Url_Transform_Filename.slugify — basics', () => {
     it('00.6.4#01 should return empty string for empty input', () => {

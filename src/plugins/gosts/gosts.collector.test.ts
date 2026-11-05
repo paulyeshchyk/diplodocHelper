@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, it } from '@jest/globals';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { collectGostReferences } from './gosts.collector';
-import type { GostRefs } from './gosts.types';
+import { collectGostReferences } from './gosts.collector.js';
+import type { GostRefs } from './gosts.types.ts';
 
 
 let root: string;
