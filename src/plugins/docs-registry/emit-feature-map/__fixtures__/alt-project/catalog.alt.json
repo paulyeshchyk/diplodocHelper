@@ -1,0 +1,99 @@
+{
+  "docsRoot": "/fake/guidelines/manuals",
+  "modules": {
+    "ManualA": {
+      "dir": "ManualA",
+      "id": "100",
+      "ident": "ManualA",
+      "audiences": [
+        "beginner"
+      ],
+      "topics": [
+        "intro"
+      ],
+      "stages": [
+        "draft"
+      ],
+      "designation": "A manual for beginners"
+    },
+    "ManualB": {
+      "dir": "ManualB",
+      "id": "101",
+      "ident": "ManualB",
+      "audiences": [
+        "advanced"
+      ],
+      "topics": [
+        "reference"
+      ],
+      "stages": [
+        "published"
+      ],
+      "designation": "B manual for advanced users"
+    }
+  },
+  "dimensions": {
+    "audience": {
+      "items": {
+        "beginner": {
+          "dir": "Audience/Beg",
+          "title": "Beginner"
+        },
+        "advanced": {
+          "dir": "Audience/Adv",
+          "title": "Advanced"
+        }
+      }
+    },
+    "topic": {
+      "items": {
+        "intro": {
+          "dir": "Topic/Intro",
+          "title": "Introduction"
+        },
+        "reference": {
+          "dir": "Topic/Ref",
+          "title": "Reference"
+        }
+      }
+    },
+    "stage": {
+      "items": {
+        "draft": {
+          "dir": "Stage/Draft",
+          "title": "Draft"
+        },
+        "published": {
+          "dir": "Stage/Pub",
+          "title": "Published"
+        }
+      }
+    }
+  },
+  "index": {
+    "audience": {
+      "beginner": [
+        "ManualA"
+      ],
+      "advanced": [
+        "ManualB"
+      ]
+    },
+    "topic": {
+      "intro": [
+        "ManualA"
+      ],
+      "reference": [
+        "ManualB"
+      ]
+    },
+    "stage": {
+      "draft": [
+        "ManualA"
+      ],
+      "published": [
+        "ManualB"
+      ]
+    }
+  }
+}

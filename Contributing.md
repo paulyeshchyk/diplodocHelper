@@ -1,4 +1,4 @@
-# Contributing
+# CONTRIBUTING.md
 
 Документ о том, как мы пишем код, тесты и миграции в этом репозитории.
 Не «best practices вообще», а конкретные правила, которые мы уже
@@ -51,8 +51,8 @@ import { describe, expect, it } from '@jest/globals';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { TestSubject } from './TestSubject';
-import type { TestTypes } from './TestTypes';
+import { TestSubject } from './TestSubject.ts';
+import type { TestTypes } from './TestTypes.ts';
 ```
 
 **Cross-module `require` — в шапке файла, не внутри `it`:**
@@ -127,6 +127,9 @@ describe('MyModule frozen snapshot (legacy migrated)', () => {
 - `expect(...).not.toBeNull()` без конкретного `toBe(...)` — не защита.
 - Хардкод конкретного сообщения об ошибке — тест должен падать на
   логике, не на формулировке.
+- Импорт модулей, зависящих от `vscode`, из тестов утилит (`src/utils/**`).
+  `vscode` доступен только в extension host; в Node — `Cannot find module`.
+  Тесты утилит не должны тянуть команды/UI.
 
 ---
 
@@ -152,15 +155,64 @@ const { String_Compare_Natural } = require('../../utils/string/String_Compare_Na
 
 ### 2.2. `import` внутри `.ts`
 
-**Без** расширения — `ts-jest` и TypeScript резолвят сами:
+**С явным расширением.** Этого требует нативный Node 24 (strip-types +
+ESM resolver). Extensionless `import ... from './X'` пропускают ts-jest
+и esbuild, но `node ./plugins/X.js` падает с `ERR_MODULE_NOT_FOUND`.
+
+Правила:
+
+- собственный `.ts`-модуль → `.ts`:
+  ```typescript
+  import { String_Transliterate_Cyrillic } from '../string/String_Transliterate_Cyrillic.ts';
+  ```
+- legacy CJS `.js`-модуль (ещё не мигрировавший) → `.js`:
+  ```typescript
+  import { slugify_latin_alphanumeric } from '../encoding.slugify.js';
+  ```
+- внешние пакеты (`node:fs`, `js-yaml`) → без расширения:
+  ```typescript
+  import * as fs from 'node:fs';
+  import yaml from 'js-yaml';
+  ```
+
+**Многострочные импорты** — расширение на последней строке:
 
 ```typescript
-// правильно
-import { String_Transliterate_Cyrillic } from '../string/String_Transliterate_Cyrillic';
-
-// неправильно
-import { ... } from '../string/String_Transliterate_Cyrillic.ts';
+import {
+    FeatureMap_Filter_Engine,
+    STRIP_KEYS,
+    type ChipAttrs,
+} from './FeatureMap_Filter_Engine.ts';
 ```
+
+**Директорные импорты** (`from '.'`) — **не работают** под нативным
+Node (strip-types требует явный файл, `.` резолвится в директорию).
+Разворачивать:
+
+```typescript
+// неправильно
+import { run } from '.';
+
+// правильно
+import { run } from './index.ts';
+```
+
+Правило действует **на все `.ts`-файлы**, включая `.test.ts`. Тесты
+запускаются через ts-jest (терпит extensionless), но если скопировать
+такой импорт в production — CLI упадёт. Единое правило проще соблюдать,
+чем исключение.
+
+Проверка (Linux/macOS):
+
+```bash
+git grep -nE "from '\.[^']*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
+```
+
+Если вывод пуст — все относительные импорты корректны.
+
+**Известный warning:** `MODULE_TYPELESS_PACKAGE_JSON` при `node ./plugins/X.js`.
+Причина — `package.json` без `"type"`. Не фиксить через `"type": "module"`
+(сломает `.js` с `require`). Плановое решение — CLI-A (прекомпиляция).
 
 ### 2.3. Типы для «словарей» и «массивов объектов»
 
@@ -170,7 +222,7 @@ import { ... } from '../string/String_Transliterate_Cyrillic.ts';
 - Есть отдельный `Foo.types.ts` в папке модуля.
 - JSDoc в legacy-файле ссылается на него:
   `/** @typedef {import('./Foo.types.ts').FooMap} FooMap */`
-- TS-тест импортирует через `import type { FooMap } from './Foo.types';`
+- TS-тест импортирует через `import type { FooMap } from './Foo.types.ts';`
 
 Пример (`gosts`):
 
@@ -183,7 +235,7 @@ export type GostRefs = Record<string, GostRef[]>;
 const refs = {};
 
 // gosts.collector.test.ts
-import type { GostRefs } from './gosts.types';
+import type { GostRefs } from './gosts.types.ts';
 const refs: GostRefs = collectGostReferences(langDir, gostList);
 ```
 
@@ -222,6 +274,23 @@ const refs: GostRefs = collectGostReferences(langDir, gostList);
 
 Тип-файлы: `Foo.types.ts` **в папке модуля-хозяина** (`src/plugins/gosts/gosts.types.ts`),
 не в `src/utils/types/`.
+
+### 2.6. CLI-флаги до `require` (prelude)
+
+Флаги, влияющие на `_paths.js` (сейчас — `--docs-project-root`), нужно
+разбирать в prelude `diplodoc-helper-cli.js` **до** первого `require`.
+`_paths.js` кешируется Node'ом и читает `process.env` однократно.
+Поддерживай обе формы:
+
+```js
+for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a.startsWith('--flag='))        { ... = a.slice('--flag='.length); argv.splice(i, 1); break; }
+    if (a === '--flag' && argv[i + 1])  { ... = argv[i + 1];               argv.splice(i, 2); break; }
+}
+```
+
+Первая форма (`--key=value`) коварна: `argv.indexOf('--flag')` её **не находит**.
 
 ---
 
@@ -297,6 +366,23 @@ export class Url_Transform_Segment {
 const oldFunctionName = Foo.staticMethod;
 ```
 
+### Шаг 3.5. После `git mv X.js X.ts` — заменить тело целиком
+
+`git mv` переименовывает, но **не** меняет содержимое. В `.ts`-файле
+остаётся CJS-тело с `require(...)` и `module.exports = { ... }`.
+
+Проверка сразу после `mv`:
+
+```bash
+grep -nE "module\.exports|^const .* = require\(" src/**/X.ts
+```
+
+Если найдено — тело не заменено. Заменяй целиком, не «наклеивай
+`export` в начало».
+
+Симптом, если пропустить: `TS2306: File is not a module` при `import
+from './X.ts'`.
+
 ### Шаг 4. Прогон
 
 `npm test -- Foo` → зелёные. Затем `npm test` целиком.
@@ -370,28 +456,53 @@ change для существующих документов и/или внешн
 
 ---
 
- ## 6. Feature-map: особый случай
- 
-`feature-map` — **не** в общем пайплайне миграций, у неё свой цикл
-(FM-pre, FM-a..d). Причина: планируется поддержка другого проекта
-(другие измерения, другие пути, другой набор статей). Любая правка
-`feature-map.*` должна проверяться тестами по следующей схеме:
+## 6. Feature-map: особый случай
 
-| Модуль                                         | Кейсы          | Что покрывают                                                                             |
-| ---------------------------------------------- | -------------- | ----------------------------------------------------------------------------------------- |
-| `emit-feature-map/index.js`                    | `57.1#01..#09` | генерация `feature-map.md` из `catalog.json`                                              |
-| `emit-feature-map/feature-map.injector.js`     | `57.2#01..#03` | инжект CSS+JS в HTML-страницы сборки                                                      |
-| `emit-feature-map/FeatureMap_Filter_Engine.ts` | `57.3#01..#27` | чистая логика фильтрации (attrsOf, computeChipClass, computeCellClass, computeVisibility) |
+`feature-map` — **не** в общем пайплайне миграций, у неё свой цикл.
+Причина: поддержка разных проектов (другие измерения, другие пути,
+другой набор статей). Отдельное руководство — `FEATURE-MAP.md`.
+
+Любая правка `feature-map.*` должна проверяться тестами по схеме:
+
+| Модуль                                         | Кейсы          | Что покрывают                                 |
+| ---------------------------------------------- | -------------- | --------------------------------------------- |
+| `emit-feature-map/index.ts`                    | `57.1#01..#09` | генерация `feature-map.md` (дефолтный конфиг) |
+| `emit-feature-map/feature-map.injector.ts`     | `57.2#01..#03` | инжект CSS+JS в HTML-страницы сборки          |
+| `emit-feature-map/FeatureMap_Filter_Engine.ts` | `57.3#01..#27` | чистая логика фильтрации                      |
+| `emit-feature-map/index.ts` (alt-project)      | `57.4#01..#09` | генерация с `--config` (второй проект)        |
+| `emit-feature-map/index.ts` (path overrides)   | `57.5#01..#03` | `opts.docsDir` / `opts.generatedDir`          |
 
 **Константы для тестов** — в `const FM = {...}` в шапке каждого тест-файла.
 При изменении пути вывода, anchor'а, измерений или i18n — правится
-только этот блок, тело тестов не трогается (см. Шаг 5 плана FM).
+только этот блок, тело тестов не трогается.
 
-**Состояние FeatureMap_Filter_Engine:** reference implementation.
-`feature-map.client.js` остаётся браузерным IIFE, его inline-функции
-дублируют Engine (синхронизируются вручную до шага 3, где будет введён
-esbuild-бандл). При любой правке inline-функций в `client.js` —
-обновить Engine и прогнать `57.3.*`.
+**`pluginDir` — обязательный параметр `runGeneration`.** В ESM нет
+`__dirname`, поэтому путь к ассетам передаётся явно. Вызывающие:
+`diplodoc-helper-cli.js` (CJS — использует свой `__dirname`) и тесты
+(`ts-jest` — CJS-режим).
+
+**Три способа переопределить пути.**
+
+1. `--docs-project-root=<root>` — глобально, через `process.env.DOCS_PROJECT_ROOT`.
+   `_paths.js` пересчитывает `DOCS_DIR`, `GENERATED_DIR`, `REGISTRY_DIR`,
+   `ASSETS_DIR` от `root`. Применяется ко **всем** `docs-registry/*` командам.
+   Predule-обработка (см. §2.6).
+2. `--docs-root=<docs-dir>` — точечно, только `runEmitFeatureMap`.
+   Передаётся через `opts.docsDir`.
+3. `--generated-dir=<gen-dir>` — точечно, `opts.generatedDir`. Только для
+   чтения `catalog.<lang>.json` при отсутствии `--catalog`.
+
+Приоритет: `opts.docsDir` / `opts.generatedDir` > `_paths.js` (env или дефолт).
+
+**`docsRoot` должен быть внутри `docsDir`.** Если `catalog.docsRoot`
+указывает за пределы `opts.docsDir` / `DOCS_DIR`, `docsRootRel` начнётся
+с `..`, и сгенерированные `href` станут `/../...` — технически битые
+в браузере. В штатном втором проекте `docsRoot` — подпапка `docsDir`.
+
+**`--config=<path>`.** Переопределяет `DEFAULT_FEATURE_MAP_CONFIG` из
+JSON-файла. Merge — shallow на верхнем уровне: любой ключ заменяет
+значение из дефолта целиком. Неизвестные ключи игнорируются с
+`console.warn` (forward-compat). Подробности — `FEATURE-MAP.md`.
 
 ---
 
@@ -405,6 +516,27 @@ esbuild-бандл). При любой правке inline-функций в `cl
 `npm run precompile` автоматически гоняет `validate` перед сборкой —
 локальный `npm run build:prod` упадёт, если тесты красные. Это
 намеренно.
+
+### 7.1. `docs/plugins/` — зеркало, не источник правды
+
+`installScripts` копирует `src/plugins/` в `docs/plugins/` для того,
+чтобы target-project мог работать без VS Code-расширения. Это значит,
+что в `docs/plugins/` лежат **копии** `.ts`-модулей и `.test.ts`-файлов.
+
+Правила:
+
+- **Jest** не должен туда заходить → `testPathIgnorePatterns: ['<rootDir>/docs/']`
+  (см. `jest.config.js`).
+- **`tsc --noEmit`** туда не заходит → `tsconfig.json#include` содержит
+  только `src/**/*.js` + `global.d.ts`.
+- **`node ./plugins/X.js`** из `docs/` работает — `require('./Y.ts')`
+  поддерживается нативным Node 24+ (см. §2.1).
+- При правке `src/plugins/**` — `docs/plugins/**` **не синхронизируется
+  автоматически**. Если нужен свежий тест в `docs/` — переустановить
+  скрипты через `installScripts` (в `.test.ts` в ignore-листе, поэтому
+  копироваться будут только runtime-файлы).
+- Тесты в `docs/plugins/` **не запускаются** — это зеркало, могут тянуть
+  `require('vscode')`, недоступный вне extension host.
 
 ---
 
@@ -433,6 +565,13 @@ git grep -n "functionName\b" -- ':!<файл-определения>'
 # Все словарные литералы без типизации (кандидаты на *.types.ts)
 git grep -n 'const \w* = {}' src/plugins/
 
+# Все extensionless relative imports в .ts
+git grep -nE "from '\.[^']*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
+
 # Все места, где используется slugify-семейство
 git grep -nE "slugify_(latin|latin_alphanumeric|filename|diplodoc_reference)" src/
+
+# Все .ts-файлы без tracked в git (проверка перед коммитом)
+git ls-files | grep '\.test\.ts$' | wc -l
+find src -name '*.test.ts' | wc -l
 ```

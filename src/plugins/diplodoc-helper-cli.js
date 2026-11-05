@@ -4,6 +4,30 @@
 // diplodoc-helper-cli.js
 const path = require('path');
 const fs = require('fs');
+
+
+// ── prelude: --docs-project-root должен быть известен ДО первого require
+//    модуля, транзитивно подтягивающего `_paths.js` (кешируется Node).
+//    Поддерживаем обе формы: '--docs-project-root=<path>' и
+//    '--docs-project-root <path>'.
+const __args = process.argv.slice(2);
+for (let i = 0; i < __args.length; i++) {
+    const a = __args[i];
+    if (a.startsWith('--docs-project-root=')) {
+        process.env.DOCS_PROJECT_ROOT = a.slice('--docs-project-root='.length);
+        __args.splice(i, 1);
+        break;
+    }
+    if (a === '--docs-project-root' && __args[i + 1]) {
+        process.env.DOCS_PROJECT_ROOT = __args[i + 1];
+        __args.splice(i, 2);
+        break;
+    }
+}
+// ─────────────────────────────────────────────────────────────────────────
+
+const featureMapPluginDir = path.join(__dirname, 'docs-registry', 'emit-feature-map');
+
 const { runGeneration: generateHelpMap } = require('./helpMap/helpmap.js');
 const { runGeneration: generateContexts } = require('./contexts/сontexts.js');
 const { runGeneration: generateHelptags } = require('./helptags/helptags.js');
@@ -27,13 +51,13 @@ const { runGeneration: injectTermTitles } = require('./terms/terms.injector.js')
 const { runGeneration: generateGosts } = require('./gosts/gosts.js');
 const { runGeneration: generateComments } = require('./comments/comments.js');
 const { convertJsonToMdTable } = require('./json-to-md/json-to-md-table.js');
-const { runEmitFeatureMap } = require('./docs-registry/emit-feature-map/index.js');
-const { runGeneration: injectFeatureMap } = require('./docs-registry/emit-feature-map/feature-map.injector.js');
+const { runEmitFeatureMap } = require('./docs-registry/emit-feature-map/index.ts');
+const { runGeneration: injectFeatureMap } = require('./docs-registry/emit-feature-map/feature-map.injector.ts');
 
 const { injectGostsTable } = require('./gosts/gosts.injector.js');
 // Если запускают как cli
 if (require.main === module) {
-    const args = process.argv.slice(2);
+    const args = __args;
     const command = args[0];
 
     const asyncHandlers = {
@@ -132,12 +156,17 @@ if (require.main === module) {
     } else if (command === 'reindexFootnotes') {
         reindexFootnotes(docsDir);
     } else if (command === 'emitFeatureMap') {
-        const { runEmitFeatureMap } = require('./docs-registry/emit-feature-map/index.js');
-        runEmitFeatureMap(args.slice(1)).catch(e => { console.error(e.message || e); process.exit(1); });
+        const opts = {};
+        const docsRoot   = extractFlag(args, '--docs-root');
+        const generated  = extractFlag(args, '--generated-dir');
+        if (docsRoot)  opts.docsDir      = docsRoot;
+        if (generated) opts.generatedDir = generated;
+        runEmitFeatureMap(args.slice(1), opts)
+            .catch(e => { console.error(e.message || e); process.exit(1); });
     } else if (command === 'featureMapInject') {
         const buildDirIdx = args.indexOf('--buildDir');
         const buildDir = buildDirIdx !== -1 ? args[buildDirIdx + 1] : outputDir;
-        injectFeatureMap(buildDir);
+        injectFeatureMap(buildDir, { pluginDir: featureMapPluginDir });
     } else if (command === 'footnoteNumbering') {
         renumberFootnotes({ docsDir, outputDir });
     } else if (command === 'roadMap') {
@@ -209,6 +238,16 @@ function findSectionIndexHtml(rootDir, sectionName) {
             if (e.name.startsWith('_') || e.name.startsWith('.')) continue;
             stack.push(full);
         }
+    }
+    return null;
+}
+
+// --- helper для парсинга --flag и --flag=value ---
+function extractFlag(argv, name) {
+    for (let i = 0; i < argv.length; i++) {
+        const a = argv[i];
+        if (a.startsWith(name + '=')) return a.slice(name.length + 1);
+        if (a === name && argv[i + 1]) return argv[i + 1];
     }
     return null;
 }

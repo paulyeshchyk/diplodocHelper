@@ -1,0 +1,23 @@
+{
+  "outputPathTemplate": "{lang}/Guidelines/FM/map.md",
+  "moduleHrefAnchor": "purpose",
+  "moduleHrefTemplate": "/{docsRootRel}/{dir}/index.html#{anchor}",
+  "stripDimensions": [
+    "audience"
+  ],
+  "stripLabels": {
+    "audience": "Audience"
+  },
+  "rowDimension": "topic",
+  "columnDimension": "stage",
+  "dimToFieldMap": {
+    "audience": "audiences",
+    "topic": "topics",
+    "stage": "stages"
+  },
+  "title": "Guidelines Map",
+  "sectionType": "Article",
+  "counterPlaceholder": "Showing: —",
+  "resetButtonText": "Reset",
+  "emptyCellSymbol": "—"
+}
