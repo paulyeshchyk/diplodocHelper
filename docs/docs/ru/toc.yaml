@@ -55,3 +55,13 @@ items:
     include:
       path: Дополнительнаяинформация/toc.yaml
       mode: link
+  - name: Рефакторинг
+    href: Рефакторинг/index.md
+    include:
+      path: Рефакторинг/toc.yaml
+      mode: link
+  - name: Contributing
+    href: Contributing/index.md
+    include:
+      path: Contributing/toc.yaml
+      mode: link

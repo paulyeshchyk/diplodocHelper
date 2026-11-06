@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { DOCS_DIR } from '../_paths.js';
+import { DOCS_DIR } from '../_paths.ts';
 import { runEmitFeatureMap } from './index.ts';
 
 /**
@@ -68,50 +68,64 @@ function makeFixture(docsRoot: string) {
                 capabilities: ['cap-2'],
                 // designation намеренно отсутствует — проверяем escHtml(undefined) → ''
             },
+            // МодульGamma — БЕЗ ident: проверяем fallback на dir (57.1#11)
+            'МодульGamma': {
+                dir: 'МодульGamma',
+                id: '3',
+                actors: ['ci'],
+                layers: ['cli'],
+                families: ['fam-a'],
+                capabilities: ['cap-1'],
+                designation: 'Gamma desc',
+            },
+            // МодульDelta — БЕЗ ident и с вложенным dir: проверяем
+            // basename-фолбэк для чипа (57.1#13).
+            'nested/МодульDelta': {
+                dir: 'nested/МодульDelta',
+                id: '4',
+                actors: ['ci'],
+                layers: ['cli'],
+                families: ['fam-a'],
+                capabilities: ['cap-1'],
+                designation: 'Delta desc',
+            },            
         },
         dimensions: {
-            actor: {
-                items: {
-                    ci: { dir: 'A/CI', title: 'CI' },
-                    techwriter: { dir: 'A/TW', title: 'Techwriter' },
-                    reader: { dir: 'A/Reader', title: 'Reader' }, // в index[] пусто — отфильтруется
-                }
-            },
-            capability: {
-                items: {
-                    'cap-1': { dir: 'C/1', title: 'Cap1' },
-                    'cap-2': { dir: 'C/2', title: 'Cap2' },
-                }
-            },
-            layer: {
-                items: {
-                    cli: { dir: 'L/CLI', title: 'CLI' },
-                    ui: { dir: 'L/UI', title: 'UI' },
-                }
-            },
-            family: {
-                items: {
-                    'fam-a': { dir: 'F/A', title: 'FamA' },
-                    'fam-b': { dir: 'F/B', title: 'FamB' },
-                }
-            },
+            actor: { items: {
+                ci:         { dir: 'A/CI',     title: 'CI' },
+                techwriter: { dir: 'A/TW',     title: 'Techwriter' },
+                reader:     { dir: 'A/Reader', title: 'Reader' }, // в index[] пусто — отфильтруется
+            } },
+            capability: { items: {
+                'cap-1': { dir: 'C/1', title: 'Cap1' },
+                'cap-2': { dir: 'C/2', title: 'Cap2' },
+            } },
+            layer: { items: {
+                cli: { dir: 'L/CLI', title: 'CLI' },
+                ui:  { dir: 'L/UI',  title: 'UI' },
+            } },
+            family: { items: {
+                'fam-a': { dir: 'F/A', title: 'FamA' },
+                'fam-b': { dir: 'F/B', title: 'FamB' },
+            } },
         },
+
         index: {
             actor: {
-                ci: ['МодульAlpha'],
+                ci:         ['МодульAlpha', 'МодульGamma', 'nested/МодульDelta'],
                 techwriter: ['МодульBeta'],
-                reader: [], // пусто → pickUsable отфильтрует
+                reader:     [],
             },
             capability: {
-                'cap-1': ['МодульAlpha'],
+                'cap-1': ['МодульAlpha', 'МодульGamma', 'nested/МодульDelta'],
                 'cap-2': ['МодульBeta'],
             },
             layer: {
-                cli: ['МодульAlpha'],
-                ui: ['МодульBeta'],
+                cli: ['МодульAlpha', 'МодульGamma', 'nested/МодульDelta'],
+                ui:  ['МодульBeta'],
             },
             family: {
-                'fam-a': ['МодульAlpha'],
+                'fam-a': ['МодульAlpha', 'МодульGamma', 'nested/МодульDelta'],
                 'fam-b': ['МодульBeta'],
             },
         },
@@ -175,7 +189,7 @@ describe('feature-map.runEmitFeatureMap', () => {
     it('57.1#02 should wrap content in <div data-feature-map>', async () => {
         const md = await run();
 
-        expect(md).toContain('<div data-feature-map>');
+        expect(md).toMatch(/<div data-feature-map(\s|>)/);
         expect(md).toContain('</div>');
     });
 
@@ -208,20 +222,29 @@ describe('feature-map.runEmitFeatureMap', () => {
         expect(md).toContain(`data-strip="${FM.rowDimension}" data-value="fam-b"`);
     });
 
-    it('57.1#06 should embed module chip with correct href and data-attributes', async () => {
+    it('57.1#06 should embed module chip with href and data-attrs', async () => {
         const md = await run();
 
         const alphaHref = `/${docsRootRel}/МодульAlpha/index.html#${FM.moduleAnchor}`;
         expect(md).toContain(`class="fm-chip" href="${encodeURI(alphaHref)}"`);
         expect(md).toContain('data-module="МодульAlpha"');
-        expect(md).toContain('data-actor="ci"');
-        expect(md).toContain('data-cap="cap-1"');
-        expect(md).toContain('data-family="fam-a"');
-        expect(md).toContain('data-layer="cli"');
 
-        // Beta
-        expect(md).toContain('data-module="МодульBeta"');
-        expect(md).toContain('data-actor="techwriter"');
+        // data-attrs — валидный JSON (проверяем через JSON.parse).
+        const attrsMatch = md.match(
+            /data-attrs='([^']*)'[^>]*data-module="МодульAlpha"/,
+        );
+        expect(attrsMatch).not.toBeNull();
+        const attrs = JSON.parse(attrsMatch![1]);
+        expect(attrs.actor).toEqual(['ci']);
+        expect(attrs.capability).toEqual(['cap-1']);
+        expect(attrs.family).toEqual(['fam-a']);
+        expect(attrs.layer).toEqual(['cli']);
+
+        // Phase C: legacy individual attributes удалены.
+        expect(md).not.toContain('data-actor="');
+        expect(md).not.toContain('data-cap="');
+        expect(md).not.toContain('data-family="');
+        expect(md).not.toContain('data-layer="');
     });
 
     it('57.1#07 should escape HTML-sensitive chars but collapse undefined to ""', async () => {
@@ -253,6 +276,78 @@ describe('feature-map.runEmitFeatureMap', () => {
         expect(famARow![0]).toContain('data-module="МодульAlpha"');
         expect(famARow![0]).toContain('class="is-empty"');
     });
+
+    it('57.1#10 should emit data-dims on root element (strip ∪ row ∪ col)', async () => {
+        const md = await run();
+        expect(md).toMatch(/<div data-feature-map data-dims="[^"]*"/);
+        for (const dim of FM.stripDimensions) {
+            expect(md).toMatch(new RegExp(`data-dims="[^"]*${dim}[^"]*"`));
+        }
+        expect(md).toMatch(new RegExp(`data-dims="[^"]*${FM.rowDimension}[^"]*"`));
+        expect(md).toMatch(new RegExp(`data-dims="[^"]*${FM.columnDimension}[^"]*"`));
+    });
+
+    it('57.1#11 should fall back to dir for missing ident', async () => {
+        const md = await run();
+        // МодульGamma без ident в fixture → label = dir
+        const gammaChip = md.match(
+            /<a class="fm-chip"[^>]*data-module="МодульGamma"[^>]*>([^<]*)<\/a>/,
+        );
+        expect(gammaChip).not.toBeNull();
+        expect(gammaChip![1]).toBe('МодульGamma');
+    });
+
+    it('57.1#12 should emit data-attrs JSON with dim values for every declared dim', async () => {
+        const md = await run();
+        // МодульAlpha — все 4 dims: actor=ci, capability=cap-1, layer=cli, family=fam-a
+        const alphaMatch = md.match(
+            /<a class="fm-chip"[^>]*data-attrs='([^']*)'[^>]*data-module="МодульAlpha"/,
+        );
+        expect(alphaMatch).not.toBeNull();
+        const attrs = JSON.parse(alphaMatch![1]);
+        expect(attrs).toEqual({
+            actor: ['ci'],
+            capability: ['cap-1'],
+            layer: ['cli'],
+            family: ['fam-a'],
+        });
+    });
+
+    it('57.1#13 should fall back to basename(dir) for missing chipLabelField value', async () => {
+        const md = await run();
+        // 'nested/МодульDelta' без ident → label = 'МодульDelta' (basename),
+        // не полный 'nested/МодульDelta'.
+        const deltaChip = md.match(
+            /<a class="fm-chip"[^>]*data-module="nested\/МодульDelta"[^>]*>([^<]*)<\/a>/,
+        );
+        expect(deltaChip).not.toBeNull();
+        expect(deltaChip![1]).toBe('МодульDelta');
+    });
+
+    it('57.1#14 should respect chipLabelField from config', async () => {
+        const customConfigPath = path.join(root, 'chip-label-config.json');
+        fs.writeFileSync(
+            customConfigPath,
+            JSON.stringify({ chipLabelField: 'designation' }),
+            'utf8',
+        );
+        await runEmitFeatureMap([
+            '--lang=ru',
+            `--catalog=${catalogPath}`,
+            `--config=${customConfigPath}`,
+            `--out=${outPath}`,
+        ]);
+        const md = fs.readFileSync(outPath, 'utf8');
+
+        // Alpha.designation = 'Alpha desc' → label = 'Alpha desc'
+        const alphaChip = md.match(
+            /<a class="fm-chip"[^>]*data-module="МодульAlpha"[^>]*>([^<]*)<\/a>/,
+        );
+        expect(alphaChip).not.toBeNull();
+        expect(alphaChip![1]).toBe('Alpha desc');
+    });
+
+
 });
 
 describe('feature-map.runEmitFeatureMap — alt-project (57.4)', () => {
@@ -324,11 +419,27 @@ describe('feature-map.runEmitFeatureMap — alt-project (57.4)', () => {
 
     it('57.4#07 should place modules into (topic × stage) cells per dimToFieldMap', async () => {
         const md = await runAlt();
-        // ManualA: topics=[intro], stages=[draft] → ячейка (draft, intro)
-        // ManualB: topics=[reference], stages=[published] → ячейка (published, reference)
-        // Проверяем, что оба чипа есть
         expect(md).toContain('data-module="ManualA"');
         expect(md).toContain('data-module="ManualB"');
+
+
+        // data-attrs для alt-проекта: alt-измерения, без actor/cap/layer/family
+        const attrsMatch = md.match(
+            /data-attrs='([^']*)'[^>]*data-module="ManualA"/,
+        );
+        expect(attrsMatch).not.toBeNull();
+        const attrs = JSON.parse(attrsMatch![1]);
+        expect(attrs.audience).toEqual(['beginner']);
+        expect(attrs.topic).toEqual(['intro']);
+        expect(attrs.stage).toEqual(['draft']);
+        expect(attrs).not.toHaveProperty('actor');
+        expect(attrs).not.toHaveProperty('capability');
+
+        // Phase C: legacy individual attributes полностью удалены.
+        expect(md).not.toContain('data-actor="');
+        expect(md).not.toContain('data-cap="');
+        expect(md).not.toContain('data-family="');
+        expect(md).not.toContain('data-layer="');
     });
 
     it('57.4#08 should default-config still work without --config (regression)', async () => {

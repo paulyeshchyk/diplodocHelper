@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { Html_Escape_Text } from '../../utils/html/Html_Escape_Text.ts';
-import { DOCS_DIR, GENERATED_DIR } from '../_paths.js';
+import { DOCS_DIR, GENERATED_DIR } from '../_paths.ts';
 import { loadFeatureMapConfig } from './feature-map.constants.ts';
 import type {
     CatalogDimension,
@@ -83,6 +83,16 @@ export async function runEmitFeatureMap(
         return `/${docsRootRel}/${item.dir}/index.html`;
     };
 
+    // --- все измерения, участвующие в фильтрации/сетке ---
+    // Порядок: stripDimensions → row → col. Используется для:
+    //   1) data-dims на root `<div data-feature-map data-dims="…">`;
+    //   2) ключи data-attrs в chipHtml (только declared dims).
+    const allDims: string[] = Array.from(new Set([
+        ...cfg.stripDimensions,
+        cfg.rowDimension,
+        cfg.columnDimension,
+    ]));
+
     // --- поля в CatalogModule, соответствующие измерениям сетки ---
     const rowField = cfg.dimToFieldMap[cfg.rowDimension];
     if (!rowField) {
@@ -112,19 +122,34 @@ export async function runEmitFeatureMap(
         }
     }
 
-    // --- chip (карточка модуля) ---
+    // --- chip (карточка модуля) ---    
     const chipHtml = ({ dir, mod }: { dir: string; mod: CatalogModule }): string => {
-        const actorsAttr = (mod.actors ?? []).join(' ');
-        const capsAttr = (mod.capabilities ?? []).join(' ');
-        const famsAttr = (mod.families ?? []).join(' ');
-        const layersAttr = (mod.layers ?? []).join(' ');
-        const label = esc(mod.ident ?? '').trim();
+        // data-attrs: JSON `{ [dim]: string[] }` для всех declared dims,
+        // у которых у модуля есть непустые значения.
+        // Escaping: HTML-entity для `&<>'` (не `"` — атрибут в `'...'`,
+        // JSON.parse в браузере увидит исходный объект после entity-декодирования).
+        const dataAttrs: Record<string, string[]> = {};
+        for (const dim of allDims) {
+            const field = cfg.dimToFieldMap[dim];
+            if (!field) continue;
+            const raw = mod[field];
+            const values = Array.isArray(raw) ? raw : [];
+            if (values.length) dataAttrs[dim] = values;
+        }
+        const attrsJson = JSON.stringify(dataAttrs)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/'/g, '&#39;');
+
+        // chip label: cfg.chipLabelField (если scalar-строка) → basename(dir).
+        // Никогда не полный dir — в глубоких иерархиях карточка нечитаема.
+        const rawLabel = mod[cfg.chipLabelField];
+        const scalarLabel = typeof rawLabel === 'string' ? rawLabel.trim() : '';
+        const label = esc(scalarLabel || path.basename(dir));
 
         return `<a class="fm-chip" href="${encodeURI(hrefOfModule(dir))}" ` +
-            `data-actor="${esc(actorsAttr)}" ` +
-            `data-cap="${esc(capsAttr)}" ` +
-            `data-family="${esc(famsAttr)}" ` +
-            `data-layer="${esc(layersAttr)}" ` +
+            `data-attrs='${attrsJson}' ` +
             `data-module="${esc(dir)}" ` +
             `title="${esc(mod.designation ?? '')}">` +
             `${label}</a>`;
@@ -245,7 +270,7 @@ sectionType: ${cfg.sectionType}
 
 # ${cfg.title}
 
-<div data-feature-map>
+<div data-feature-map data-dims="${esc(allDims.join(','))}">
 ${stripsMarkup}
 ${toolbar}
 ${grid}

@@ -5,6 +5,8 @@
 const fs = require('fs/promises');
 const path = require('path');
 const yaml = require('js-yaml');
+require('../docs-registry/_paths.ts');
+const { DOCS_DIR, GENERATED_DIR, REGISTRY_DIR } = require('../docs-registry/_paths.ts');
 
 // ---------- CLI ----------
 const HELP = `

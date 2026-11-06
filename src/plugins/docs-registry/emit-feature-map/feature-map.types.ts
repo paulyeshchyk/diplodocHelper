@@ -23,32 +23,81 @@ export interface CatalogDimension {
 }
 
 /**
- * Один модуль из `catalog.modules`. Поля `actors`/`layers`/`families`/`capabilities`
- * соответствуют `dimensions.*.items` — это слаги, а не отображаемые имена.
- * `designation` может отсутствовать — `escHtml(undefined)` → `''`.
+ * Один модуль из `catalog.modules`.
+ *
+ * Служебные поля (`dir` / `path` / `id` / `ident` / `designation`) —
+ * общие для любого проекта; измерение — это произвольный ключ с массивом
+ * слагов (`[measurement]`).
+ *
+ * **Fallback-правила:**
+ *   - `ident` отсутствует → `chipHtml` использует `dir` как label;
+ *   - `id` отсутствует → сортировка `index[dim][slug]` использует `dir`
+ *     вместо числового id (`String_Compare_Natural.compare`).
+ *
+ * `path` опционален — заполняется `collect-catalog`, `feature-map` его не читает.
  */
 export interface CatalogModule {
+    /** Относительный путь от `docsRoot`. Обязателен — используется в href. */
     dir: string;
-    id: string;
-    ident: string;
-    actors?: string[];
-    layers?: string[];
-    families?: string[];
-    capabilities?: string[];
+
+    /** Путь к `index.md`. Заполняется `collect-catalog`. */
+    path?: string;
+
+    /** Ключ для natural-sort. Fallback — `dir`. */
+    id?: string;
+
+    /** Текст карточки. Fallback — `dir`. */
+    ident?: string;
+
+    /** Tooltip карточки. Fallback — `''`. */
     designation?: string;
-    [key: string]: unknown;
+
+    /**
+     * Все измерения — произвольные ключи. Значения — массивы слагов
+     * (совпадают с `dimensions.<dim>.items.<slug>`).
+     *
+     * Не измерение = служебное поле (`dir` / `path` / `id` / `ident` / `designation`).
+     */
+    [measurement: string]: string | string[] | undefined;
+
+    /**
+     * Имя поля `CatalogModule`, из которого берётся текст карточки чипа.
+     *
+     * Приоритет:
+     *   1. `mod[chipLabelField]` — если это непустая строка;
+     *   2. `path.basename(mod.dir)` — **никогда** не полный `dir`
+     *      (глубокие иерархии `Registry/МодульX` делают карточку нечитаемой).
+     *
+     * Типичные значения: `'ident'` (default), `'designation'`, `'id'`,
+     * любой scalar-ключ из `_fields.yaml` (`kind !== 'multi'`).
+     *
+     * Если поле — массив (multi-измерение), используется `basename(dir)`.
+     *
+     * @configurable
+     */
+    chipLabelField: string;
 }
 
 /**
  * Снимок каталога — то, что читается из `catalog.<lang>.json`.
  */
 export interface CatalogSnapshot {
+
     /** Абсолютный путь к папке с модулями. */
     docsRoot: string;
     modules: Record<string, CatalogModule>;
     dimensions: Record<string, CatalogDimension>;
+
     /** `dimName → { slug → [moduleDir, ...] }`. */
     index: Record<string, Record<string, string[]>>;
+
+    /**
+     * Путь к реестру (`dimensions.yaml` или `<lang>.yaml`), из которого
+     * собраны `dimensions`. Заполняется `collect-catalog`.
+     * Используется для сообщений об ошибках (как `printUnknownError`
+     * в `build-page-legend`).
+     */
+    registryPath?: string;
 }
 
 /**
@@ -123,4 +172,21 @@ export interface FeatureMapConfig {
 
     /** Символ пустой ячейки. */
     emptyCellSymbol: string;
+
+    /**
+ * Имя поля `CatalogModule`, из которого берётся текст карточки чипа.
+ *
+ * Приоритет:
+ *   1. `mod[chipLabelField]` — если это непустая строка;
+ *   2. `path.basename(mod.dir)` — **никогда** не полный `dir`
+ *      (глубокие иерархии `Registry/МодульX` делают карточку нечитаемой).
+ *
+ * Типичные значения: `'ident'` (default), `'designation'`, `'id'`,
+ * любой scalar-ключ из `_fields.yaml` (`kind !== 'multi'`).
+ *
+ * Если поле — массив (multi-измерение), используется `basename(dir)`.
+ *
+ * @configurable
+ */
+    chipLabelField: string;
 }

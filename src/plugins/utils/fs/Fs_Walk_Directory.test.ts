@@ -124,6 +124,36 @@ describe('Fs_Walk_Directory.walkSync', () => {
             [path.join(root, 'a.md'), path.join(root, 'sub', 'c.md')].sort(),
         );
     });
+    it('00.4.2#55 should call onDirectory for each non-skipped dir in pre-order', () => {
+        const dirs: string[] = [];
+        Fs_Walk_Directory.walkSync({
+            dir: root,
+            onFile: () => {},
+            onDirectory: p => dirs.push(p),
+        });
+        // pre-order: parent before child. root has 'sub', '.hidden', '_assets', 'node_modules'.
+        // default skipHidden=true → .hidden excluded.
+        expect(dirs).toContain(path.join(root, 'sub'));
+        expect(dirs).toContain(path.join(root, '_assets'));
+        expect(dirs).toContain(path.join(root, 'node_modules'));
+        expect(dirs).not.toContain(path.join(root, '.hidden'));
+    });
+
+    it('00.4.2#56 should not call onDirectory for skipped dirs', () => {
+        const dirs: string[] = [];
+        Fs_Walk_Directory.walkSync({
+            dir: root,
+            skipHidden: false,
+            skipUnderscore: true,
+            skipDirNames: new Set(['node_modules']),
+            onFile: () => {},
+            onDirectory: p => dirs.push(p),
+        });
+        expect(dirs).toContain(path.join(root, 'sub'));
+        expect(dirs).toContain(path.join(root, '.hidden'));
+        expect(dirs).not.toContain(path.join(root, '_assets'));
+        expect(dirs).not.toContain(path.join(root, 'node_modules'));
+    });
 });
 
 describe('Fs_Walk_Directory.collectFiles', () => {

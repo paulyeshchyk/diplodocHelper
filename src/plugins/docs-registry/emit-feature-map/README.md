@@ -174,6 +174,7 @@ interface FeatureMapConfig {
     counterPlaceholder: string;         // 'Показано: —'
     resetButtonText: string;            // 'Сбросить все'
     emptyCellSymbol: string;            // '·'
+    chipLabelField: string;             // 'ident' (default) | 'designation' | 'id' | ...
 }
 ```
 
@@ -194,6 +195,13 @@ interface FeatureMapConfig {
   `naznachenie`, `specifications` или любой id внутри статьи.
 - **`outputPathTemplate`** — куда положить `feature-map.md`. Поддерживает
   `{lang}`. Относительный путь от `DOCS_DIR`.
+- **`chipLabelField`** — имя поля `CatalogModule`, из которого берётся
+  текст карточки чипа. Приоритет:
+  1. `mod[chipLabelField]`, если это непустая строка;
+  2. `path.basename(mod.dir)` — **никогда** не полный `dir`
+    (глубокие иерархии `Registry/МодульX` делают карточку нечитаемой).
+
+Если поле — массив (multi-измерение), используется `basename(dir)`.  
 
 **Merge при `--config`:** shallow на верхнем уровне. Чтобы изменить
 `stripLabels`, нужно указать **весь** объект. Неизвестные ключи
@@ -457,7 +465,8 @@ frontmatter).
     "sectionType": "Page",
     "counterPlaceholder": "Показано: —",
     "resetButtonText": "Сбросить все",
-    "emptyCellSymbol": "·"
+    "emptyCellSymbol": "·",
+    "chipLabelField": "ident",   // → 'iPhone 15 Pro' из frontmatter ident
 }
 ```
 
@@ -620,6 +629,29 @@ node ./src/plugins/diplodoc-helper-cli.js emitFeatureMap \
 При `node ./plugins/X.js` — это перф-предупреждение Node о reparse
 `.ts` как ESM. Не ошибка. Уйдёт в CLI-A (прекомпиляция `.ts` → `.js`).
 
+### 6.8. «data-attrs»
+
+**`data-attrs` — единственный источник измерений чипа.**
+
+Сгенерированный HTML содержит на каждом чипе:
+
+```html
+<a class="fm-chip"
+   data-attrs='{"audience":["beginner"],"topic":["intro"],"stage":["draft"]}'
+   data-module="ManualA"
+   title="A manual for beginners">ManualA</a>
+```
+
+`data-attrs` — JSON, ключи — измерения из `cfg`.`dimToFieldMap` ∪ strip ∪ row ∪ col.
+Клиент (`feature-map.client.js`) читает `chip.dataset.attrs` и фильтрует по
+selected / hovered state из data-dims на root.
+
+#### Ограничения на имена измерений:
+
+- data-dims="audience,topic,stage" — на root <div data-feature-map>.
+- Порядок strips = порядок в config.stripDimensions.
+- Служебные data-* (кроме data-attrs, data-module, title) больше не генерируются. Legacy data-actor / data-cap / data-family / data-layer удалены в Phase C.
+ 
 ---
 
 ## 7. Что нужно доработать для полной автоматизации
@@ -647,6 +679,8 @@ node ./src/plugins/diplodoc-helper-cli.js emitFeatureMap \
    (сейчас `feature-map` тянет `dimToFieldMap` из своего конфига,
    `collect-catalog` — из `fields.yaml`).
 
+4. Удалить пункт про `data-actor`/etc (если был) — отметить: `FM-d (client.ts + esbuild) — отложено; data-attrs inline в IIFE работает без бандлера.`
+   
 **Минимальный путь для нового проекта сейчас:** Path A (ручной catalog.json),
 см. §4.4. **Полная автоматизация** — отдельная волна, требует
 переработки `collect-catalog` и `_fields.js` под generic-конфиг.
@@ -667,3 +701,18 @@ node ./src/plugins/diplodoc-helper-cli.js emitFeatureMap \
 
 **Для полноценного второго проекта** нужны FM-e и CLI-A. Пока что
 Path A (ручной catalog) + `--config` работают полностью.
+
+## 9. Что закрыто в Phase C
+
+| #   | Пункт                                                                                                                                                       |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `chipLabelField` — конфигурируемый источник label (default `'ident'`)                                                                                       |
+| 2   | `basename(dir)` fallback — никогда не полный `dir`                                                                                                          |
+| 3   | Legacy `data-actor` / `data-cap` / `data-family` / `data-layer` удалены из `chipHtml`                                                                       |
+| 4   | Legacy fallback в `attrsOf` (client) удалён                                                                                                                 |
+| 5   | `collect-catalog`: восстановлена legacy-экстракция service fields через `_fields.yaml` (это и был баг `Registry/МодульРазмерыстатей` вместо `bytescounter`) |
+| 6   | `FEATURE-MAP.md` обновлён                                                                                                                                   |
+
+**После слияния** — FM полностью generic: второй проект с другим набором измерений работает, включая фильтрацию в браузере. Остаётся `FM-d (client.ts + esbuild)` — но он **не блокирует** второй проект, потому что `data-attrs` + IIFE с `JSON.parse` работают без бандлера.
+
+Жду результат прогона. После зелёного — FM закрыт финально, переходим к **`Markdown_Parse_Figure_Orchestrant`** (следующая vscode-команда).

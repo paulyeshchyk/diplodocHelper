@@ -20,6 +20,15 @@ export interface WalkOptions {
     filterFile?: (fullPath: string) => boolean;
     /** Колбэк для каждого файла, прошедшего фильтр. */
     onFile: (fullPath: string) => void;
+
+    /**
+     * Колбэк для директорий, прошедших skip-проверки (pre-order: родитель
+     * вызывается до рекурсии в детей). Корневая `dir` **не** репортится.
+     *
+     * Используется `Fs_Find_Module_Dirs.findSync` для сбора папок-модулей
+     * без чтения их содержимого.
+     */
+    onDirectory?: (dirPath: string) => void;    
 }
 
 /**
@@ -68,6 +77,7 @@ export class Fs_Walk_Directory {
                 if (skipUnderscore && entry.name.startsWith('_')) continue;
                 if (options.skipDirNames?.has(entry.name)) continue;
                 if (options.skipFullPaths?.has(path.resolve(fullPath))) continue;
+                options.onDirectory?.(fullPath);
                 Fs_Walk_Directory._walk(fullPath, options);
             } else if (options.filterFile ? options.filterFile(fullPath) : true) {
                 options.onFile(fullPath);

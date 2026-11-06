@@ -1,4 +1,9 @@
-# CONTRIBUTING.md
+---
+title: Contributing
+sectionType: Page
+pureTitle: Contributing
+sectionIndex: ""
+---
 
 Документ о том, как мы пишем код, тесты и миграции в этом репозитории.
 Не «best practices вообще», а конкретные правила, которые мы уже
@@ -153,6 +158,23 @@ const { String_Compare_Natural } = require('../../utils/string/String_Compare_Na
 `tsconfig.json` содержит `allowImportingTsExtensions: true` при
 `noEmit: true` — это валидный сценарий.
 
+---
+
+**`__dirname` и `import.meta.url` в `.ts`.**
+
+- `__dirname` под нативным Node 24 в `.ts` **не определён** (модуль грузится
+  как ESM через `loadESMFromCJS`). ts-jest это маскирует (транспилит в CJS),
+  но `node ./plugins/X.js` падает с `ReferenceError: __dirname is not defined`.
+- `import.meta.url` **нельзя** использовать при `tsconfig.module: "commonjs"` —
+  TS выдаёт ошибку компиляции.
+
+**Правило:** `.ts`-модули, которым нужен путь к себе, получают его **извне**
+через `process.env` / параметр функции / `opts`. Путь задаётся в CJS-точке
+входа (CLI-prelude, тест-обёртка), где `__dirname` работает естественно.
+
+Пример: `_paths.ts` читает `process.env.DOCS_PROJECT_ROOT`, который ставит
+`diplodoc-helper-cli.js` в prelude через `findProjectRoot(__dirname)`.
+
 ### 2.2. `import` внутри `.ts`
 
 **С явным расширением.** Этого требует нативный Node 24 (strip-types +
@@ -205,7 +227,7 @@ import { run } from './index.ts';
 Проверка (Linux/macOS):
 
 ```bash
-git grep -nE "from '\.[^']*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
+git grep -nE "from '\.[^162]*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
 ```
 
 Если вывод пуст — все относительные импорты корректны.
@@ -293,6 +315,19 @@ for (let i = 0; i < argv.length; i++) {
 Первая форма (`--key=value`) коварна: `argv.indexOf('--flag')` её **не находит**.
 
 ---
+
+**`require.main === module` в `.ts` не работает под нативным Node.**
+
+Когда `node ./X.ts` грузит файл со `import`, Node использует ESM loader,
+где `require` и `module` — undefined. Значит `if (require.main === module)`
+упадёт с ReferenceError.
+
+Правило: **не использовать `require.main === module` в `.ts`-файлах.**
+CLI-entry — `diplodoc-helper-cli.js` (единственная точка входа). Прямой
+запуск `node ./docs-registry/collect-catalog/index.ts` — не поддерживается.
+
+Для `.js`-файлов (которые ещё не мигрированы) `require.main === module`
+работает, потому что они грузятся как CJS.
 
 ## 3. Именование модулей
 
@@ -453,7 +488,12 @@ change для существующих документов и/или внешн
 - `slugify_diplodoc_reference('### Header ###')` → `'header-'`
   (trailing `-`; на практике не проявляется, потому что caller уже
   `trim`'ит заголовок).
-
+- `Frontmatter_Split_Raw.split('---\n---\nbody')` → `null` (пустой
+  frontmatter не матчится legacy-регексом). Расхождение с
+  `frontmatter.utils.parse` (gray-matter возвращает `{data:{}, ...}`).
+  Любая правка регекса = breaking для `collect-catalog` /
+  `build-page-legend` (файлы с пустым frontmatter начнут появляться
+  в каталогах). Зафиксировано в `57.7.2#09`.
 ---
 
 ## 6. Feature-map: особый случай
@@ -566,7 +606,7 @@ git grep -n "functionName\b" -- ':!<файл-определения>'
 git grep -n 'const \w* = {}' src/plugins/
 
 # Все extensionless relative imports в .ts
-git grep -nE "from '\.[^']*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
+git grep -nE "from '\.[^162]*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
 
 # Все места, где используется slugify-семейство
 git grep -nE "slugify_(latin|latin_alphanumeric|filename|diplodoc_reference)" src/

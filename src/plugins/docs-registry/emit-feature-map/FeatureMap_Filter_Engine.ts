@@ -1,50 +1,26 @@
-/**
- * Чистая логика фильтрации Feature Map.
- *
- * Историческое имя: inline-функции `attrsOf` / `needs` / `chipMatches` /
- * `anyActive` + inline-логика `render` / `updateCounter` в
- * `feature-map.client.js` (browser IIFE).
- *
- * ⚠️ Статус: **reference implementation**. Пока `feature-map.client.js`
- * остаётся браузерным IIFE (без бандлера), его inline-функции дублируют
- * эту логику. Полная унификация — шаг 3 (client.js → client.ts + esbuild).
- *
- * ⚠️ Цель: характеризационные тесты `57.3#01..#25` фиксируют текущее
- * поведение. Любое расхождение = изменение визуального поведения
- * фильтрации; должно быть явным решением, а не побочным эффектом
- * рефакторинга.
- *
- * Соглашения:
- *   - `RawAttrs.cap` — потому что в HTML атрибут `data-cap` (не `data-capability`);
- *     во внутреннем `ChipAttrs` — `capability` (полное имя измерения).
- *   - `computeChipClass` / `computeCellClass` возвращают **один класс** или `null`,
- *     а не массив, — совпадает с тем, что `element.classList.add()` принимает
- *     один аргумент (в старой логике тоже ровно один класс на чип/ячейку).
- */
-
-export type StripKey = 'actor' | 'capability' | 'layer' | 'family';
-
-export const STRIP_KEYS: readonly StripKey[] = ['actor', 'capability', 'layer', 'family'];
+export type ChipAttrs = Record<string, string[]>;
 
 export interface FilterState {
-    selected: Record<StripKey, ReadonlySet<string>>;
-    hovered: Record<StripKey, string | null>;
+    selected: Record<string, ReadonlySet<string>>;
+    hovered: Record<string, string | null>;
 }
 
-/** Сырые значения data-атрибутов DOM-элемента (см. `chip.dataset`). */
+/**
+ * Сырые значения data-атрибутов DOM-элемента.
+ *
+ * Phase B: приоритет — `attrs` (уже распарсенный `data-attrs` JSON).
+ * `actor` / `cap` / `layer` / `family` — legacy Phase A (back-compat
+ * на время, пока сгенерированный HTML ещё содержит individual-атрибуты;
+ * удаляется в Phase C).
+ */
 export interface RawAttrs {
+    /** Phase B: `data-attrs` JSON, распарсенный вызывающим. */
+    attrs?: Record<string, string[]>;
+    /** Legacy Phase A: individual `data-*`. */
     actor?: string;
-    cap?: string;       // ← data-cap, не data-capability
+    cap?: string;
     layer?: string;
     family?: string;
-}
-
-/** Разобранные атрибуты чипа. */
-export interface ChipAttrs {
-    actor: string[];
-    capability: string[];
-    layer: string[];
-    family: string[];
 }
 
 export type ChipHighlightClass =
@@ -63,32 +39,48 @@ export type CellHighlightClass =
 export interface VisibilityResult {
     shown: number;
     total: number;
-    /** 'plain' — статичный счётчик «Показано: N из M»; 'preview' — «Будет показано: …». */
     mode: 'plain' | 'preview';
-    /** `true` — нет активных фильтров, reset-button должен быть disabled. */
     resetDisabled: boolean;
 }
 
 export class FeatureMap_Filter_Engine {
-    /** Парсит `dataset`-поля чипа. Пустая строка / undefined → `[]`. */
+    /**
+     * Парсит сырые значения data-атрибутов в `ChipAttrs`.
+     *
+     * Phase B: если `raw.attrs` задан — используется он (JSON из `data-attrs`).
+     * Иначе — legacy fallback на individual `data-actor` / `data-cap` /
+     * `data-layer` / `data-family`.
+     *
+     * Возвращает только те ключи, для которых есть значения (в Phase B);
+     * в legacy-fallback — все 4 legacy-ключа как массивы (даже пустые),
+     * как было в Phase A.
+     */
     static attrsOf(raw: RawAttrs): ChipAttrs {
-        const split = (v: string | undefined): string[] =>
-            (v ?? '').split(/\s+/).filter(Boolean);
-        return {
-            actor: split(raw.actor),
-            capability: split(raw.cap),
-            layer: split(raw.layer),
-            family: split(raw.family),
+        const out: ChipAttrs = {};
+
+        if (raw.attrs) {
+            for (const [k, v] of Object.entries(raw.attrs)) {
+                out[k] = Array.isArray(v) ? v.map(String) : [];
+            }
+            return out;
+        }
+
+        // Legacy fallback (Phase A back-compat).
+        const legacy: Record<string, string | undefined> = {
+            actor: raw.actor,
+            capability: raw.cap,
+            layer: raw.layer,
+            family: raw.family,
         };
+        for (const [k, v] of Object.entries(legacy)) {
+            out[k] = (v ?? '').split(/\s+/).filter(Boolean);
+        }
+        return out;
     }
 
-    /**
-     * Значения, которые нужны для измерения `key`:
-     * `selected[key] ∪ {hovered[key]}`.
-     * Возвращает новый Set (мутация не затрагивает `state`).
-     */
-    static needs(state: FilterState, key: StripKey): Set<string> {
-        const result = new Set(state.selected[key]);
+    /** `selected[key] ∪ {hovered[key]}`, новый Set. */
+    static needs(state: FilterState, key: string): Set<string> {
+        const result = new Set<string>(state.selected[key] ?? []);
         const hovered = state.hovered[key];
         if (hovered) result.add(hovered);
         return result;
@@ -96,28 +88,20 @@ export class FeatureMap_Filter_Engine {
 
     /** Есть ли хоть один selected-элемент или hovered-элемент во всём state. */
     static anyActive(state: FilterState): boolean {
-        for (const k of STRIP_KEYS) {
-            if (state.selected[k].size || state.hovered[k]) return true;
+        for (const k of Object.keys(state.selected)) {
+            if (state.selected[k].size) return true;
+        }
+        for (const k of Object.keys(state.hovered)) {
+            if (state.hovered[k]) return true;
         }
         return false;
     }
 
-    /**
-     * CSS-класс для чипа модуля (или `null`, если фильтры неактивны).
-     *
-     * Соответствует inline-логике из `feature-map.client.js#render`:
-     *   - `!active` → `null`;
-     *   - `active && !hasHovered` → `is-highlight` (mSel) / `is-dimmed` (!mSel);
-     *   - `active && hasHovered`:
-     *       `mSel && mHov` → `is-highlight`,
-     *       `!mSel && mHov` → `is-preview-add`,
-     *       `mSel && !mHov` → `is-preview-drop`,
-     *       else → `is-dimmed`.
-     */
+    /** CSS-класс для чипа модуля (или `null`, если фильтры неактивны). */
     static computeChipClass(attrs: ChipAttrs, state: FilterState): ChipHighlightClass {
         if (!FeatureMap_Filter_Engine.anyActive(state)) return null;
 
-        const hasHovered = STRIP_KEYS.some(k => state.hovered[k] !== null);
+        const hasHovered = Object.keys(state.hovered).some(k => state.hovered[k] !== null);
         const mSel = FeatureMap_Filter_Engine._matchesSelected(attrs, state);
         const mHov = FeatureMap_Filter_Engine._matchesHovered(attrs, state);
 
@@ -130,15 +114,7 @@ export class FeatureMap_Filter_Engine {
         return mSel ? 'is-highlight' : 'is-dimmed';
     }
 
-    /**
-     * CSS-класс для ячейки сетки (`td`).
-     *
-     * Соответствует inline-логике из `feature-map.client.js#render`:
-     *   - `!active` → `null`;
-     *   - если есть хоть один `is-highlight`-чип → `is-cell-highlight`;
-     *   - иначе если есть `is-preview-add` → `is-cell-preview-add`;
-     *   - иначе → `is-dimmed`.
-     */
+    /** CSS-класс для ячейки сетки (`td`). */
     static computeCellClass(chips: ChipAttrs[], state: FilterState): CellHighlightClass {
         if (!FeatureMap_Filter_Engine.anyActive(state)) return null;
 
@@ -154,21 +130,14 @@ export class FeatureMap_Filter_Engine {
         return 'is-dimmed';
     }
 
-    /**
-     * Счётчик для тулбара.
-     *
-     * Соответствует inline-логике из `feature-map.client.js#updateCounter`:
-     *   - `!active` → `{ shown: total, mode: 'plain', resetDisabled: true }`;
-     *   - `active && !hasHovered` → `{ shown: |{mSel}|, mode: 'plain', resetDisabled: false }`;
-     *   - `active && hasHovered` → `{ shown: |{mSel ∧ mHov}|, mode: 'preview', resetDisabled: false }`.
-     */
+    /** Счётчик для тулбара. */
     static computeVisibility(moduleChips: ChipAttrs[], state: FilterState): VisibilityResult {
         const total = moduleChips.length;
         if (!FeatureMap_Filter_Engine.anyActive(state)) {
             return { shown: total, total, mode: 'plain', resetDisabled: true };
         }
 
-        const hasHovered = STRIP_KEYS.some(k => state.hovered[k] !== null);
+        const hasHovered = Object.keys(state.hovered).some(k => state.hovered[k] !== null);
         let shown = 0;
         for (const attrs of moduleChips) {
             const mSel = FeatureMap_Filter_Engine._matchesSelected(attrs, state);
@@ -189,24 +158,24 @@ export class FeatureMap_Filter_Engine {
 
     // --- private ---------------------------------------------------------
 
-    /** true, если чип удовлетворяет **всем** selected-измерениям (AND). */
     private static _matchesSelected(attrs: ChipAttrs, state: FilterState): boolean {
-        for (const k of STRIP_KEYS) {
+        for (const k of Object.keys(state.selected)) {
             const sel = state.selected[k];
             if (!sel.size) continue;
+            const have = attrs[k] ?? [];
             for (const x of sel) {
-                if (attrs[k].indexOf(x) < 0) return false;
+                if (have.indexOf(x) < 0) return false;
             }
         }
         return true;
     }
 
-    /** true, если чип удовлетворяет **всем** hovered-измерениям (AND). */
     private static _matchesHovered(attrs: ChipAttrs, state: FilterState): boolean {
-        for (const k of STRIP_KEYS) {
+        for (const k of Object.keys(state.hovered)) {
             const hov = state.hovered[k];
             if (!hov) continue;
-            if (attrs[k].indexOf(hov) < 0) return false;
+            const have = attrs[k] ?? [];
+            if (have.indexOf(hov) < 0) return false;
         }
         return true;
     }

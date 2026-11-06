@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import type { FeatureMapConfig } from './feature-map.types.ts';
 
 /**
@@ -34,6 +34,7 @@ export const DEFAULT_FEATURE_MAP_CONFIG: FeatureMapConfig = {
     counterPlaceholder: 'Показано: —',
     resetButtonText: 'Сбросить все',
     emptyCellSymbol: '·',
+    chipLabelField: 'ident',
 };
 
 

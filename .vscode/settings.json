@@ -3,7 +3,7 @@
   "editor.language.brackets": [],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[yaml]": {
     "editor.defaultFormatter": null,
@@ -14,5 +14,9 @@
   "js/ts.implicitProjectConfig.checkJs": true,
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "jest.runMode": "on-demand",
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
 }

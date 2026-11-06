@@ -5,6 +5,57 @@
 const path = require('path');
 const fs = require('fs');
 
+/**
+  * Ищет вверх от `start` папку-корень проекта документации.
+  *
+  * Возвращает `PROJECT_ROOT`, от которого `_paths.ts` считает
+  * `DOCS_DIR = <PROJECT_ROOT>/docs`.
+  *
+  * Два сценария (проверяются в порядке приоритета):
+  *
+  *   1. **Repo extension layout** — вверх находится папка `<X>`,
+  *      содержащая `<X>/docs/docs/`. Значит `<X>/docs` — это docs-проект
+  *      (обёртка над реальной docs), и правильный `PROJECT_ROOT = <X>/docs`.
+  *      Пример: `<repo>/src/plugins/docs-registry` → `<repo>/docs`.
+  *
+  *   2. **Standalone docs project** — вверх находится папка `<X>`,
+  *      содержащая `<X>/docs/_registry/` или `<X>/docs/_generated/`.
+  *      Значит `<X>/docs` — это реальная docs, а `PROJECT_ROOT = <X>`.
+  *      Пример: `<target>/plugins/docs-registry` → `<target>`.
+  *
+  * Возвращает `null`, если ни один сценарий не сработал. Тогда
+  * `_paths.ts` возьмёт `process.cwd()` как fallback (dev из произвольной
+  * директории — работает только с явным `--docs-project-root`).
+  */
+function findProjectRoot(start) {
+    let cur = path.resolve(start);
+
+    // 1. Repo extension layout: <X>/docs/docs/ → PROJECT_ROOT = <X>/docs
+    while (cur && cur !== path.dirname(cur)) {
+        if (fs.existsSync(path.join(cur, 'docs', 'docs'))) {
+            return path.join(cur, 'docs');
+        }
+        cur = path.dirname(cur);
+    }
+
+    // 2. Standalone docs project: <X>/docs/_registry или <X>/docs/_generated
+    cur = path.resolve(start);
+
+
+    while (cur && cur !== path.dirname(cur)) {
+        const docsDir = path.join(cur, 'docs');
+        if (
+            fs.existsSync(path.join(docsDir, '_registry')) ||
+            fs.existsSync(path.join(docsDir, '_generated'))
+        ) {
+            return cur;
+        }
+        cur = path.dirname(cur);
+    }
+
+    return null;
+}
+
 
 // ── prelude: --docs-project-root должен быть известен ДО первого require
 //    модуля, транзитивно подтягивающего `_paths.js` (кешируется Node).
@@ -24,6 +75,15 @@ for (let i = 0; i < __args.length; i++) {
         break;
     }
 }
+
+// Fallback: если флаг не передан — вычисляем от `__dirname` CLI (CJS — работает).
+// `_paths.ts` (ESM) полагается на этот env и больше не пытается вычислить
+// свой путь сам.
+if (!process.env.DOCS_PROJECT_ROOT) {
+    const guessed = findProjectRoot(__dirname);
+    if (guessed) process.env.DOCS_PROJECT_ROOT = guessed;
+}
+
 // ─────────────────────────────────────────────────────────────────────────
 
 const featureMapPluginDir = path.join(__dirname, 'docs-registry', 'emit-feature-map');
@@ -61,10 +121,10 @@ if (require.main === module) {
     const command = args[0];
 
     const asyncHandlers = {
-        catalog:       { path: './docs-registry/collect-catalog/index.js',    fn: 'runCollectCatalog' },
-        pageLegend:    { path: './docs-registry/build-page-legend/index.js',  fn: 'runBuildPageLegend' },
-        renderModules: { path: './docs-registry/render-modules/index.js',     fn: 'runRenderModules' },
-        emitModulesTable: { path: './docs-registry/emit-modules-table/index.js',    fn: 'runEmitModulesTable' },
+        catalog: { path: './docs-registry/collect-catalog/index.ts', fn: 'runCollectCatalog' },
+        pageLegend: { path: './docs-registry/build-page-legend/index.ts', fn: 'runBuildPageLegend' },
+        renderModules: { path: './docs-registry/render-modules/index.ts', fn: 'runRenderModules' },
+        emitModulesTable: { path: './docs-registry/emit-modules-table/index.ts', fn: 'runEmitModulesTable' },
     };
     const asyncH = asyncHandlers[command];
     if (asyncH) {
@@ -157,9 +217,9 @@ if (require.main === module) {
         reindexFootnotes(docsDir);
     } else if (command === 'emitFeatureMap') {
         const opts = {};
-        const docsRoot   = extractFlag(args, '--docs-root');
-        const generated  = extractFlag(args, '--generated-dir');
-        if (docsRoot)  opts.docsDir      = docsRoot;
+        const docsRoot = extractFlag(args, '--docs-root');
+        const generated = extractFlag(args, '--generated-dir');
+        if (docsRoot) opts.docsDir = docsRoot;
         if (generated) opts.generatedDir = generated;
         runEmitFeatureMap(args.slice(1), opts)
             .catch(e => { console.error(e.message || e); process.exit(1); });
@@ -263,8 +323,8 @@ module.exports = {
     generateAbbrs,
     generateTerms,
     generateGosts,
-    runCollectCatalog:    require('./docs-registry/collect-catalog').runCollectCatalog,
-    runBuildPageLegend:   require('./docs-registry/build-page-legend').runBuildPageLegend,
-    runRenderModules:     require('./docs-registry/render-modules').runRenderModules,
-    emitModulesTable: require('./docs-registry/emit-modules-table/index.js').runEmitModulesTable,
+    runCollectCatalog: require('./docs-registry/collect-catalog/index.ts').runCollectCatalog,
+    runBuildPageLegend: require('./docs-registry/build-page-legend/index.ts').runBuildPageLegend,
+    runRenderModules: require('./docs-registry/render-modules/index.ts').runRenderModules,
+    emitModulesTable: require('./docs-registry/emit-modules-table/index.ts').runEmitModulesTable,
 };
