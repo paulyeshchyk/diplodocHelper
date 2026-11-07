@@ -580,4 +580,86 @@ describe('feature-map.runEmitFeatureMap — path overrides (57.5)', () => {
         expect(ciItem).not.toBeNull();
         expect(ciItem![0]).not.toContain('fm-strip-link');
     });
+
+    it('57.1#17 should render __empty__ strip with custom label', async () => {
+        // Layout с includeEmpty + custom label
+        fs.mkdirSync(path.join(DOCS_DIR, '_registry'), { recursive: true });
+        fs.writeFileSync(
+            path.join(DOCS_DIR, '_registry', 'layout.json'),
+            JSON.stringify({
+                includeEmpty: true,
+                emptyLabel: { actor: 'Без АРМ' },
+            }),
+            'utf8',
+        );
+
+        const fixture = makeFixture(docsRoot);
+        // Модуль без actors
+        (fixture.modules as any)['МодульEpsilon'] = {
+            dir: 'МодульEpsilon',
+            id: '99',
+            ident: 'eps',
+            layers: ['cli'],
+            families: ['fam-a'],
+            capabilities: ['cap-1'],
+        };
+        (fixture.index.actor as Record<string, string[]>)['__empty__'] = ['МодульEpsilon'];
+        fixture.index.capability['cap-1'].push('МодульEpsilon');
+        fixture.index.layer.cli.push('МодульEpsilon');
+        fixture.index.family['fam-a'].push('МодульEpsilon');
+        (fixture.dimensions.actor.items as Record<string, { title: string }>)['__empty__'] = {
+            title: 'Без АРМ',
+        };
+        fs.writeFileSync(catalogPath, JSON.stringify(fixture), 'utf8');
+
+        const md = await run();
+        expect(md).toMatch(/data-strip="actor"[^>]*data-value="__empty__"/);
+        expect(md).toContain('Без АРМ');
+
+        // cleanup
+        fs.rmSync(path.join(DOCS_DIR, '_registry', 'layout.json'), { force: true });
+    });
+
+    it('57.1#18 should put module into __empty__ cell for missing column/row', async () => {
+        fs.mkdirSync(path.join(DOCS_DIR, '_registry'), { recursive: true });
+        fs.writeFileSync(
+            path.join(DOCS_DIR, '_registry', 'layout.json'),
+            JSON.stringify({ includeEmpty: true }),
+            'utf8',
+        );
+
+        const fixture = makeFixture(docsRoot);
+        // Модуль без family (row)
+        (fixture.modules as any)['МодульZeta'] = {
+            dir: 'МодульZeta',
+            id: '100',
+            ident: 'zeta',
+            actors: ['ci'],
+            layers: ['cli'],
+            capabilities: ['cap-1'],
+        };
+        fixture.index.actor.ci.push('МодульZeta');
+        fixture.index.capability['cap-1'].push('МодульZeta');
+        fixture.index.layer.cli.push('МодульZeta');
+        (fixture.index.family as Record<string, string[]>)['__empty__'] = ['МодульZeta'];
+        (fixture.dimensions.family.items as Record<string, { title: string }>)['__empty__'] = {
+            title: 'Без семейства',
+        };
+        fs.writeFileSync(catalogPath, JSON.stringify(fixture), 'utf8');
+
+        const md = await run();
+        // Модуль попал в строку с data-value="__empty__"
+        const emptyRow = md.match(/<tr>[^]*data-value="__empty__"[^]*?<\/tr>/);
+        expect(emptyRow).not.toBeNull();
+        expect(emptyRow![0]).toContain('data-module="МодульZeta"');
+
+        // data-attrs содержит __empty__ для family
+        const zetaAttrs = md.match(
+            /data-attrs='([^']*)'[^>]*data-module="МодульZeta"/,
+        );
+        const attrs = JSON.parse(zetaAttrs![1]);
+        expect(attrs.family).toEqual(['__empty__']);
+
+        fs.rmSync(path.join(DOCS_DIR, '_registry', 'layout.json'), { force: true });
+    });
 });

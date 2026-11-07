@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import type { LayoutConfig } from './_layout.types.ts';
+export { EMPTY_SLUG } from './_layout.types.ts';
 
 /**
  * Дефолтный layout = diplodoc-helper до волны C.
@@ -12,6 +13,9 @@ export const DEFAULT_LAYOUT: Readonly<LayoutConfig> = Object.freeze({
   moduleSectionTypes: null,
   outFolder: 'Реестр',
   skipDirs: [],
+  strictDimensions: true,
+  includeEmpty: false,
+  emptyLabel: 'Без значения',
 });
 
 /**
@@ -73,5 +77,38 @@ export function loadLayout(layoutPath: string): LayoutConfig {
     out.outFolder = String(src.outFolder);
   }
 
+  if ('strictDimensions' in src) {
+    out.strictDimensions = src.strictDimensions !== false;
+  }
+  if ('includeEmpty' in src) {
+    if (Array.isArray(src.includeEmpty)) {
+      out.includeEmpty = src.includeEmpty.map(String);
+    } else {
+      out.includeEmpty = src.includeEmpty === true;
+    }
+  }
+  if ('emptyLabel' in src) {
+    if (typeof src.emptyLabel === 'string') {
+      out.emptyLabel = src.emptyLabel;
+    } else if (src.emptyLabel && typeof src.emptyLabel === 'object' && !Array.isArray(src.emptyLabel)) {
+      const labels: Record<string, string> = {};
+      for (const [k, v] of Object.entries(src.emptyLabel as Record<string, unknown>)) {
+        if (v != null) labels[k] = String(v);
+      }
+      out.emptyLabel = labels;
+    }
+  }
+
   return out;
+}
+
+export function isIncludeEmptyForDim(layout: LayoutConfig, dim: string): boolean {
+  if (layout.includeEmpty === true) return true;
+  if (Array.isArray(layout.includeEmpty)) return layout.includeEmpty.includes(dim);
+  return false;
+}
+
+export function getEmptyLabelForDim(layout: LayoutConfig, dim: string): string {
+  if (typeof layout.emptyLabel === 'string') return layout.emptyLabel;
+  return layout.emptyLabel[dim] || 'Без значения';
 }

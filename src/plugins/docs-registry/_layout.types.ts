@@ -48,4 +48,35 @@ export interface LayoutConfig {
    * в `collect-catalog`.
    */
   skipDirs: string[];
+
+  /**
+   * Строгая проверка неизвестных slug'ов в измерениях.
+   * - `true` (по умолчанию): `collect-catalog` бросает `throw` при первом
+   *   unknown (с `--lenient` — warning без auto-register).
+   * - `false`: warning + auto-register в runtime (`catalog.dimensions`),
+   *   `dimensions.yaml` **не** изменяется. Используется, когда реестр
+   *   измерений не претендует на «полный список» (MES).
+   */
+  strictDimensions: boolean;
+
+  /**
+   * Включать ли «пустые» модули в `index` (модули без значения измерения).
+   * - `false` (default): не включать;
+   * - `true`: включать для всех измерений;
+   * - `string[]`: только для перечисленных измерений.
+   *
+   * Пустые получают служебный slug `__empty__` в `catalog.index` и
+   * `catalog.dimensions.<dim>.items`.
+   */
+  includeEmpty: boolean | string[];
+
+  /**
+   * Отображаемый label для `__empty__`.
+   * - `string`: общий для всех измерений;
+   * - `object`: per-dim, например `{ content_type: "Без типа" }`;
+   * - default: `'Без значения'`.
+   */
+  emptyLabel: string | Record<string, string>;
 }
+
+export const EMPTY_SLUG = '__empty__';

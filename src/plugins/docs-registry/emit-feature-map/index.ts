@@ -9,6 +9,7 @@ import type {
     CatalogSnapshot,
 } from './feature-map.types.ts';
 import * as fsSync from 'node:fs';
+import { loadLayout, EMPTY_SLUG, isIncludeEmptyForDim } from '../_layout.ts';
 
 export interface RunEmitFeatureMapOptions {
     /**
@@ -58,6 +59,7 @@ export async function runEmitFeatureMap(
     const parsed = parseArgs(argv);
     const effectiveDocsDir = options.docsDir ?? DOCS_DIR;
     const effectiveGeneratedDir = options.generatedDir ?? GENERATED_DIR;
+    const layout = loadLayout(path.join(effectiveDocsDir, '_registry', 'layout.json'));
 
     // Default config: <docsDir>/_registry/feature-map.config.json,
     // если --config не задан. Иначе — дефолт (back-compat для diplodoc-helper,
@@ -124,8 +126,16 @@ export async function runEmitFeatureMap(
     // --- ячейки: (columnValue × rowValue) → [modules] ---
     const cells = new Map<string, Array<{ dir: string; mod: CatalogModule }>>();
     for (const [dir, mod] of Object.entries(catalog.modules)) {
-        const colValues = Array.isArray(mod[columnField]) ? (mod[columnField] as string[]) : [];
-        const rowValues = Array.isArray(mod[rowField]) ? (mod[rowField] as string[]) : [];
+        const rawCols = Array.isArray(mod[columnField]) ? (mod[columnField] as string[]) : [];
+        const rawRows = Array.isArray(mod[rowField]) ? (mod[rowField] as string[]) : [];
+
+        const colValues = rawCols.length > 0
+            ? rawCols
+            : (isIncludeEmptyForDim(layout, cfg.columnDimension) ? [EMPTY_SLUG] : []);
+        const rowValues = rawRows.length > 0
+            ? rawRows
+            : (isIncludeEmptyForDim(layout, cfg.rowDimension) ? [EMPTY_SLUG] : []);
+
         for (const c of colValues) {
             for (const r of rowValues) {
                 const key = `${c}::${r}`;
@@ -148,7 +158,11 @@ export async function runEmitFeatureMap(
             if (!field) continue;
             const raw = mod[field];
             const values = Array.isArray(raw) ? raw : [];
-            if (values.length) dataAttrs[dim] = values;
+            if (values.length) {
+                dataAttrs[dim] = values;
+            } else if (isIncludeEmptyForDim(layout, dim)) {
+                dataAttrs[dim] = [EMPTY_SLUG];
+            }
         }
         const attrsJson = JSON.stringify(dataAttrs)
             .replace(/&/g, '&amp;')
@@ -208,6 +222,9 @@ export async function runEmitFeatureMap(
             }
             const items = pickUsable(catalog.dimensions[dim], catalog.index[dim]);
             const countMap = countBy(catalog.modules, field);
+            if (isIncludeEmptyForDim(layout, dim)) {
+                countMap[EMPTY_SLUG] = (catalog.index[dim]?.[EMPTY_SLUG] || []).length;
+            }
             const label = cfg.stripLabels[dim] ?? dim;
             return stripHtml(dim, label, items, countMap);
         })
@@ -337,10 +354,14 @@ function pickUsable(
 ): Array<[string, { title: string }]> {
     if (!dim) return [];
     return Object.entries(dim.items || {})
-        .filter(([slug]) => ((index ?? {})[slug] || []).length > 0)
-        .sort((a, b) =>
-            String(a[1].title || a[0]).localeCompare(String(b[1].title || b[0]), 'ru'),
-        );
+        .filter(([slug]) =>
+            slug === EMPTY_SLUG || ((index ?? {})[slug] || []).length > 0,
+        )
+        .sort((a, b) => {
+            if (a[0] === EMPTY_SLUG) return 1;
+            if (b[0] === EMPTY_SLUG) return -1;
+            return String(a[1].title || a[0]).localeCompare(String(b[1].title || b[0]), 'ru');
+        });
 }
 
 function countBy(

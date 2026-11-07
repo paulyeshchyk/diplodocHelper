@@ -526,3 +526,111 @@ describe('collect-catalog — path extractors (57.6#32..#35)', () => {
         expect(joined).not.toMatch(/no-such-dir/);
     });
 });
+
+describe('collect-catalog — strictDimensions / includeEmpty', () => {
+    it('57.6#36 should auto-register unknown slug with strictDimensions=false', async () => {
+        writeLayout({ modulePrefix: null, strictDimensions: false });
+        fs.mkdirSync(path.join(docsDir, '_registry'), { recursive: true });
+        fs.writeFileSync(
+            path.join(docsDir, '_registry', 'fields.yaml'),
+            `fields:\n  ct:\n    kind: multi\n    dimension: ct\n    dimField: cts\n    frontmatterKey: content_type\n`,
+            'utf8',
+        );
+        writeRegistry(`dimensions:\n  ct:\n    items:\n      screen: { title: "Screen" }\n`);
+        writeModule('Раздел1/Статья1', 'title: A\nid: 1\ncontent_type: special');
+
+        const outPath = path.join(generatedDir, 'catalog.ru.json');
+        await runCollectCatalog(
+            ['--lang=ru', `--out=${outPath}`],
+            { docsDir, registryDir, generatedDir },
+        );
+
+        const catalog = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+        expect(catalog.dimensions.ct.items.special).toEqual({ title: 'special' });
+        expect(catalog.index.ct.special).toEqual(['Раздел1/Статья1']);
+        expect(catalog.warnings.join('\n')).toMatch(/auto-registered/);
+    });
+
+    it('57.6#37 should include __empty__ when includeEmpty=true', async () => {
+        writeLayout({ modulePrefix: null, includeEmpty: true, emptyLabel: 'Без значения' });
+        fs.mkdirSync(path.join(docsDir, '_registry'), { recursive: true });
+        fs.writeFileSync(
+            path.join(docsDir, '_registry', 'fields.yaml'),
+            `fields:\n  ct:\n    kind: multi\n    dimension: ct\n    dimField: cts\n    frontmatterKey: content_type\n`,
+            'utf8',
+        );
+        writeRegistry(`dimensions:\n  ct:\n    items:\n      screen: { title: "Screen" }\n`);
+        writeModule('Раздел1/БезТипа', 'title: A\nid: 1');  // нет content_type
+
+        const outPath = path.join(generatedDir, 'catalog.ru.json');
+        await runCollectCatalog(
+            ['--lang=ru', `--out=${outPath}`],
+            { docsDir, registryDir, generatedDir },
+        );
+
+        const catalog = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+        expect(catalog.dimensions.ct.items.__empty__).toEqual({ title: 'Без значения' });
+        expect(catalog.index.ct.__empty__).toEqual(['Раздел1/БезТипа']);
+    });
+
+    it('57.6#38 should include __empty__ only for listed dimensions', async () => {
+        writeLayout({ modulePrefix: null, includeEmpty: ['ct'] });
+        fs.mkdirSync(path.join(docsDir, '_registry'), { recursive: true });
+        fs.writeFileSync(
+            path.join(docsDir, '_registry', 'fields.yaml'),
+            [
+                'fields:',
+                '  ct:',
+                '    kind: multi',
+                '    dimension: ct',
+                '    dimField: cts',
+                '    frontmatterKey: content_type',
+                '  aud:',
+                '    kind: multi',
+                '    dimension: aud',
+                '    dimField: auds',
+                '    frontmatterKey: audience',
+            ].join('\n'),
+            'utf8',
+        );
+        writeRegistry(
+            `dimensions:\n  ct:\n    items: {}\n  aud:\n    items: {}\n`,
+        );
+        writeModule('Раздел1/Статья1', 'title: A\nid: 1');  // ни ct, ни aud
+
+        const outPath = path.join(generatedDir, 'catalog.ru.json');
+        await runCollectCatalog(
+            ['--lang=ru', `--out=${outPath}`],
+            { docsDir, registryDir, generatedDir },
+        );
+
+        const catalog = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+        expect(catalog.index.ct.__empty__).toEqual(['Раздел1/Статья1']);
+        expect(catalog.index.aud.__empty__).toBeUndefined();
+    });
+
+    it('57.6#39 should use per-dim emptyLabel', async () => {
+        writeLayout({
+            modulePrefix: null,
+            includeEmpty: true,
+            emptyLabel: { ct: 'Без типа', aud: 'Без АРМ' },
+        });
+        fs.mkdirSync(path.join(docsDir, '_registry'), { recursive: true });
+        fs.writeFileSync(
+            path.join(docsDir, '_registry', 'fields.yaml'),
+            `fields:\n  ct:\n    kind: multi\n    dimension: ct\n    dimField: cts\n    frontmatterKey: content_type\n`,
+            'utf8',
+        );
+        writeRegistry(`dimensions:\n  ct:\n    items: {}\n`);
+        writeModule('Раздел1/Статья1', 'title: A\nid: 1');
+
+        const outPath = path.join(generatedDir, 'catalog.ru.json');
+        await runCollectCatalog(
+            ['--lang=ru', `--out=${outPath}`],
+            { docsDir, registryDir, generatedDir },
+        );
+
+        const catalog = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+        expect(catalog.dimensions.ct.items.__empty__).toEqual({ title: 'Без типа' });
+    });
+});

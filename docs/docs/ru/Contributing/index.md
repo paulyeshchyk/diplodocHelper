@@ -12,6 +12,15 @@ sectionIndex: ""
 
 ---
 
+# Contributing
+
+Документ о том, как мы пишем код, тесты и миграции в этом репозитории.
+Не «best practices вообще», а конкретные правила, которые мы уже
+применяем. Новое правило сюда попадает только после того, как
+применено в реальной волне изменений.
+
+---
+
 ## 1. Тестовая дисциплина
 
 ### 1.1. Нумерация кейсов
@@ -37,19 +46,17 @@ sectionIndex: ""
 it('00.6.1#03 should handle multi-char cyrillic and preserve unmapped ь/ъ', () => {
 ```
 
-**Кросс-модульный кейс** (тест на стык фич) дополнительно помечается
-списком `+id` в начале `it`:
+**Кросс-модульный кейс** дополнительно помечается списком `+id`:
 
 ```typescript
 it('00.6.2#15 (+3, +5) should drive InlineAnnotation_Make_AnchorId for abbr/term', () => {
 ```
 
-Смысл метки: «этот тест провалится, если сломается фича 3 или 5, а не
-только 00». Помогает при триаже падений.
+Смысл: «этот тест провалится, если сломается фича 3 или 5».
 
 ### 1.2. Импорты в тестах
 
-Все `import` — из `@jest/globals`, без глобалов:
+Все `import` — из `@jest/globals`:
 
 ```typescript
 import { describe, expect, it } from '@jest/globals';
@@ -79,19 +86,15 @@ it('...', () => {
 });
 ```
 
-Исключение — `require` внутри `it` оправдан только для `jest.isolateModules`
-или `jest.resetModules`. В обычном коде — в шапку.
-
 ### 1.3. Frozen snapshot, не «живой источник»
 
-**Не** пишем parity-тесты, которые читают живой legacy-файл через
+**Не** пишем parity-тесты, читающие живой legacy-файл через
 `readFileSync` + `extractFunction`. После миграции файл становится
-shim'ом, и сравнение вырождается в самосравнение — тест зелёный, но
-ничего не защищает.
+shim'ом, и сравнение вырождается в самосравнение.
 
-Правильно — **frozen snapshot**: зафиксировать эталонные значения
-литералами **до** миграции, закоммитить их. После миграции тот же тест
-становится drift-guard'ом:
+Правильно — **frozen snapshot**: зафиксировать эталон **до** миграции,
+закоммитить литералы. После миграции — тот же тест становится
+drift-guard'ом:
 
 ```typescript
 describe('MyModule frozen snapshot (legacy migrated)', () => {
@@ -99,7 +102,6 @@ describe('MyModule frozen snapshot (legacy migrated)', () => {
         ['Привет', 'privet'],
         ['жизнь', 'zhizn'],           // trailing ь
         ['объект', 'ob_ekt'],          // middle ъ → separator
-        // ...
     ];
 
     it('00.X.Y#99 should keep frozen legacy output', () => {
@@ -110,20 +112,18 @@ describe('MyModule frozen snapshot (legacy migrated)', () => {
 });
 ```
 
-Один раз прочитал источник, зафиксировал, дальше — только литералы.
-
 ### 1.4. Структура тестового файла
 
-Колокация: `Foo.ts` рядом с `Foo.test.ts` (не в `test/`).
-Устаревшие заглушки `test/**/*.test.js` (`toBeDefined` + `todo`) —
-кандидаты на удаление при касании.
+Колокация: `Foo.ts` рядом с `Foo.test.ts`. Устаревшие заглушки
+`test/**/*.test.js` (`toBeDefined` + `todo`) — кандидаты на удаление
+при касании.
 
 Порядок `describe`-блоков:
 
-1. Основной контракт (`basics`, `separator normalisation`, `cyrillic`, …).
+1. Основной контракт (`basics`, `separator normalisation`, `cyrillic`).
 2. Edge-cases (`empty`, `non-string`, `whitespace-only`, `longest match`).
 3. Cross-module invariants (с метками `+id`).
-4. Frozen snapshot в конце.
+4. Frozen snapshot.
 
 ### 1.5. Что не пишем
 
@@ -132,9 +132,18 @@ describe('MyModule frozen snapshot (legacy migrated)', () => {
 - `expect(...).not.toBeNull()` без конкретного `toBe(...)` — не защита.
 - Хардкод конкретного сообщения об ошибке — тест должен падать на
   логике, не на формулировке.
-- Импорт модулей, зависящих от `vscode`, из тестов утилит (`src/utils/**`).
-  `vscode` доступен только в extension host; в Node — `Cannot find module`.
-  Тесты утилит не должны тянуть команды/UI.
+- Импорт модулей, зависящих от `vscode`, из тестов утилит
+  (`src/utils/**`). `vscode` доступен только в extension host; в Node —
+  `Cannot find module`. Тесты утилит не должны тянуть команды/UI.
+
+### 1.6. Проверка закоммиченности `.test.ts`
+
+```bash
+git ls-files | grep '\.test\.ts$' | wc -l
+find src -name '*.test.ts' | wc -l
+```
+
+Числа должны совпадать. Иначе — `git add` перед коммитом рефакторинга.
 
 ---
 
@@ -145,41 +154,25 @@ describe('MyModule frozen snapshot (legacy migrated)', () => {
 
 ### 2.1. `require` в JS-потребителе
 
-Всегда **с расширением** `.ts`, иначе сборка через esbuild не резолвит:
+Всегда **с расширением** `.ts`, иначе esbuild не резолвит:
 
 ```javascript
 // правильно
 const { String_Compare_Natural } = require('../../utils/string/String_Compare_Natural.ts');
 
-// неправильно — esbuild не найдёт
+// неправильно
 const { String_Compare_Natural } = require('../../utils/string/String_Compare_Natural');
 ```
 
 `tsconfig.json` содержит `allowImportingTsExtensions: true` при
-`noEmit: true` — это валидный сценарий.
-
----
-
-**`__dirname` и `import.meta.url` в `.ts`.**
-
-- `__dirname` под нативным Node 24 в `.ts` **не определён** (модуль грузится
-  как ESM через `loadESMFromCJS`). ts-jest это маскирует (транспилит в CJS),
-  но `node ./plugins/X.js` падает с `ReferenceError: __dirname is not defined`.
-- `import.meta.url` **нельзя** использовать при `tsconfig.module: "commonjs"` —
-  TS выдаёт ошибку компиляции.
-
-**Правило:** `.ts`-модули, которым нужен путь к себе, получают его **извне**
-через `process.env` / параметр функции / `opts`. Путь задаётся в CJS-точке
-входа (CLI-prelude, тест-обёртка), где `__dirname` работает естественно.
-
-Пример: `_paths.ts` читает `process.env.DOCS_PROJECT_ROOT`, который ставит
-`diplodoc-helper-cli.js` в prelude через `findProjectRoot(__dirname)`.
+`noEmit: true` — валидный сценарий.
 
 ### 2.2. `import` внутри `.ts`
 
-**С явным расширением.** Этого требует нативный Node 24 (strip-types +
-ESM resolver). Extensionless `import ... from './X'` пропускают ts-jest
-и esbuild, но `node ./plugins/X.js` падает с `ERR_MODULE_NOT_FOUND`.
+**С явным расширением.** Этого требует нативный Node 24
+(strip-types + ESM resolver). Extensionless `import ... from './X'`
+пропускают ts-jest и esbuild, но `node ./plugins/X.js` падает с
+`ERR_MODULE_NOT_FOUND`.
 
 Правила:
 
@@ -187,7 +180,7 @@ ESM resolver). Extensionless `import ... from './X'` пропускают ts-jes
   ```typescript
   import { String_Transliterate_Cyrillic } from '../string/String_Transliterate_Cyrillic.ts';
   ```
-- legacy CJS `.js`-модуль (ещё не мигрировавший) → `.js`:
+- legacy CJS `.js`-модуль → `.js`:
   ```typescript
   import { slugify_latin_alphanumeric } from '../encoding.slugify.js';
   ```
@@ -202,14 +195,11 @@ ESM resolver). Extensionless `import ... from './X'` пропускают ts-jes
 ```typescript
 import {
     FeatureMap_Filter_Engine,
-    STRIP_KEYS,
     type ChipAttrs,
 } from './FeatureMap_Filter_Engine.ts';
 ```
 
-**Директорные импорты** (`from '.'`) — **не работают** под нативным
-Node (strip-types требует явный файл, `.` резолвится в директорию).
-Разворачивать:
+**Директорные импорты** (`from '.'`) — не работают под нативным Node:
 
 ```typescript
 // неправильно
@@ -221,32 +211,47 @@ import { run } from './index.ts';
 
 Правило действует **на все `.ts`-файлы**, включая `.test.ts`. Тесты
 запускаются через ts-jest (терпит extensionless), но если скопировать
-такой импорт в production — CLI упадёт. Единое правило проще соблюдать,
-чем исключение.
+такой импорт в production — CLI упадёт.
 
-Проверка (Linux/macOS):
+Проверка:
 
 ```bash
-git grep -nE "from '\.[^162]*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
+git grep -nE "from '\.[^']*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
+# должно быть пусто
 ```
 
-Если вывод пуст — все относительные импорты корректны.
+**Известный warning:** `MODULE_TYPELESS_PACKAGE_JSON` при
+`node ./plugins/X.js`. Причина — `package.json` без `"type"`. Не
+фиксить через `"type": "module"` (сломает `.js` с `require`). Плановое
+решение — CLI-A (прекомпиляция `.ts` → `.js`).
 
-**Известный warning:** `MODULE_TYPELESS_PACKAGE_JSON` при `node ./plugins/X.js`.
-Причина — `package.json` без `"type"`. Не фиксить через `"type": "module"`
-(сломает `.js` с `require`). Плановое решение — CLI-A (прекомпиляция).
+### 2.3. `__dirname` в `.ts`
 
-### 2.3. Типы для «словарей» и «массивов объектов»
+`__dirname` под нативным Node 24 в `.ts` **не определён** (модуль
+грузится как ESM через `loadESMFromCJS`). ts-jest это маскирует, но
+`node ./plugins/X.js` падает с `ReferenceError`.
+
+`import.meta.url` **нельзя** при `tsconfig.module: "commonjs"` — TS
+выдаёт ошибку компиляции.
+
+**Правило:** `.ts`-модули, которым нужен путь к себе, получают его
+**извне** (`process.env` / параметр функции / `opts`). Путь задаётся в
+CJS-точке входа, где `__dirname` работает.
+
+Пример: `_paths.ts` читает `process.env.DOCS_PROJECT_ROOT`, который
+ставит `diplodoc-helper-cli.js` в prelude через `findProjectRoot(__dirname)`.
+
+### 2.4. Типы для «словарей» и «массивов объектов»
 
 Любая функция, возвращающая `{}` или `[]`, которая используется из
-другого модуля (в т.ч. из теста), обязана иметь типизацию. Правило:
+другого модуля, обязана иметь типизацию. Правило:
 
-- Есть отдельный `Foo.types.ts` в папке модуля.
+- `Foo.types.ts` в папке модуля;
 - JSDoc в legacy-файле ссылается на него:
   `/** @typedef {import('./Foo.types.ts').FooMap} FooMap */`
 - TS-тест импортирует через `import type { FooMap } from './Foo.types.ts';`
 
-Пример (`gosts`):
+Пример:
 
 ```typescript
 // gosts.types.ts
@@ -258,15 +263,14 @@ const refs = {};
 
 // gosts.collector.test.ts
 import type { GostRefs } from './gosts.types.ts';
-const refs: GostRefs = collectGostReferences(langDir, gostList);
 ```
 
-**Без типизации** `const refs = {}` в `.js` даёт `{}` в `checkJs`,
-и `refs['key']` падает с `"key" не может использоваться для индексации`.
+Без типизации `const refs = {}` в `.js` даёт `{}` в `checkJs`, и
+`refs['key']` падает с `"key" не может использоваться для индексации`.
 
-### 2.4. `catch (e)`
+### 2.5. `catch (e)`
 
-В `.js` при `checkJs` / `strict` `e` имеет тип `unknown`. Правильно:
+При `checkJs` / `strict` `e` имеет тип `unknown`:
 
 ```javascript
 } catch (err) {
@@ -275,33 +279,28 @@ const refs: GostRefs = collectGostReferences(langDir, gostList);
 }
 ```
 
-Не `e.message` напрямую.
+### 2.6. Где живут `.ts`-модули
 
-### 2.5. Где живут `.ts`-модули
-
-Категорийные папки в `src/utils/`:
-
-| Папка                          | Что                                              |
-| ------------------------------ | ------------------------------------------------ |
-| `src/utils/string/`            | `String_*` — сравнение, обрезка, форматирование  |
-| `src/utils/url/`               | `Url_*` — slugify, транслитерация, encode        |
-| `src/utils/html/`              | `Html_*` — escape, классификация, parse          |
-| `src/utils/fs/`                | `Fs_*` — walk, cleanup                           |
-| `src/utils/link/`              | `Link_*` — классификация ссылок                  |
-| `src/utils/markdown/`          | `Markdown_*` — парсинг, маскировка               |
-| `src/utils/inline-annotation/` | `InlineAnnotation_*` — общий код для abbrs/terms |
-| `src/utils/path/`              | `Path_*` — resolve, classify                     |
-| `src/utils/yaml/`              | `Yaml_*` — load, save                            |
-| `src/utils/frontmatter/`       | `Frontmatter_*` — parse, get, upsert             |
+| Папка                          | Что                                                |
+| ------------------------------ | -------------------------------------------------- |
+| `src/utils/string/`            | `String_*`                                         |
+| `src/utils/url/`               | `Url_Transform_*`, `String_Transliterate_Cyrillic` |
+| `src/utils/html/`              | `Html_Escape_*`, `Html_Classify_File`              |
+| `src/utils/fs/`                | `Fs_Walk_Directory`, `Fs_Find_Module_Dirs`         |
+| `src/utils/link/`              | `Link_Classify_External`                           |
+| `src/utils/inline-annotation/` | `InlineAnnotation_*`                               |
+| `src/utils/path/`              | `Path_ToPosix`                                     |
+| `src/utils/frontmatter/`       | `Frontmatter_Split_Raw`                            |
 
 Тип-файлы: `Foo.types.ts` **в папке модуля-хозяина** (`src/plugins/gosts/gosts.types.ts`),
 не в `src/utils/types/`.
 
-### 2.6. CLI-флаги до `require` (prelude)
+### 2.7. CLI-флаги до `require` (prelude)
 
-Флаги, влияющие на `_paths.js` (сейчас — `--docs-project-root`), нужно
+Флаги, влияющие на `_paths.ts` (сейчас — `--docs-project-root`), нужно
 разбирать в prelude `diplodoc-helper-cli.js` **до** первого `require`.
-`_paths.js` кешируется Node'ом и читает `process.env` однократно.
+`_paths.ts` кешируется Node'ом и читает `process.env` однократно.
+
 Поддерживай обе формы:
 
 ```js
@@ -312,32 +311,38 @@ for (let i = 0; i < argv.length; i++) {
 }
 ```
 
-Первая форма (`--key=value`) коварна: `argv.indexOf('--flag')` её **не находит**.
+Первая форма (`--key=value`) коварна: `argv.indexOf('--flag')` её не находит.
+
+### 2.8. `require.main === module` в `.ts` не работает
+
+Под нативным Node 24, где `.ts` грузится как ESM, `require` и `module` —
+undefined. Правило: **не использовать `require.main === module` в `.ts`**.
+CLI-entry — единственная точка входа `diplodoc-helper-cli.js`.
+
+### 2.9. `.default` на CJS-модуле — всегда `undefined`
+
+```js
+// правильно
+const { runRenderModules } = require('./render-modules');
+// неправильно
+require('./render-modules').default.runRenderModules;  // TypeError
+```
+
+`.default` появляется только у ESM (`export default`) или CJS с явным
+`module.exports = { default: {...} }`. ts-jest иногда маскирует это
+через interop, но `require()` возвращает сырой `module.exports`.
 
 ---
-
-**`require.main === module` в `.ts` не работает под нативным Node.**
-
-Когда `node ./X.ts` грузит файл со `import`, Node использует ESM loader,
-где `require` и `module` — undefined. Значит `if (require.main === module)`
-упадёт с ReferenceError.
-
-Правило: **не использовать `require.main === module` в `.ts`-файлах.**
-CLI-entry — `diplodoc-helper-cli.js` (единственная точка входа). Прямой
-запуск `node ./docs-registry/collect-catalog/index.ts` — не поддерживается.
-
-Для `.js`-файлов (которые ещё не мигрированы) `require.main === module`
-работает, потому что они грузятся как CJS.
 
 ## 3. Именование модулей
 
 Формат: **`<Object>_<Action>_<Subject>`**.
 
-- `Object` — что примеряет на себя действие (существительное-субъект).
-- `Action` — глагол (`Compare`, `Transform`, `Escape`, `Classify`, `Walk`).
-- `Subject` — что обрабатывается (`Natural`, `Segment`, `Text`, `File`).
+- `Object` — что примеряет на себя действие;
+- `Action` — глагол (`Compare`, `Transform`, `Escape`, `Classify`, `Walk`);
+- `Subject` — что обрабатывается.
 
-Класс-статика, а не функции:
+Класс-статика:
 
 ```typescript
 export class Url_Transform_Segment {
@@ -345,17 +350,9 @@ export class Url_Transform_Segment {
 }
 ```
 
-Потребители вызывают `Url_Transform_Segment.slugify(x)`.
-
-**Почему класс, а не функция:** группировка по `Object`, автодополнение
-в IDE, единая точка для JSDoc-документации контракта, отсутствие
+**Почему класс, а не функция:** группировка по `Object`,
+автодополнение в IDE, единая точка для JSDoc-контракта, отсутствие
 конфликтов имён при импорте нескольких `slugify` из разных доменов.
-
-**Почему `static`, а не instance:** нет состояния, нет смысла в `new`.
-
-**Почему `Object_Action_Subject`, а не `ObjectSubjectAction`:** в
-алфавитном порядке файлов `Url_Transform_Filename`, `Url_Transform_Reference`,
-`Url_Transform_Segment` идут подряд — удобно навигировать.
 
 **Суффикс `Legacy`** — если функция реализует лоссовый/сомнительный
 контракт, но оставлен для совместимости:
@@ -363,33 +360,28 @@ export class Url_Transform_Segment {
 
 ### 3.1. `Orchestrant`
 
-Если метод сам по себе сложный и декомпозирован на несколько
-приватных/публичных, но публичный фасад один — он называется
-`<Action>Orchestrant` или `<Action>` (без суффикса), а внутренние —
-`<Action>Step<N>`.
-
-Пример из планируемого `Markdown_Parse_Figure_Orchestrant`:
-`extractImages` → `extractFigcaptions` → `associateCaptions` → orchestrant.
+Если метод сам по себе сложный и декомпозирован, но публичный фасад
+один — он называется `<Action>Orchestrant` (или `<Action>` без суффикса),
+внутренние — `<Action>Step<N>`.
 
 ---
 
 ## 4. Миграционная волна
 
-Каждая волна миграции `.js` → `.ts` проходит 5 шагов. Не пропускать.
+5 шагов. Не пропускать.
 
 ### Шаг 1. Frozen snapshot на legacy
 
-До того как трогать код, пишем тесты **на текущем `.js`**. Все зелёные.
-Это фиксирует эталон поведения.
+Пишем тесты **на текущем `.js`**. Все зелёные. Фиксируем эталон.
 
 ### Шаг 2. Типы
 
-Создать `Foo.types.ts` в папке модуля. Если `const X = {}` — JSDoc
-`@type {FooMap}`. Запустить `tsc --noEmit` — должно быть чисто.
+Создать `Foo.types.ts`. `const X = {}` → JSDoc `@type {FooMap}`.
+`tsc --noEmit` — чисто.
 
 ### Шаг 3. Миграция
 
-Заменить реализацию. Оставить shim-обёртку в старом файле:
+Заменить реализацию. Оставить shim-обёртку:
 
 ```javascript
 /**
@@ -404,19 +396,31 @@ const oldFunctionName = Foo.staticMethod;
 ### Шаг 3.5. После `git mv X.js X.ts` — заменить тело целиком
 
 `git mv` переименовывает, но **не** меняет содержимое. В `.ts`-файле
-остаётся CJS-тело с `require(...)` и `module.exports = { ... }`.
-
-Проверка сразу после `mv`:
+остаётся CJS-тело с `require(...)` и `module.exports`. Проверка:
 
 ```bash
 grep -nE "module\.exports|^const .* = require\(" src/**/X.ts
 ```
 
-Если найдено — тело не заменено. Заменяй целиком, не «наклеивай
-`export` в начало».
+Если найдено — тело не заменено. Симптом: `TS2306: File is not a module`.
 
-Симптом, если пропустить: `TS2306: File is not a module` при `import
-from './X.ts'`.
+### Шаг 3.6. `runXxx(argv)` не вызывает `process.exit`
+
+Функции, которые тестируются (`runCollectCatalog`, `runEmitFeatureMap`,
+`runRenderModules`, …), **бросают `Error`**. `process.exit` — только
+в CLI-entry:
+
+```javascript
+if (require.main === module) {
+    runXxx(process.argv.slice(2)).catch(e => {
+        console.error(`❌ ${e.message || e}`);
+        process.exit(1);
+    });
+}
+```
+
+Причина: `process.exit` убивает Jest-worker. Тест видит
+`Jest worker encountered N child process exceptions` вместо `expect().rejects`.
 
 ### Шаг 4. Прогон
 
@@ -424,194 +428,221 @@ from './X.ts'`.
 
 ### Шаг 5. Удаление shim
 
-Отдельный коммит. Не совмещать с миграцией потребителей. Перед
-удалением — `git grep` по имени функции (может остаться внешний
-потребитель, например, установленные скрипты в целевом проекте).
+Отдельный коммит. Перед удалением — `git grep` по имени функции.
 
-### Правила для волны
+### Правила волны
 
-- **Не смешивать** в одном коммите миграцию A и миграцию B.
-- **Не смешивать** миграцию и новую фичу (например, изменение
-  `feature-map` не должно ехать в волне `InlineAnnotation_*`).
-- **Не удалять** legacy до тех пор, пока snapshot не зелёный **после**
-  миграции всех потребителей.
+- **Не смешивать** в одном коммите миграцию A и B.
+- **Не смешивать** миграцию и новую фичу.
+- **Не удалять** legacy до зелёного snapshot после миграции всех потребителей.
 
 ---
 
 ## 5. Асимметрии legacy, которые нельзя «оптимизировать»
 
-Эти вещи выглядят как дубли или как баги, но менять их = breaking
-change для существующих документов и/или внешних потребителей. Все
-зафиксированы frozen-снапшотами.
-
 ### 5.1. Коллекторы: 4 независимых флага
 
-| Коллектор  | `skipHidden` | `skipUnderscore` | `skipDirNames`                                  | `skipFullPaths` |
-| ---------- | ------------ | ---------------- | ----------------------------------------------- | --------------- |
-| `abbrs`    | ✓            | ✓                | `abbrs,terms,contexts,helptags,figures,roadmap` | ✓ output-dir    |
-| `terms`    | ✓            | ✓                | `terms,abbrs,contexts,helptags,figures,roadmap` | ✓ output-dir    |
-| `gosts`    | ✓            | ✓                | —                                               | ✓ output-dir    |
-| `helptags` | ✗            | ✗                | `helptags,contexts`                             | —               |
-| `сontexts` | ✗            | ✗                | `contexts`                                      | —               |
-| `figures`  | ✗            | ✗                | `figures,contexts,helptags`                     | —               |
+| Коллектор  | `skipHidden` | `skipUnderscore` | `skipDirNames` | `skipFullPaths` |
+| ---------- | ------------ | ---------------- | -------------- | --------------- |
+| `abbrs`    | ✓            | ✓                | 6 имён         | ✓ output-dir    |
+| `terms`    | ✓            | ✓                | 6 имён         | ✓ output-dir    |
+| `gosts`    | ✓            | ✓                | —              | ✓ output-dir    |
+| `helptags` | ✗            | ✗                | 2              | —               |
+| `сontexts` | ✗            | ✗                | 1              | —               |
+| `figures`  | ✗            | ✗                | 3              | —               |
 
 **Копирование шаблона между коллекторами = тихая регрессия.**
-`skipHidden: true` в `helptags` потеряет теги из `.hidden/`-статей;
-`skipDirNames` из 6 имён в `figures` потеряет рисунки в `abbrs/terms/roadmap`.
 
-### 5.2. Slugify family: 4 функции, 4 разных контракта
+### 5.2. Slugify family: 4 функции, 4 контракта
 
-| Функция                      | Транслит | Lowercase | Разделитель    | Сохраняет            | Trim             |
-| ---------------------------- | -------- | --------- | -------------- | -------------------- | ---------------- |
-| `slugify_latin_alphanumeric` | ✓        | ✓         | `_`            | `[a-z0-9]`           | ✓                |
-| `slugify_filename`           | ✗        | ✗         | `_`            | `[\p{L}\p{N}\-._]`   | ✓                |
-| `slugify_diplodoc_reference` | ✓        | ✓         | `-`            | `[a-z0-9/=\ \-]`     | ✗ (trailing `-`) |
-| `slugify_latin`              | ✓        | ✓         | `/` (сегменты) | всё, но по сегментам | ✗                |
+| Функция                      | Транслит | Lowercase | Разделитель    | Сохраняет          | Trim             |
+| ---------------------------- | -------- | --------- | -------------- | ------------------ | ---------------- |
+| `slugify_latin_alphanumeric` | ✓        | ✓         | `_`            | `[a-z0-9]`         | ✓                |
+| `slugify_filename`           | ✗        | ✗         | `_`            | `[\p{L}\p{N}\-._]` | ✓                |
+| `slugify_diplodoc_reference` | ✓        | ✓         | `-`            | `[a-z0-9/=\ \-]`   | ✗ (trailing `-`) |
+| `slugify_latin`              | ✓        | ✓         | `/` (сегменты) | всё, по сегментам  | ✗                |
 
-**Нельзя** схлопнуть в один модуль с параметром `mode`. Каждый
-контракт используется в своей фиче, у каждого — свой frozen-snapshot.
-`slugify_filename` сохраняет кириллицу — это требование, а не упущение.
+Нельзя схлопнуть в один модуль с параметром `mode`.
 
 ### 5.3. Другие унаследованные контракты
 
-- `escapeHtml` / `Html_Escape_Text.escape` — **не** экранирует `'`.
-  Использование в одинарных кавычках (`id='${x}'`) — небезопасно и
-  не поддерживается.
-- `Html_Escape_JsonString.escape` — **не** экранирует `&` (уже
-  экранирован `Html_Escape_Text` на предыдущем шаге).
-- `String_Transliterate_Cyrillic.toLatin` — **не** транслитерирует
-  `ь`/`ъ`, они «протекают» как есть. Очистка до `[a-z0-9]` — дело
-  `Url_Transform_*`.
-- `slugify_latin_alphanumeric('жизнь')` → `'zhizn'` (trailing `ь`
-  съедается `_` + trim), но `slugify_latin_alphanumeric('объект')`
-  → `'ob_ekt'` (middle `ъ` → separator).
-- `slugify_diplodoc_reference('### Header ###')` → `'header-'`
-  (trailing `-`; на практике не проявляется, потому что caller уже
-  `trim`'ит заголовок).
-- `Frontmatter_Split_Raw.split('---\n---\nbody')` → `null` (пустой
-  frontmatter не матчится legacy-регексом). Расхождение с
-  `frontmatter.utils.parse` (gray-matter возвращает `{data:{}, ...}`).
-  Любая правка регекса = breaking для `collect-catalog` /
-  `build-page-legend` (файлы с пустым frontmatter начнут появляться
-  в каталогах). Зафиксировано в `57.7.2#09`.
+- `Html_Escape_Text.escape` — **не** экранирует `'`.
+- `Html_Escape_JsonString.escape` — **не** экранирует `&`.
+- `String_Transliterate_Cyrillic.toLatin` — **не** транслитерирует `ь`/`ъ`.
+- `slugify_latin_alphanumeric('жизнь')` → `'zhizn'` (trailing `ь` съедается `_` + trim), но `'объект'` → `'ob_ekt'` (middle `ъ` → separator).
+- `Frontmatter_Split_Raw.split('---\n---\nbody')` → `null` (пустой frontmatter не матчится legacy-регексом).
+
 ---
 
 ## 6. Feature-map: особый случай
 
-`feature-map` — **не** в общем пайплайне миграций, у неё свой цикл.
-Причина: поддержка разных проектов (другие измерения, другие пути,
-другой набор статей). Отдельное руководство — `FEATURE-MAP.md`.
+`feature-map` — отдельный цикл. Подробности — `FEATURE-MAP.md`.
 
-Любая правка `feature-map.*` должна проверяться тестами по схеме:
+Покрытие тестами:
 
-| Модуль                                         | Кейсы          | Что покрывают                                 |
-| ---------------------------------------------- | -------------- | --------------------------------------------- |
-| `emit-feature-map/index.ts`                    | `57.1#01..#09` | генерация `feature-map.md` (дефолтный конфиг) |
-| `emit-feature-map/feature-map.injector.ts`     | `57.2#01..#03` | инжект CSS+JS в HTML-страницы сборки          |
-| `emit-feature-map/FeatureMap_Filter_Engine.ts` | `57.3#01..#27` | чистая логика фильтрации                      |
-| `emit-feature-map/index.ts` (alt-project)      | `57.4#01..#09` | генерация с `--config` (второй проект)        |
-| `emit-feature-map/index.ts` (path overrides)   | `57.5#01..#03` | `opts.docsDir` / `opts.generatedDir`          |
+| Модуль                                         | Кейсы            |
+| ---------------------------------------------- | ---------------- |
+| `emit-feature-map/index.ts`                    | `57.1#01..#18`   |
+| `emit-feature-map/feature-map.injector.ts`     | `57.2#01..#03`   |
+| `emit-feature-map/FeatureMap_Filter_Engine.ts` | `57.3#01..#29`   |
+| `index.ts` (alt-project)                       | `57.4#01..#09`   |
+| `index.ts` (path overrides)                    | `57.5#01..#03`   |
+| `collect-catalog` (layout/path/empty)          | `57.6#01..#39`   |
+| `emit-modules-table`                           | `00.6.7#01..#09` |
+| `render-modules`                               | `00.6.8#01..#13` |
+| `build-page-legend`                            | `00.6.6#01..#12` |
+| `_layout`                                      | `00.4.4#01..#16` |
 
-**Константы для тестов** — в `const FM = {...}` в шапке каждого тест-файла.
-При изменении пути вывода, anchor'а, измерений или i18n — правится
-только этот блок, тело тестов не трогается.
+**Константы для тестов** — в `const FM = {...}` в шапке. При изменении
+пути вывода / anchor / измерений / i18n — правится только этот блок.
 
-**`pluginDir` — обязательный параметр `runGeneration`.** В ESM нет
-`__dirname`, поэтому путь к ассетам передаётся явно. Вызывающие:
-`diplodoc-helper-cli.js` (CJS — использует свой `__dirname`) и тесты
-(`ts-jest` — CJS-режим).
-
-**Три способа переопределить пути.**
+**Три способа переопределить пути:**
 
 1. `--docs-project-root=<root>` — глобально, через `process.env.DOCS_PROJECT_ROOT`.
-   `_paths.js` пересчитывает `DOCS_DIR`, `GENERATED_DIR`, `REGISTRY_DIR`,
-   `ASSETS_DIR` от `root`. Применяется ко **всем** `docs-registry/*` командам.
-   Predule-обработка (см. §2.6).
-2. `--docs-root=<docs-dir>` — точечно, только `runEmitFeatureMap`.
-   Передаётся через `opts.docsDir`.
-3. `--generated-dir=<gen-dir>` — точечно, `opts.generatedDir`. Только для
-   чтения `catalog.<lang>.json` при отсутствии `--catalog`.
+   Predule-обработка (см. §2.7).
+2. `--docs-root=<docs-dir>` — точечно, через `opts.docsDir` в `runEmitFeatureMap` /
+   `runCollectCatalog` / `runEmitModulesTable` / `runRenderModules` /
+   `runBuildPageLegend`.
+3. `--generated-dir=<gen-dir>` — точечно, через `opts.generatedDir`.
 
-Приоритет: `opts.docsDir` / `opts.generatedDir` > `_paths.js` (env или дефолт).
-
-**`docsRoot` должен быть внутри `docsDir`.** Если `catalog.docsRoot`
-указывает за пределы `opts.docsDir` / `DOCS_DIR`, `docsRootRel` начнётся
-с `..`, и сгенерированные `href` станут `/../...` — технически битые
-в браузере. В штатном втором проекте `docsRoot` — подпапка `docsDir`.
-
-**`--config=<path>`.** Переопределяет `DEFAULT_FEATURE_MAP_CONFIG` из
-JSON-файла. Merge — shallow на верхнем уровне: любой ключ заменяет
-значение из дефолта целиком. Неизвестные ключи игнорируются с
-`console.warn` (forward-compat). Подробности — `FEATURE-MAP.md`.
+Приоритет: `opts.*` > `_paths.ts` (env или дефолт).
 
 ---
 
 ## 7. Сборка и валидация
 
-- `npm test` — Jest (все `.test.ts` + `.test.js`).
+- `npm test` — Jest.
 - `npm run type-check` — `tsc --noEmit` (JS + TS).
 - `npm run validate` — `lint + type-check + test`.
 - `npm run build:prod` — `generate-manifest + esbuild` → `dist/extension.js`.
 
-`npm run precompile` автоматически гоняет `validate` перед сборкой —
-локальный `npm run build:prod` упадёт, если тесты красные. Это
-намеренно.
+`npm run precompile` гоняет `validate` перед сборкой.
 
 ### 7.1. `docs/plugins/` — зеркало, не источник правды
 
-`installScripts` копирует `src/plugins/` в `docs/plugins/` для того,
-чтобы target-project мог работать без VS Code-расширения. Это значит,
-что в `docs/plugins/` лежат **копии** `.ts`-модулей и `.test.ts`-файлов.
+`installScripts` копирует `src/plugins/` в `docs/plugins/`. Правила:
 
-Правила:
-
-- **Jest** не должен туда заходить → `testPathIgnorePatterns: ['<rootDir>/docs/']`
-  (см. `jest.config.js`).
-- **`tsc --noEmit`** туда не заходит → `tsconfig.json#include` содержит
-  только `src/**/*.js` + `global.d.ts`.
-- **`node ./plugins/X.js`** из `docs/` работает — `require('./Y.ts')`
-  поддерживается нативным Node 24+ (см. §2.1).
-- При правке `src/plugins/**` — `docs/plugins/**` **не синхронизируется
-  автоматически**. Если нужен свежий тест в `docs/` — переустановить
-  скрипты через `installScripts` (в `.test.ts` в ignore-листе, поэтому
-  копироваться будут только runtime-файлы).
-- Тесты в `docs/plugins/` **не запускаются** — это зеркало, могут тянуть
-  `require('vscode')`, недоступный вне extension host.
+- Jest не должен туда заходить → `testPathIgnorePatterns: ['<rootDir>/docs/']`;
+- `tsc --noEmit` туда не заходит → `tsconfig.json#include` содержит
+  только `src/**/*.js` + `global.d.ts`;
+- `node ./plugins/X.js` из `docs/` работает (нативный Node 24+);
+- при правке `src/plugins/**` — `docs/plugins/**` **не синхронизируется
+  автоматически**. Переустановить через `installScripts` (`.test.ts` в
+  ignore-листе);
+- тесты в `docs/plugins/` не запускаются — могут тянуть `vscode`.
 
 ---
 
 ## 8. Что делать при обнаружении бага legacy
 
-1. **Не чинить в текущей волне.** Волна — про миграцию, баг — про
-   отдельную фичу.
-2. Зафиксировать в frozen-snapshot (зафиксировать **текущее**
-   поведение, включая баг).
-3. Открыть отдельную задачу: `chore(<module>): fix legacy <что>`.
+1. **Не чинить в текущей волне.**
+2. Зафиксировать в frozen-snapshot (текущее поведение, включая баг).
+3. Открыть отдельную задачу `chore(<module>): fix legacy <что>`.
 4. Чинить отдельным коммитом с обновлением snapshot и явной
    пометкой в CHANGELOG как **breaking change**.
-
-Пример: `slugify_filename('.hidden')` → `'.hidden'` (dot не trim'ится).
-Если когда-нибудь решим trim'ить — сломаются файлы `docs/ru/**/Контексты/.hidden.md`,
-все ссылки на них. Snapshot заставит пройти через это решение явно.
 
 ---
 
 ## 9. Полезные команды
 
 ```bash
-# Проверить, есть ли внешние потребители функции
+# Внешние потребители функции
 git grep -n "functionName\b" -- ':!<файл-определения>'
 
-# Все словарные литералы без типизации (кандидаты на *.types.ts)
+# Словарные литералы без типизации (кандидаты на *.types.ts)
 git grep -n 'const \w* = {}' src/plugins/
 
-# Все extensionless relative imports в .ts
-git grep -nE "from '\.[^162]*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
+# Extensionless relative imports в .ts
+git grep -nE "from '\.[^']*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
 
-# Все места, где используется slugify-семейство
+# Случаи slugify-семейства
 git grep -nE "slugify_(latin|latin_alphanumeric|filename|diplodoc_reference)" src/
 
-# Все .ts-файлы без tracked в git (проверка перед коммитом)
+# .test.ts не закоммичены
 git ls-files | grep '\.test\.ts$' | wc -l
 find src -name '*.test.ts' | wc -l
+
+# Проверить, что docs-registry полностью .ts
+find src/plugins/docs-registry -name '*.js'
+# ожидаем: только feature-map/feature-map.client.js
+
+# `__empty__` — grep по месту использования
+git grep -n "__empty__" src/
 ```
+
+---
+
+## 10. Feature-map расширения
+
+### 10.1. `__empty__` — «Без значения»
+
+Служебный slug для модулей без значения измерения. Управляется в
+`layout.json`:
+
+```json
+{
+    "includeEmpty": true,
+    "emptyLabel": { "content_type": "Без типа", "audience": "Без АРМ" }
+}
+```
+
+- `includeEmpty: false` (default) — не включать;
+- `includeEmpty: true` — для всех измерений;
+- `includeEmpty: ["content_type", "status"]` — только для перечисленных.
+
+`emptyLabel` — `string` (общий) или `object` (per-dim). Default: `'Без значения'`.
+
+### 10.2. `strictDimensions: false` — auto-register
+
+Неизвестные slug'и в измерениях:
+
+- `true` (default): `throw` при первом unknown (с `--lenient` — warning);
+- `false`: warning + auto-register в runtime (`catalog.dimensions`),
+  `dimensions.yaml` не изменяется.
+
+Для MES `strictDimensions: false` — реестр измерений не полный список.
+
+### 10.3. `_fields.yaml` — `source: path`
+
+Не все поля техпис пишет в frontmatter. Для path-based:
+
+```yaml
+fields:
+  section:
+    kind: multi
+    dimension: section
+    dimField: sections
+    source: path
+    path:
+      regex: "Раздел(\\d+)"
+      template: "s$1"
+
+  audience:
+    kind: multi
+    dimension: audience
+    dimField: audiences
+    source: path
+    path:
+      rules:
+        - { regex: "АРМ\\s*Менеджера", slug: "manager" }
+        - { regex: "АРМ\\s*Технолога", slug: "technologist" }
+```
+
+- `source: 'frontmatter'` (default) — из `fm[frontmatterKey || key]`;
+- `source: 'path'` — из `mod.dir` через regex/rules;
+- `source: 'frontmatter-or-path'` — frontmatter приоритетнее, path как fallback.
+
+### 10.4. `data-attrs` и `data-dims`
+
+Единственный контракт для браузерного клиента:
+
+```html
+<div data-feature-map data-dims="audience,status,section,content_type">
+  <a class="fm-chip" data-attrs='{"audience":["manager"],"section":["s1"]}'
+     data-module="…" title="…">ident</a>
+</div>
+```
+
+- `data-dims` на root — объединение `stripDimensions ∪ {rowDimension, columnDimension}`;
+- `data-attrs` — JSON-объект `{dim: string[]}` на каждом чипе;
+- legacy `data-actor` / `data-cap` / `data-family` / `data-layer` — удалены.

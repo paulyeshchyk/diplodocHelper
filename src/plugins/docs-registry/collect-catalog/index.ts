@@ -5,7 +5,7 @@ import { Frontmatter_Split_Raw } from '../../utils/frontmatter/Frontmatter_Split
 import { Fs_Find_Module_Dirs } from '../../utils/fs/Fs_Find_Module_Dirs.ts';
 import { Path_ToPosix } from '../../utils/path/Path_ToPosix.ts';
 import { String_Compare_Natural } from '../../utils/string/String_Compare_Natural.ts';
-import { loadFields} from '../_fields.ts';
+import { loadFields } from '../_fields.ts';
 import type { PathConfig } from '../_fields.ts';
 import { loadLayout } from '../_layout.ts';
 import { DOCS_DIR, GENERATED_DIR, REGISTRY_DIR } from '../_paths.ts';
@@ -13,6 +13,8 @@ import type {
     CatalogDimension,
     CatalogModule,
 } from '../emit-feature-map/feature-map.types.ts';
+
+import { EMPTY_SLUG, isIncludeEmptyForDim, getEmptyLabelForDim } from '../_layout.ts';
 
 const HELP = `
 Использование: node collect-catalog.js [options]
@@ -346,13 +348,22 @@ export async function runCollectCatalog(
         if (f.dimension) dimToField[f.dimension] = f.dimField;
     }
 
+    const strict = layout.strictDimensions;
     const unknown: UnknownDimSlug[] = [];
+
     for (const [modDir, mod] of Object.entries(modules)) {
         for (const [dimName, field] of Object.entries(dimToField)) {
             if (!registry.dimensions[dimName]) continue;
             const values: string[] = field && Array.isArray(mod[field]) ? (mod[field] as string[]) : [];
             for (const slug of values) {
-                if (!registry.dimensions[dimName].items?.[slug]) {
+                if (registry.dimensions[dimName].items?.[slug]) continue;
+
+                if (!strict) {
+                    // auto-register в runtime (dimensions.yaml не трогаем)
+                    if (!registry.dimensions[dimName].items) registry.dimensions[dimName].items = {};
+                    registry.dimensions[dimName].items![slug] = { title: slug };
+                    warnings.push(`${modDir}: ${dimName}="${slug}" — auto-registered`);
+                } else {
                     unknown.push({ modDir, dim: dimName, slug });
                 }
             }
@@ -389,9 +400,21 @@ export async function runCollectCatalog(
         for (const [dimName, field] of Object.entries(dimToField)) {
             if (!index[dimName]) continue;
             const values: string[] = field && Array.isArray(mod[field]) ? (mod[field] as string[]) : [];
-            for (const slug of values) {
-                if (!index[dimName][slug]) index[dimName][slug] = [];
-                if (!index[dimName][slug].includes(modDir)) index[dimName][slug].push(modDir);
+
+            if (values.length > 0) {
+                for (const slug of values) {
+                    if (!index[dimName][slug]) index[dimName][slug] = [];
+                    if (!index[dimName][slug].includes(modDir)) index[dimName][slug].push(modDir);
+                }
+            } else if (isIncludeEmptyForDim(layout, dimName)) {
+                if (!index[dimName][EMPTY_SLUG]) index[dimName][EMPTY_SLUG] = [];
+                if (!index[dimName][EMPTY_SLUG].includes(modDir)) index[dimName][EMPTY_SLUG].push(modDir);
+
+                if (!registry.dimensions[dimName].items[EMPTY_SLUG]) {
+                    registry.dimensions[dimName].items[EMPTY_SLUG] = {
+                        title: getEmptyLabelForDim(layout, dimName),
+                    };
+                }
             }
         }
     }
@@ -399,6 +422,7 @@ export async function runCollectCatalog(
     // --- empty dimensions ---
     for (const [dimName, dim] of Object.entries(registry.dimensions)) {
         for (const slug of Object.keys(dim.items || {})) {
+            if (slug === EMPTY_SLUG) continue;
             if (!index[dimName][slug] || index[dimName][slug].length === 0) {
                 warnings.push(`измерение ${dimName}/${slug}: нет модулей`);
             }

@@ -23,3 +23,5 @@ docs/plugins.bak
 docs/package-lock.json
 package-lock.json
 docs/docs/ru/Модули/FM/feature-map.md
+docs/docs/git-meta.json
+docs/docs/presets.yaml
