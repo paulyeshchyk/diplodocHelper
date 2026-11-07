@@ -218,11 +218,25 @@ describe('render-modules.runRenderModules (frozen, legacy)', () => {
   });
 
   it('00.6.8#12 should skip dimension slug when target dir does not exist', async () => {
-    // Удаляем F/B — должна быть errors++ и continue, F/A всё равно рендерится
-    fs.rmSync(path.join(docsRoot, 'F/B'), { recursive: true, force: true });
+    // Не удаляем через fs.rmSync — обходим Windows-flake (file lock
+    // не освобождается за 50ms, rename-lock в NTFS). Вместо этого
+    // меняем `fam-b.dir` на несуществующую папку — `render-modules`
+    // должен её скипнуть и записать ошибку.
+    const catalogObj = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+    catalogObj.dimensions.family.items['fam-b'].dir = 'F/DoesNotExist';
+    fs.writeFileSync(catalogPath, JSON.stringify(catalogObj), 'utf8');
+
+    const errSpy = jest.spyOn(console, 'error');
     await run();
+
+    // F/A рендерится нормально
     expect(fs.existsSync(modulesMd('F/A'))).toBe(true);
-    expect(fs.existsSync(modulesMd('F/B'))).toBe(false);
+    // F/DoesNotExist — не создаётся, папки нет
+    expect(fs.existsSync(path.join(docsRoot, 'F/DoesNotExist', 'modules.md'))).toBe(false);
+    // Порядок в сообщении: "папка не существует: F/DoesNotExist"
+    expect(errSpy).toHaveBeenCalledWith(
+      expect.stringMatching(/папка не существует:\s*F\/DoesNotExist/),
+    );
   });
 
   it.skip('00.6.8#13 should throw when catalog does not exist', async () => {

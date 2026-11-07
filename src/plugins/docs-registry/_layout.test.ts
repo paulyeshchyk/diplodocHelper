@@ -30,6 +30,7 @@ describe('loadLayout', () => {
       moduleIndexFile: 'index.md',
       moduleSectionTypes: null,
       outFolder: '_index',
+      skipDirs: [],
     }));
     expect(loadLayout(layoutPath)).toEqual({
       modulesFolder: 'booklets',
@@ -37,6 +38,7 @@ describe('loadLayout', () => {
       moduleIndexFile: 'index.md',
       moduleSectionTypes: null,
       outFolder: '_index',
+      skipDirs: [],
     });
   });
 

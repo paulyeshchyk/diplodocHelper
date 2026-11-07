@@ -8,6 +8,7 @@ import type {
     CatalogModule,
     CatalogSnapshot,
 } from './feature-map.types.ts';
+import * as fsSync from 'node:fs';
 
 export interface RunEmitFeatureMapOptions {
     /**
@@ -25,6 +26,11 @@ export interface RunEmitFeatureMapOptions {
      * Переопределяет `GENERATED_DIR` из `_paths.js`.
      * Из CLI: `--generated-dir=<path>`.
      */
+    generatedDir?: string;
+}
+
+export interface RunEmitFeatureMapOptions {
+    docsDir?: string;
     generatedDir?: string;
 }
 
@@ -47,13 +53,21 @@ export interface RunEmitFeatureMapOptions {
  */
 export async function runEmitFeatureMap(
     argv: string[],
-    opts: RunEmitFeatureMapOptions = {},
+    options: RunEmitFeatureMapOptions = {},
 ): Promise<void> {
     const parsed = parseArgs(argv);
-    const cfg = loadFeatureMapConfig(parsed.config);
+    const effectiveDocsDir = options.docsDir ?? DOCS_DIR;
+    const effectiveGeneratedDir = options.generatedDir ?? GENERATED_DIR;
 
-    const effectiveDocsDir = opts.docsDir ?? DOCS_DIR;
-    const effectiveGeneratedDir = opts.generatedDir ?? GENERATED_DIR;
+    // Default config: <docsDir>/_registry/feature-map.config.json,
+    // если --config не задан. Иначе — дефолт (back-compat для diplodoc-helper,
+    // у которого файла нет и используется DEFAULT_FEATURE_MAP_CONFIG).
+    let configPath: string | null = parsed.config;
+    if (!configPath) {
+        const candidate = path.join(effectiveDocsDir, '_registry', 'feature-map.config.json');
+        if (fsSync.existsSync(candidate)) configPath = candidate;
+    }
+    const cfg = loadFeatureMapConfig(configPath);
 
     const catalogPath = parsed.catalog
         ? path.resolve(parsed.catalog)

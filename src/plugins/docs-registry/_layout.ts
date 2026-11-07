@@ -11,6 +11,7 @@ export const DEFAULT_LAYOUT: Readonly<LayoutConfig> = Object.freeze({
   moduleIndexFile: 'index.md',
   moduleSectionTypes: null,
   outFolder: 'Реестр',
+  skipDirs: [],
 });
 
 /**

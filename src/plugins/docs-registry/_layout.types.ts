@@ -37,4 +37,15 @@ export interface LayoutConfig {
    * относительно `<dimension.dir>`. По умолчанию `'Реестр'`.
    */
   outFolder: string;
+
+  /**
+   * Дополнительные папки (basename), которые не считать модулями даже
+   * при `modulePrefix: null`. Например, `figures`, `helptags`, `roadmap`,
+   * `Дополнительнаяинформация` — они имеют `index.md` с `sectionType: Page`,
+   * но не являются статьями.
+   *
+   * По умолчанию — пусто (back-compat). Мерж с дефолтным `SKIP_DIRS`
+   * в `collect-catalog`.
+   */
+  skipDirs: string[];
 }

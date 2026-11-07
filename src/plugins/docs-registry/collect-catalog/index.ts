@@ -227,11 +227,15 @@ export async function runCollectCatalog(
         }
     }
 
+    const effectiveSkipDirs = layout.skipDirs.length > 0
+        ? new Set<string>([...SKIP_DIRS, ...layout.skipDirs])
+        : SKIP_DIRS;
+
     const foundDirs = Fs_Find_Module_Dirs.findSync({
         rootDir: docsRoot,
         prefix: effectivePrefix,
         excludeDirs,
-        skipDirNames: SKIP_DIRS,
+        skipDirNames: effectiveSkipDirs,
         indexFileName: layout.moduleIndexFile,
     });
 

@@ -1,4 +1,5 @@
 import * as fs from 'node:fs/promises';
+import * as fsSync from 'node:fs';
 import * as path from 'node:path';
 import { GENERATED_DIR } from '../_paths.ts';
 import type {
@@ -114,9 +115,7 @@ export async function runRenderModules(
       const targetFileAbs = path.join(targetDirAbs, opts.outName);
       const moduleDirs = (catalog.index[dimName] || {})[slug] || [];
 
-      try {
-        await fs.access(targetDirAbs);
-      } catch {
+      if (!fsSync.existsSync(targetDirAbs)) {
         console.error(`✗ ${dimName}/${slug}: папка не существует: ${item.dir}`);
         counts.errors++;
         continue;
