@@ -93,7 +93,7 @@ export async function runEmitFeatureMap(
 
     const hrefOfDim = (dimName: string, slug: string): string | null => {
         const item = catalog.dimensions[dimName]?.items?.[slug];
-        if (!item) return null;
+        if (!item || !item.dir) return null;
         return `/${docsRootRel}/${item.dir}/index.html`;
     };
 
@@ -160,7 +160,9 @@ export async function runEmitFeatureMap(
         // Никогда не полный dir — в глубоких иерархиях карточка нечитаема.
         const rawLabel = mod[cfg.chipLabelField];
         const scalarLabel = typeof rawLabel === 'string' ? rawLabel.trim() : '';
-        const label = esc(scalarLabel || path.basename(dir));
+
+        const pureTitle = typeof mod.pureTitle === 'string' ? mod.pureTitle.trim() : '';
+        const label = esc(scalarLabel || pureTitle || path.basename(dir));
 
         return `<a class="fm-chip" href="${encodeURI(hrefOfModule(dir))}" ` +
             `data-attrs='${attrsJson}' ` +

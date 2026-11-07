@@ -63,6 +63,15 @@ function writeRegistry(yaml: string): void {
     fs.writeFileSync(path.join(registryDir, 'dimensions.yaml'), yaml, 'utf8');
 }
 
+function writeLayout(layout: object): void {
+    fs.mkdirSync(path.join(docsDir, '_registry'), { recursive: true });
+    fs.writeFileSync(
+        path.join(docsDir, '_registry', 'layout.json'),
+        JSON.stringify(layout),
+        'utf8',
+    );
+}
+
 // ---------------------------------------------------------------------------
 // Unit: parseArgv
 // ---------------------------------------------------------------------------
@@ -379,5 +388,141 @@ describe('collect-catalog — layout.json integration', () => {
         const catalog = JSON.parse(fs.readFileSync(outPath, 'utf8'));
         const moduleDirs = Object.keys(catalog.modules);
         expect(moduleDirs).toEqual(['Часть1/Раздел1/Глава1/Статья1']);
+    });
+});
+
+describe('collect-catalog — path extractors (57.6#32..#35)', () => {
+    it('57.6#32 should extract simple path slugs via regex+template', async () => {
+        writeLayout({ modulePrefix: null });
+        fs.mkdirSync(path.join(docsDir, '_registry'), { recursive: true });
+        fs.writeFileSync(
+            path.join(docsDir, '_registry', 'fields.yaml'),
+            [
+                'fields:',
+                '  section:',
+                '    kind: multi',
+                '    dimension: section',
+                '    dimField: sections',
+                '    source: path',
+                '    path:',
+                '      regex: "Раздел(\\\\d+)"',
+                '      template: "s$1"',
+            ].join('\n'),
+            'utf8',
+        );
+        writeRegistry(
+            `dimensions:\n  section:\n    items:\n      s1: { title: "S1" }\n      s2: { title: "S2" }\n`,
+        );
+
+        writeModule('Раздел1.Управление/Глава1/Статья1', 'title: A\nid: 1');
+        writeModule('Раздел2.Планирование/Глава1/Статья1', 'title: B\nid: 2');
+        writeModule('Другое/Статья1', 'title: C\nid: 3');
+
+        const outPath = path.join(generatedDir, 'catalog.ru.json');
+        await runCollectCatalog(
+            ['--lang=ru', `--out=${outPath}`],
+            { docsDir, registryDir, generatedDir },
+        );
+
+        const catalog = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+        expect(catalog.modules['Раздел1.Управление/Глава1/Статья1'].sections).toEqual(['s1']);
+        expect(catalog.modules['Раздел2.Планирование/Глава1/Статья1'].sections).toEqual(['s2']);
+        expect(catalog.modules['Другое/Статья1'].sections).toBeUndefined();
+    });
+
+    it('57.6#33 should extract path slugs via rules (dictionary)', async () => {
+        writeLayout({ modulePrefix: null });
+        fs.mkdirSync(path.join(docsDir, '_registry'), { recursive: true });
+        fs.writeFileSync(
+            path.join(docsDir, '_registry', 'fields.yaml'),
+            [
+                'fields:',
+                '  audience:',
+                '    kind: multi',
+                '    dimension: audience',
+                '    dimField: audiences',
+                '    source: path',
+                '    path:',
+                '      rules:',
+                '        - { regex: "АРМ\\\\s*Менеджера", slug: "manager" }',
+                '        - { regex: "АРМ\\\\s*Технолога", slug: "technologist" }',
+            ].join('\n'),
+            'utf8',
+        );
+        writeRegistry(
+            `dimensions:\n  audience:\n    items:\n      manager: { title: "M" }\n      technologist: { title: "T" }\n`,
+        );
+
+        writeModule('Раздел1/АРМ Менеджера/Статья', 'title: A\nid: 1');
+        writeModule('Раздел1/АРМ Технолога/Статья', 'title: B\nid: 2');
+        writeModule('Раздел1/Другое/Статья', 'title: C\nid: 3');
+
+        const outPath = path.join(generatedDir, 'catalog.ru.json');
+        await runCollectCatalog(
+            ['--lang=ru', `--out=${outPath}`],
+            { docsDir, registryDir, generatedDir },
+        );
+
+        const catalog = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+        expect(catalog.modules['Раздел1/АРМ Менеджера/Статья'].audiences).toEqual(['manager']);
+        expect(catalog.modules['Раздел1/АРМ Технолога/Статья'].audiences).toEqual(['technologist']);
+        expect(catalog.modules['Раздел1/Другое/Статья'].audiences).toBeUndefined();
+    });
+
+    it('57.6#34 should respect frontmatter-or-path (frontmatter priority)', async () => {
+        writeLayout({ modulePrefix: null });
+        fs.mkdirSync(path.join(docsDir, '_registry'), { recursive: true });
+        fs.writeFileSync(
+            path.join(docsDir, '_registry', 'fields.yaml'),
+            [
+                'fields:',
+                '  section:',
+                '    kind: multi',
+                '    dimension: section',
+                '    dimField: sections',
+                '    frontmatterKey: section',
+                '    source: frontmatter-or-path',
+                '    path:',
+                '      regex: "Раздел(\\\\d+)"',
+                '      template: "s$1"',
+            ].join('\n'),
+            'utf8',
+        );
+        writeRegistry(
+            `dimensions:\n  section:\n    items:\n      s1: { title: "S1" }\n      s5: { title: "S5" }\n`,
+        );
+
+        writeModule('Раздел1.Управление/Статья', 'title: A\nid: 1\nsection: s5');
+        writeModule('Раздел1.Управление/Статья2', 'title: B\nid: 2');
+
+        const outPath = path.join(generatedDir, 'catalog.ru.json');
+        await runCollectCatalog(
+            ['--lang=ru', `--out=${outPath}`],
+            { docsDir, registryDir, generatedDir },
+        );
+
+        const catalog = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+        expect(catalog.modules['Раздел1.Управление/Статья'].sections).toEqual(['s5']);
+        expect(catalog.modules['Раздел1.Управление/Статья2'].sections).toEqual(['s1']);
+    });
+
+    it('57.6#35 should not emit warning for missing dimension dir', async () => {
+        fs.mkdirSync(path.join(docsDir, '_registry'), { recursive: true });
+        fs.writeFileSync(path.join(docsDir, '_registry', 'fields.yaml'), '', 'utf8');
+        writeRegistry(
+            `dimensions:\n  section:\n    items:\n      s1: { dir: "no-such-dir", title: "S1" }\n`,
+        );
+
+        writeModule('МодульA', 'title: A\nid: 1');
+
+        const outPath = path.join(generatedDir, 'catalog.ru.json');
+        await runCollectCatalog(
+            ['--lang=ru', `--out=${outPath}`],
+            { docsDir, registryDir, generatedDir },
+        );
+
+        const catalog = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+        const joined = catalog.warnings.join('\n');
+        expect(joined).not.toMatch(/no-such-dir/);
     });
 });

@@ -1,7 +1,35 @@
-import * as yaml from 'js-yaml';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import * as yaml from 'js-yaml';
 import { DOCS_DIR } from './_paths.ts';
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+/**
+ * Источник значения поля в `CatalogModule`.
+ *
+ * - `frontmatter` (default) — из `fm[frontmatterKey || key]`;
+ * - `path` — из `mod.dir` по правилам в `f.path` (техпис НЕ вводит);
+ * - `frontmatter-or-path` — сначала frontmatter; если пусто — path.
+ */
+export type FieldSource = 'frontmatter' | 'path' | 'frontmatter-or-path';
+
+export interface PathRule {
+    /** JS-regex (строка), применяется к `mod.dir` (posix, relative от `docsRoot`). */
+    regex: string;
+    /** Slug, добавляемый в `mod[dimField]` при match. */
+    slug: string;
+}
+
+export interface PathConfig {
+    /** `regex + template`: `{ regex: "Раздел(\\d+)", template: "s$1" }`. */
+    regex?: string;
+    template?: string;
+    /** Или список правил (словарь): `[{ regex, slug }, …]`. */
+    rules?: PathRule[];
+}
 
 export interface FieldDef {
     kind?: 'multi' | 'scalar';
@@ -12,6 +40,8 @@ export interface FieldDef {
     label?: string;
     useAs?: string;
     order?: number;
+    source?: FieldSource;
+    path?: PathConfig;
     [key: string]: unknown;
 }
 

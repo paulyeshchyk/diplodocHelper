@@ -88,33 +88,41 @@ function makeFixture(docsRoot: string) {
                 families: ['fam-a'],
                 capabilities: ['cap-1'],
                 designation: 'Delta desc',
-            },            
+            },
         },
         dimensions: {
-            actor: { items: {
-                ci:         { dir: 'A/CI',     title: 'CI' },
-                techwriter: { dir: 'A/TW',     title: 'Techwriter' },
-                reader:     { dir: 'A/Reader', title: 'Reader' }, // в index[] пусто — отфильтруется
-            } },
-            capability: { items: {
-                'cap-1': { dir: 'C/1', title: 'Cap1' },
-                'cap-2': { dir: 'C/2', title: 'Cap2' },
-            } },
-            layer: { items: {
-                cli: { dir: 'L/CLI', title: 'CLI' },
-                ui:  { dir: 'L/UI',  title: 'UI' },
-            } },
-            family: { items: {
-                'fam-a': { dir: 'F/A', title: 'FamA' },
-                'fam-b': { dir: 'F/B', title: 'FamB' },
-            } },
+            actor: {
+                items: {
+                    ci: { dir: 'A/CI', title: 'CI' },
+                    techwriter: { dir: 'A/TW', title: 'Techwriter' },
+                    reader: { dir: 'A/Reader', title: 'Reader' }, // в index[] пусто — отфильтруется
+                }
+            },
+            capability: {
+                items: {
+                    'cap-1': { dir: 'C/1', title: 'Cap1' },
+                    'cap-2': { dir: 'C/2', title: 'Cap2' },
+                }
+            },
+            layer: {
+                items: {
+                    cli: { dir: 'L/CLI', title: 'CLI' },
+                    ui: { dir: 'L/UI', title: 'UI' },
+                }
+            },
+            family: {
+                items: {
+                    'fam-a': { dir: 'F/A', title: 'FamA' },
+                    'fam-b': { dir: 'F/B', title: 'FamB' },
+                }
+            },
         },
 
         index: {
             actor: {
-                ci:         ['МодульAlpha', 'МодульGamma', 'nested/МодульDelta'],
+                ci: ['МодульAlpha', 'МодульGamma', 'nested/МодульDelta'],
                 techwriter: ['МодульBeta'],
-                reader:     [],
+                reader: [],
             },
             capability: {
                 'cap-1': ['МодульAlpha', 'МодульGamma', 'nested/МодульDelta'],
@@ -122,7 +130,7 @@ function makeFixture(docsRoot: string) {
             },
             layer: {
                 cli: ['МодульAlpha', 'МодульGamma', 'nested/МодульDelta'],
-                ui:  ['МодульBeta'],
+                ui: ['МодульBeta'],
             },
             family: {
                 'fam-a': ['МодульAlpha', 'МодульGamma', 'nested/МодульDelta'],
@@ -533,5 +541,43 @@ describe('feature-map.runEmitFeatureMap — path overrides (57.5)', () => {
         // href модуля percent-encoded через encodeURI() в index.ts — учитываем.
         const expectedHref = `/${expectedRel}/МодульAlpha/index.html#naznachenie`;
         expect(md).toContain(encodeURI(expectedHref));
+    });
+
+    it('57.1#15 should fall back to pureTitle when chipLabelField is empty', async () => {
+        const fixture = makeFixture(docsRoot);
+        (fixture.modules as any)['МодульDelta'] = {
+            dir: 'МодульDelta',
+            id: '5',
+            pureTitle: '1.1. Управлять заказами',
+            actors: ['ci'],
+            layers: ['cli'],
+            families: ['fam-a'],
+            capabilities: ['cap-1'],
+        };
+        fixture.index.actor.ci.push('МодульDelta');
+        fixture.index.capability['cap-1'].push('МодульDelta');
+        fixture.index.layer.cli.push('МодульDelta');
+        fixture.index.family['fam-a'].push('МодульDelta');
+        fs.writeFileSync(catalogPath, JSON.stringify(fixture), 'utf8');
+
+        const md = await run();
+        const deltaChip = md.match(
+            /<a class="fm-chip"[^>]*data-module="МодульDelta"[^>]*>([^<]*)<\/a>/,
+        );
+        expect(deltaChip).not.toBeNull();
+        expect(deltaChip![1]).toBe('1.1. Управлять заказами');
+    });
+
+    it('57.1#16 should not emit dimension link when dir is missing', async () => {
+        const fixture = makeFixture(docsRoot);
+        delete (fixture.dimensions.actor.items.ci as any).dir;
+        fs.writeFileSync(catalogPath, JSON.stringify(fixture), 'utf8');
+
+        const md = await run();
+        const ciItem = md.match(
+            /<span class="fm-strip-item">[\s\S]*?data-value="ci"[\s\S]*?<\/span>/,
+        );
+        expect(ciItem).not.toBeNull();
+        expect(ciItem![0]).not.toContain('fm-strip-link');
     });
 });

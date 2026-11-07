@@ -12,7 +12,11 @@
  */
 
 export interface CatalogDimensionItem {
-    dir: string;
+
+    /** Путь к папке-указателю от `docsRoot`. Опционален — если не задан,
+     *  ссылка на страницу измерения не строится (только заголовок). */
+    dir?: string;
+
     title: string;
 }
 
@@ -48,6 +52,9 @@ export interface CatalogModule {
 
     /** Текст карточки. Fallback — `dir`. */
     ident?: string;
+
+    /** «1.1. Создание заказа» — номер + pureTitle. Fallback для chip label. */
+    pureTitle?: string;
 
     /** Tooltip карточки. Fallback — `''`. */
     designation?: string;

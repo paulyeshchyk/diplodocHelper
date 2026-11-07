@@ -111,6 +111,12 @@ export async function runRenderModules(
     }
     const items = dim.items || {};
     for (const [slug, item] of Object.entries(items)) {
+      if (!item.dir) {
+        if (opts.verbose) {
+          console.log(`  - ${dimName}/${slug}: dir не задан — skip`);
+        }
+        continue;
+      }
       const targetDirAbs = path.join(docsRoot, item.dir);
       const targetFileAbs = path.join(targetDirAbs, opts.outName);
       const moduleDirs = (catalog.index[dimName] || {})[slug] || [];

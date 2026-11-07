@@ -5,7 +5,8 @@ import { Frontmatter_Split_Raw } from '../../utils/frontmatter/Frontmatter_Split
 import { Fs_Find_Module_Dirs } from '../../utils/fs/Fs_Find_Module_Dirs.ts';
 import { Path_ToPosix } from '../../utils/path/Path_ToPosix.ts';
 import { String_Compare_Natural } from '../../utils/string/String_Compare_Natural.ts';
-import { loadFields } from '../_fields.ts';
+import { loadFields} from '../_fields.ts';
+import type { PathConfig } from '../_fields.ts';
 import { loadLayout } from '../_layout.ts';
 import { DOCS_DIR, GENERATED_DIR, REGISTRY_DIR } from '../_paths.ts';
 import type {
@@ -282,10 +283,6 @@ export async function runCollectCatalog(
         }
 
         const relDir = Path_ToPosix.convert(path.relative(docsRoot, dir));
-
-
-
-
         const mod: CatalogModule = {
             dir: relDir,
             path: relDir + '/index.md',
@@ -295,25 +292,43 @@ export async function runCollectCatalog(
             chipLabelField: '',
         };
 
-        // Service fields: defaults из прямого frontmatter. Это даёт рабочий
-        // результат даже если `_fields.yaml` не объявляет `id`/`ident`/`designation`.
+        // Defaults для service-полей (back-compat — если fields.yaml их не объявил).
         mod.id = fm['id'] != null ? String(fm['id']) : '';
         mod.ident = fm['ident'] != null ? String(fm['ident']) : '';
         mod.designation = fm['designation'] != null ? String(fm['designation']) : '';
 
-        // Legacy extraction: `_fields.yaml` может объявить service field с
-        // custom `frontmatterKey` (например, `ident: { frontmatterKey: pureTitle }`).
-        // Тогда loop переопределит значение выше — это восстанавливает поведение
-        // до Phase A (когда `if (key === 'ident') continue` был добавлен ошибочно).
-        for (const [key, f] of Object.entries(loadFields(fieldsPath))) {
+        const fields = loadFields(fieldsPath);
+
+        // Frontmatter-поля (включая service с frontmatterKey).
+        for (const [key, f] of Object.entries(fields)) {
+            const source = f.source ?? 'frontmatter';
+            if (source === 'path') continue;
             const fmKey = f.frontmatterKey || key;
             const raw2 = fm[fmKey];
             if (f.kind === 'multi') {
                 mod[f.dimField || key] = parseListValue(raw2);
-            } else {
-                mod[key] = raw2 != null ? String(raw2) : '';
+            } else if (raw2 != null) {
+                mod[key] = String(raw2);
             }
         }
+
+        // Path-extractors (source: 'path' | 'frontmatter-or-path').
+        for (const [key, f] of Object.entries(fields)) {
+            const source = f.source ?? 'frontmatter';
+            if (source !== 'path' && source !== 'frontmatter-or-path') continue;
+            if (!f.dimension || !f.dimField) continue;
+
+            const already = mod[f.dimField];
+            if (source === 'frontmatter-or-path' && Array.isArray(already) && already.length > 0) {
+                continue;
+            }
+
+            const slugs = extractPathSlugs(relDir, f.path);
+            if (slugs.length > 0) {
+                mod[f.dimField] = slugs;
+            }
+        }
+
         modules[relDir] = mod;
     }
 
@@ -377,17 +392,6 @@ export async function runCollectCatalog(
             for (const slug of values) {
                 if (!index[dimName][slug]) index[dimName][slug] = [];
                 if (!index[dimName][slug].includes(modDir)) index[dimName][slug].push(modDir);
-            }
-        }
-    }
-
-    // --- registry dir checks ---
-    for (const [dimName, dim] of Object.entries(registry.dimensions)) {
-        for (const [slug, item] of Object.entries(dim.items || {})) {
-            try {
-                await fs.access(path.join(docsRoot, item.dir));
-            } catch {
-                warnings.push(`${dimName}/${slug}: папка не существует: ${item.dir}`);
             }
         }
     }
@@ -467,4 +471,35 @@ function printUnknownError(unknown: UnknownDimSlug[], registryPath: string): voi
     console.error(`     с полями dir (путь к папке измерения) и title.`);
     console.error(`  3. Или исправьте значения в frontmatter модулей на существующие.`);
     console.error(`\n  Для отладки: --lenient — продолжит с предупреждениями.`);
+}
+
+function extractPathSlugs(
+    relDir: string,
+    pathCfg: PathConfig | undefined,
+): string[] {
+    if (!pathCfg) return [];
+
+    // 1. Rules (словарь).
+    if (Array.isArray(pathCfg.rules)) {
+        const slugs: string[] = [];
+        for (const rule of pathCfg.rules) {
+            if (new RegExp(rule.regex).test(relDir)) {
+                slugs.push(rule.slug);
+            }
+        }
+        return slugs;
+    }
+
+    // 2. Simple: regex + template.
+    if (pathCfg.regex && pathCfg.template) {
+        const m = relDir.match(new RegExp(pathCfg.regex));
+        if (!m) return [];
+        let slug = pathCfg.template;
+        for (let i = 1; i < m.length; i++) {
+            slug = slug.replace(new RegExp(`\\$${i}`, 'g'), m[i] ?? '');
+        }
+        return [slug];
+    }
+
+    return [];
 }

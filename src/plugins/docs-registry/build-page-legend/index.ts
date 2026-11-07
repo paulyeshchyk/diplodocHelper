@@ -476,7 +476,7 @@ function parseArrayValue(value: unknown): string[] {
 
 function formatDimensionLink(ctx: FieldContext, dimName: string, slug: string): string | null {
     const item = ctx.catalog?.dimensions?.[dimName]?.items?.[slug];
-    if (!item) return null;
+    if (!item || !item.dir) return null;
     const dimIndexRel = path.posix.join(item.dir, 'index.md');
     const relPath = path.posix.relative(ctx.moduleDirRel ?? '', dimIndexRel);
     return `[${slug}](${encodeURI(relPath)})`;
