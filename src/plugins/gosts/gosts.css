@@ -62,3 +62,19 @@
     background-color: #fff3cd;
     outline: 2px solid #ffeeba;
 }
+
+/* Термин в таблице ГОСТов — как «ссылка-подсказка» */
+.gost-card-value abbr.term,
+.gost-table abbr.term {
+    text-decoration: none;
+    border-bottom: 1px dashed currentColor;
+    cursor: help;
+}
+
+/* Аббревиатура без определения — то же самое */
+.gost-card-value abbr[data-abbr],
+.gost-table abbr[data-abbr] {
+    text-decoration: none;
+    border-bottom: 1px dotted currentColor;
+    cursor: help;
+}

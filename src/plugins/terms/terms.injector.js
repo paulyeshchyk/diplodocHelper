@@ -286,4 +286,5 @@ module.exports = {
   injectTermTitlesIntoHtml,
   injectTermsClientScript,
   extractDataTerm,
+  renderTooltipHtml,
 };

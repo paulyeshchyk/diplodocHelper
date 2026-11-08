@@ -106,7 +106,7 @@ function writeTermsIndex(outputDir, termMap, lang, options = {}) {
       occurrenceLines.push(
         renderTemplate('occ.line.md', {
           TITLE: page.title,
-          URL: `../${page.href}`,
+          URL: `../../${page.href}`,
           LINKS: linksHtml,
         })
       );

@@ -131,7 +131,7 @@ function writeAbbrsIndex(outputDir, abbrMap, lang, options = {}) {
             occurrenceLines.push(
                 renderTemplate('occ.line.md', {
                     TITLE: page.title,
-                    URL: `../${page.href}`,
+                    URL: `../../${page.href}`,
                     LINKS: linksHtml,
                 })
             );

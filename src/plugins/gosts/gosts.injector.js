@@ -1,11 +1,180 @@
-// @ts-nocheck
-
 // gosts.injector.js
-const fs = require('fs');
+const fs   = require('fs');
 const path = require('path');
 const { loadGostDictionary, getGostDictionaryPath } = require('./gosts.dictionary');
 const { slugify_latin_alphanumeric } = require('../utils/encoding.slugify.js');
-const { collectGostReferences } = require('./gosts.collector'); // <-- ДОБАВЛЕНО
+const { collectGostReferences } = require('./gosts.collector');
+
+// ── термины ──────────────────────────────────────────────────────────
+const { loadTermDictionary }  = require('../terms/terms.dictionary.js');
+const { getTermOutputUrl }    = require('../terms/terms.paths.js');
+const { termAnchorId }        = require('../terms/terms.model.js');
+const { renderTooltipHtml: renderTermTooltipHtml } =
+    require('../terms/terms.injector.js');
+
+// ── аббревиатуры ─────────────────────────────────────────────────────
+const { loadAbbrDictionary }  = require('../abbrs/abbrs.dictionary.js');
+const { getAbbrOutputUrl }    = require('../abbrs/abbrs.paths.js');
+const { abbrAnchorId }        = require('../abbrs/abbrs.model.js');
+const { renderTooltipHtml: renderAbbrTooltipHtml } =
+    require('../abbrs/abbrs.injector.js');
+
+function escHtmlText(s) {
+    return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+/**
+ * «Сырой» <abbr class="term" data-term="…">…</abbr>
+ *   → <span class="dl-term">…tooltip…</span>
+ * Идемпотентен: если уже внутри .dl-term — пропускает.
+ */
+function enrichTermAbbrInText(text, termsDict, lang) {
+    if (!text || !termsDict || termsDict.size === 0) return text;
+
+    const linkText  = lang === 'ru' ? 'см. Термины' : 'see Terms';
+    const outputUrl = getTermOutputUrl(lang);
+
+    return text.replace(
+        /<abbr(\b[^>]*\bclass\s*=\s*["'][^"']*\bterm\b[^"']*["'][^>]*)>([^<]+)<\/abbr>/gi,
+        (match, attrs, inner, offset, fullText) => {
+            const innerText = inner.trim();
+            if (!innerText) return match;
+
+            const before = fullText.substring(Math.max(0, offset - 80), offset);
+            if (/<span[^>]*\bclass\s*=\s*["'][^"']*\bdl-term\b[^"']*["'][^>]*>\s*$/i.test(before)) {
+                return match;
+            }
+
+            const dt = attrs.match(/\bdata-term\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+            const dataTerm   = dt ? ((dt[1] ?? dt[2]) || '').trim() : '';
+            const lookupTerm = dataTerm || innerText;
+
+            const def = termsDict.get(lookupTerm);
+            if (!def) return match;
+
+            return renderTermTooltipHtml({
+                term: lookupTerm,
+                definition: def.definition,
+                description: def.description,
+                attrs,
+                idAttr: '',                                   // в data.js id не нужен
+                inner: innerText,
+                linkHref: `${outputUrl}#${termAnchorId(lookupTerm)}`,
+                linkText,
+            });
+        }
+    );
+}
+
+/**
+ * «Сырой» <abbr data-abbr="…">…</abbr>
+ *   → <span class="dl-abbr">…tooltip…</span>
+ * Пропускает <abbr class="…"> (уже обработано terms) и <abbr title="…"> (inline-override).
+ */
+function enrichAbbrInText(text, abbrsDict, lang) {
+    if (!text || !abbrsDict || abbrsDict.size === 0) return text;
+
+    const linkText  = lang === 'ru' ? 'см. Аббревиатуры' : 'see Abbreviations';
+    const outputUrl = getAbbrOutputUrl(lang);
+
+    return text.replace(
+        /<abbr(\b[^>]*)>([^<]+)<\/abbr>/gi,
+        (match, attrs, inner, offset, fullText) => {
+            const innerText = inner.trim();
+            if (!innerText) return match;
+            if (/\bclass\s*=/.test(attrs)) return match;      // <abbr class="…"> — чужое
+            if (/\btitle\s*=/.test(attrs)) return match;      // user override
+
+            const before = fullText.substring(Math.max(0, offset - 80), offset);
+            if (/<span[^>]*\bclass\s*=\s*["'][^"']*\bdl-abbr\b[^"']*["'][^>]*>\s*$/i.test(before)) {
+                return match;
+            }
+
+            const da = attrs.match(/\bdata-abbr\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+            const dataAbbr   = da ? ((da[1] ?? da[2]) || '').trim() : '';
+            const lookupAbbr = dataAbbr || innerText;
+
+            const def = abbrsDict.get(lookupAbbr);
+            if (!def) return match;
+
+            return renderAbbrTooltipHtml({
+                abbr: lookupAbbr,
+                full: def.full,
+                description: def.description,
+                attrs,
+                idAttr: '',
+                inner: innerText,
+                linkHref: `${outputUrl}#${abbrAnchorId(lookupAbbr)}`,
+                linkText,
+            });
+        }
+    );
+}
+
+/** Единая точка обогащения — вызывать из injectGostsTable. */
+function enrichAbbrsAndTerms(text, { termsDict, abbrsDict, lang }) {
+    if (!text) return text;
+    const withTerms = enrichTermAbbrInText(text, termsDict, lang);
+    return enrichAbbrInText(withTerms, abbrsDict, lang);
+}
+
+
+
+/**
+ * Оборачивает «сырые» <abbr class="term" data-term="…">…</abbr>
+ * в <span class="dl-term"> со «взрослым» тултипом (title + desc + footer-link).
+ * Идемпотентна: если <abbr> уже внутри .dl-term — не трогаем.
+ *
+ * @param {string} text
+ * @param {Map<string,{term:string, definition:string, description?:string}>} termDict
+ * @param {string} lang
+ * @returns {string}
+ */
+function enrichTermAbbr(text, termDict, lang) {
+    if (!text || !termDict || termDict.size === 0) return text;
+
+    const linkText  = lang === 'ru' ? 'см. Термины' : 'see Terms';
+    const outputUrl = getTermOutputUrl(lang);
+
+    return text.replace(
+        /<abbr(\b[^>]*\bclass\s*=\s*["'][^"']*\bterm\b[^"']*["'][^>]*)>([^<]+)<\/abbr>/gi,
+        (match, attrs, inner, offset, fullText) => {
+            const innerText = inner.trim();
+            if (!innerText) return match;
+
+            // Уже обёрнуто в .dl-term? — выходим (идемпотентность).
+            const before = fullText.substring(Math.max(0, offset - 80), offset);
+            if (/<span[^>]*\bclass\s*=\s*["'][^"']*\bdl-term\b[^"']*["'][^>]*>\s*$/i.test(before)) {
+                return match;
+            }
+
+            const dtMatch = attrs.match(/\bdata-term\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+            const dataTerm = dtMatch ? ((dtMatch[1] ?? dtMatch[2]) || '').trim() : '';
+            const lookupTerm = dataTerm || innerText;
+
+            const def = termDict.get(lookupTerm);
+            if (!def) return match; // нет определения — оставляем как было
+
+            const hasId = /\bid\s*=/.test(attrs);
+            const anchor = termAnchorId(lookupTerm);
+            const href   = `${outputUrl}#${anchor}`;
+
+            return renderTermTooltipHtml({
+                term: lookupTerm,
+                definition: def.definition,
+                description: def.description,
+                attrs,                                 // class/data-term/… как были
+                idAttr: hasId ? '' : '',               // id в таблице не нужен (см. пояснение ниже)
+                inner: innerText,                      // видимый текст не меняем
+                linkHref: href,
+                linkText,
+            });
+        }
+    );
+}
 
 function findBuildRoot(targetHtml) {
     let dir = path.dirname(path.resolve(targetHtml));
@@ -58,10 +227,19 @@ function injectGostsTable({ langDir, targetHtml, lang }) {
 
     const entries = loadGostDictionary(langDir, lang);
 
+    const termDict = loadTermDictionary(langDir, lang);
+    const abbrDict = loadAbbrDictionary(langDir, lang);
+    const enrichCtx = { termsDict: termDict, abbrsDict: abbrDict, lang };
+
     for (const item of entries) {
         if (item.description) item.description = resolveMarkdownLinks(item.description, yamlDir, docsRoot);
-        if (item.title) item.title = resolveMarkdownLinks(item.title, yamlDir, docsRoot);
-        if (item.status) item.status = resolveMarkdownLinks(item.status, yamlDir, docsRoot);
+        if (item.title)       item.title       = resolveMarkdownLinks(item.title,       yamlDir, docsRoot);
+        if (item.status)      item.status      = resolveMarkdownLinks(item.status,      yamlDir, docsRoot);
+
+        if (item.description) item.description = enrichAbbrsAndTerms(item.description, enrichCtx);
+        if (item.title)       item.title       = enrichAbbrsAndTerms(item.title,       enrichCtx);
+        if (item.status)      item.status      = enrichAbbrsAndTerms(item.status,      enrichCtx);
+
         if (item.code) item.anchorId = `gost-${slugify_latin_alphanumeric(item.code)}`;
     }
 
@@ -82,13 +260,14 @@ function injectGostsTable({ langDir, targetHtml, lang }) {
         //     return String(a.title).localeCompare(String(b.title), 'ru', { numeric: true });
         // });
     }
+
     // ----------------------------
 
     // Передаем язык в data.js
     const dataContent = `window.__GOSTS_LANG__ = "${lang}";\nwindow.__GOSTS_DATA__ = ${JSON.stringify(entries)};`;
     fs.writeFileSync(path.join(targetDir, 'gosts.data.js'), dataContent, 'utf8');
 
-    fs.copyFileSync(path.join(__dirname, 'gosts.js'), path.join(targetDir, 'gosts.js'));
+    fs.copyFileSync(path.join(__dirname, 'gosts.client.js'), path.join(targetDir, 'gosts.js'));
     fs.copyFileSync(path.join(__dirname, 'gosts.css'), path.join(targetDir, 'gosts.css'));
 
     let html = fs.readFileSync(targetHtml, 'utf8');

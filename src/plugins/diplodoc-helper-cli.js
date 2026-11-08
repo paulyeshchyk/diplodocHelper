@@ -170,14 +170,19 @@ if (require.main === module) {
         generateTerms(docsDir);
     } else if (command === 'gosts') {
         generateGosts(docsDir);
+
+        // >>> ДОБАВЛЕНА КОМАНДА ИНЖЕКТА ГОСТОВ
     } else if (command === 'gostsInject' || command === 'injectGosts') {
         const sectionIdx = args.indexOf('--section');
         const section = sectionIdx !== -1 ? args[sectionIdx + 1] : 'ГОСТы';
         let targetHtml = null;
+
+        // Если передан --targetHtml, берем его
         const targetHtmlIdx = args.indexOf('--targetHtml');
         if (targetHtmlIdx !== -1) {
             targetHtml = path.resolve(args[targetHtmlIdx + 1]);
         } else {
+            // Иначе ищем по названию секции (по умолчанию СправочникГОСТов)
             targetHtml = findSectionIndexHtml(outputDir, section);
         }
         if (!targetHtml || !fs.existsSync(targetHtml)) {
@@ -185,6 +190,7 @@ if (require.main === module) {
             process.exitCode = 1;
         } else {
             const resolvedDocsDir = path.resolve(docsDir);
+            // Определяем язык (ru/en) из последней папки docsDir
             const lang = /^[a-z]{2}$/i.test(path.basename(resolvedDocsDir))
                 ? path.basename(resolvedDocsDir)
                 : 'ru';
