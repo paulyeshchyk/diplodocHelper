@@ -35,7 +35,6 @@ const { ux_term_add, ux_term_show_full } = require('./diplodoc-helper.term.Add')
 const { ux_terms_generate } = require('./diplodoc-helper.term.Generate');
 const { ux_linter_terms } = require('./diplodoc-helper.linter.terms');
 const {ux_install_scripts} = require('./diplodoc-helper.installScripts');
-const { ux_gost_add } = require('./diplodoc-helper.gost.Add');
 const { ux_gost_insert } = require('./diplodoc-helper.gost.Insert');
 
 /**
@@ -77,7 +76,6 @@ const commandHandlers = {
     'diplodoc-helper.term.showFull': ux_term_show_full,
     'diplodoc-helper.linter.terms': ux_linter_terms,
     'diplodoc-helper.installScripts':ux_install_scripts,
-    'diplodoc-helper.gost.Add': ux_gost_add,
     'diplodoc-helper.gost.Insert': ux_gost_insert,
     'diplodoc-helper.settings': () => {
         vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_KEY);

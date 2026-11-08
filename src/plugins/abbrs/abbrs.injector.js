@@ -273,4 +273,5 @@ module.exports = {
     injectAbbrTitlesIntoHtml,
     injectAbbrsClientScript,
     extractDataAbbr,
+    renderTooltipHtml,
 };

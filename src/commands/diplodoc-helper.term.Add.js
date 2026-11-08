@@ -8,7 +8,15 @@ const { loadTermDictionary } = require('../plugins/terms/terms.dictionary.js');
 const { appendTermToDictionary } = require('../plugins/terms/terms.dictionary.writer.js');
 const { findTermAroundOffset } = require('../plugins/terms/terms.textRange.js');
 const { runGeneration } = require('../plugins/terms/terms');
-const { inferLang } = require('../plugins/terms/terms.paths.js');
+const termsPaths = require('../plugins/terms/terms.paths.js');
+const { slugify_latin_alphanumeric } = require('../plugins/utils/encoding.slugify.js');
+
+const inferLang = termsPaths.inferLang;
+// Может отсутствовать в вашей версии terms.paths.js — тогда yaml-вариант
+// деградирует до обычного <abbr> (см. buildTermMarkup).
+const getTermOutputDir = termsPaths.getTermOutputDir;
+
+const SUPPORTED_LANGS = new Set(['markdown', 'yaml']);
 
 function escapeHtmlText(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -18,29 +26,99 @@ function escapeHtmlAttr(s) {
     return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/** markdown → 'md', yaml → 'html' (зеркало логики gost.Insert.js). */
+function resolveLinkFormat(languageId) {
+    // return languageId === 'yaml' ? 'html' : 'md';
+    return 'md';
+}
+
+/** Аналог resolveGostUrl — относительный либо прямой URL до индекса глоссария. */
+function resolveTermUrl({ pathType, docPath, langDir, termIndexPath, anchor, lang = 'ru' }) {
+    if (!termIndexPath || !langDir) return `#${anchor}`;
+
+    let rawPath = '';
+    if (pathType === 'relative') {
+        rawPath = path.relative(path.dirname(docPath), termIndexPath).replace(/\\/g, '/');
+        if (!rawPath.startsWith('.')) rawPath = './' + rawPath;
+    } else {
+        let directPath = path.relative(langDir, termIndexPath).replace(/\\/g, '/');
+        if (directPath.endsWith('.md')) directPath = directPath.slice(0, -3) + '.html';
+        const cleanLang = lang.replace(/^\/+|\/+$/g, '');
+        rawPath = `/${cleanLang}/${directPath}`;
+    }
+    return encodeURI(`${rawPath}#${anchor}`);
+}
+
 /**
- * Оборачивает диапазон в <abbr class="term">.
+ * Аналог buildGostLink — собирает итоговую разметку термина.
+ * @returns {string}
+ */
+function buildTermMarkup({ format, visibleText, canonicalTerm, docPath, langDir, termIndexPath, anchor, lang }) {
+    const visible = escapeHtmlText(visibleText);
+    const needsDataTerm = canonicalTerm && canonicalTerm !== visibleText;
+
+    let abbrAttrs = 'class="term"';
+    if (needsDataTerm) abbrAttrs += ` data-term="${escapeHtmlAttr(canonicalTerm)}"`;
+    const abbr = `<abbr ${abbrAttrs}>${visible}</abbr>`;
+
+    // YAML-ветка имеет смысл только если известен путь к индексу глоссария.
+    if (format === 'html' && typeof getTermOutputDir === 'function' && termIndexPath) {
+        const url = resolveTermUrl({
+            pathType: 'direct',
+            docPath,
+            langDir,
+            termIndexPath,
+            anchor,
+            lang,
+        });
+        return `<a href="${url}">${abbr}</a>`;
+    }
+
+    // markdown (и fallback для yaml, если getTermOutputDir недоступен)
+    return abbr;
+}
+
+/**
+ * Оборачивает диапазон в <abbr class="term"> (markdown) или
+ * <a href="…"><abbr class="term">…</abbr></a> (yaml).
  *
  * @param {vscode.TextEditor} editor
- * @param {vscode.Range} range — что заменяем
- * @param {string} visibleText — что показываем в тексте
- * @param {string} [lookupTerm] — канонический термин из словаря.
- *   Если задан и отличается от visibleText — добавляется data-term="…".
+ * @param {vscode.Range} range
+ * @param {string} visibleText
+ * @param {string} [lookupTerm]
+ * @param {string} [langDir] — нужен для вычисления URL в yaml-ветке
  */
-async function wrapInTerm(editor, range, visibleText, lookupTerm) {
+async function wrapInTerm(editor, range, visibleText, lookupTerm, langDir) {
     const visible = String(visibleText || '').trim();
     if (!visible) return;
 
     const lookup = String(lookupTerm || '').trim();
-    const needsDataTerm = lookup && lookup !== visible;
+    const document = editor.document;
+    const docPath = document.uri.fsPath;
+    const format = resolveLinkFormat(document.languageId);
 
-    let attrs = 'class="term"';
-    if (needsDataTerm) {
-        attrs += ` data-term="${escapeHtmlAttr(lookup)}"`;
+    let termIndexPath = '';
+    let lang = 'ru';
+    if (langDir) {
+        lang = inferLang(langDir) || 'ru';
+        if (typeof getTermOutputDir === 'function') {
+            termIndexPath = path.join(getTermOutputDir(langDir, lang), 'index.md');
+        }
     }
-    const finalText = `<abbr ${attrs}>${escapeHtmlText(visible)}</abbr>`;
+    const anchor = `term-${slugify_latin_alphanumeric(lookup || visible)}`;
 
-    const currentText = editor.document.getText(range).trim();
+    const finalText = buildTermMarkup({
+        format,
+        visibleText: visible,
+        canonicalTerm: lookup,
+        docPath,
+        langDir,
+        termIndexPath,
+        anchor,
+        lang,
+    });
+
+    const currentText = document.getText(range).trim();
     if (currentText === finalText) return;
 
     await editor.edit(eb => eb.replace(range, finalText));
@@ -50,7 +128,7 @@ async function createTermAndInsert(editor, targetRange, targetVisible, targetTer
     const dictionary = loadTermDictionary(langDir);
 
     if (dictionary.has(targetTerm)) {
-        await wrapInTerm(editor, targetRange, targetVisible, targetTerm);
+        await wrapInTerm(editor, targetRange, targetVisible, targetTerm, langDir);
         await saveAndRegenerate(editor, langDir, targetTerm, false);
         return;
     }
@@ -83,7 +161,7 @@ async function createTermAndInsert(editor, targetRange, targetVisible, targetTer
         return;
     }
 
-    await wrapInTerm(editor, targetRange, targetVisible, targetTerm);
+    await wrapInTerm(editor, targetRange, targetVisible, targetTerm, langDir);
     await saveAndRegenerate(editor, langDir, targetTerm, true);
 }
 
@@ -91,11 +169,17 @@ function getTermWordRange(document, position) {
     return document.getWordRangeAtPosition(position, /[A-Za-zА-Яа-яЁё0-9_.]+/);
 }
 
+/** Совместимо и с <abbr>…</abbr>, и с <a><abbr>…</abbr></a>. */
 async function unwrapTerm(editor, range) {
     const currentText = editor.document.getText(range);
-    const match = currentText.match(
+    let match = currentText.match(
         /^<abbr\b[^>]*\bclass\s*=\s*["'][^"']*\bterm\b[^"']*["'][^>]*>([\s\S]*?)<\/abbr>$/i
     );
+    if (!match) {
+        match = currentText.match(
+            /^<a\b[^>]*>\s*<abbr\b[^>]*\bclass\s*=\s*["'][^"']*\bterm\b[^"']*["'][^>]*>([\s\S]*?)<\/abbr>\s*<\/a>$/i
+        );
+    }
     if (!match) return;
     await editor.edit(eb => eb.replace(range, match[1]));
 }
@@ -140,15 +224,15 @@ async function ux_term_add(argument) {
     }
 
     const document = editor.document;
-    if (document.languageId !== 'markdown') {
+    if (!SUPPORTED_LANGS.has(document.languageId)) {
         vscode.window.showErrorMessage(translate(nls_ts.plugin.term.add.error.notMarkdown));
         return;
     }
 
     const selection = editor.selection;
     let targetRange;
-    let targetTerm; // канонический термин (lookup key)
-    let targetVisible; // видимый текст (что окажется внутри <abbr>)
+    let targetTerm;
+    let targetVisible;
     let alreadyWrapped = false;
 
     const text = document.getText();
@@ -163,7 +247,8 @@ async function ux_term_add(argument) {
     } else if (!selection.isEmpty) {
         targetRange = selection;
         const raw = document.getText(targetRange).trim();
-        const m = raw.match(/^<abbr\b([^>]*\bclass\s*=\s*["'][^"']*\bterm\b[^"']*["'][^>]*)>([\s\S]*?)<\/abbr>$/i);
+        const m = raw.match(/^<abbr\b([^>]*\bclass\s*=\s*["'][^"']*\bterm\b[^"']*["'][^>]*)>([\s\S]*?)<\/abbr>$/i)
+            || raw.match(/^<a\b[^>]*>\s*<abbr\b([^>]*\bclass\s*=\s*["'][^"']*\bterm\b[^"']*["'][^>]*)>([\s\S]*?)<\/abbr>\s*<\/a>$/i);
         if (m) {
             const attrs = m[1];
             const innerText = m[2].trim();
@@ -284,8 +369,7 @@ async function ux_term_add(argument) {
     }
 
     if (picked.action === 'use' && picked.def) {
-        // Видимый текст сохраняем — привязываемся к picked.def.term через data-term.
-        await wrapInTerm(editor, targetRange, targetVisible, picked.def.term);
+        await wrapInTerm(editor, targetRange, targetVisible, picked.def.term, langDir);
         await saveAndRegenerate(editor, langDir, picked.def.term, false);
         return;
     }
@@ -299,4 +383,13 @@ async function ux_term_show_full(definition) {
     vscode.window.showInformationMessage(definition);
 }
 
-module.exports = { ux_term_add, ux_term_show_full, wrapInTerm, unwrapTerm };
+module.exports = {
+    ux_term_add,
+    ux_term_show_full,
+    wrapInTerm,
+    unwrapTerm,
+    // Экспортируем на всякий случай, чтобы можно было тестировать/переиспользовать
+    resolveLinkFormat,
+    resolveTermUrl,
+    buildTermMarkup,
+};

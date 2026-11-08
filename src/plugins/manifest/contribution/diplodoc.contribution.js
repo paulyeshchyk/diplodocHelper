@@ -60,6 +60,7 @@ const WHEN = {
     EXPLORER_IS_FOLDER_OR_NOT_MD: '(explorerResourceIsFolder || resourceExtname != .md)',
     EDITOR_LANG_MD_AND_SELECTION: '(editorLangId == markdown && editorHasSelection)',
     EDITOR_LANG_YAML_AND_SELECTION: '(editorLangId == yaml && editorHasSelection)',
+    EDITOR_LANG_MD: '(editorLangId == markdown)',
     EDITOR_LANG_YAML_MD_YAML: '(editorLangId == yaml || editorLangId == markdown)',
     EDITOR_TEXT_FOCUS_READONLY_AND_CAN_PASTE:
         'editorTextFocus && !editorReadonly && (diplodoc-helper:canPasteMarkdownLink || resourceFilename =~ /^(gosts|abbreviations)\\.yaml$/)',
@@ -202,7 +203,7 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.abbr.Add',
-            WHEN.EDITOR_LANG_MD_AND_SELECTION && WHEN.EDITOR_LANG_YAML_MD_YAML,
+            WHEN.EDITOR_LANG_MD_AND_SELECTION,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             6
@@ -220,7 +221,7 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.gost.Insert',
-            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY && WHEN.EDITOR_LANG_YAML_MD_YAML,
+            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             8 // Следующий порядковый номер
@@ -229,7 +230,7 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.gost.Add',
-            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY && WHEN.EDITOR_LANG_YAML_MD_YAML,
+            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             9
