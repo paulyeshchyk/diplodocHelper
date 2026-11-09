@@ -4,9 +4,15 @@ light:
   link: "#1E88E5"
   mini-toc-active-border: "#1E88E5"
   mini-toc-active: "#1E88E5"
+  # tab-active: "#00FFAA"
 
 dark:
   link: "#1E88E5"
   mini-toc-active-border: "#1E88E5"
   mini-toc-active: "#1E88E5"
+  # tab-active: "#00D0FF"
+
+#tab-active: "#FE0000"
+#tab-text: "#333333"
+#tab-text-hover: "#000000"
   
