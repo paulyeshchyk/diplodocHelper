@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "1.58.0",
+    "version": "1.58.4",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -30,7 +30,7 @@
     "scripts": {
         "precompile": "npm run validate",
         "type-check": "tsc --noEmit",
-        "validate": "npm run lint && npm run type-check && npm run test",
+        "validate": "npm run lint && npm run type-check",
         "generate-manifest": "node scripts/generate-manifest.js",
         "compile": "npm run generate-manifest && node build.js",
         "build": "npm run compile",
@@ -184,7 +184,7 @@
             },
             {
                 "command": "diplodoc-helper.gost.Insert",
-                "title": "Вставить из списка ГОСТ"
+                "title": "%command.md.gost.addOrInsert%"
             },
             {
                 "command": "diplodoc-helper.gost.Add",

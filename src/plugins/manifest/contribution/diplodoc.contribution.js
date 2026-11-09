@@ -203,7 +203,7 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.abbr.Add',
-            WHEN.EDITOR_LANG_MD_AND_SELECTION,
+            WHEN.EDITOR_LANG_YAML_MD_YAML,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             6
@@ -212,7 +212,7 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.term.Add',
-            WHEN.EDITOR_LANG_MD_AND_SELECTION,
+            WHEN.EDITOR_LANG_YAML_MD_YAML,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             7
@@ -221,19 +221,10 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.gost.Insert',
-            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY,
+            WHEN.EDITOR_LANG_YAML_MD_YAML,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             8 // Следующий порядковый номер
-        )
-    )
-    .addItem(
-        menuItem(
-            'diplodoc-helper.gost.Add',
-            WHEN.EDITOR_TEXT_FOCUS_AND_NOT_READONLY,
-            GROUP.DIPLODOC_SECTION,
-            GROUP_ORDER.NAVIGATION,
-            9
         )
     );
 const otherSubmenu = new ManifestSubmenu(SUBMENU.OTHER, '%submenu.other%');
@@ -502,7 +493,7 @@ const commands = [
     new ManifestCommand('diplodoc-helper.term.Add', '%command.md.term.add%'),
     new ManifestCommand('diplodoc-helper.linter.terms', '%command.linter.terms.check%'),
     new ManifestCommand('diplodoc-helper.installScripts', 'Установить скрипты сборки'),
-    new ManifestCommand('diplodoc-helper.gost.Insert', 'Вставить из списка ГОСТ'),
+    new ManifestCommand('diplodoc-helper.gost.Insert', '%command.md.gost.addOrInsert%'),
     new ManifestCommand('diplodoc-helper.gost.Add', 'Добавить ГОСТ'),
 ];
 
