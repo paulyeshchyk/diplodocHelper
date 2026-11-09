@@ -1,113 +1,150 @@
-[data-feature-map] { 
-  font-size: 0.9em; 
-  
-  /* ==========================================
-     БРЕНДИРОВАНИЕ (Палитра проекта)
-     ========================================== */
-  --brand-color: #737C3E;    /* болотный — основной */
-  --brand-deep:  #343B20;    /* тёмный — для контраста текста */
-  --brand-tint:  #E8EBD8;    /* светлый — мягкий фон */
-  --brand-on-dark: #FFFFFF;  /* текст на тёмном */
-  
-  /* Дополнительные оттенки для таблицы */
-  --brand-border: #C5CBA9;   /* Цвет рамок */
-  --brand-cell-bg: #F4F5ED;  /* Бледный фон ячеек (чтобы видеть сетку) */
-  --brand-chip-bg: #FFFFFF;  /* Белый фон модулей (чтобы выделялись на фоне ячеек) */
+[data-feature-map] {
+  font-size: 0.9em;
 
-  /* ==========================================
-     НАСТРОЙКИ ВНЕШНЕГО ВИДА ТАБЛИЦЫ
-     ========================================== */
-  --fm-cell-padding: 1px; 
-  --fm-chip-gap: 1px;     
-  --fm-first-col-width: 180px; 
+  /* =====================================================
+     ЕДИНАЯ ТОЧКА ВХОДА
+     ===================================================== */
+  --brand-base:      #6B8E23;   
+  --brand-deep-base: #4A5D23;   
+
+  /* =====================================================
+     ПРОИЗВОДНЫЕ (формулы)
+     ===================================================== */
+  --brand-color:      var(--brand-base);
+  --brand-deep:       var(--brand-deep-base);
+  --brand-on-dark:    color-mix(in srgb, var(--brand-base) 6%, white);
+
+  --brand-tint:       color-mix(in srgb, var(--brand-base) 11%, white);
+  --brand-cell-bg:    #fCfCfC; /*color-mix(in srgb, var(--brand-base) 6%,  #fafafa);*/
+  --brand-chip-bg:    #ffffff;
+
+  --brand-border:     color-mix(in srgb, var(--brand-base) 22%, #e5e5e5);
+
+  --gray-50:          color-mix(in srgb, var(--brand-base) 4%,  #fafafa);
+  --gray-100:         color-mix(in srgb, var(--brand-base) 8%,  #f0f0f0);
+  --gray-200:         color-mix(in srgb, var(--brand-base) 12%, #e0e0e0);
+  --gray-300:         color-mix(in srgb, var(--brand-base) 18%, #cfcfcf);
+  --gray-400:         color-mix(in srgb, var(--brand-base) 25%, #b0b0b0);
+  --gray-500:         #999999;
+  --gray-dimmed:      #fCfCfC; /* color-mix(in srgb, var(--brand-base) 5%,  #f7f7f7);*/
+
+  --highlight-cell:   color-mix(in srgb, var(--brand-base) 14%, white);
+  --preview-add-bg:   color-mix(in srgb, var(--brand-base) 9%,  white);
+  --preview-drop:     #999999;
+
+  --fm-cell-padding: 1px;
+  --fm-chip-gap: 1px;
+  --fm-first-col-width: 180px;
 }
 
 /* ---- полосы фильтров ---- */
 .fm-strip {
-  display: flex; gap: 6px; align-items: center;
+  display: flex;
+  gap: 6px;
+  align-items: center;
   flex-wrap: wrap;
-  padding: 6px 0; margin: 4px 0;
+  padding: 6px 0;
+  margin: 4px 0;
   border-bottom: 1px solid var(--brand-border);
 }
+
 .fm-strip-label {
-  font-weight: 600; color: var(--brand-deep);
-  padding-right: 8px; flex-shrink: 0; min-width: 80px;
+  font-weight: 600;
+  color: var(--brand-deep);
+  padding-right: 8px;
+  flex-shrink: 0;
+  min-width: 80px;
 }
+
 .fm-strip-item {
-  display: inline-flex; align-items: center; gap: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   margin-right: 4px;
 }
+
 .fm-strip-link {
-  font-size: 0.75em; color: var(--brand-color) !important;
+  font-size: 0.75em;
+  color: var(--brand-color) !important;
   text-decoration: none !important;
-  padding: 0 3px; line-height: 1;
+  padding: 0 3px;
+  line-height: 1;
   opacity: 0.7;
 }
 .fm-strip-link:hover { opacity: 1; }
 
-/* ---- чипы фильтров (верхние) ---- */
+/* ---- чипы фильтров ---- */
 .fm-chip {
   display: inline-block;
-  padding: 4px 10px; 
-  border-radius: 4px; /* Менее скруглённые, более строгие */
-  background: var(--brand-tint); 
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--brand-tint);
   color: var(--brand-deep) !important;
-  border: 1px solid var(--brand-color);
+  border: 1px solid var(--brand-border);
   text-decoration: none !important;
-  font-size: 0.85em; line-height: 1.2;
-  cursor: pointer; white-space: nowrap;
+  font-size: 0.85em;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap;
   font-family: inherit;
   transition: background .15s, opacity .15s, box-shadow .15s, border-color .15s;
   text-align: center;
+  overflow: hidden;
 }
-.fm-chip small { opacity: .7; margin-left: 4px; font-size: .9em; }
+
+.fm-chip small {
+  opacity: .7;
+  margin-left: 4px;
+  font-size: .9em;
+}
 
 .fm-chip.is-active {
   background: var(--brand-color) !important;
   color: var(--brand-on-dark) !important;
   border-color: var(--brand-color) !important;
+  box-shadow: none !important;
 }
-.fm-chip.is-active small { opacity: .9; }
-.fm-chip.is-peer {
-  outline: 2px solid var(--brand-color); outline-offset: 1px;
-}
-.fm-chip.is-highlight {
-  background: var(--brand-tint) !important; 
-  color: var(--brand-deep) !important;
-  border-color: var(--brand-deep) !important;
-  box-shadow: 0 0 0 2px var(--brand-color);
-}
-.fm-chip.is-dimmed { opacity: .15 !important; }
 
 /* ---- тулбар ---- */
 .fm-toolbar {
-  display: flex; align-items: center; gap: 12px;
-  margin: 8px 0; padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+  padding: 6px 0;
   border-top: 1px solid var(--brand-border);
   border-bottom: 1px solid var(--brand-border);
 }
+
 .fm-counter {
-  font-size: 0.9em; color: var(--brand-deep);
+  font-size: 0.9em;
+  color: var(--brand-deep);
   font-variant-numeric: tabular-nums;
 }
+
 .fm-reset-all {
   margin-left: auto;
   padding: 4px 10px;
-  border: 1px solid var(--brand-color); border-radius: 4px;
-  background: var(--brand-tint); 
+  border: 1px solid var(--brand-border);
+  border-radius: 4px;
+  background: var(--brand-tint);
   color: var(--brand-deep);
   cursor: pointer;
-  font-size: 0.85em; font-family: inherit;
+  font-size: 0.85em;
+  font-family: inherit;
   transition: all .15s;
 }
-.fm-reset-all:hover:not(:disabled) { 
-  background: var(--brand-color); 
+.fm-reset-all:hover:not(:disabled) {
+  background: var(--brand-color);
   color: var(--brand-on-dark);
+  border-color: var(--brand-color);
 }
-.fm-reset-all:disabled { opacity: .4; cursor: default; }
+.fm-reset-all:disabled {
+  opacity: .4;
+  cursor: default;
+}
 
-
-/* ---- Сетка (Таблица Менделеева) ---- */
+/* ---- Сетка ---- */
 .fm-grid {
   table-layout: fixed;
   width: 100% !important;
@@ -123,38 +160,42 @@
   width: var(--fm-first-col-width);
 }
 
-/* Ячейки: бледный фон и чёткие рамки */
-.fm-grid th, .fm-grid td {
+.fm-grid th,
+.fm-grid td {
   border: 1px solid var(--brand-border);
   padding: 0 !important;
-  min-width: 0 !important; 
-  vertical-align: middle; /* Центрируем по вертикали */
-  text-align: center;     /* Центрируем по горизонтали */
+  min-width: 0 !important;
+  vertical-align: middle;
+  text-align: center;
   background: var(--brand-cell-bg);
   overflow: hidden;
   box-sizing: border-box;
   transition: background .15s, opacity .15s;
 }
 
-/* Фиксируем высоту для строк с данными */
 .fm-grid tbody tr {
   height: var(--fm-row-height, 100px);
 }
 
-/* Фиксируем нормальную высоту шапки, чтобы она не растягивалась */
+/* Шапка */
 .fm-grid thead th {
-  background: var(--brand-deep); 
+  background: linear-gradient(
+    180deg,
+    var(--brand-deep) 0%,
+    color-mix(in srgb, var(--brand-deep) 88%, black) 100%
+  );
   color: var(--brand-on-dark);
   font-weight: 500;
   position: sticky;
   top: 0;
   z-index: 1;
-  height: 44px; /* Жесткая высота шапки */
+  height: 44px;
   padding: 0 !important;
 }
 
+/* Строковые заголовки */
 .fm-grid tbody th {
-  background: var(--brand-tint); 
+  background: var(--brand-tint);
   color: var(--brand-deep);
   font-weight: 600;
   white-space: nowrap;
@@ -165,15 +206,14 @@
   display: grid;
   grid-template-columns: repeat(var(--fm-cell-cols, 1), minmax(0, 1fr));
   grid-auto-rows: minmax(0, 1fr);
-  padding: var(--fm-cell-padding); 
-  gap: var(--fm-chip-gap);        
+  padding: var(--fm-cell-padding);
+  gap: var(--fm-chip-gap);
   width: 100%;
   height: 100%;
   box-sizing: border-box;
   overflow: hidden;
 }
 
-/* Пустые ячейки */
 .fm-grid td.is-empty .fm-cell-content {
   display: flex;
   align-items: center;
@@ -182,7 +222,7 @@
   color: var(--brand-border);
 }
 
-/* ---- Чипы модулей внутри сетки (МОЗАИКА) ---- */
+/* ---- Чипы модулей в сетке ---- */
 .fm-grid td .fm-chip {
   display: flex;
   align-items: center;
@@ -191,38 +231,39 @@
   height: 100%;
   margin: 0;
   padding: 0 4px;
-  border-radius: 0;
+  border-radius: 3px;
   font-size: 0.8em;
   text-align: center;
-  
+
   background: var(--brand-chip-bg);
   color: var(--brand-deep) !important;
-  box-shadow: inset 0 0 0 1px var(--brand-color); 
-  
-  white-space: nowrap;     
-  overflow: hidden;        
-  text-overflow: ellipsis; 
+  border: none;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand-color) 35%, transparent);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Подсветка ячеек */
-.fm-grid td.is-highlight { background: #EDEFE0; }
-.fm-grid td.is-dimmed    { opacity: .15; filter: grayscale(1); }
+.fm-grid td.is-highlight {
+  background: var(--highlight-cell);
+}
 
-
-/* ---- Шапки (Layer / Family) ---- */
+/* ---- Шапки (кнопки) ---- */
 .fm-hdr {
-  position: relative; /* Убрали flex, чтобы не ломать таблицу */
+  position: relative;
   width: 100%;
   height: 100%;
 }
 
 .fm-hdr-btn {
-  display: flex;      /* Flexbox только для центрирования текста */
+  display: flex;
   align-items: center;
-  justify-content: center; /* Центрируем текст */
+  justify-content: center;
   width: 100%;
-  height: 100%;       /* Занимает всю высоту ячейки (44px для шапки, 100% для строк) */
-  padding: 0 18px 0 8px; /* Отступ справа под стрелочку */
+  height: 100%;
+  padding: 0 18px 0 8px;
   background: transparent;
   border: none;
   font: inherit;
@@ -231,92 +272,108 @@
   user-select: none;
   transition: background .15s, color .15s;
   font-family: inherit;
-  
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Первую колонку (Family) выравниваем по левому краю, чтобы было удобнее читать */
 .fm-grid tbody th .fm-hdr-btn {
   justify-content: flex-start;
   text-align: left;
 }
 
-/* Стили наведения */
-.fm-grid thead .fm-hdr-btn:hover { background: rgba(255,255,255,0.1); }
-.fm-grid thead .fm-hdr-btn.is-active { background: var(--brand-color); color: #fff; }
+.fm-grid thead .fm-hdr-btn:hover {
+  background: color-mix(in srgb, white 12%, transparent);
+}
+.fm-grid thead .fm-hdr-btn.is-active {
+  background: var(--brand-color);
+  color: var(--brand-on-dark);
+}
 
-.fm-grid tbody .fm-hdr-btn:hover { background: rgba(115, 124, 62, 0.1); }
-.fm-grid tbody .fm-hdr-btn.is-active { background: var(--brand-color); color: #fff; }
+.fm-grid tbody .fm-hdr-btn:hover {
+  background: color-mix(in srgb, var(--brand-color) 10%, transparent);
+}
+.fm-grid tbody .fm-hdr-btn.is-active {
+  background: var(--brand-color);
+  color: var(--brand-on-dark);
+}
 
-.fm-hdr-btn:focus { outline: 2px solid var(--brand-color); outline-offset: -2px; }
-.fm-hdr-btn.is-peer   { outline: 2px solid var(--brand-color); outline-offset: -2px; }
+.fm-hdr-btn:focus {
+  outline: 2px solid var(--brand-color);
+  outline-offset: -2px;
+}
+.fm-hdr-btn.is-peer {
+  outline: 2px solid var(--brand-color);
+  outline-offset: -2px;
+}
 
 .fm-hdr-link {
-  position: absolute; 
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
   right: 4px;
-  font-size: 0.85em; 
+  font-size: 0.85em;
   color: var(--brand-color) !important;
   text-decoration: none !important;
-  padding: 2px; 
+  padding: 2px;
   line-height: 1;
-  opacity: 0.6;
+  opacity: 0.65;
   z-index: 2;
 }
 .fm-hdr-link:hover { opacity: 1; }
 
-/* В темной шапке стрелочка должна быть белой */
-.fm-grid thead .fm-hdr-link { color: var(--brand-on-dark) !important; }
+.fm-grid thead .fm-hdr-link {
+  color: var(--brand-on-dark) !important;
+}
 
 /* ==========================================
    СОСТОЯНИЯ ПРИ ФИЛЬТРАЦИИ
    ========================================== */
 
-/* 1. Единый серый цвет для отфильтрованных ячеек */
 .fm-grid td.is-dimmed {
-  background: #F0F0F0 !important; /* Однородный серый */
-  opacity: 1 !important;          /* Не делаем прозрачной саму ячейку */
+  background: var(--gray-dimmed) !important;
+  opacity: 1 !important;
 }
 .fm-grid td.is-dimmed .fm-cell-content {
-  opacity: 0.05 !important;       /* Прячем всё содержимое внутри */
+  opacity: 0.05 !important;
   filter: grayscale(1);
 }
 
-/* 2. Ячейка, которая будет подсвечена (при наведении на фильтр) */
 .fm-grid td.is-cell-preview-add {
-  background: #F8F9F3 !important; /* Едва заметный светлый фон */
+  background: var(--preview-add-bg) !important;
 }
 
-/* 3. Чип, который точно останется (СПЛОШНАЯ ЗАЛИВКА) */
 .fm-grid td .fm-chip.is-highlight {
   background: var(--brand-color) !important;
-  color: var(--brand-on-dark) !important; /* Светлый текст */
+  color: var(--brand-on-dark) !important;
   border: none !important;
   box-shadow: none !important;
   opacity: 1 !important;
 }
 
-/* 4. Чип, который ДОБАВИТСЯ при клике (пунктирная рамка) */
 .fm-grid td .fm-chip.is-preview-add {
   background: transparent !important;
   color: var(--brand-color) !important;
-  border: 2px dashed var(--brand-color) !important;
+  border: 1.5px dashed var(--brand-color) !important;
   box-shadow: none !important;
 }
 
-/* 5. Чип, который ИСЧЕЗНЕТ при клике (полупрозрачный, бледный) */
 .fm-grid td .fm-chip.is-preview-drop {
   background: transparent !important;
-  color: #999 !important;
-  border: 1px dashed #CCC !important;
+  color: var(--preview-drop) !important;
+  border: 1px dashed var(--gray-300) !important;
   box-shadow: none !important;
   opacity: 0.4;
 }
 
-/* 6. Отфильтрованные чипы (is-dimmed) - оставляем как есть, меняем только прозрачность */
 .fm-grid td .fm-chip.is-dimmed {
   opacity: 0.15 !important;
+}
+
+/* Рамки таблицы */
+.fm-grid table,
+.fm-grid td,
+.fm-grid th,
+.fm-grid tr {
+  border-color: var(--brand-border) !important;
 }
