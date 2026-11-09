@@ -282,3 +282,18 @@
 .gost-pages-toggle:hover {
     text-decoration: underline;
 }
+/* Термин в таблице ГОСТов — как «ссылка-подсказка» */
+.gost-card-value abbr.term,
+.gost-table abbr.term {
+    text-decoration: none;
+    border-bottom: 1px dashed currentColor;
+    cursor: help;
+}
+
+/* Аббревиатура без определения — то же самое */
+.gost-card-value abbr[data-abbr],
+.gost-table abbr[data-abbr] {
+    text-decoration: none;
+    border-bottom: 1px dotted currentColor;
+    cursor: help;
+}
