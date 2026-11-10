@@ -257,8 +257,8 @@ node ./plugins/json-to-md/json-to-md-table.js … \
 Заголовок и подвал группы — сквозные строки:
 
 ```md
-|| **Модуль: section.Rename** {.cell-align-top-left} | > | > | > | > ||
-|| _Всего для section.Rename: **2**_ <br><br> {.cell-align-top-left} | > | > | > | > ||
+|| **Модуль: section.Rename** ::{align="top-left"} | > | > | > | > ||
+|| _Всего для section.Rename: **2**_ <br><br> ::{align="top-left"} | > | > | > | > ||
 ```
 
 Символ `>` — официальный синтаксис Diplodoc для горизонтального объединения ячеек; `{.cell-align-top-left}` — выравнивание текста по левому краю.
