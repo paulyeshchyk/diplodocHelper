@@ -42,3 +42,11 @@ search:
     provider: local
     tolerance: 2
     confidense: phrased
+
+py_feature_map:
+  projectName: "MES Documentation" # опционально, если нет — берем title из yfm или имя папки
+  config: "_registry/feature-map.config.json"
+  layout: "_registry/layout.json"
+  fields: "_registry/fields.yaml"
+  dimensions: "_registry/dimensions.yaml"
+  catalog: "_generated/catalog.{lang}.json"
