@@ -78,8 +78,8 @@ describe('Sanitizer.sanitizeHtml', () => {
     expect(Sanitizer.sanitizeHtml('<b>text')).toBe('<b>text');
   });
 
-  test('> inside attribute value breaks regex (known limitation)', () => {
-    expect(Sanitizer.sanitizeHtml('<a title="x > y">t</a>')).not.toContain('title');
+  test('handles > inside attribute value', () => {
+    expect(Sanitizer.sanitizeHtml('<a title="x > y">t</a>')).toBe('<a title="x &gt; y">t</a>');
   });
 
   test('stripTags keeps dots and dashes', () => {
@@ -88,5 +88,22 @@ describe('Sanitizer.sanitizeHtml', () => {
 
   test('stripTags mangles email (documented behavior)', () => {
     expect(Sanitizer.stripTags('a@b.com')).toBe('a b.com');
+  });
+
+  test('allows bare relative paths', () => {
+    expect(Sanitizer.sanitizeHtml('<a href="page.md">t</a>'))
+      .toBe('<a href="page.md">t</a>');
+    expect(Sanitizer.sanitizeHtml('<a href="sub/file.md">t</a>'))
+      .toBe('<a href="sub/file.md">t</a>');
+  });
+  test('rejects protocol-relative URLs', () => {
+    expect(Sanitizer.sanitizeHtml('<a href="//evil.com/x">t</a>'))
+      .toBe('<a>t</a>');
+  });
+  test('rejects data: and file: URLs', () => {
+    expect(Sanitizer.sanitizeHtml('<a href="data:text/html,x">t</a>'))
+      .toBe('<a>t</a>');
+    expect(Sanitizer.sanitizeHtml('<a href="file:///etc/passwd">t</a>'))
+      .toBe('<a>t</a>');
   });
 });

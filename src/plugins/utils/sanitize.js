@@ -26,7 +26,12 @@ const DANGEROUS_BLOCK_TAGS = [
   'script', 'style', 'iframe', 'object', 'embed', 'form', 'svg', 'math', 'link', 'meta', 'base',
 ];
 
+/**
+ * @type {RegExp}
+ */
+// eslint-disable-next-line no-control-regex
 const CONTROL_CHARS = /[\u0000-\u001f\u007f]/g;
+
 // Символы, опасные в YAML/HTML-индикаторах. Заменяются пробелом.
 const DANGEROUS_CHARS = /[<>'"&*!|%@`]/g;
 
@@ -35,10 +40,13 @@ const ENTITIES = {
   '&#39;': "'", '&#x27;': "'", '&nbsp;': ' ',
 };
 
+// @ts-ignore
 function decodeEntities(s) {
+  // @ts-ignore
   return s.replace(/&(?:#x?[0-9a-f]+|[a-z]+);/gi, m => ENTITIES[m.toLowerCase()] ?? m);
 }
 
+// @ts-ignore
 function escapeAttrValue(v) {
   return decodeEntities(String(v))
     .replace(/&/g, '&amp;')
@@ -47,14 +55,29 @@ function escapeAttrValue(v) {
     .replace(/>/g, '&gt;');
 }
 
+
+/**
+ * @param {string} url
+ */
 function isSafeUrl(url) {
   const t = String(url).trim();
   if (!t) return false;
-  if (t.startsWith('#') || t.startsWith('/') || t.startsWith('./') || t.startsWith('../')) return true;
-  return ALLOWED_PROTOCOLS.test(t);
+
+  // Protocol-relative (//evil.com) — небезопасно
+  if (t.startsWith('//')) return false;
+
+  // Есть протокол → только из белого списка
+  if (/^[a-z][a-z0-9+.\-]*:/i.test(t)) {
+    return ALLOWED_PROTOCOLS.test(t);
+  }
+
+  // Без протокола: #anchor, /abs, ./rel, ../rel, bare-relative — безопасно
+  return true;
 }
 
+// @ts-ignore
 function cleanAttributes(tag, attrsStr) {
+  // @ts-ignore
   const tagAttrs = TAG_ATTRS[tag] || new Set();
   const re = /([a-z_:][a-z0-9_:.\-]*)(?:\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+)))?/gi;
   const kept = [];
@@ -123,15 +146,19 @@ class Sanitizer {
     }
 
     // 2. Все остальные тэги — по whitelist
-    s = s.replace(/<\/?([a-z][a-z0-9]*)\b([^>]*)>/gi, (match, tagName, attrsStr) => {
-      const tag = tagName.toLowerCase();
-      if (!ALLOWED_TAGS.has(tag)) return ''; // тэг выкинуть, содержимое — оставить
-      if (match.startsWith('</')) return `</${tag}>`;
+    // Атрибуты в кавычках могут содержать `>` — учитываем
+    s = s.replace(
+      /<(\/?)([a-z][a-z0-9]*)\b((?:"[^"]*"|'[^']*'|[^>])*)>/gi,
+      (match, close, tagName, attrsStr) => {
+        const tag = tagName.toLowerCase();
+        if (!ALLOWED_TAGS.has(tag)) return ''; // тэг выкинуть, содержимое — оставить
+        if (close) return `</${tag}>`;
 
-      const selfClose = /\/\s*$/.test(attrsStr);
-      const attrs = cleanAttributes(tag, attrsStr.replace(/\/\s*$/, ''));
-      return `<${tag}${attrs}${selfClose ? ' /' : ''}>`;
-    });
+        const selfClose = /\/\s*$/.test(attrsStr);
+        const attrs = cleanAttributes(tag, attrsStr.replace(/\/\s*$/, ''));
+        return `<${tag}${attrs}${selfClose ? ' /' : ''}>`;
+      }
+    );
 
     return s;
   }
