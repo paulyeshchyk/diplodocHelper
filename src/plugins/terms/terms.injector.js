@@ -37,7 +37,7 @@ function renderTooltipHtml(p) {
   });
   if (p.description) {
     content += renderTemplate('tooltip.description.html', {
-      DESCRIPTION: escapeHtml(p.description),
+      DESCRIPTION: p.description,
     });
   }
   if (p.linkHref) {
@@ -253,10 +253,10 @@ function runGeneration({ buildDir, docsRoot }) {
       }
 
       if (totalUnmatched > 0) {
-          console.warn(
-              `[termTitles] ${lang}: ${totalUnmatched} <abbr class="term"> без определений ` +
-              `в словаре. Не найдены: ${Array.from(allUnmatched).join(', ')}`
-          );
+        console.warn(
+          `[termTitles] ${lang}: ${totalUnmatched} <abbr class="term"> без определений ` +
+          `в словаре. Не найдены: ${Array.from(allUnmatched).join(', ')}`
+        );
       }
       const unmatchedNote = totalUnmatched > 0 ? `; ${totalUnmatched} без определений` : '';
 

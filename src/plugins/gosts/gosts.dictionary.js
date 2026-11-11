@@ -4,6 +4,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 // Предполагается, что вы создали gosts.paths.js по аналогии с terms.paths.js
 const { getGostOutputDir } = require('./gosts.paths');
+const { Sanitizer } = require('../utils/sanitize');
 
 const DICT_FILENAME = 'gosts.yaml';
 
@@ -25,7 +26,7 @@ function loadGostDictionary(langDir, lang) {
         dictPath = getGostDictionaryPath(langDir, lang);
     } catch (err) {
         console.error(`❌ [gosts] Ошибка определения пути: ${err.message}`);
-        return []; 
+        return [];
     }
 
     if (!fs.existsSync(dictPath)) {
@@ -37,8 +38,23 @@ function loadGostDictionary(langDir, lang) {
         const raw = fs.readFileSync(dictPath, 'utf8');
         const parsed = yaml.load(raw);
         const result = Array.isArray(parsed) ? parsed : [];
-        console.log(`[gosts] Загружено ${result.length} записей из ${dictPath}`);
-        return result;
+
+        const sanitized = result.map(entry => {
+            if (!entry || typeof entry !== 'object') return entry;
+            return {
+                ...entry,
+                code: Sanitizer.stripTags(entry.code),
+                type: Sanitizer.stripTags(entry.type),
+                date: Sanitizer.stripTags(entry.date),
+                status: Sanitizer.stripTags(entry.status),
+                title: Sanitizer.sanitizeHtml(entry.title),
+                description: Sanitizer.sanitizeHtml(entry.description),
+            };
+        });
+
+        console.log(`[gosts] Загружено ${sanitized.length} записей из ${dictPath}`);
+        return sanitized;
+
     } catch (err) {
         console.error(`❌ [gosts] Ошибка парсинга ${dictPath}: ${err.message}`);
         return [];

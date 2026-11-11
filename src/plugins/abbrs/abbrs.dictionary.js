@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 const { getAbbrOutputDir } = require('./abbrs.paths');
+const { Sanitizer } = require('../utils/sanitize');
 
 const DICT_FILENAME = 'abbreviations.yaml';
 
@@ -43,16 +44,23 @@ function loadAbbrDictionary(langDir, lang) {
         const map = new Map();
         for (const entry of parsed) {
             if (!entry || typeof entry !== 'object') continue;
-            if (!entry.abbr || !entry.full) {
-                console.warn(`[abbrs] ${dictPath}: пропущена запись без abbr или full`, entry);
+
+            const abbr = Sanitizer.stripTags(String(entry.abbr || ''));
+            if (!abbr) {
+                console.warn(`[abbrs] ${dictPath}: пропущена запись с пустым abbr`, entry);
                 continue;
             }
-            const abbr = String(entry.abbr).trim();
+            const full = Sanitizer.sanitizeHtml(String(entry.full || '').trim());
+            if (!full) {
+                console.warn(`[abbrs] ${dictPath}: пропущена запись без full`, entry);
+                continue;
+            }
+
             map.set(abbr, {
                 abbr,
-                full: String(entry.full).trim(),
-                category: entry.category ? String(entry.category).trim() : undefined,
-                description: entry.description ? String(entry.description).trim() : undefined,
+                full,
+                category: entry.category ? Sanitizer.stripTags(String(entry.category).trim()) : undefined,
+                description: entry.description ? Sanitizer.sanitizeHtml(String(entry.description).trim()) : undefined,
             });
         }
         return map;

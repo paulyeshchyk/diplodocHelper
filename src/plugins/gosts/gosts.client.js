@@ -214,10 +214,10 @@
 
                     html += `<tr id="${anchorId}" class="gost-main-row ${isOpen ? 'is-expanded' : ''} ${isTarget}" data-id="${anchorId}">`;
                     html += `<td class="col-num">${rowNum++}</td>`;
-                    html += `<td class="col-code"><strong>${formatMarkdown(item.code)}</strong></td>`;
+                    html += `<td class="col-code"><strong>${esc(item.code)}</strong></td>`;
                     html += `<td class="col-title">${formatMarkdown(item.title)}</td>`;
-                    html += `<td class="col-date">${formatMarkdown(item.date || '—')}</td>`;
-                    html += `<td class="col-status">${formatMarkdown(item.status || '—')}</td>`;
+                    html += `<td class="col-date">${esc(item.date || '—')}</td>`;
+                    html += `<td class="col-status">${esc(item.status || '—')}</td>`;
                     html += `</tr>`;
 
                     html += `<tr class="gost-card-row ${isOpen ? 'is-open' : ''}">`;
@@ -225,11 +225,11 @@
                     html += `<div class="gost-card-wrapper"><div class="gost-card-inner">`;
                     html += `<div class="gost-card-content">`;
 
-                    html += `<div class="gost-card-item"><div class="gost-card-label">Обозначение:</div><div class="gost-card-value">${formatMarkdown(item.code)}</div></div>`;
+                    html += `<div class="gost-card-item"><div class="gost-card-label">Обозначение:</div><div class="gost-card-value">${esc(item.code)}</div></div>`;
                     html += `<div class="gost-card-item"><div class="gost-card-label">Тип:</div><div class="gost-card-value">${esc(item.type || '—')}</div></div>`;
                     html += `<div class="gost-card-item"><div class="gost-card-label">Название:</div><div class="gost-card-value">${formatMarkdown(item.title || '—')}</div></div>`;
                     html += `<div class="gost-card-item"><div class="gost-card-label">Дата введения:</div><div class="gost-card-value">${esc(item.date || '—')}</div></div>`;
-                    html += `<div class="gost-card-item"><div class="gost-card-label">Статус:</div><div class="gost-card-value">${formatMarkdown(item.status || '—')}</div></div>`;
+                    html += `<div class="gost-card-item"><div class="gost-card-label">Статус:</div><div class="gost-card-value">${esc(item.status || '—')}</div></div>`;
                     html += `<div class="gost-card-item"><div class="gost-card-label">Доп. информация:</div><div class="gost-card-value">${formatMarkdown(item.description || '—')}</div></div>`;
 
                     // --- БЛОК ССЫЛАЮЩИХСЯ СТАТЕЙ ---
