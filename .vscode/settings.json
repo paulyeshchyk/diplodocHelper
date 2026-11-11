@@ -19,4 +19,7 @@
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
+  "i18n-ally.localesPaths": [
+    "src/i18n"
+  ],
 }

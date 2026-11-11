@@ -1,0 +1,33 @@
+{
+  "outputPathTemplate": "{lang}/Дополнительнаяинформация/FM/index.md",
+  "moduleHrefAnchor": "naznachenie",
+  "moduleHrefTemplate": "/{docsRootRel}/{dir}/index.html#{anchor}",
+  "stripDimensions": [
+    "actor",
+    "layer",
+    "arm"
+  ],
+  "stripLabels": {
+    "actor": "Actor",
+    "layer": "Layer"
+  },
+  "rowDimension": "family",
+  "columnDimension": "capability",
+  "dimToFieldMap": {
+    "actor": "actors",
+    "capability": "capabilities",
+    "layer": "layers",
+    "family": "families",
+    "arm": "arms"
+  },
+  "title": "Feature Map",
+  "sectionType": [
+    "Page",
+    "Chapter",
+    "Section"
+  ],
+  "counterPlaceholder": "Показано: —",
+  "resetButtonText": "Сбросить все",
+  "emptyCellSymbol": "·",
+  "chipLabelField": "ident"
+}

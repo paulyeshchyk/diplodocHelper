@@ -1,0 +1,130 @@
+dimensions:
+  actor:
+    title: Актор
+    columns:
+      - label: ID
+        field: id
+      - label: Модуль
+        field: ident
+      - label: Роль
+        field: role
+      - label: Что делает
+        field: designation
+    items:
+      Пользователь:
+        title: Пользователь
+      Система:
+        title: Система
+      Администратор:
+        title: Администратор
+  family:
+    title: Семейство
+    columns:
+      - label: ID
+        field: id
+      - label: Модуль
+        field: ident
+      - label: Роль
+        field: role
+      - label: Что делает
+        field: designation
+    items:
+      none:
+        title: none
+        dir: Дополнительнаяинформация\FM\Семействоfamily\СемействоNone
+      Заказ:
+        title: Заказ
+        dir: Дополнительнаяинформация\FM\Семействоfamily\СемействоЗаказ
+      ПСп:
+        title: ПСп
+        dir: Дополнительнаяинформация\FM\Семействоfamily\СемействоПСп
+      Контрагент:
+        title: Контрагент
+        dir: Дополнительнаяинформация\FM\Семействоfamily\СемействоКонтрагент
+      ДСЕ:
+        title: ДСЕ
+        dir: Дополнительнаяинформация\FM\Семействоfamily\СемействоДСЕ
+      Маршрут:
+        title: Маршрут
+        dir: Дополнительнаяинформация\FM\Семействоfamily\СемействоМаршрут
+      Операция:
+        title: Операция
+        dir: Дополнительнаяинформация\FM\Семействоfamily\СемействоОперация
+      Трудоемкость:
+        title: Трудоемкость
+        dir: Дополнительнаяинформация\FM\Семействоfamily\СемействоТрудоемкость
+  layer:
+    title: Слой
+    columns:
+      - label: ID
+        field: id
+      - label: Модуль
+        field: ident
+      - label: Роль
+        field: role
+      - label: Что делает
+        field: designation
+    items:
+      none:
+        title: none
+        dir: Дополнительнаяинформация\FMОпределения\Слоиlayer\СлойNone
+      Frontend:
+        title: Frontend
+        dir: Дополнительнаяинформация\FMОпределения\Слоиlayer\СлойFrontend
+      Backend:
+        title: Backend
+        dir: Дополнительнаяинформация\FMОпределения\Слоиlayer\СлойBackend
+      Sql:
+        title: Sql
+        dir: Дополнительнаяинформация\FMОпределения\Слоиlayer\СлойSql
+      Plugin:
+        title: Plugin
+        dir: Дополнительнаяинформация\FMОпределения\Слоиlayer\СлойPlugin
+      External:
+        title: External
+        dir: Дополнительнаяинформация\FMОпределения\Слоиlayer\СлойExternal
+  capability:
+    title: Capability
+    columns:
+      - label: ID
+        field: id
+      - label: Модуль
+        field: ident
+      - label: Роль
+        field: role
+      - label: Что делает
+        field: designation
+    items:
+      none:
+        title: none
+        dir: Дополнительнаяинформация\FMОпределения\КаталогCapabilitymap\КаталогNone
+      Компоновка:
+        title: Компоновка
+        dir: Дополнительнаяинформация\FMОпределения\КаталогCapabilitymap\КаталогКомпоновка
+      Отчёт:
+        title: Отчёт
+        dir: Дополнительнаяинформация\FMОпределения\КаталогCapabilitymap\КаталогОтчёт
+      Форма:
+        title: Форма
+        dir: Дополнительнаяинформация\FMОпределения\КаталогCapabilitymap\КаталогФорма
+      Справочник:
+        title: Справочник
+        dir: Дополнительнаяинформация\FMОпределения\КаталогCapabilitymap\КаталогСправочник
+  arm:
+    items:
+      Мастер:
+        title: Мастер
+        dir: Дополнительнаяинформация\FMОпределения\АРМ\АРММастер
+      Плановик:
+        title: Плановик
+        dir: Дополнительнаяинформация\FMОпределения\АРМ\АРМПлановик
+      Рабочий:
+        title: Рабочий
+        dir: Дополнительнаяинформация\FMОпределения\АРМ\АРМРабочий
+      Менеджер:
+        title: Менеджер
+        dir: Дополнительнаяинформация\FMОпределения\АРМ\АРММенеджер
+      Технолог:
+        title: Технолог
+        dir: Дополнительнаяинформация\FM\АРМ\АРМТехнолог
+    title: АРМ

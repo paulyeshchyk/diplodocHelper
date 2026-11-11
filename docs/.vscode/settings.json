@@ -62,5 +62,6 @@
     "editor.wordWrap": "off",
   },
   "cmake.ignoreCMakeListsMissing": true,
-  "markdown.extension.orderedList.autoRenumber": true
+  "markdown.extension.orderedList.autoRenumber": true,
+  "featureMap.docsProjectRoot": "d:\\projects\\private\\diplodocHelper\\docs\\docs"
 }

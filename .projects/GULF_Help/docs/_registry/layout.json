@@ -1,0 +1,17 @@
+{
+  "modulesFolder": "",
+  "modulePrefix": "",
+  "moduleIndexFile": "index.md",
+  "moduleSectionTypes": null,
+  "outFolder": "Реестр",
+  "skipDirs": [],
+  "strictDimensions": true,
+  "includeEmpty": [
+    "actor",
+    "family",
+    "layer",
+    "capability",
+    "arm"
+  ],
+  "emptyLabel": "Без значения"
+}

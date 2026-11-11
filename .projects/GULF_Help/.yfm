@@ -1,0 +1,49 @@
+allowHtml: true
+lang: ru
+langs:
+  - en
+  - ru
+lint: false
+interface:
+  favicon-src: _assets/images/gulf.ico
+docs-viewer:
+  lang: ru
+  langs:
+    - en
+    - ru
+  disableLanguagePersistence: true
+mtimes: false
+resources:
+  script:
+    - ../plugins/mdedit_fixes/fix-footnote-links.js
+    - ./_assets/scripts/flash.js
+    - ./_assets/scripts/no-cache.js
+    - ./_assets/scripts/context-search.js
+    - ./_assets/scripts/lightbox.js
+    - ./_assets/scripts/figures-view.js
+    - ./_assets/scripts/gosts.js
+  style:
+    - _assets/style/custom.css
+    - _assets/style/breadcrumb.css
+    - _assets/style/context-search.css
+    - _assets/style/tableautoincrement.css
+    - _assets/style/lightbox.css
+    - _assets/style/abbr.css
+    - _assets/style/terms.css
+    - _assets/style/gosts.css
+extensions:
+  - name: mdit-plugins
+    plugins:
+      - name: markdown-it-footnote
+        module: markdown-it-footnote
+search:
+  provider: local
+  tolerance: 2
+  confidense: phrased
+py_feature_map:
+  projectName: d:\projects\ascon\GULF_Help\docs
+  config: _registry/feature-map.config.json
+  layout: _registry/layout.json
+  fields: _registry/fields.yaml
+  dimensions: _registry/dimensions.yaml
+  catalog: _generated/catalog.ru.json
