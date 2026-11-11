@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 const { getAbbrDictionaryPath } = require('./abbrs.dictionary');
+const { Sanitizer } = require('../utils/sanitize');
 
 function formatAbbrEntry(entry) {
     let lines = [];
@@ -45,7 +46,8 @@ function formatAbbrEntry(entry) {
  */
 function appendAbbrToDictionary(langDir, entry, lang) {
     const dictPath = getAbbrDictionaryPath(langDir, lang);
-    const normalizedAbbr = entry.abbr.trim();
+    const normalizedAbbr = Sanitizer.stripTags(String(entry.abbr || ''));
+    if (!normalizedAbbr) return false;
 
     /** @type {any[]} */
     let entries = [];
@@ -62,8 +64,10 @@ function appendAbbrToDictionary(langDir, entry, lang) {
         try {
             const loaded = yaml.load(existing);
             if (Array.isArray(loaded)) {
-                const exists = loaded.some(
-                    e => e && typeof e === 'object' && String(e.abbr || '').trim() === normalizedAbbr
+                // ── NEW: сверяем дубли по очищенному abbr ──
+                const exists = loaded.some(e =>
+                    e && typeof e === 'object' &&
+                    Sanitizer.stripTags(String(e.abbr || '')) === normalizedAbbr
                 );
                 if (exists) return false;
                 entries = loaded;
@@ -90,18 +94,18 @@ function appendAbbrToDictionary(langDir, entry, lang) {
 
     const newEntry = {
         abbr: normalizedAbbr,
-        full: String(entry.full || '').trim(),
+        full: Sanitizer.sanitizeHtml(String(entry.full || '').trim()),
     };
     if (entry.category && String(entry.category).trim()) {
-        newEntry.category = String(entry.category).trim();
+        newEntry.category = Sanitizer.stripTags(String(entry.category).trim());
     }
     if (entry.description && String(entry.description).trim()) {
-        newEntry.description = String(entry.description).trim();
+        newEntry.description = Sanitizer.sanitizeHtml(String(entry.description).trim());
     }
     entries.push(newEntry);
 
     // Сортировка по abbr
-    entries.sort((a, b) => 
+    entries.sort((a, b) =>
         String(a.abbr || '').localeCompare(String(b.abbr || ''), 'ru', { sensitivity: 'base' })
     );
 
@@ -110,7 +114,7 @@ function appendAbbrToDictionary(langDir, entry, lang) {
 
     for (const item of entries) {
         const firstLetter = String(item.abbr || '').charAt(0).toUpperCase();
-        
+
         if (firstLetter && firstLetter !== currentLetter) {
             currentLetter = firstLetter;
             bodyLines.push(`# ── ${currentLetter} ──`);
@@ -122,7 +126,7 @@ function appendAbbrToDictionary(langDir, entry, lang) {
     }
 
     const finalContent = header.trimEnd() + '\n\n' + bodyLines.join('\n').trimEnd() + '\n';
-    
+
     fs.mkdirSync(path.dirname(dictPath), { recursive: true });
     fs.writeFileSync(dictPath, finalContent, 'utf8');
     return true;

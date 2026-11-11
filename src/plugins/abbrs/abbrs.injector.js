@@ -43,7 +43,7 @@ function renderTooltipHtml(p) {
     });
     if (p.description) {
         content += renderTemplate('tooltip.description.html', {
-            DESCRIPTION: escapeHtml(p.description),
+            DESCRIPTION: p.description,
         });
     }
     if (p.linkHref) {

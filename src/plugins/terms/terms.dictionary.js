@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 const { getTermOutputDir } = require('./terms.paths');
+const { Sanitizer } = require('../utils/sanitize');
 
 const DICT_FILENAME = 'terms.yaml';
 
@@ -40,16 +41,25 @@ function loadTermDictionary(langDir, lang) {
         const map = new Map();
         for (const entry of parsed) {
             if (!entry || typeof entry !== 'object') continue;
-            if (!entry.term || !entry.definition) {
-                console.warn(`[terms] ${dictPath}: пропущена запись без term или definition`, entry);
+
+            // ── NEW: identity — только plain text ──
+            const term = Sanitizer.stripTags(String(entry.term || ''));
+            if (!term) {
+                console.warn(`[terms] ${dictPath}: пропущена запись с пустым term`, entry);
                 continue;
             }
-            const term = String(entry.term).trim();
+            // definition проверяем после очистки
+            const definition = Sanitizer.sanitizeHtml(String(entry.definition || '').trim());
+            if (!definition) {
+                console.warn(`[terms] ${dictPath}: пропущена запись без definition`, entry);
+                continue;
+            }
+
             map.set(term, {
                 term,
-                definition: String(entry.definition).trim(),
-                category: entry.category ? String(entry.category).trim() : undefined,
-                description: entry.description ? String(entry.description).trim() : undefined,
+                definition,
+                category: entry.category ? Sanitizer.stripTags(String(entry.category).trim()) : undefined,
+                description: entry.description ? Sanitizer.sanitizeHtml(String(entry.description).trim()) : undefined,
             });
         }
         return map;

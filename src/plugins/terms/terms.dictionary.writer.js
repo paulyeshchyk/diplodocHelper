@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 const { getTermDictionaryPath } = require('./terms.dictionary');
+const { Sanitizer } = require('../utils/sanitize');
 
 /**
  * Форматирует одну запись в красивый YAML с блочным текстом `>-`.
@@ -50,8 +51,9 @@ function formatTermEntry(entry) {
  */
 function appendTermToDictionary(langDir, entry, lang) {
     const dictPath = getTermDictionaryPath(langDir, lang);
-    const normalizedTerm = entry.term.trim();
-    
+    const normalizedTerm = Sanitizer.stripTags(String(entry.term || ''));
+    if (!normalizedTerm) return false;
+
     /** @type {any[]} */
     let entries = [];
     let header = '';
@@ -70,8 +72,9 @@ function appendTermToDictionary(langDir, entry, lang) {
             const loaded = yaml.load(existing);
             if (Array.isArray(loaded)) {
                 // Проверяем на дубликат
-                const exists = loaded.some(
-                    e => e && typeof e === 'object' && String(e.term || '').trim() === normalizedTerm
+                const exists = loaded.some(e =>
+                    e && typeof e === 'object' &&
+                    Sanitizer.stripTags(String(e.term || '')) === normalizedTerm
                 );
                 if (exists) return false;
                 entries = loaded;
@@ -100,18 +103,18 @@ function appendTermToDictionary(langDir, entry, lang) {
     // 3. Добавляем новую запись
     const newEntry = {
         term: normalizedTerm,
-        definition: String(entry.definition || '').trim(),
+        definition: Sanitizer.sanitizeHtml(String(entry.definition || '').trim()),
     };
     if (entry.category && String(entry.category).trim()) {
-        newEntry.category = String(entry.category).trim();
+        newEntry.category = Sanitizer.stripTags(String(entry.category).trim());
     }
     if (entry.description && String(entry.description).trim()) {
-        newEntry.description = String(entry.description).trim();
+        newEntry.description = Sanitizer.sanitizeHtml(String(entry.description).trim());
     }
     entries.push(newEntry);
 
     // 4. Сортируем по полю term
-    entries.sort((a, b) => 
+    entries.sort((a, b) =>
         String(a.term || '').localeCompare(String(b.term || ''), 'ru', { sensitivity: 'base' })
     );
 
@@ -121,7 +124,7 @@ function appendTermToDictionary(langDir, entry, lang) {
 
     for (const item of entries) {
         const firstLetter = String(item.term || '').charAt(0).toUpperCase();
-        
+
         // Добавляем алфавитный разделитель, если буква изменилась
         if (firstLetter && firstLetter !== currentLetter) {
             currentLetter = firstLetter;
@@ -134,7 +137,7 @@ function appendTermToDictionary(langDir, entry, lang) {
     }
 
     const finalContent = header.trimEnd() + '\n\n' + bodyLines.join('\n').trimEnd() + '\n';
-    
+
     // 6. Записываем файл
     fs.mkdirSync(path.dirname(dictPath), { recursive: true });
     fs.writeFileSync(dictPath, finalContent, 'utf8');

@@ -325,23 +325,18 @@
                 },
                 {
                     "command": "diplodoc-helper.abbr.Add",
-                    "when": "(editorLangId == markdown && editorHasSelection)",
+                    "when": "(editorLangId == yaml || editorLangId == markdown)",
                     "group": "7.diplodoc.section@6"
                 },
                 {
                     "command": "diplodoc-helper.term.Add",
-                    "when": "(editorLangId == markdown && editorHasSelection)",
+                    "when": "(editorLangId == yaml || editorLangId == markdown)",
                     "group": "7.diplodoc.section@7"
                 },
                 {
                     "command": "diplodoc-helper.gost.Insert",
-                    "when": "(editorTextFocus && !editorReadonly)",
+                    "when": "(editorLangId == yaml || editorLangId == markdown)",
                     "group": "7.diplodoc.section@8"
-                },
-                {
-                    "command": "diplodoc-helper.gost.Add",
-                    "when": "(editorTextFocus && !editorReadonly)",
-                    "group": "7.diplodoc.section@9"
                 }
             ],
             "diplodoc.other.explorer.context.menu": [

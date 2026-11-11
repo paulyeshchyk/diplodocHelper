@@ -3,12 +3,13 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 const { getGostDictionaryPath } = require('./gosts.dictionary');
+const { Sanitizer } = require('../utils/sanitize');
 
 function formatGostEntry(entry) {
     const lines = [];
     const codeKey = yaml.dump(entry.code, { lineWidth: -1 }).trim();
     lines.push(`- code: ${codeKey}`);
-    
+
     // Добавляем type
     const typeKey = entry.type ? yaml.dump(entry.type, { lineWidth: -1 }).trim() : '"Прочее"';
     lines.push(`  type: ${typeKey}`);
@@ -44,7 +45,9 @@ function formatGostEntry(entry) {
 
 function appendGostToDictionary(langDir, entry, lang) {
     const dictPath = getGostDictionaryPath(langDir, lang);
-    const normalizedCode = entry.code.trim();
+
+    const normalizedCode = Sanitizer.stripTags(entry.code).trim();
+    if (!normalizedCode) return false;
 
     let entries = [];
     let header = '';
@@ -59,7 +62,13 @@ function appendGostToDictionary(langDir, entry, lang) {
         try {
             const loaded = yaml.load(existing);
             if (Array.isArray(loaded)) {
-                if (loaded.some(e => e.code === normalizedCode)) return false;
+
+                const exists = loaded.some(e =>
+                    e && typeof e === 'object' &&
+                    Sanitizer.stripTags(String(e.code || '')) === normalizedCode
+                );
+                if (exists) return false;
+
                 entries = loaded;
             }
         } catch (err) {
@@ -85,11 +94,11 @@ function appendGostToDictionary(langDir, entry, lang) {
 
     entries.push({
         code: normalizedCode,
-        type: entry.type ? entry.type.trim() : 'Прочее',
-        title: String(entry.title || '').trim(),
-        date: String(entry.date || '').trim(),
-        status: String(entry.status || '').trim(),
-        description: String(entry.description || '').trim()
+        type: Sanitizer.stripTags(entry.type) || 'Прочее',
+        title: Sanitizer.sanitizeHtml(entry.title),
+        date: Sanitizer.stripTags(entry.date),
+        status: Sanitizer.stripTags(entry.status),
+        description: Sanitizer.sanitizeHtml(entry.description),
     });
 
     // Сначала сортируем по типу, потом по коду (с учетом чисел)
