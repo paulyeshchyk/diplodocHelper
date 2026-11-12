@@ -28,6 +28,8 @@
         "onStartupFinished"
     ],
     "scripts": {
+        "build:pipeline": "node ./plugins/run-pipeline.js --stage=all",
+        "build:legacy": "node ./plugins/docs-build.js",
         "precompile": "npm run validate",
         "type-check": "tsc --noEmit",
         "validate": "npm run lint && npm run type-check",

@@ -1,0 +1,129 @@
+# Файл <repo>/plugins.config.yaml (создастся init-config --only=plugins, потом дополняется вручную):
+# plugins.config.yaml — миграция с docs-build.js
+# См. docs/PIPELINE.md, REFACTORING.md §2.5.
+
+lang: ru
+
+common:
+  logLevel: off
+  stopOnError: true
+  dryRun: false
+
+stages:
+  pre:
+    - module: collectCatalog
+    - module: buildPageLegend
+      options: { rewrite: true, withInclude: true, ignore: 'sectionType,context,pureTitle,ID_Group,ID_Type,vars' }
+    - module: renderModules
+      options: { rewrite: true, withInclude: true }
+    - module: emitModulesTable
+      options: { anchor: naznachenie }
+    - module: emitFeatureMap
+      options: { out: ./docs/ru/Модули/FM/feature-map.md }
+    - module: reindexFigures
+    - module: reindexFootnotes
+    - module: helpMap
+    - module: periodicStat
+    - module: contexts
+    - module: helptags
+    - module: abbrs
+    - module: terms
+    - module: gosts
+    - module: createFigureContent
+
+    # opt-in
+    - module: roadMap
+      options: { dataPath: ./plugins/roadMap/roadmap-data.json, engine: mermaid }
+
+    # === opt-in: known-issues ×4 ===
+    - module: jsonToMdTable
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+    - module: jsonToMdTable
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+        groupBy: module
+    - module: jsonToMdTable
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+        groupBy: severity
+    - module: jsonToMdTable
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+        groupBy: type
+
+    # === opt-in: registry matrix ×3 ===
+    - module: jsonToMdTable
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: matrix
+        rowField: families_arr
+        colField: capabilities_arr
+        cellLabelField: ident_plain
+        cellHrefField: id_href
+        omitEmpty: both
+        outputFile: ./docs/_generated/ru/registry-matrix-family-capability.md
+    - module: jsonToMdTable
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: matrix
+        rowField: families_arr
+        colField: layers_arr
+        cellLabelField: ident_plain
+        cellHrefField: id_href
+        omitEmpty: both
+        outputFile: ./docs/_generated/ru/registry-matrix-family-layer.md
+    - module: jsonToMdTable
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: matrix
+        rowField: capabilities_arr
+        colField: layers_arr
+        cellLabelField: ident_plain
+        cellHrefField: id_href
+        omitEmpty: both
+        outputFile: ./docs/_generated/ru/registry-matrix-layer-capability.md
+
+    # === opt-in: registry simple ===
+    - module: jsonToMdTable
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: simple
+        schema: modules
+        outputFile: ./docs/_generated/ru/registry-table.md
+
+  build: []
+  # diplodoc build — см. scripts/build-pipeline.js (Wave 6 сделает модулем)
+
+  post:
+    - module: featureMapInject
+    - module: footnoteAnchors
+    - module: abbrTitles
+    - module: termTitles
+    - module: footnoteNumbering
+    - module: footnoteList
+      options: { targetHtml: ./build/ru/Дополнительнаяинформация/Переченьсносок/index.html }
+    - module: gostsInject
+    - module: breadcrumb
+    - module: contexttags
+    - module: comments
+    - module: ganttFixScroll
+      options: { engine: mermaid }
+    - module: periodicTable
+    - module: periodicTableHelpTag
+    - module: periodicTableContext
+    - module: tocCleanMode
+
+    # Остальные post-модули — в DEFAULT_PIPELINE, дублировать не нужно.

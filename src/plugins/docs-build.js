@@ -1,17 +1,19 @@
 #!/usr/bin/env node
-
 // @ts-nocheck
 
 /**
- * «Аккумулятор» сборки документации.
- * Один источник правды для Docker и Windows.
+ * @deprecated Используйте `plugins.config.yaml` + `npm run build:pipeline`
+ * (или прямой вызов `node ./plugins/run-pipeline.js --stage=all`).
  *
- *   node ./plugins/docs-build.js                      — полный пайплайн
- *   node ./plugins/docs-build.js --list              — что вообще есть
- *   node ./plugins/docs-build.js --only=helpMap      — прогнать один шаг
- *   node ./plugins/docs-build.js --skip=roadMap      — всё кроме одного
- *   node ./plugins/docs-build.js --phase=pre,post    — только эти фазы
+ * `docs-build.js` сохранён как fallback на время миграции (REFACTORING.md §2.11,
+ * Contributing §11.5). Все 32 шага перенесены в ModuleDef-registry;
+ * DEFAULT_PIPELINE повторяет поведение этого файла. Удаление — после
+ * end-to-end-валидации на реальном проекте.
+ *
+ * Миграция: docs/PIPELINE.md.
  */
+'use strict';
+
 const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -54,7 +56,7 @@ const STEPS = {
         cli('renderModules', '--lang=ru', '--rewrite', '--with-include'),
         // ---
         cli('emitModulesTable', '--lang=ru', '--anchor=naznachenie'),
-        cli('emitFeatureMap',   '--lang=ru', '--out=./docs/ru/Модули/FM/feature-map.md'),
+        cli('emitFeatureMap', '--lang=ru', '--out=./docs/ru/Модули/FM/feature-map.md'),
 
         cli('reindexFigures', '--docsDir', './docs/ru'),
         cli('reindexFootnotes', '--docsDir', './docs/ru'),
@@ -192,7 +194,7 @@ const STEPS = {
     // ── POST: пост-обработка ./build ──────────────────────────
     post: [
         cli('featureMapInject', '--buildDir', './build'),
-        cli('footnoteAnchors', './build'),
+        cli('footnoteAnchors', '--build-dir', './build'),
         cli('abbrTitles', './build', '--docsDir', './docs'),
         cli('termTitles', './build', '--docsDir', './docs'),
         cli('footnoteNumbering', '--docsDir', './docs/ru', '--outputDir', './build'),
@@ -212,10 +214,10 @@ const STEPS = {
             './plugins/mdedit_fixes',
             './build/plugins/mdedit_fixes'
         ),
-        cli('breadcrumb', './build'),
-        cli('contexttags', './build'),
-        cli('comments', './build'),
-        cli('ganttFixScroll', './build'),
+        cli('breadcrumb', '--build-dir', './build'),
+        cli('contexttags', '--build-dir', './build'),
+        cli('comments', '--build-dir', './build'),
+        cli('ganttFixScroll', '--build-dir', './build'),
         cli('periodicTable'),
         cli('periodicTableHelpTag'),
         cli('periodicTableContext'),
@@ -333,6 +335,13 @@ async function execute(step, phase) {
 // ─── MAIN ──────────────────────────────────────────────────────
 
 async function main() {
+
+    console.warn(
+        '⚠️  docs-build.js is deprecated — see docs/PIPELINE.md. ' +
+        'Equivalent: npm run build:pipeline (uses plugins.config.yaml, ' +
+        'falls back to DEFAULT_PIPELINE).',
+    );
+
     const opts = parseArgs(process.argv.slice(2));
 
     if (opts.help) {

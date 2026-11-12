@@ -216,7 +216,7 @@ import { run } from './index.ts';
 Проверка:
 
 ```bash
-git grep -nE "from '\.[^']*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
+git grep -nE "from '\.[^162]*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
 # должно быть пусто
 ```
 
@@ -553,7 +553,7 @@ git grep -n "functionName\b" -- ':!<файл-определения>'
 git grep -n 'const \w* = {}' src/plugins/
 
 # Extensionless relative imports в .ts
-git grep -nE "from '\.[^']*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
+git grep -nE "from '\.[^162]*'" -- 'src/**/*.ts' | grep -vE "\.(ts|js)'"
 
 # Случаи slugify-семейства
 git grep -nE "slugify_(latin|latin_alphanumeric|filename|diplodoc_reference)" src/
@@ -646,3 +646,73 @@ fields:
 - `data-dims` на root — объединение `stripDimensions ∪ {rowDimension, columnDimension}`;
 - `data-attrs` — JSON-объект `{dim: string[]}` на каждом чипе;
 - legacy `data-actor` / `data-cap` / `data-family` / `data-layer` — удалены.
+
+## 11. Pipeline и `plugins.config.yaml`
+
+### 11.1. Три источника конфигурации
+
+| Приоритет | Источник                            | Кто использует  |
+| --------- | ----------------------------------- | --------------- |
+| 1         | `--config=<path>`                   | CI / Docker     |
+| 2         | `PLUGINS_CONFIG_PATH` env           | shell-wrapper   |
+| 3         | `<projectRoot>/plugins.config.yaml` | локально техпис |
+| 4         | `DEFAULT_PIPELINE` (код)            | back-compat     |
+
+`<projectRoot>` — walk up to first `package.json`. Техписский конфиг — только «для работы с документацией»; destructive-операции (FM, ГОСТы) — в `<repo>/ci/plugins.config.yaml`.
+
+### 11.2. Три уровня + merge
+
+4 уровня опций, специфичное доминирует:
+
+- **L2** — `stages.<phase>[].options` — для конкретного плагина в общем yaml;
+- **L1** — `common` — для всех плагинов;
+- **L3** — `<pluginDir>/plugin.config.{yaml,yml,json}` — свой конфиг плагина (dev override: `src/plugins/<name>/` > `plugins/<name>/`);
+- **L4** — `ModuleDef.args[].default` — дефолт в коде (deprecated, уйдёт в Wave 5).
+
+**Приоритет:** L2 > L1 > L3 > L4.
+
+Почему L1 > L3: если в коде FM забыл выключить debug, но в общем yaml явно `off` — работает. L2 > L3: явное решение в yaml проекта доминирует над dev-забывчивостью.
+
+### 11.3. `logLevel` и `stopOnError`
+
+| Опция         | Значения                             | Default | Где    |
+| ------------- | ------------------------------------ | ------- | ------ |
+| `logLevel`    | `off` / `info` / `warning` / `error` | `off`   | L1–L4  |
+| `stopOnError` | `true` / `false`                     | `true`  | L1, L2 |
+
+- `stopOnError` — свойство pipeline.runner: при `throw` от модуля → `continue` или stop;
+- `logLevel` — передаётся модулю через `opts.logLevel`. **На Wave 5 только данные** — `console.log` работает как раньше. Реальное использование — Wave 5+ (`opts.logger`).
+- `verbose` — **deprecated** в пользу `logLevel`.
+
+### 11.4. Порядок = порядок в YAML
+
+`ModuleDef.defaultOrder` — только suggestion для `init-config`. В runtime порядок **буквальный** = порядок элементов в `plugins.config.yaml`. Никакого topo-sort. Если нужно поменять — переставить две строки.
+
+`dependsOn` — только для `init-config` validation (warn). Runtime не падает на отсутствующей зависимости.
+
+### 11.5. Fallback strategy
+
+`docs-build.js` и `run-pipeline` работают параллельно до Wave 5+:
+
+```json
+"build":          "node ./plugins/docs-build.js",
+"build:pipeline": "node ./plugins/run-pipeline.js --stage=all"
+```
+
+Пока `plugins.config.yaml` нет — `run-pipeline` использует `DEFAULT_PIPELINE` (текущий `docs-build.js`). Deprecation `docs-build.js` — отдельной волной после Wave 5.
+
+### 11.6. `init-config`
+
+```bash
+diplodoc-helper-cli init-config [--project-root=<path>] [--dry-run] [--force] [--only=<list>] [--lang=<code>]
+```
+
+- default — не трогать существующие;
+- `--dry-run` — отчёт;
+- `--force` — перезаписать;
+- `--only=layout,fields` — ограничить набор;
+- эвристики: `АРМ X` → path-based `audience`, `РазделN` → path-based `section`, `ГОСТы/` → `gosts` включён, `known-issues-summary.json` → `jsonToMd` включён.
+
+### 11.7. `jsonToMd` — исключение
+
+14 специфичных аргументов. В `ModuleDef.args` — flat, но в `plugins.config.yaml` для этого модуля — `options: { ... }` как escape hatch. Если появится 3-й модуль с >10 специфичных — правило пересмотрим.
