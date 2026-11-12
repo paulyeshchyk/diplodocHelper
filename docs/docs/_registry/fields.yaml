@@ -1,10 +1,3 @@
-# Поля frontmatter модуля. Источник правды для всего пайплайна:
-#   build-page-legend  → формат/порядок/лейбл
-#   collect-catalog    → какой frontmatter-ключ в какое JSON-поле
-#   emit-modules-table → колонки + массивы (для matrix)
-#   json-to-md         → схема simple-таблицы
-#   feature-map        → какие измерения брать в фильтры
-
 fields:
   id:
     frontmatterKey: ID
@@ -13,7 +6,6 @@ fields:
     order: 10
     alias: ID
     required: true
-
   ident:
     frontmatterKey: Идентификатор
     kind: scalar
@@ -21,7 +13,6 @@ fields:
     order: 20
     alias: Модуль
     required: true
-
   actor:
     kind: multi
     format: backtick
@@ -30,8 +21,7 @@ fields:
     alias: Актор
     dimension: actor
     dimField: actors
-    useAs: filter          # для feature-map
-
+    useAs: filter
   layer:
     kind: multi
     format: backtick
@@ -40,8 +30,7 @@ fields:
     alias: Слой
     dimension: layer
     dimField: layers
-    useAs: matrix-row      # для feature-map: строки сетки
-
+    useAs: matrix-row
   family:
     kind: multi
     format: backtick
@@ -50,8 +39,7 @@ fields:
     alias: Семейство
     dimension: family
     dimField: families
-    useAs: matrix-col      # для feature-map: столбцы сетки
-
+    useAs: matrix-col
   capability:
     kind: multi
     format: backtick
@@ -60,39 +48,33 @@ fields:
     alias: Каталог
     dimension: capability
     dimField: capabilities
-    useAs: filter          # для feature-map
-
+    useAs: filter
   designation:
     kind: scalar
     format: plain
     order: 70
     alias: Предназначение
-
   role:
     kind: scalar
     format: plain
     order: 80
     alias: Роль
-
   folder:
     kind: multi
     format: double
     join: '; '
     order: 90
     alias: Папка
-
   entrypoint:
     kind: scalar
     format: backtick
     order: 100
     alias: Точка входа
-
   version:
     kind: scalar
     format: backtick
     order: 110
     alias: Версия
-
   pureTitle:
     kind: scalar
     format: plain

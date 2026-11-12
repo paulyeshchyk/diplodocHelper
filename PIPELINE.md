@@ -50,7 +50,7 @@ npx diplodoc-helper init-config --force         # перезаписать су�
 
 ### 2.1. Dev-репо vs installScripts-проект
 
-`package.json`-скрипты `build:pipeline` / `build:legacy` рассчитаны на
+`package.json`-скрипты `build:pipeline` рассчитан на
 **установленный** проект — после `installScripts`, который копирует
 `src/plugins/**` → `./plugins/**`. В таком проекте пути `./plugins/run-pipeline.js`
 и `./plugins/docs-build.js` валидны.
@@ -185,7 +185,6 @@ node ./plugins/run-pipeline.js --stage=post --dry-run      # только печ
 
 ```json
 "build:pipeline": "node ./plugins/run-pipeline.js --stage=all",
-"build:legacy":   "node ./plugins/docs-build.js"
 ```
 
 Пока `plugins.config.yaml` нет — `build:pipeline` работает через
