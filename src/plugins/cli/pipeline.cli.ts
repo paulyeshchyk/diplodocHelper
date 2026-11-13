@@ -1,4 +1,5 @@
 import * as path from 'node:path';
+import { initLogger } from '../utils/logger/index.ts';
 import { createRegistry } from './modules.ts';
 import { findProjectRoot, resolveConfigPath } from './paths.ts';
 import { extractFlag, hasFlag } from './pipeline.cli.args.ts';
@@ -23,6 +24,8 @@ export async function runPipelineCli(argv: string[]): Promise<void> {
   const cliConfig = extractFlag(argv, '--config');
   const cliProjectRoot = extractFlag(argv, '--project-root');
 
+
+
   const projectRoot =
     cliProjectRoot ??
     (process.env.DOCS_PROJECT_ROOT
@@ -37,6 +40,12 @@ export async function runPipelineCli(argv: string[]): Promise<void> {
     );
   }
 
+  // yaml.common.logLevel перебивает env-default (приоритет: yaml > env).
+  // Так «logLevel: off в plugins.config.yaml» наконец-то реально замолкает.
+  const configPath = resolveConfigPath(cliConfig, projectRoot);
+  const pipeline = loadPipeline(configPath);
+  initLogger({ level: pipeline.common.logLevel });
+
   // legacy docs-build.js всегда запускал модули с cwd=projectRoot.
   // run-pipeline должен вести себя так же — иначе относительные пути
   // в `--jsonPath ./docs/…` / `--dataPath ./plugins/…` разрешатся
@@ -47,9 +56,6 @@ export async function runPipelineCli(argv: string[]): Promise<void> {
     const msg = e instanceof Error ? e.message : String(e);
     console.warn(`[run-pipeline] не удалось chdir в ${projectRoot}: ${msg}`);
   }
-
-  const configPath = resolveConfigPath(cliConfig, projectRoot);
-  const pipeline = loadPipeline(configPath);
 
   if (hasFlag(argv, '--dry-run')) {
     console.log(`[run-pipeline] config: ${pipeline.source === 'file' ? pipeline.path : '(default)'}`);

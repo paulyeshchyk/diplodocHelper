@@ -17,7 +17,13 @@
     "include": [
         "src/**/*.js",
         "src/**/*.ts",
-        "global.d.ts"
+        "global.d.ts",
+        "src/plugins/utils/yaml-inline/value-context.js_",
+        "src/plugins/utils/yaml-inline/utils.js_",
+        "src/plugins/utils/yaml-inline/tag-guard.js_",
+        "src/plugins/utils/yaml-inline/key-line.js_",
+        "src/plugins/utils/yaml-inline/index.test.js_",
+        "src/plugins/utils/yaml-inline/index.js_"
     ],
     "exclude": [
         "**/*breadcrumb.template.js",

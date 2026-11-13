@@ -1,3 +1,4 @@
+import { createLogger } from '../utils/logger/index.ts';
 import { isEntryEnabled, loadPluginConfig, mergeModuleOptions, resolveModuleConfigPath } from './pipeline.merge.ts';
 import type { ResolvedPipeline } from './pipeline.types.ts';
 import type { CommandRegistry } from './registry.ts';
@@ -5,7 +6,6 @@ import type { CommandRegistry } from './registry.ts';
 export interface RunPipelineOptions {
   stage: 'pre' | 'build' | 'post' | 'all';
   projectRoot: string | null;
-  logger?: Pick<Console, 'log' | 'warn' | 'error'>;
 }
 
 export interface RunPipelineResult {
@@ -20,7 +20,7 @@ export async function runPipeline(
   registry: CommandRegistry,
   opts: RunPipelineOptions,
 ): Promise<RunPipelineResult> {
-  const logger = opts.logger ?? console;
+  const log = createLogger('runner', { logLevel: pipeline.common.logLevel });
   const stages: Array<'pre' | 'build' | 'post'> =
     opts.stage === 'all' ? ['pre', 'build', 'post'] : [opts.stage];
 
@@ -33,13 +33,13 @@ export async function runPipeline(
 
   for (const phase of stages) {
     const entries = pipeline.stages[phase];
-    logger.log(`\n▶ [${phase}] ${entries.length} шагов`);
+    log.info(`\n▶ [${phase}] ${entries.length} шагов`);
 
     for (const entry of entries) {
       const moduleName = entry.module;
 
       if (!isEntryEnabled(entry)) {
-        logger.log(`  ↷ ${moduleName}: disabled`);
+        log.info(`  ↷ ${moduleName}: disabled`);
         result.skipped.push(moduleName);
         continue;
       }
@@ -50,7 +50,7 @@ export async function runPipeline(
         if (pipeline.common.stopOnError) {
           throw new Error(`[pipeline] ${msg}`);
         }
-        logger.error(`  ✗ ${moduleName}: ${msg}`);
+        log.error(`  ✗ ${moduleName}: ${msg}`);
         result.failed.push({ module: moduleName, error: msg });
         result.ok = false;
         continue;
@@ -61,19 +61,19 @@ export async function runPipeline(
       const mergedOpts = mergeModuleOptions(entry, pipeline.common, L3, def.args);
 
       try {
-        logger.log(`  ▶ ${moduleName}`);
+        log.info(`  ▶ ${moduleName}`);
         await registry.run(moduleName, [], mergedOpts);
-        logger.log(`  ✓ ${moduleName}`);
+        log.info(`  ✓ ${moduleName}`);
         result.executed.push(moduleName);
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         result.failed.push({ module: moduleName, error: msg });
         result.ok = false;
         if (pipeline.common.stopOnError) {
-          logger.error(`  ✗ ${moduleName}: ${msg}`);
+          log.error(`  ✗ ${moduleName}: ${msg}`);
           throw e;
         }
-        logger.error(`  ✗ ${moduleName}: ${msg} (продолжаем: stopOnError=false)`);
+        log.error(`  ✗ ${moduleName}: ${msg} (продолжаем: stopOnError=false)`);
       }
     }
   }

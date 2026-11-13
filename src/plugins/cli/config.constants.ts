@@ -43,7 +43,7 @@ export const COMMON_ARGS = DEFAULT_COMMON_ARGS;
  */
 export const DEFAULT_COMMON: CommonOptions = {
   lang: 'ru',
-  logLevel: 'off',
+  logLevel: 'info',
   stopOnError: true,
   dryRun: false,
   verbose: false,

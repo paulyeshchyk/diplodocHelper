@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "1.58.4",
+    "version": "1.59.0",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -47,6 +47,7 @@
         "release:patch": "npm run build:prod && node scripts/bump-version.js",
         "release:minor": "npm run build:prod && node scripts/bump-minor.js",
         "test": "jest",
+        "posttest": "node scripts/open-coverage.js",
         "watch": "node build.js --watch"
     },
     "contributes": {
@@ -190,6 +191,10 @@
             {
                 "command": "diplodoc-helper.gost.Add",
                 "title": "Добавить ГОСТ"
+            },
+            {
+                "command": "diplodoc-helper.yaml.format",
+                "title": "Ж+К+М"
             }
         ],
         "submenus": [
@@ -338,6 +343,11 @@
                     "command": "diplodoc-helper.gost.Insert",
                     "when": "(editorLangId == yaml || editorLangId == markdown)",
                     "group": "7.diplodoc.section@8"
+                },
+                {
+                    "command": "diplodoc-helper.yaml.format",
+                    "when": "(editorLangId == yaml)",
+                    "group": "7.diplodoc.section@9"
                 }
             ],
             "diplodoc.other.explorer.context.menu": [

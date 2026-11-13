@@ -46,7 +46,7 @@ export interface ModuleImpl {
 // Общие опции (L1 при merge)
 // ---------------------------------------------------------------------------
 
-export type LogLevel = 'off' | 'info' | 'warning' | 'error';
+export type LogLevel = 'off' | 'error' | 'warning' | 'info' | 'debug';
 
 export interface CommonOptions {
   lang: string;

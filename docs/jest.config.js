@@ -11,11 +11,14 @@ const config = {
     coverageProvider: 'v8',
     preset: 'ts-jest',
     testMatch: ['**/*.test.ts', '**/*.test.js'], // временно: и TS, и старые JS-заглушки
+    moduleNameMapper: {
+        '^vscode$': '<rootDir>/__mocks__/vscode.js',
+    },
     moduleFileExtensions: ['ts', 'js', 'json'],
-     testPathIgnorePatterns: [
-         '/node_modules/',
-         '<rootDir>/docs/',
-     ],    
+    testPathIgnorePatterns: [
+        '/node_modules/',
+        '<rootDir>/docs/',
+    ],
 };
 
 

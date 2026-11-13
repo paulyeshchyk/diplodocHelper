@@ -5,11 +5,13 @@ const { walkMdFilesGetAbbrs } = require('./abbrs.collector');
 const { writeAbbrsIndex } = require('./abbrs.writer');
 const ABBR_CONFIG = require('./abbrs.config.js');
 const { getAbbrOutputDir, getAbbrLanguages } = require('./abbrs.paths');
+const { createLogger } = require('../utils/logger');
 
 /**
  * @param {string} docsRoot
  */
 function runGeneration(docsRoot) {
+    const log = createLogger('abbrs');
     const results = { success: [], failed: [] };
 
     for (const lang of getAbbrLanguages()) {
@@ -24,7 +26,7 @@ function runGeneration(docsRoot) {
             const usedCount = all.filter(a => a.rank > 0).length;
 
             if (all.length === 0) {
-                console.log(`[abbrs] ${lang}: ни словаря, ни разметки <abbr> — пропуск.`);
+                log.info(`${lang}: ни словаря, ни разметки <abbr> — пропуск.`);
                 continue;
             }
 
@@ -32,13 +34,10 @@ function runGeneration(docsRoot) {
             if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
             writeAbbrsIndex(outputDir, abbrMap, lang, ABBR_CONFIG);
-            console.log(
-                `[abbrs] ${lang}: ${definedCount} в словаре, ` +
-                    `${orphanCount} вне словаря, ${usedCount} используется → ${outputDir}`
-            );
+            log.info(`${lang}: ${definedCount} в словаре, ${orphanCount} вне словаря, ${usedCount} используется → ${outputDir}`);
             results.success.push(lang);
         } catch (err) {
-            console.error(`❌ [abbrs] Ошибка для ${lang}:`, err);
+            log.error(`Ошибка для ${lang}:`, err);
             results.failed.push(lang);
         }
     }

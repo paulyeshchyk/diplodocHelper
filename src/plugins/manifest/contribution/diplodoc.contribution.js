@@ -60,6 +60,7 @@ const WHEN = {
     EXPLORER_IS_FOLDER_OR_NOT_MD: '(explorerResourceIsFolder || resourceExtname != .md)',
     EDITOR_LANG_MD_AND_SELECTION: '(editorLangId == markdown && editorHasSelection)',
     EDITOR_LANG_YAML_AND_SELECTION: '(editorLangId == yaml && editorHasSelection)',
+    EDITOR_LANG_YAML: '(editorLangId == yaml)',
     EDITOR_LANG_MD: '(editorLangId == markdown)',
     EDITOR_LANG_YAML_MD_YAML: '(editorLangId == yaml || editorLangId == markdown)',
     EDITOR_TEXT_FOCUS_READONLY_AND_CAN_PASTE:
@@ -224,7 +225,16 @@ editorSubmenu
             WHEN.EDITOR_LANG_YAML_MD_YAML,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
-            8 // Следующий порядковый номер
+            8
+        )
+    )
+    .addItem(
+        menuItem(
+            'diplodoc-helper.yaml.format',
+            WHEN.EDITOR_LANG_YAML,
+            GROUP.DIPLODOC_SECTION,
+            GROUP_ORDER.NAVIGATION,
+            9 // Следующий порядковый номер
         )
     );
 const otherSubmenu = new ManifestSubmenu(SUBMENU.OTHER, '%submenu.other%');
@@ -495,6 +505,7 @@ const commands = [
     new ManifestCommand('diplodoc-helper.installScripts', 'Установить скрипты сборки'),
     new ManifestCommand('diplodoc-helper.gost.Insert', '%command.md.gost.addOrInsert%'),
     new ManifestCommand('diplodoc-helper.gost.Add', 'Добавить ГОСТ'),
+    new ManifestCommand('diplodoc-helper.yaml.format', 'Ж+К+М'),
 ];
 
 module.exports = { commands, rootMenus, allSubmenus };

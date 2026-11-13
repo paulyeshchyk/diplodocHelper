@@ -1,5 +1,6 @@
 import { resolveDocsDir } from '../cli/module-helpers.ts';
 import type { ModuleDef } from '../cli/types.ts';
+import { createLogger } from '../utils/logger/index.ts';
 
 type Results = { success: string[]; failed: string[] };
 type GenFn = (docsRoot: string) => Results;
@@ -22,7 +23,7 @@ export const termsModule: ModuleDef = {
       async run(opts) {
         const results = runGeneration(resolveDocsDir(opts));
         if (results.success.length === 0) {
-          console.warn(
+          createLogger('terms', opts).warn(
             `[terms] ни одного языка не обработано ` +
             `(failed: ${results.failed.join(', ') || '—'}; legacy-контракт: не падаем)`,
           );

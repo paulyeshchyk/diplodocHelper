@@ -9,13 +9,14 @@ const config = {
     collectCoverage: true,
     coverageDirectory: 'coverage',
     coverageProvider: 'v8',
+    coverageReporters: ['html'], // или ['html', 'text-summary']
     preset: 'ts-jest',
     testMatch: ['**/*.test.ts', '**/*.test.js'], // временно: и TS, и старые JS-заглушки
     moduleFileExtensions: ['ts', 'js', 'json'],
-     testPathIgnorePatterns: [
-         '/node_modules/',
-         '<rootDir>/docs/',
-     ],    
+    testPathIgnorePatterns: [
+        '/node_modules/',
+        '<rootDir>/docs/',
+    ],
 };
 
 

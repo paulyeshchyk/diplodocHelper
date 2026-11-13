@@ -32,6 +32,7 @@ stages:
     - module: abbrs
     - module: terms
     - module: gosts
+      enabled: false
     - module: createFigureContent
 
     # === opt-in: дорожная карта ===

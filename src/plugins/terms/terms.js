@@ -5,12 +5,14 @@ const { walkMdFilesGetTerms } = require('./terms.collector');
 const { writeTermsIndex } = require('./terms.writer');
 const TERM_CONFIG = require('./terms.config.js');
 const { getTermOutputDir, getTermLanguages } = require('./terms.paths');
+const { createLogger } = require('../utils/logger');
 
 /**
  * @param {string} docsRoot
  */
 function runGeneration(docsRoot) {
     const results = { success: [], failed: [] };
+    const log = createLogger('terms');
 
     for (const lang of getTermLanguages()) {
         const langDir = path.join(docsRoot, lang);
@@ -24,7 +26,7 @@ function runGeneration(docsRoot) {
             const usedCount = all.filter(a => a.rank > 0).length;
 
             if (all.length === 0) {
-                console.log(`[terms] ${lang}: ни словаря, ни разметки <abbr class="term"> — пропуск.`);
+                log.info(`[terms] ${lang}: ни словаря, ни разметки <abbr class="term"> — пропуск.`);
                 continue;
             }
 
@@ -32,13 +34,10 @@ function runGeneration(docsRoot) {
             if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
             writeTermsIndex(outputDir, termMap, lang, TERM_CONFIG);
-            console.log(
-                `[terms] ${lang}: ${definedCount} в словаре, ` +
-                    `${orphanCount} вне словаря, ${usedCount} используется → ${outputDir}`
-            );
+            log.info(`[terms] ${lang}: ${definedCount} в словаре, ${orphanCount} вне словаря, ${usedCount} используется → ${outputDir}`);
             results.success.push(lang);
         } catch (err) {
-            console.error(`❌ [terms] Ошибка для ${lang}:`, err);
+            log.error(`❌ [terms] Ошибка для ${lang}:`, err);
             results.failed.push(lang);
         }
     }

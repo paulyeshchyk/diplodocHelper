@@ -1,14 +1,9 @@
 #!/usr/bin/env node
-/**
- * Bootstrap `run-pipeline`.
- *
- * Тонкий CJS-entry: реальная логика — в `src/plugins/cli/pipeline.cli.ts`.
- * `installScripts` копирует `src/plugins/cli/` → `plugins/cli/` и этот
- * файл → `plugins/run-pipeline.js`.
- */
+
 'use strict';
 
-// prelude: --docs-project-root до require('./cli/...') (см. CONTRIBUTING §2.7)
+const { initLogger } = require('./utils/logger');
+
 const args = process.argv.slice(2);
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
@@ -23,6 +18,11 @@ for (let i = 0; i < args.length; i++) {
     break;
   }
 }
+
+// Инициализируем ДО загрузки cli, чтобы logger был готов к моменту
+// первого createLogger(). Дефолт 'off' — но pipeline.cli.ts пере-инициализирует
+// с level из yaml/env (см. ниже).
+initLogger();
 
 const { runPipelineCli } = require('./cli/pipeline.cli.ts');
 
