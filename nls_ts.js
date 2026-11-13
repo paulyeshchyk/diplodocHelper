@@ -83,6 +83,7 @@ const nls_ts = {
         move: "command.md.section.move",
         update: "command.md.section.update"
       },
+      format: 'command.md.format',
       term: {
         add: "command.md.term.add"
       }

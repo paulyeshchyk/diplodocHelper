@@ -243,5 +243,6 @@
   "plugin.yaml.format.error.notYaml": "Works only in YAML files",
   "plugin.yaml.format.error.noSelection": "Select text to format",
   "plugin.yaml.format.error.cannotFormat": "Cannot format: {0}",
-  "plugin.yaml.format.error.editFailed": "Failed to apply format"
+  "plugin.yaml.format.error.editFailed": "Failed to apply format",
+  "command.md.format": "Format selection (B/I/M)"
 }

@@ -231,7 +231,7 @@ editorSubmenu
     .addItem(
         menuItem(
             'diplodoc-helper.yaml.format',
-            WHEN.EDITOR_LANG_YAML,
+            WHEN.EDITOR_LANG_YAML_AND_SELECTION,
             GROUP.DIPLODOC_SECTION,
             GROUP_ORDER.NAVIGATION,
             9 // Следующий порядковый номер
@@ -505,7 +505,7 @@ const commands = [
     new ManifestCommand('diplodoc-helper.installScripts', 'Установить скрипты сборки'),
     new ManifestCommand('diplodoc-helper.gost.Insert', '%command.md.gost.addOrInsert%'),
     new ManifestCommand('diplodoc-helper.gost.Add', 'Добавить ГОСТ'),
-    new ManifestCommand('diplodoc-helper.yaml.format', 'Ж+К+М'),
+    new ManifestCommand('diplodoc-helper.yaml.format', '%command.md.format%'),
 ];
 
 module.exports = { commands, rootMenus, allSubmenus };

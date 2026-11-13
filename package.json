@@ -194,7 +194,7 @@
             },
             {
                 "command": "diplodoc-helper.yaml.format",
-                "title": "Ж+К+М"
+                "title": "%command.md.format%"
             }
         ],
         "submenus": [
@@ -346,7 +346,7 @@
                 },
                 {
                     "command": "diplodoc-helper.yaml.format",
-                    "when": "(editorLangId == yaml)",
+                    "when": "(editorLangId == yaml && editorHasSelection)",
                     "group": "7.diplodoc.section@9"
                 }
             ],
