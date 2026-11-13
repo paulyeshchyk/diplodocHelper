@@ -1,107 +1,97 @@
 // @ts-nocheck
+// src/commands/diplodoc-helper.yaml.format.js
+
 const vscode = require('vscode');
+const { nls_ts, translate } = require('../../nls_ts.js');
 const { Yaml_Analyze_Selection } = require('../plugins/utils/yaml-inline/index.ts');
+const { Yaml_Read_ValueRange } = require('../plugins/utils/yaml-inline/value-range.ts');
+const { Yaml_Detect_Format } = require('../plugins/utils/yaml-inline/format-detect.ts');
+const { Yaml_Toggle_Format } = require('../plugins/utils/yaml-inline/toggle-format.ts');
 
-// Порядок важен! mono — внутри, bold — снаружи.
-// Иначе `**foo**` превратится в `` `**foo**` `` (литеральные звёздочки).
-const FORMAT_ORDER = ['mono', 'italic', 'bold'];
-
-const FORMAT_WRAPPERS = {
-  bold: (/** @type {string} */ t) => `**${t}**`,
-  italic: (/** @type {string} */ t) => `*${t}*`,
-  mono: (/** @type {string} */ t) => `\`${t}\``,
-};
-
-/**
- * Пункты QuickPick: одна «кнопка» = одна или несколько обёрток.
- * formats — Set из ключей FORMAT_WRAPPERS.
- */
-const PICK_ITEMS = [
-  // одиночные
-  { label: '$(bold)   Ж', description: 'Жирный', formats: new Set(['bold']) },
-  { label: '$(italic) К', description: 'Курсив', formats: new Set(['italic']) },
-  { label: '$(code)   М', description: 'Моноширинный', formats: new Set(['mono']) },
-  // комбинации — тоже «одна кнопка»
-  { label: '$(bold) $(italic) Ж+К', description: 'Жирный + Курсив', formats: new Set(['bold', 'italic']) },
-  { label: '$(bold) $(code) Ж+М', description: 'Жирный + Моноширинный', formats: new Set(['bold', 'mono']) },
-  { label: '$(italic) $(code) К+М', description: 'Курсив + Моноширинный', formats: new Set(['italic', 'mono']) },
-  { label: '$(bold) $(italic) $(code) Ж+К+М', description: 'Все три', formats: new Set(['bold', 'italic', 'mono']) },
+const FORMAT_ITEMS = [
+  { key: 'bold', icon: '$(bold)', label: 'Ж', desc: 'Жирный' },
+  { key: 'italic', icon: '$(italic)', label: 'К', desc: 'Курсив' },
+  { key: 'mono', icon: '$(code)', label: 'М', desc: 'Моноширинный' },
 ];
-
-/**
- * Применяет выбранные обёртки к строке в фиксированном порядке.
- * @param {string} text
- * @param {Set<string>} formats
- * @returns {string}
- */
-function applyFormats(text, formats) {
-  let result = text;
-  for (const key of FORMAT_ORDER) {
-    if (formats.has(key)) {
-      result = FORMAT_WRAPPERS[key](result);
-    }
-  }
-  return result;
-}
 
 async function ux_yaml_format_selection() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showErrorMessage('Нет активного редактора');
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.yaml.format.error.noEditor));
     return;
   }
-
   if (editor.document.languageId !== 'yaml') {
-    vscode.window.showWarningMessage('Команда работает только в YAML-файлах');
+    vscode.window.showWarningMessage(translate(nls_ts.plugin.yaml.format.error.notYaml));
     return;
   }
 
   const selection = editor.selection;
   if (selection.isEmpty) {
-    vscode.window.showWarningMessage('Выделите текст для форматирования');
+    vscode.window.showWarningMessage(translate(nls_ts.plugin.yaml.format.error.noSelection));
     return;
   }
 
-  const selectedText = editor.document.getText(selection);
-  if (!selectedText.trim()) {
-    vscode.window.showWarningMessage('Выделенный текст пуст');
-    return;
-  }
-
+  // 1. Guard: YAML-value + tag-balance
   const analysis = Yaml_Analyze_Selection.analyze(editor.document, selection);
   if (!analysis.ok) {
     vscode.window.showWarningMessage(
-      `Форматирование недоступно: ${analysis.reason}`,
-      { modal: false },
+      translate(nls_ts.plugin.yaml.format.error.cannotFormat, analysis.reason),
     );
     return;
   }
 
-  // ---- «попап с кнопками» ----
-  const picked = await vscode.window.showQuickPick(PICK_ITEMS, {
-    title: 'Форматирование YAML',
-    placeHolder: 'Ж — жирный, К — курсив, М — моноширинный (можно комбинировать)',
+  // 2. Detection: активные триггеры Ж/К/М
+  // contentRange — реальный контент value без кавычек/комментариев
+  const contentRange = Yaml_Read_ValueRange.read(
+    editor.document, selection, analysis.kind, analysis.owner,
+  );
+
+  const fullText = editor.document.getText();
+  const detectStart = editor.document.offsetAt(contentRange.start);
+  const detectEnd = editor.document.offsetAt(contentRange.end);
+
+  const active = Yaml_Detect_Format.detect(fullText, detectStart, detectEnd);
+
+  const items = FORMAT_ITEMS.map(f => ({
+    label: `${active[f.key] ? '$(check)' : '$(circle-outline)'} ${f.icon} ${f.label}`,
+    description: active[f.key]
+      ? translate(nls_ts.plugin.yaml.format.activeHint, f.desc)
+      : translate(nls_ts.plugin.yaml.format.inactiveHint, f.desc),
+    key: f.key,
+  }));
+
+  const picked = await vscode.window.showQuickPick(items, {
+    title: translate(nls_ts.plugin.yaml.format.title),
+    placeHolder: translate(nls_ts.plugin.yaml.format.placeholder),
     matchOnDescription: false,
     ignoreFocusOut: true,
   });
   if (!picked) return;
 
-  const newText = applyFormats(selectedText, picked.formats);
+  // 3. Toggle
+  const result = Yaml_Toggle_Format.toggle(fullText, detectStart, detectEnd, picked.key);
+  if (result.action === 'noop') return;
 
-  // Запоминаем смещение до правки — чтобы потом восстановить выделение
-  const startOffset = editor.document.offsetAt(selection.start);
-
-  const ok = await editor.edit(eb => eb.replace(selection, newText));
+  // 4. Применить edits (в порядке, как вернул модуль — с конца)
+  const ok = await editor.edit(eb => {
+    for (const e of result.edits) {
+      const from = editor.document.positionAt(e.offset);
+      const to = editor.document.positionAt(e.offset + e.length);
+      eb.replace(new vscode.Range(from, to), e.replacement);
+    }
+  });
   if (!ok) {
-    vscode.window.showErrorMessage('Не удалось применить форматирование');
+    vscode.window.showErrorMessage(translate(nls_ts.plugin.yaml.format.error.editFailed));
     return;
   }
 
-  // Возвращаем выделение на результат — чтобы можно было ещё раз нажать
-  const newStart = editor.document.positionAt(startOffset);
-  const newEnd = editor.document.positionAt(startOffset + newText.length);
+  // 5. Восстановить selection
+  const newStart = editor.document.positionAt(result.newStart);
+  const newEnd = editor.document.positionAt(result.newEnd);
   editor.selection = new vscode.Selection(newStart, newEnd);
   editor.revealRange(new vscode.Range(newStart, newEnd), vscode.TextEditorRevealType.InCenterIfOutsideViewport);
 }
+
+
 
 module.exports = { ux_yaml_format_selection };

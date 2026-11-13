@@ -234,5 +234,14 @@
   "submenu.lint": "Очистка и проверки",
   "submenu.other": "Прочее",
   "submenu.reindexier": "Индексация",
-  "submenu.terms": "Термины"
+  "submenu.terms": "Термины",
+  "plugin.yaml.format.title": "Форматирование YAML",
+  "plugin.yaml.format.placeholder": "Toggle bold / italic / mono",
+  "plugin.yaml.format.activeHint": "{0} — active, click to remove",
+  "plugin.yaml.format.inactiveHint": "{0} — click to apply",
+  "plugin.yaml.format.error.noEditor": "No active editor",
+  "plugin.yaml.format.error.notYaml": "Works only in YAML files",
+  "plugin.yaml.format.error.noSelection": "Select text to format",
+  "plugin.yaml.format.error.cannotFormat": "Cannot format: {0}",
+  "plugin.yaml.format.error.editFailed": "Failed to apply format"
 }

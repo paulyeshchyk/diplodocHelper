@@ -4,14 +4,14 @@ const { translate } = require('./nls_loader');
 const nls_ts = {
   command: {
     fe: {
+      abbrs: {
+        generate: "command.fe.abbrs.generate"
+      },
       context: {
         generate: "command.fe.context.generate"
       },
       helptag: {
         generate: "command.fe.helptag.generate"
-      },
-      abbrs: {
-        generate: "command.fe.abbrs.generate"
       },
       terms: {
         generate: "command.fe.terms.generate"
@@ -33,10 +33,34 @@ const nls_ts = {
     html: {
       breadcrumbs: "command.html.breadcrumbs"
     },
+    linter: {
+      abbrs: {
+        check: "command.linter.abbrs.check"
+      },
+      links: {
+        check: "command.linter.links.check"
+      },
+      terms: {
+        check: "command.linter.terms.check"
+      }
+    },
     md: {
+      abbr: {
+        add: "command.md.abbr.add"
+      },
+      anchor: {
+        add: "command.md.anchor.add"
+      },
       context: {
         delete: "command.md.context.delete",
         update: "command.md.context.update"
+      },
+      footnote: {
+        add: "command.md.footnote.add",
+        reindex: "command.md.footnote.reindex"
+      },
+      gost: {
+        addOrInsert: "command.md.gost.addOrInsert"
       },
       helptag: {
         delete: "command.md.helptag.delete",
@@ -59,43 +83,56 @@ const nls_ts = {
         move: "command.md.section.move",
         update: "command.md.section.update"
       },
-      anchor: {
-        add: "command.md.anchor.add"
-      },
-      footnote: {
-        add: "command.md.footnote.add",
-        reindex: "command.md.footnote.reindex"
-      },
-      abbr: {
-        add: "command.md.abbr.add"
-      },
       term: {
         add: "command.md.term.add"
-      },
-      gost: {
-        addOrInsert: "command.md.gost.addOrInsert"
       }
     },
     settings: "command.settings",
-    linter: {
-      links: {
-        check: "command.linter.links.check"
-      },
-      abbrs: {
-        check: "command.linter.abbrs.check"
-      },
-      terms: {
-        check: "command.linter.terms.check"
-      }
-    },
     smart: {
       delete: "command.smart.delete"
+    }
+  },
+  crossref: {
+    few: {
+      files: {
+        message: "crossref.few.files.message"
+      },
+      links: {
+        message: "crossref.few.links.message"
+      }
+    },
+    footer: {
+      message: "crossref.footer.message"
+    },
+    more: {
+      files: {
+        message: "crossref.more.files.message"
+      }
+    },
+    none: {
+      reference: {
+        message: "crossref.none.reference.message"
+      }
+    },
+    plural: {
+      file: {
+        confirm: {
+          header: "crossref.plural.file.confirm.header"
+        },
+        message: "crossref.plural.file.message"
+      },
+      links: {
+        message: "crossref.plural.links.message"
+      }
     }
   },
   description: "description",
   displayName: "displayName",
   extension: {
     settings: {
+      contextPollingInterval: {
+        description: "extension.settings.contextPollingInterval.description"
+      },
       defaultLanguage: {
         description: "extension.settings.defaultLanguage.description"
       },
@@ -113,9 +150,6 @@ const nls_ts = {
       },
       usePollingForContext: {
         description: "extension.settings.usePollingForContext.description"
-      },
-      contextPollingInterval: {
-        description: "extension.settings.contextPollingInterval.description"
       }
     }
   },
@@ -136,6 +170,54 @@ const nls_ts = {
     }
   },
   plugin: {
+    abbr: {
+      add: {
+        category: {
+          placeholder: "plugin.abbr.add.category.placeholder",
+          prompt: "plugin.abbr.add.category.prompt"
+        },
+        error: {
+          noEditor: "plugin.abbr.add.error.noEditor",
+          noSelection: "plugin.abbr.add.error.noSelection",
+          notInLanguageFolder: "plugin.abbr.add.error.notInLanguageFolder",
+          notMarkdown: "plugin.abbr.add.error.notMarkdown"
+        },
+        full: {
+          error: {
+            empty: "plugin.abbr.add.full.error.empty"
+          },
+          placeholder: "plugin.abbr.add.full.placeholder",
+          prompt: "plugin.abbr.add.full.prompt"
+        },
+        info: {
+          dictUpdated: "plugin.abbr.add.info.dictUpdated",
+          dictUpdatedAndIndex: "plugin.abbr.add.info.dictUpdatedAndIndex",
+          refreshNow: "plugin.abbr.add.info.refreshNow",
+          success: "plugin.abbr.add.info.success",
+          usedAndIndex: "plugin.abbr.add.info.usedAndIndex"
+        },
+        pick: {
+          caseInsensitiveHint: "plugin.abbr.add.pick.caseInsensitiveHint",
+          createNew: "plugin.abbr.add.pick.createNew",
+          createWithCase: "plugin.abbr.add.pick.createWithCase",
+          placeholder: "plugin.abbr.add.pick.placeholder",
+          removeMarkup: "plugin.abbr.add.pick.removeMarkup"
+        },
+        warning: {
+          alreadyInDictionary: "plugin.abbr.add.warning.alreadyInDictionary",
+          emptyDictionary: "plugin.abbr.add.warning.emptyDictionary",
+          indexFailed: "plugin.abbr.add.warning.indexFailed",
+          saveFailed: "plugin.abbr.add.warning.saveFailed"
+        }
+      },
+      codeAction: {
+        addToDict: "plugin.abbr.codeAction.addToDict",
+        removeMarkup: "plugin.abbr.codeAction.removeMarkup",
+        showFull: "plugin.abbr.codeAction.showFull",
+        wrap: "plugin.abbr.codeAction.wrap",
+        wrapWord: "plugin.abbr.codeAction.wrapWord"
+      }
+    },
     breadcrumb: {
       generate: {
         error: {
@@ -201,6 +283,27 @@ const nls_ts = {
       },
       wipe: {
         success: "plugin.context.wipe.success"
+      }
+    },
+    footnote: {
+      add: {
+        error: {
+          emptySelection: "plugin.footnote.add.error.emptySelection",
+          failed: "plugin.footnote.add.error.failed",
+          noEditor: "plugin.footnote.add.error.noEditor",
+          noSelection: "plugin.footnote.add.error.noSelection",
+          notMarkdown: "plugin.footnote.add.error.notMarkdown"
+        },
+        info: {
+          success: "plugin.footnote.add.info.success"
+        },
+        input: {
+          error: {
+            empty: "plugin.footnote.add.input.error.empty"
+          },
+          placeHolder: "plugin.footnote.add.input.placeHolder",
+          prompt: "plugin.footnote.add.input.prompt"
+        }
       }
     },
     helpmap: {
@@ -295,6 +398,38 @@ const nls_ts = {
         }
       }
     },
+    linter: {
+      abbrs: {
+        error: {
+          noDocsRoot: "plugin.linter.abbrs.error.noDocsRoot",
+          openFile: "plugin.linter.abbrs.error.openFile"
+        },
+        info: {
+          clean: "plugin.linter.abbrs.info.clean"
+        },
+        pick: {
+          placeholder: "plugin.linter.abbrs.pick.placeholder"
+        },
+        progress: {
+          title: "plugin.linter.abbrs.progress.title"
+        }
+      },
+      terms: {
+        error: {
+          noDocsRoot: "plugin.linter.terms.error.noDocsRoot",
+          openFile: "plugin.linter.terms.error.openFile"
+        },
+        info: {
+          clean: "plugin.linter.terms.info.clean"
+        },
+        pick: {
+          placeholder: "plugin.linter.terms.pick.placeholder"
+        },
+        progress: {
+          title: "plugin.linter.terms.progress.title"
+        }
+      }
+    },
     reindex: {
       figures: {
         info: {
@@ -305,8 +440,8 @@ const nls_ts = {
       },
       footnotes: {
         info: {
-          successDetailed: "plugin.reindex.footnotes.info.successDetailed",
-          failDetailed: "plugin.reindex.footnotes.info.failDetailed"
+          failDetailed: "plugin.reindex.footnotes.info.failDetailed",
+          successDetailed: "plugin.reindex.footnotes.info.successDetailed"
         }
       }
     },
@@ -382,150 +517,64 @@ const nls_ts = {
         }
       }
     },
-    footnote: {
-      add: {
-        error: {
-          noEditor: "plugin.footnote.add.error.noEditor",
-          notMarkdown: "plugin.footnote.add.error.notMarkdown",
-          noSelection: "plugin.footnote.add.error.noSelection",
-          emptySelection: "plugin.footnote.add.error.emptySelection",
-          failed: "plugin.footnote.add.error.failed"
-        },
-        input: {
-          prompt: "plugin.footnote.add.input.prompt",
-          placeHolder: "plugin.footnote.add.input.placeHolder",
-          error: {
-            empty: "plugin.footnote.add.input.error.empty"
-          }
-        },
-        info: {
-          success: "plugin.footnote.add.info.success"
-        }
-      }
-    },
-    abbr: {
-      add: {
-        error: {
-          noEditor: "plugin.abbr.add.error.noEditor",
-          notMarkdown: "plugin.abbr.add.error.notMarkdown",
-          noSelection: "plugin.abbr.add.error.noSelection",
-          notInLanguageFolder: "plugin.abbr.add.error.notInLanguageFolder"
-        },
-        pick: {
-          placeholder: "plugin.abbr.add.pick.placeholder",
-          createNew: "plugin.abbr.add.pick.createNew",
-          removeMarkup: "plugin.abbr.add.pick.removeMarkup",
-          createWithCase: "plugin.abbr.add.pick.createWithCase",
-          caseInsensitiveHint: "plugin.abbr.add.pick.caseInsensitiveHint"
-        },
-        full: {
-          prompt: "plugin.abbr.add.full.prompt",
-          placeholder: "plugin.abbr.add.full.placeholder",
-          error: {
-            empty: "plugin.abbr.add.full.error.empty"
-          }
-        },
-        category: {
-          prompt: "plugin.abbr.add.category.prompt",
-          placeholder: "plugin.abbr.add.category.placeholder"
-        },
-        warning: {
-          emptyDictionary: "plugin.abbr.add.warning.emptyDictionary",
-          alreadyInDictionary: "plugin.abbr.add.warning.alreadyInDictionary",
-          saveFailed: "plugin.abbr.add.warning.saveFailed",
-          indexFailed: "plugin.abbr.add.warning.indexFailed"
-        },
-        info: {
-          success: "plugin.abbr.add.info.success",
-          refreshNow: "plugin.abbr.add.info.refreshNow",
-          dictUpdated: "plugin.abbr.add.info.dictUpdated",
-          dictUpdatedAndIndex: "plugin.abbr.add.info.dictUpdatedAndIndex",
-          usedAndIndex: "plugin.abbr.add.info.usedAndIndex"
-        }
-      },
-      codeAction: {
-        showFull: "plugin.abbr.codeAction.showFull",
-        addToDict: "plugin.abbr.codeAction.addToDict",
-        removeMarkup: "plugin.abbr.codeAction.removeMarkup",
-        wrap: "plugin.abbr.codeAction.wrap",
-        wrapWord: "plugin.abbr.codeAction.wrapWord"
-      }
-    },
-    linter: {
-      abbrs: {
-        progress: {
-          title: "plugin.linter.abbrs.progress.title"
-        },
-        info: {
-          clean: "plugin.linter.abbrs.info.clean"
-        },
-        pick: {
-          placeholder: "plugin.linter.abbrs.pick.placeholder"
-        },
-        error: {
-          noDocsRoot: "plugin.linter.abbrs.error.noDocsRoot",
-          openFile: "plugin.linter.abbrs.error.openFile"
-        }
-      },
-      terms: {
-        progress: {
-          title: "plugin.linter.terms.progress.title"
-        },
-        info: {
-          clean: "plugin.linter.terms.info.clean"
-        },
-        pick: {
-          placeholder: "plugin.linter.terms.pick.placeholder"
-        },
-        error: {
-          noDocsRoot: "plugin.linter.terms.error.noDocsRoot",
-          openFile: "plugin.linter.terms.error.openFile"
-        }
-      }
-    },
     term: {
       add: {
-        error: {
-          noEditor: "plugin.term.add.error.noEditor",
-          notMarkdown: "plugin.term.add.error.notMarkdown",
-          noSelection: "plugin.term.add.error.noSelection",
-          notInLanguageFolder: "plugin.term.add.error.notInLanguageFolder"
-        },
-        pick: {
-          placeholder: "plugin.term.add.pick.placeholder",
-          createNew: "plugin.term.add.pick.createNew",
-          createWithCase: "plugin.term.add.pick.createWithCase",
-          caseInsensitiveHint: "plugin.term.add.pick.caseInsensitiveHint",
-          removeMarkup: "plugin.term.add.pick.removeMarkup"
+        category: {
+          placeholder: "plugin.term.add.category.placeholder",
+          prompt: "plugin.term.add.category.prompt"
         },
         definition: {
-          prompt: "plugin.term.add.definition.prompt",
-          placeholder: "plugin.term.add.definition.placeholder",
           error: {
             empty: "plugin.term.add.definition.error.empty"
-          }
+          },
+          placeholder: "plugin.term.add.definition.placeholder",
+          prompt: "plugin.term.add.definition.prompt"
         },
-        category: {
-          prompt: "plugin.term.add.category.prompt",
-          placeholder: "plugin.term.add.category.placeholder"
-        },
-        warning: {
-          emptyDictionary: "plugin.term.add.warning.emptyDictionary",
-          alreadyInDictionary: "plugin.term.add.warning.alreadyInDictionary",
-          saveFailed: "plugin.term.add.warning.saveFailed",
-          indexFailed: "plugin.term.add.warning.indexFailed"
+        error: {
+          noEditor: "plugin.term.add.error.noEditor",
+          noSelection: "plugin.term.add.error.noSelection",
+          notInLanguageFolder: "plugin.term.add.error.notInLanguageFolder",
+          notMarkdown: "plugin.term.add.error.notMarkdown"
         },
         info: {
           dictUpdatedAndIndex: "plugin.term.add.info.dictUpdatedAndIndex",
           usedAndIndex: "plugin.term.add.info.usedAndIndex"
+        },
+        pick: {
+          caseInsensitiveHint: "plugin.term.add.pick.caseInsensitiveHint",
+          createNew: "plugin.term.add.pick.createNew",
+          createWithCase: "plugin.term.add.pick.createWithCase",
+          placeholder: "plugin.term.add.pick.placeholder",
+          removeMarkup: "plugin.term.add.pick.removeMarkup"
+        },
+        warning: {
+          alreadyInDictionary: "plugin.term.add.warning.alreadyInDictionary",
+          emptyDictionary: "plugin.term.add.warning.emptyDictionary",
+          indexFailed: "plugin.term.add.warning.indexFailed",
+          saveFailed: "plugin.term.add.warning.saveFailed"
         }
       },
       codeAction: {
-        showFull: "plugin.term.codeAction.showFull",
         addToDict: "plugin.term.codeAction.addToDict",
         removeMarkup: "plugin.term.codeAction.removeMarkup",
+        showFull: "plugin.term.codeAction.showFull",
         wrap: "plugin.term.codeAction.wrap",
         wrapWord: "plugin.term.codeAction.wrapWord"
+      }
+    },
+    yaml: {
+      format: {
+        title: "plugin.yaml.format.title",
+        placeholder: "plugin.yaml.format.placeholder",
+        activeHint: "plugin.yaml.format.activeHint",
+        inactiveHint: "plugin.yaml.format.inactiveHint",
+        error: {
+          noEditor: "plugin.yaml.format.error.noEditor",
+          notYaml: "plugin.yaml.format.error.notYaml",
+          noSelection: "plugin.yaml.format.error.noSelection",
+          cannotFormat: "plugin.yaml.format.error.cannotFormat",
+          editFailed: "plugin.yaml.format.error.editFailed"
+        }
       }
     }
   },
@@ -550,50 +599,16 @@ const nls_ts = {
     }
   },
   submenu: {
+    abbrs: "submenu.abbrs",
     context: "submenu.context",
+    debug: "submenu.debug",
     diplodoc: "submenu.diplodoc",
     generators: "submenu.generators",
     helptag: "submenu.helptag",
-    reindexier: "submenu.reindexier",
-    other: "submenu.other",
     lint: "submenu.lint",
-    debug: "submenu.debug",
-    abbrs: "submenu.abbrs",
+    other: "submenu.other",
+    reindexier: "submenu.reindexier",
     terms: "submenu.terms"
-  },
-  crossref: {
-    few: {
-      files: {
-        message: "crossref.few.files.message"
-      },
-      links: {
-        message: "crossref.few.links.message"
-      }
-    },
-    footer: {
-      message: "crossref.footer.message"
-    },
-    more: {
-      files: {
-        message: "crossref.more.files.message"
-      }
-    },
-    none: {
-      reference: {
-        message: "crossref.none.reference.message"
-      }
-    },
-    plural: {
-      file: {
-        confirm: {
-          header: "crossref.plural.file.confirm.header"
-        },
-        message: "crossref.plural.file.message"
-      },
-      links: {
-        message: "crossref.plural.links.message"
-      }
-    }
   }
 };
 

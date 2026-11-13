@@ -107,6 +107,21 @@ const nls_ts = {
         },
     },
     plugin: {
+        yaml: {
+            format: {
+                title: "plugin.yaml.format.title",
+                placeholder: "plugin.yaml.format.placeholder",
+                activeHint: "plugin.yaml.format.activeHint",
+                inactiveHint: "plugin.yaml.format.inactiveHint",
+                error: {
+                    noEditor: "plugin.yaml.format.error.noEditor",
+                    notYaml: "plugin.yaml.format.error.notYaml",
+                    noSelection: "plugin.yaml.format.error.noSelection",
+                    cannotFormat: "plugin.yaml.format.error.cannotFormat",
+                    editFailed: "plugin.yaml.format.error.editFailed"
+                }
+            }
+        },
         linter: {
             links: {
                 check: 'command.linter.links.check',
