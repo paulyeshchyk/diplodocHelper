@@ -33,7 +33,17 @@ const vscode = {
         Development: 2,
         Test: 3,
     },
-    // добавляй по мере необходимости
+    createQuickPick: jest.fn(() => {
+        const qp = {
+            items: [], value: '', placeholder: '',
+            matchOnDescription: false, matchOnDetail: false, selectedItems: [],
+            onDidChangeValue: jest.fn(),
+            onDidAccept: jest.fn(),
+            onDidHide: jest.fn(),
+            show: jest.fn(), dispose: jest.fn(),
+        };
+        return qp;
+    }),
 };
 
 module.exports = vscode;

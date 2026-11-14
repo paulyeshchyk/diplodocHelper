@@ -872,14 +872,6 @@
     "details": "Все четыре функции определены **и** в `link.Paste.js`, **и** в `link.utils.js`. Функционально идентичны, но:\n\n- `link.Paste` использует свои копии;\n- `link.utils` — используется линтером (`vscode.linter.links.picker.js`).\n\nРеальное расхождение:\n\n| Функция                    | `link.Paste`                            | `link.utils`                       |\n| -------------------------- | --------------------------------------- | ---------------------------------- |\n| `promptAnchorSelection`    | 1 аргумент, `translate(nls_ts…)` внутри | 2 аргумента, `translateFn` передан |\n| `calculateRelativeMdPath`  | идентична                               | идентична                          |\n| `extractAnchorsFromMdFile` | идентична                               | идентична                          |\n| `generateSlug`             | идентична                               | идентична                          |\n\nЕсли в одной из них появится баг или улучшение — вторая не узнает. Стоит вынести в один модуль (например, `link.utils`) и импортировать."
   },
   {
-    "id": "KI-197",
-    "type": "unknown",
-    "severity": "major",
-    "module": "[`МодульВставкассылки`](/ru/Модули/Registry/МодульВставкассылки/index.html)",
-    "title": "`isCursorInsideHtmlTag` — мёртвый код (~80 строк)",
-    "details": "Функция определена в `link.Paste.js`, но **не вызывается**. `ux_link_paste` использует `getCursorContext(editor).isHtml` (stack-based парсер HTML).\n\n`isCursorInsideHtmlTag` — наивная реализация (поиск `<` слева, `>` справа на текущей строке). Работает хуже, чем `getCursorContext.isHtml`. Удалить."
-  },
-  {
     "id": "KI-198",
     "type": "unknown",
     "severity": "major",

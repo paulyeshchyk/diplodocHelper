@@ -9,6 +9,9 @@ const { appendAbbrToDictionary } = require('../plugins/abbrs/abbrs.dictionary.wr
 const { findAbbrAroundOffset } = require('../plugins/abbrs/abbrs.textRange.js');
 const { inferLang } = require('../plugins/abbrs/abbrs.paths.js');
 const { runGeneration } = require('../plugins/abbrs/abbrs');
+const { extractDataAbbr } = require('../plugins/abbrs/abbrs.injector.js')
+const { QuickPick_Build_DictionaryItems } = require('../plugins/utils/quickpick/QuickPick_Build_DictionaryItems.ts')
+const { QuickPick_Pick_From_List } = require('../plugins/utils/quickpick/QuickPick_Pick_From_List.ts')
 
 function escapeHtmlText(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -139,182 +142,110 @@ async function saveAndRegenerate(editor, langDir, abbrText, wasCreated) {
     }
 }
 
+function resolveAbbrTarget(editor) {
+    const doc = editor.document;
+    const selection = editor.selection;
+    const text = doc.getText();
+    const offset = doc.offsetAt(selection.active);
+
+    // а) курсор внутри существующего <abbr>...</abbr>
+    const ctx = findAbbrAroundOffset(text, offset);
+    if (ctx) {
+        return {
+            range: new vscode.Range(doc.positionAt(ctx.startOffset), doc.positionAt(ctx.endOffset)),
+            visibleText: ctx.visibleText,
+            lookup: ctx.abbr,
+            alreadyWrapped: true,
+        };
+    }
+
+    // б) выделен фрагмент
+    if (!selection.isEmpty) {
+        const raw = doc.getText(selection).trim();
+        const m = raw.match(/^<abbr\b([^>]*)>([\s\S]*?)<\/abbr>$/i);
+        if (m) {
+            const dataAbbr = extractDataAbbr(m[1]);
+            const visible = m[2].trim();
+            return { range: selection, visibleText: visible, lookup: dataAbbr || visible, alreadyWrapped: true };
+        }
+        return { range: selection, visibleText: raw, lookup: raw, alreadyWrapped: false };
+    }
+
+    // в) слово под курсором
+    const wordRange = getAbbrWordRange(doc, selection.active);
+    if (!wordRange) return null;
+    const visible = doc.getText(wordRange).trim();
+    return { range: wordRange, visibleText: visible, lookup: visible, alreadyWrapped: false };
+}
+
+function abbrEntries(dictionary) {
+    return Array.from(dictionary.values()).map(def => ({
+        key: def.abbr,
+        description: def.full,
+        category: def.category,
+    }));
+}
+
+async function showAbbrPicker(target, dictionary) {
+    const entries = abbrEntries(dictionary);
+    return QuickPick_Pick_From_List.pick({
+        placeholder: translate(nls_ts.plugin.abbr.add.pick.placeholder, target.lookup),
+        initialValue: target.lookup,
+        computeItems: query => QuickPick_Build_DictionaryItems.build({
+            entries,
+            query,
+            alreadyWrapped: target.alreadyWrapped,
+            removeMarkupLabel: translate(nls_ts.plugin.abbr.add.pick.removeMarkup),
+            createLabel: q => translate(nls_ts.plugin.abbr.add.pick.createNew, q),
+        }),
+    });
+}
+
+async function applyAbbrAction(editor, target, result, langDir) {
+    if (!result.picked) return;
+    const picked = result.picked;
+
+    if (picked.action === 'removeMarkup') {
+        await unwrapAbbr(editor, target.range);
+        return;
+    }
+    if (picked.action === 'use' && picked.def) {
+        await wrapInAbbr(editor, target.range, target.visibleText, picked.def.key);
+        await saveAndRegenerate(editor, langDir, picked.def.key, false);
+        return;
+    }
+    if (picked.action === 'create') {
+        const finalTerm = picked.query || result.query || target.lookup;
+        await createAbbrAndInsert(editor, target.range, target.visibleText, finalTerm, langDir);
+    }
+}
+
 /**
  * @param {{ mode?: 'create', abbrText?: string } | undefined} [argument]
  */
 async function ux_abbr_add(argument) {
     const editor = vscode.window.activeTextEditor;
-    if (!editor) {
-        vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.noEditor));
-        return;
+    if (!editor) { vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.noEditor)); return; }
+    if (!['markdown', 'yaml'].includes(editor.document.languageId)) {
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.notMarkdown)); return;
     }
 
-    const document = editor.document;
-    if (!(document.languageId === 'markdown' || document.languageId === 'yaml')) {
-        vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.notMarkdown));
-        return;
-    }
+    const target = resolveAbbrTarget(editor);
+    if (!target) { vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.noSelection)); return; }
 
-    const selection = editor.selection;
-    /** @type {vscode.Range} */
-    let targetRange;
-    /** @type {string} */
-    let targetTerm; // канонический ключ (lookup в словаре)
-    /** @type {string} */
-    let targetVisible; // видимый текст, который окажется внутри <abbr>
-    let alreadyWrapped = false;
-
-    // 1. Курсор/выделение внутри существующего <abbr>…</abbr>?
-    const text = document.getText();
-    const offset = document.offsetAt(selection.active);
-    const ctx = findAbbrAroundOffset(text, offset);
-
-    if (ctx) {
-        targetRange = new vscode.Range(document.positionAt(ctx.startOffset), document.positionAt(ctx.endOffset));
-        targetTerm = ctx.abbr; // из data-abbr или из inner
-        targetVisible = ctx.visibleText; // что реально видно
-        alreadyWrapped = true;
-    } else if (!selection.isEmpty) {
-        targetRange = selection;
-        const raw = document.getText(targetRange).trim();
-        const m = raw.match(/^<abbr\b([^>]*)>([\s\S]*?)<\/abbr>$/i);
-        if (m) {
-            const attrs = m[1];
-            const innerText = m[2].trim();
-            const dt = attrs.match(/\bdata-abbr\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
-            const dataAbbr = dt ? ((dt[1] !== undefined ? dt[1] : dt[2]) || '').trim() : '';
-            targetVisible = innerText;
-            targetTerm = dataAbbr || innerText;
-            alreadyWrapped = true;
-        } else {
-            targetVisible = raw;
-            targetTerm = raw;
-        }
-    } else {
-        const wordRange = getAbbrWordRange(document, selection.active);
-        if (!wordRange) {
-            vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.noSelection));
-            return;
-        }
-        targetRange = wordRange;
-        targetVisible = document.getText(targetRange).trim();
-        targetTerm = targetVisible;
-    }
-
-    if (!targetTerm || !targetVisible) {
-        vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.noSelection));
-        return;
-    }
-
-    const langDir = getLanguageRoot(document.uri.fsPath);
+    const langDir = getLanguageRoot(editor.document.uri.fsPath);
     if (!langDir || !fs.existsSync(langDir)) {
-        vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.notInLanguageFolder));
+        vscode.window.showErrorMessage(translate(nls_ts.plugin.abbr.add.error.notInLanguageFolder)); return;
+    }
+
+    if (argument?.mode === 'create') {
+        await createAbbrAndInsert(editor, target.range, target.visibleText, target.lookup, langDir);
         return;
     }
 
-    if (argument && argument.mode === 'create') {
-        await createAbbrAndInsert(editor, targetRange, targetVisible, targetTerm, langDir);
-        return;
-    }
-
-    // 5. QuickPick
     const dictionary = loadAbbrDictionary(langDir);
-
-    /** @typedef {{ label: string, description?: string, detail?: string,
-     *             action: 'use' | 'create' | 'removeMarkup',
-     *             def?: import('../plugins/abbrs/abbrs.model.js').AbbrDefinition }} PickItem */
-
-    /** @type {PickItem[]} */
-    const items = [];
-
-    if (alreadyWrapped) {
-        items.push({
-            label: `$(close) ${translate(nls_ts.plugin.abbr.add.pick.removeMarkup)}`,
-            action: 'removeMarkup',
-        });
-    }
-
-    const exactMatch = dictionary.get(targetTerm);
-
-    /** @type {import('../plugins/abbrs/abbrs.model.js').AbbrDefinition[]} */
-    const ciMatches = [];
-    if (!exactMatch) {
-        const lower = targetTerm.toLowerCase();
-        for (const def of dictionary.values()) {
-            if (def.abbr.toLowerCase() === lower) ciMatches.push(def);
-        }
-    }
-
-    if (alreadyWrapped && exactMatch) {
-        // Только «снять разметку» — других действий нет
-    } else if (exactMatch) {
-        items.push({
-            label: exactMatch.abbr,
-            description: exactMatch.full,
-            detail: exactMatch.category,
-            action: 'use',
-            def: exactMatch,
-        });
-    } else if (ciMatches.length > 0) {
-        const hint = translate(nls_ts.plugin.abbr.add.pick.caseInsensitiveHint);
-        for (const def of ciMatches) {
-            items.push({
-                label: def.abbr,
-                description: `${def.full}  (${hint})`,
-                detail: def.category,
-                action: 'use',
-                def,
-            });
-        }
-        items.push({
-            label: `$(add) ${translate(nls_ts.plugin.abbr.add.pick.createWithCase, targetTerm)}`,
-            action: 'create',
-        });
-    } else {
-        for (const def of dictionary.values()) {
-            items.push({
-                label: def.abbr,
-                description: def.full,
-                detail: def.category,
-                action: 'use',
-                def,
-            });
-        }
-        items.push({
-            label: `$(add) ${translate(nls_ts.plugin.abbr.add.pick.createNew, targetTerm)}`,
-            action: 'create',
-        });
-    }
-
-    if (items.length === 0) {
-        vscode.window.showWarningMessage(translate(nls_ts.plugin.abbr.add.warning.emptyDictionary, targetTerm));
-        return;
-    }
-
-    const picked = /** @type {PickItem | undefined} */ (
-        await vscode.window.showQuickPick(items, {
-            placeHolder: translate(nls_ts.plugin.abbr.add.pick.placeholder, targetTerm),
-            matchOnDescription: true,
-            matchOnDetail: true,
-        })
-    );
-    if (!picked) return;
-
-    if (picked.action === 'removeMarkup') {
-        await unwrapAbbr(editor, targetRange);
-        return;
-    }
-
-    if (picked.action === 'use' && picked.def) {
-        // Видимый текст СОХРАНЯЕМ, привязку к канонической форме — через data-abbr
-        await wrapInAbbr(editor, targetRange, targetVisible, picked.def.abbr);
-        await saveAndRegenerate(editor, langDir, picked.def.abbr, false);
-        return;
-    }
-
-    if (picked.action === 'create') {
-        await createAbbrAndInsert(editor, targetRange, targetVisible, targetTerm, langDir);
-    }
+    const result = await showAbbrPicker(target, dictionary);
+    await applyAbbrAction(editor, target, result, langDir);
 }
 
 async function ux_abbr_show_full(full) {
