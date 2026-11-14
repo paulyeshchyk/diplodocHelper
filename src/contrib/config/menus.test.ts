@@ -1,7 +1,7 @@
-// src/contrib/menus.test.ts
+// src/contrib/config/menus.test.ts
 
 import { describe, expect, it } from '@jest/globals';
-import { COMMANDS } from './commands.ts';
+import { COMMANDS } from '../commands.ts';
 import { MENUS } from './menus.ts';
 import { SUBMENU } from './constants.ts';
 
@@ -79,23 +79,19 @@ describe('MENUS — структура', () => {
 
 describe('MENUS frozen snapshot (счётчики)', () => {
     it('00.10.4#90 should keep frozen counts', () => {
-        const counts = Object.fromEntries(
-            MENUS.map(m => [m.id, m.items.length]),
-        );
+        const counts = Object.fromEntries(MENUS.map(m => [m.id, m.items.length]));
         expect(counts).toEqual({
             'editor/context': 1,
             'explorer/context': 1,
-            'diplodoc.explorer.context.menu': 8,
-            'diplodoc.editor.context.menu': 10,   // 9 обычных + settings в конце
-            'diplodoc.other.explorer.context.menu': 6,
-            'diplodoc.helptag.explorer.context.menu': 3,
-            'diplodoc.lint.explorer.context.menu': 4,
+            'diplodoc.explorer.context.menu': 9,                // было 10 → минус DEBUG, минус BREADCRUMBS
+            'diplodoc.editor.context.menu': 8,                  // без изменений
             'diplodoc.context.explorer.context.menu': 3,
+            'diplodoc.helptag.explorer.context.menu': 3,
+            'diplodoc.lint.explorer.context.menu': 2,           // было 4 → linter.abbrs/terms ушли в ABBR/TERMS
             'diplodoc.reindexier.explorer.context.menu': 3,
-            'diplodoc.breadcrumbs.explorer.context.menu': 1,
-            'diplodoc.debug.explorer.context.menu': 1,
-            'diplodoc.abbrs.explorer.context.menu': 1,
-            'diplodoc.terms.explorer.context.menu': 1,
+            'diplodoc.abbrs.explorer.context.menu': 2,          // было 1 → + linter.abbrs
+            'diplodoc.terms.explorer.context.menu': 2,          // было 1 → + linter.terms
+            'diplodoc.other.explorer.context.menu': 4,          // было 4, состав другой (breadcrumbs, contextmap вместо abbr/terms)
         });
     });
 });

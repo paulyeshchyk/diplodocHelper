@@ -13,7 +13,7 @@ async function loadDeps(): Promise<{ reindexFigures: ReindexFiguresFn; getConfig
   const [figMod, cfgMod, constMod] = await Promise.all([
     import('./reindexer.figures.js'),
     import('../../config/diplodoc.config.js'),
-    import('../../contrib/constants.ts'),
+    import('../../contrib/config/constants.ts'),
   ]);
   const fig = figMod as unknown as { reindexFigures: ReindexFiguresFn; default?: { reindexFigures: ReindexFiguresFn } };
   const reindexFigures = fig.reindexFigures ?? fig.default!.reindexFigures;

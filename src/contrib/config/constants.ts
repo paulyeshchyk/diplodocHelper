@@ -1,4 +1,4 @@
-// src/contrib/constants.ts
+// src/contrib/config/constants.ts
 
 // ============================================================================
 // CONFIG — ключи VS Code-настроек (self-contained, не зависит от manifest/)
@@ -94,8 +94,6 @@ export const SUBMENU = {
     CONTEXT: 'diplodoc.context.explorer.context.menu',
     OTHER: 'diplodoc.other.explorer.context.menu',
     REINDEXIER: 'diplodoc.reindexier.explorer.context.menu',
-    BREADCRUMBS: 'diplodoc.breadcrumbs.explorer.context.menu',
-    DEBUG: 'diplodoc.debug.explorer.context.menu',
     LINT: 'diplodoc.lint.explorer.context.menu',
     ABBR: 'diplodoc.abbrs.explorer.context.menu',
     TERMS: 'diplodoc.terms.explorer.context.menu',
@@ -115,12 +113,53 @@ export const MENU = {
 // ============================================================================
 
 export interface GroupParts {
-    /** Префикс сортировки: `''` (обычная), `'z'` (после separator), `'0'` (до separator). */
-    readonly prefix?: '' | 'z' | '0';
+    /**
+     * Префикс `groupName` — определяет **зону** пункта в меню.
+     *
+     * Механика VS Code: разделитель рисуется между соседними пунктами,
+     * у которых разный `groupName`. `groupName` сортируются лексикографически,
+     * поэтому префикс управляет одновременно **порядком** и **количеством
+     * визуальных разделителей**.
+     *
+     * Конвенции (используйте осознанно, без ограничения типа):
+     * - `''`   — основная зона (`7.diplodoc.section`);
+     * - `'0'`  — до всех (`07.diplodoc.section`);
+     * - `'z'`  — после всех (`z7.diplodoc.section`);
+     * - `'a'`, `'b'`, `'c'`, … — доп. зоны между `''` и `'z'`,
+     *   лексикографически (`'a…' < 'b…' < …`).
+     *
+     * Каждое уникальное значение → отдельная зона → визуальный
+     * разделитель между этой и соседней зоной. N зон = N-1 разделителей.
+     *
+     * Пример (4 зоны, 3 разделителя):
+     *   `''`      →  [items A1, A2]
+     *   `'a'`     →  [items B1]
+     *   `'b'`     →  [items C1, C2]
+     *   `'z'`     →  [items D1]
+     *
+     * Trade-off: `string` открывает возможность для typos (`'Z'` vs `'z'`
+     * — разные зоны). Для типовых случаев используйте `SEPARATOR_ZONE`.
+     */
+    readonly prefix?: string;
     readonly order: number;
     readonly group: GroupKey;
     readonly itemOrder: number;
 }
+
+/**
+ * Стандартные зоны `groupName` для `buildGroup`. Не ограничение —
+ * шпаргалка для типовых случаев. Произвольная строка в `prefix`
+ * работает так же.
+ */
+export const SEPARATOR_ZONE = {
+    BEFORE_ALL: '0',
+    MAIN: '',
+    ZONE_A: 'a',
+    ZONE_B: 'b',
+    ZONE_C: 'c',
+    ZONE_D: 'd',
+    AFTER_ALL: 'z',
+} as const;
 
 /**
  * Собирает VS Code-строку `'<sort>.<groupName>@<order>'`.

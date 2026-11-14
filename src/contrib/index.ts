@@ -1,8 +1,8 @@
 // src/contrib/index.ts
 
 export { COMMANDS } from './commands.ts';
-export { MENUS } from './menus.ts';
-export { KEYBINDINGS } from './keybindings.ts';
+export { MENUS } from './config/menus.ts';
+export { KEYBINDINGS } from './config/keybindings.ts';
 export { INTERNAL_HANDLERS } from './internal-handlers.ts';
 
 export {
@@ -12,7 +12,7 @@ export {
     type WhenCondition,
     type GroupKey,
     type GroupParts,
-} from './constants.ts';
+} from './config/constants.ts';
 
 export { buildContributes, buildCommandHandlers } from './build.ts';
 

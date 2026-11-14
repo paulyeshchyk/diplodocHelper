@@ -1,6 +1,6 @@
 // src/contrib/commands.ts
 
-import { CONFIG_KEY } from './constants.ts';
+import { CONFIG_KEY } from './config/constants.ts';
 import type { CommandHandler, CommandSpec } from './types.ts';
 
 /**

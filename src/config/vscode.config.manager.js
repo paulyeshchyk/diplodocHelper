@@ -2,9 +2,9 @@
 
 const vscode = require('vscode');
 const { DiplodocConfigFromJson } = require('./diplodoc.config.js');
-const { CONFIG_KEY } = require('../contrib/constants.ts');
+const { CONFIG_KEY } = require('../contrib/config/constants.ts');
 
-/** @import { DiplodocConfig } from '../contrib/diplodoc.config.model.js' */
+/** @import { DiplodocConfig } from './diplodoc.config.model.js' */
 
 
 /** @type {DiplodocConfig | null} */

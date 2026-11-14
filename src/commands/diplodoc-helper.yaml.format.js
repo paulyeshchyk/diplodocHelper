@@ -2,16 +2,16 @@
 // src/commands/diplodoc-helper.yaml.format.js
 
 const vscode = require('vscode');
-const { nls_ts, translate } = require('../../nls_ts.js');
+const { nls_ts, translate } = require('../nls_ts.js');
 const { Yaml_Analyze_Selection } = require('../plugins/utils/yaml-inline/index.ts');
 const { Yaml_Read_ValueRange } = require('../plugins/utils/yaml-inline/value-range.ts');
 const { Yaml_Detect_Format } = require('../plugins/utils/yaml-inline/format-detect.ts');
 const { Yaml_Toggle_Format } = require('../plugins/utils/yaml-inline/toggle-format.ts');
 
-const FORMAT_ITEMS = [
-  { key: 'bold', icon: '$(bold)', label: 'Ж', desc: 'Жирный' },
-  { key: 'italic', icon: '$(italic)', label: 'К', desc: 'Курсив' },
-  { key: 'mono', icon: '$(code)', label: 'М', desc: 'Моноширинный' },
+const FORMAT_KEYS = [
+  { key: 'bold', icon: '$(bold)', shortKey: 'short.bold', descKey: 'bold' },
+  { key: 'italic', icon: '$(italic)', shortKey: 'short.italic', descKey: 'italic' },
+  { key: 'mono', icon: '$(code)', shortKey: 'short.mono', descKey: 'mono' },
 ];
 
 async function ux_yaml_format_selection() {
@@ -40,25 +40,48 @@ async function ux_yaml_format_selection() {
     return;
   }
 
-  // 2. Detection: активные триггеры Ж/К/М
-  // contentRange — реальный контент value без кавычек/комментариев
+
+  // helper: конвертирует plain {line, character} в vscode.Position,
+  // пропускает vscode.Position как есть, клампит к границам документа.
+  const toVscodePosition = p => {
+    if (p instanceof vscode.Position) return p;
+    const line = Number(p?.line ?? 0);
+    const character = Number(p?.character ?? 0);
+    const doc = editor.document;
+    const safeLine = Math.max(0, Math.min(line, doc.lineCount - 1));
+    const lineText = doc.lineAt(safeLine).text;
+    const safeChar = Math.max(0, Math.min(character, lineText.length));
+    if (safeLine !== line || safeChar !== character) {
+      console.warn(
+        `[yaml.format] clamped position ${JSON.stringify(p)} → ` +
+        `(${safeLine}, ${safeChar}); doc has ${doc.lineCount} lines, ` +
+        `line ${safeLine} has ${lineText.length} chars`,
+      );
+    }
+    return new vscode.Position(safeLine, safeChar);
+  };
+
   const contentRange = Yaml_Read_ValueRange.read(
     editor.document, selection, analysis.kind, analysis.owner,
-  );
+  )
 
   const fullText = editor.document.getText();
-  const detectStart = editor.document.offsetAt(contentRange.start);
-  const detectEnd = editor.document.offsetAt(contentRange.end);
+  const detectStart = editor.document.offsetAt(toVscodePosition(contentRange.start));
+  const detectEnd = editor.document.offsetAt(toVscodePosition(contentRange.end));
 
   const active = Yaml_Detect_Format.detect(fullText, detectStart, detectEnd);
 
-  const items = FORMAT_ITEMS.map(f => ({
-    label: `${active[f.key] ? '$(check)' : '$(circle-outline)'} ${f.icon} ${f.label}`,
-    description: active[f.key]
-      ? translate(nls_ts.plugin.yaml.format.activeHint, f.desc)
-      : translate(nls_ts.plugin.yaml.format.inactiveHint, f.desc),
-    key: f.key,
-  }));
+  const items = FORMAT_KEYS.map(f => {
+    const shortLabel = translate(nls_ts.plugin.yaml.format[f.shortKey]);
+    const desc = translate(nls_ts.plugin.yaml.format[f.descKey]);
+    return {
+      label: `${active[f.key] ? '$(check)' : '$(circle-outline)'} ${f.icon} ${shortLabel}`,
+      description: active[f.key]
+        ? translate(nls_ts.plugin.yaml.format.activeHint, desc)
+        : translate(nls_ts.plugin.yaml.format.inactiveHint, desc),
+      key: f.key,
+    };
+  });
 
   const picked = await vscode.window.showQuickPick(items, {
     title: translate(nls_ts.plugin.yaml.format.title),

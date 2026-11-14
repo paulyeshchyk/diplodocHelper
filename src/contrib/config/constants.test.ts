@@ -1,4 +1,4 @@
-// src/contrib/constants.test.ts
+// src/contrib/config/constants.test.ts
 
 import { describe, expect, it } from '@jest/globals';
 import {

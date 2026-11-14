@@ -12,19 +12,23 @@ let currentTranslations = {};
  * @param {string} rootPath
  */
 function initNls(locale, rootPath) {
-    let nlsPath = path.join(rootPath, `package.nls.${locale}.json`);
-
-    if (!fs.existsSync(nlsPath)) {
-        nlsPath = path.join(rootPath, 'package.nls.json');
-    }
-
-    try {
-        if (fs.existsSync(nlsPath)) {
-            currentTranslations = JSON.parse(fs.readFileSync(nlsPath, 'utf8'));
+    const loadJson = (/** @type {string} */ name) => {
+        const p = path.join(rootPath, name);
+        if (!fs.existsSync(p)) return {};
+        try { return JSON.parse(fs.readFileSync(p, 'utf8')); }
+        catch (e) {
+            let msg = e instanceof Error ? e.message : String(e);
+            console.error(`[nls] ${p}: ${msg}`);
+            return {};
         }
-    } catch (err) {
-        console.error('Failed to load NLS file:', err);
-    }
+    };
+
+    // 1. База — английский (все ключи гарантированно)
+    const base = loadJson('package.nls.json');
+    // 2. Override — локаль (если файла нет — только база)
+    const override = locale === 'en' ? {} : loadJson(`package.nls.${locale}.json`);
+    // 3. Merge
+    currentTranslations = { ...base, ...override };
 }
 
 /**

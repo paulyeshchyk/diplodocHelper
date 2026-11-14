@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "1.59.0",
+    "version": "1.61.0",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -28,27 +28,19 @@
         "onStartupFinished"
     ],
     "scripts": {
-        "build:pipeline": "node ./plugins/run-pipeline.js --stage=all",
-        "precompile": "npm run validate",
         "type-check": "tsc --noEmit",
+        "lint": "echo ''",
         "validate": "npm run lint && npm run type-check",
         "generate-contrib": "node scripts/generate-contrib.js",
-        "compile": "node build.js",
-        "build": "npm run compile",
-        "build:prod": "cross-env NODE_ENV=production npm run compile",
-        "build:dev": "cross-env NODE_ENV=development npm run compile",
-        "vscode:prepublish": "npm run build:prod",
-        "package": "npm run build:prod && vsce package -o ./build",
-        "publish-vsix": "vsce publish",
-        "publish": "npm run package && npm run publish-vsix",
-        "lint2": "eslint . --fix",
-        "lint": "echo ''",
-        "format": "prettier --write .",
-        "release:patch": "npm run build:prod && node scripts/bump-version.js",
-        "release:minor": "npm run build:prod && node scripts/bump-minor.js",
+        "check": "npm run generate-contrib && npm run validate && npm run test",
+        "vscode:prepublish": "npm run check && cross-env NODE_ENV=production node build.js",
+        "package": "node scripts/package.js",
+        "build": "npm run package",
+        "build:dev": "cross-env NODE_ENV=development node build.js",
+        "release:patch": "node scripts/bump-version.js && npm run build",
+        "release:minor": "node scripts/bump-minor.js && npm run build",
         "test": "jest",
-        "posttest": "node scripts/open-coverage.js",
-        "watch": "node build.js --watch"
+        "posttest": "node scripts/open-coverage.js"
     },
     "contributes": {
         "commands": [
@@ -207,8 +199,8 @@
                 "label": "%submenu.diplodoc%"
             },
             {
-                "id": "diplodoc.other.explorer.context.menu",
-                "label": "%submenu.other%"
+                "id": "diplodoc.context.explorer.context.menu",
+                "label": "%submenu.context%"
             },
             {
                 "id": "diplodoc.helptag.explorer.context.menu",
@@ -219,20 +211,8 @@
                 "label": "%submenu.lint%"
             },
             {
-                "id": "diplodoc.context.explorer.context.menu",
-                "label": "%submenu.context%"
-            },
-            {
                 "id": "diplodoc.reindexier.explorer.context.menu",
                 "label": "%submenu.reindexier%"
-            },
-            {
-                "id": "diplodoc.breadcrumbs.explorer.context.menu",
-                "label": "%command.html.breadcrumbs%"
-            },
-            {
-                "id": "diplodoc.debug.explorer.context.menu",
-                "label": "%submenu.debug%"
             },
             {
                 "id": "diplodoc.abbrs.explorer.context.menu",
@@ -241,6 +221,10 @@
             {
                 "id": "diplodoc.terms.explorer.context.menu",
                 "label": "%submenu.terms%"
+            },
+            {
+                "id": "diplodoc.other.explorer.context.menu",
+                "label": "%submenu.other%"
             }
         ],
         "menus": {
@@ -281,105 +265,86 @@
                 {
                     "command": "diplodoc-helper.copyLink",
                     "when": "explorerResourceIsFolder || resourceExtname == .md || resourceExtname == .png || resourceExtname == .jpg || resourceExtname == .svg",
-                    "group": "z1.diplodoc.section@5"
+                    "group": "a1.diplodoc.section@1"
+                },
+                {
+                    "submenu": "diplodoc.context.explorer.context.menu",
+                    "when": "explorerResourceIsFolder",
+                    "group": "b2.diplodoc.other@1"
+                },
+                {
+                    "submenu": "diplodoc.helptag.explorer.context.menu",
+                    "when": "explorerResourceIsFolder",
+                    "group": "b2.diplodoc.other@2"
+                },
+                {
+                    "submenu": "diplodoc.lint.explorer.context.menu",
+                    "when": "explorerResourceIsFolder",
+                    "group": "c2.diplodoc.lint@1"
                 },
                 {
                     "submenu": "diplodoc.other.explorer.context.menu",
                     "when": "explorerResourceIsFolder",
                     "group": "z2.diplodoc.other@1"
-                },
-                {
-                    "submenu": "diplodoc.lint.explorer.context.menu",
-                    "when": "explorerResourceIsFolder",
-                    "group": "z2.diplodoc.lint@2"
-                },
-                {
-                    "submenu": "diplodoc.debug.explorer.context.menu",
-                    "when": "explorerResourceIsFolder",
-                    "group": "z2.diplodoc.debug@3"
                 }
             ],
             "diplodoc.editor.context.menu": [
                 {
-                    "command": "diplodoc-helper.link.addAnchor",
-                    "when": "(editorLangId == markdown && editorHasSelection)",
-                    "group": "7.diplodoc.section@1"
-                },
-                {
-                    "command": "diplodoc-helper.pasteLink",
-                    "when": "editorTextFocus && !editorReadonly && (diplodoc-helper:canPasteMarkdownLink || resourceFilename =~ /^(gosts|abbreviations)\\.yaml$/)",
-                    "group": "7.diplodoc.section@2"
-                },
-                {
                     "command": "diplodoc-helper.pasteImageFromClipboard",
                     "when": "(editorTextFocus && resourceExtname == .md)",
-                    "group": "7.diplodoc.section@3"
+                    "group": "7.diplodoc.section@1"
                 },
                 {
                     "command": "diplodoc-helper.pasteImageFromList",
                     "when": "(editorTextFocus && resourceExtname == .md)",
-                    "group": "7.diplodoc.section@4"
+                    "group": "7.diplodoc.section@2"
                 },
                 {
-                    "command": "diplodoc-helper.footnote.add",
-                    "when": "(editorLangId == markdown && editorHasSelection)",
-                    "group": "7.diplodoc.section@5"
+                    "command": "diplodoc-helper.pasteLink",
+                    "when": "editorTextFocus && !editorReadonly && (diplodoc-helper:canPasteMarkdownLink || resourceFilename =~ /^(gosts|abbreviations)\\.yaml$/)",
+                    "group": "7.diplodoc.section@3"
                 },
                 {
                     "command": "diplodoc-helper.abbr.Add",
                     "when": "(editorLangId == yaml || editorLangId == markdown)",
-                    "group": "7.diplodoc.section@6"
+                    "group": "a7.diplodoc.section@1"
                 },
                 {
                     "command": "diplodoc-helper.term.Add",
                     "when": "(editorLangId == yaml || editorLangId == markdown)",
-                    "group": "7.diplodoc.section@7"
+                    "group": "a7.diplodoc.section@2"
                 },
                 {
                     "command": "diplodoc-helper.gost.Insert",
                     "when": "(editorLangId == yaml || editorLangId == markdown)",
-                    "group": "7.diplodoc.section@8"
+                    "group": "a7.diplodoc.section@3"
                 },
                 {
                     "command": "diplodoc-helper.yaml.format",
                     "when": "(editorLangId == yaml && editorHasSelection)",
-                    "group": "7.diplodoc.section@9"
+                    "group": "b7.diplodoc.section@1"
                 },
                 {
                     "command": "diplodoc-helper.settings",
+                    "when": "(editorLangId == markdown)",
                     "group": "z99.diplodoc.section@5"
                 }
             ],
-            "diplodoc.other.explorer.context.menu": [
+            "diplodoc.context.explorer.context.menu": [
                 {
-                    "submenu": "diplodoc.context.explorer.context.menu",
+                    "command": "diplodoc-helper.context.Update",
                     "when": "explorerResourceIsFolder",
-                    "group": "2.diplodoc.other@1"
+                    "group": "3.diplodoc.section@1"
                 },
                 {
-                    "submenu": "diplodoc.helptag.explorer.context.menu",
+                    "command": "diplodoc-helper.context.Delete",
                     "when": "explorerResourceIsFolder",
-                    "group": "2.diplodoc.other@2"
+                    "group": "3.diplodoc.section@2"
                 },
                 {
-                    "submenu": "diplodoc.reindexier.explorer.context.menu",
+                    "command": "diplodoc-helper.generateContexts",
                     "when": "explorerResourceIsFolder",
-                    "group": "2.diplodoc.other@3"
-                },
-                {
-                    "submenu": "diplodoc.abbrs.explorer.context.menu",
-                    "when": "explorerResourceIsFolder",
-                    "group": "2.diplodoc.other@4"
-                },
-                {
-                    "submenu": "diplodoc.terms.explorer.context.menu",
-                    "when": "explorerResourceIsFolder",
-                    "group": "2.diplodoc.other@5"
-                },
-                {
-                    "command": "diplodoc-helper.installScripts",
-                    "when": "explorerResourceIsFolder",
-                    "group": "5.diplodoc.generators@6"
+                    "group": "z3.diplodoc.generators@3"
                 }
             ],
             "diplodoc.helptag.explorer.context.menu": [
@@ -403,39 +368,12 @@
                 {
                     "command": "diplodoc-helper.linter.links",
                     "when": "explorerResourceIsFolder",
-                    "group": "5.diplodoc.generators@3"
-                },
-                {
-                    "command": "diplodoc-helper.linter.abbrs",
-                    "when": "explorerResourceIsFolder",
-                    "group": "5.diplodoc.generators@4"
-                },
-                {
-                    "command": "diplodoc-helper.linter.terms",
-                    "when": "explorerResourceIsFolder",
-                    "group": "5.diplodoc.generators@5"
+                    "group": "5.diplodoc.generators@1"
                 },
                 {
                     "command": "diplodoc-helper.wipeEmptyDirectories",
                     "when": "explorerResourceIsFolder",
-                    "group": "z5.diplodoc.files@6"
-                }
-            ],
-            "diplodoc.context.explorer.context.menu": [
-                {
-                    "command": "diplodoc-helper.context.Update",
-                    "when": "explorerResourceIsFolder",
-                    "group": "3.diplodoc.section@1"
-                },
-                {
-                    "command": "diplodoc-helper.context.Delete",
-                    "when": "explorerResourceIsFolder",
-                    "group": "3.diplodoc.section@2"
-                },
-                {
-                    "command": "diplodoc-helper.generateContexts",
-                    "when": "explorerResourceIsFolder",
-                    "group": "z3.diplodoc.generators@3"
+                    "group": "z5.diplodoc.files@1"
                 }
             ],
             "diplodoc.reindexier.explorer.context.menu": [
@@ -455,32 +393,50 @@
                     "group": "5.diplodoc.generators@3"
                 }
             ],
-            "diplodoc.breadcrumbs.explorer.context.menu": [
-                {
-                    "command": "diplodoc-helper.generateBreadcrumbs",
-                    "when": "explorerResourceIsFolder",
-                    "group": "9.diplodoc.generators@1"
-                }
-            ],
-            "diplodoc.debug.explorer.context.menu": [
-                {
-                    "command": "diplodoc-helper.generateContextmap",
-                    "when": "explorerResourceIsFolder",
-                    "group": "7.diplodoc.section@1"
-                }
-            ],
             "diplodoc.abbrs.explorer.context.menu": [
                 {
                     "command": "diplodoc-helper.generateAbbrs",
                     "when": "explorerResourceIsFolder",
-                    "group": "5.diplodoc.generators@6"
+                    "group": "5.diplodoc.generators@1"
+                },
+                {
+                    "command": "diplodoc-helper.linter.abbrs",
+                    "when": "explorerResourceIsFolder",
+                    "group": "5.diplodoc.generators@2"
                 }
             ],
             "diplodoc.terms.explorer.context.menu": [
                 {
                     "command": "diplodoc-helper.generateTerms",
                     "when": "explorerResourceIsFolder",
-                    "group": "5.diplodoc.generators@7"
+                    "group": "5.diplodoc.generators@1"
+                },
+                {
+                    "command": "diplodoc-helper.linter.terms",
+                    "when": "explorerResourceIsFolder",
+                    "group": "5.diplodoc.generators@2"
+                }
+            ],
+            "diplodoc.other.explorer.context.menu": [
+                {
+                    "submenu": "diplodoc.reindexier.explorer.context.menu",
+                    "when": "explorerResourceIsFolder",
+                    "group": "2.diplodoc.other@1"
+                },
+                {
+                    "command": "diplodoc-helper.generateBreadcrumbs",
+                    "when": "explorerResourceIsFolder",
+                    "group": "a9.diplodoc.generators@1"
+                },
+                {
+                    "command": "diplodoc-helper.generateContextmap",
+                    "when": "explorerResourceIsFolder",
+                    "group": "a9.diplodoc.generators@2"
+                },
+                {
+                    "command": "diplodoc-helper.installScripts",
+                    "when": "explorerResourceIsFolder",
+                    "group": "z5.diplodoc.generators@1"
                 }
             ]
         },

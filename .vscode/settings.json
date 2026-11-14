@@ -1,4 +1,5 @@
 {
+  "files.autoSave": "onWindowChange",
   "editor.formatOnSave": true,
   "editor.language.brackets": [],
   "editor.defaultFormatter": "esbenp.prettier-vscode",

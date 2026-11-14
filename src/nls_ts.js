@@ -113,6 +113,14 @@ const nls_ts = {
                 placeholder: "plugin.yaml.format.placeholder",
                 activeHint: "plugin.yaml.format.activeHint",
                 inactiveHint: "plugin.yaml.format.inactiveHint",
+                short: {
+                    bold: 'plugin.yaml.format.short.bold',
+                    italic: 'plugin.yaml.format.short.italic',
+                    mono: 'plugin.yaml.format.short.mono',
+                },
+                bold: 'plugin.yaml.format.bold',
+                italic: 'plugin.yaml.format.italic',
+                mono: 'plugin.yaml.format.mono',
                 error: {
                     noEditor: "plugin.yaml.format.error.noEditor",
                     notYaml: "plugin.yaml.format.error.notYaml",

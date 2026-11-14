@@ -19,13 +19,3 @@ pkg.version = newVersion;
 
 fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 console.log(`Version bumped to ${newVersion}`);
-
-const outDir = path.join(projectRoot, 'build');
-if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
-
-const outFile = path.join(outDir, `${pkg.name}-${newVersion}.vsix`);
-
-execSync(`vsce package --out "${outFile}" --allow-missing-repository`, {
-    stdio: 'inherit',
-    cwd: projectRoot,
-});
