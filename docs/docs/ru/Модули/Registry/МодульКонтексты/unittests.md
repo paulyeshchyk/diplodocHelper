@@ -15,7 +15,7 @@
 |                                                    | `writeIndexMd should work correctly`           |
 |                                                    | `writeTocAndIndexYaml should be defined`       |
 |                                                    | `writeTocAndIndexYaml should work correctly`   |
-| `test/plugins/contexts/сontexts.collector.test.js` | `walkMdFilesGetContexts should be defined`     |
+| `test/plugins/contexts/contexts.collector.test.js` | `walkMdFilesGetContexts should be defined`     |
 |                                                    | `walkMdFilesGetContexts should work correctly` |
-| `test/plugins/contexts/сontexts.test.js`           | `runGeneration should be defined`              |
+| `test/plugins/contexts/contexts.test.js`           | `runGeneration should be defined`              |
 |                                                    | `runGeneration should work correctly`          |

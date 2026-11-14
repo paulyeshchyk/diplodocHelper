@@ -483,7 +483,7 @@ if (require.main === module) {
 | `terms`    | ✓            | ✓                | 6 имён         | ✓ output-dir    |
 | `gosts`    | ✓            | ✓                | —              | ✓ output-dir    |
 | `helptags` | ✗            | ✗                | 2              | —               |
-| `сontexts` | ✗            | ✗                | 1              | —               |
+| `contexts` | ✗            | ✗                | 1              | —               |
 | `figures`  | ✗            | ✗                | 3              | —               |
 
 **Копирование шаблона между коллекторами = тихая регрессия.**

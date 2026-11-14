@@ -3,7 +3,7 @@ import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import type { ContextMap } from './contexts.types.ts';
-import { walkMdFilesGetContexts } from './сontexts.collector.js';
+import { walkMdFilesGetContexts } from './contexts.collector.js';
 
 let root: string;
 let langDir: string;

@@ -1,6 +1,6 @@
-const _ontexts = require('../../../src/plugins/contexts/сontexts');
+const _ontexts = require('../../../src/plugins/contexts/contexts');
 
-describe('сontexts', () => {
+describe('contexts', () => {
     test('runGeneration should be defined', () => {
         expect(_ontexts.runGeneration).toBeDefined();
     });

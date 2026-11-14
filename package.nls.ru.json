@@ -252,5 +252,7 @@
   "submenu.lint": "Очистка и проверки",
   "submenu.other": "Прочее",
   "submenu.reindexier": "Индексация",
-  "submenu.terms": "Термины"
+  "submenu.terms": "Термины",
+  "plugin.link.paste.error.outsideProject": "Ссылка недоступна: файл вне папки docs/: {0}",
+  "extension.settings.docsFolderName.description": "Папка с документацией (по умолчанию: docs)"
 }

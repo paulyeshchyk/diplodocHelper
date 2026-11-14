@@ -1,7 +1,7 @@
 /**
  * Типы модуля `contexts` (не путать с `contentNavigator/Pagebuilder.Config.ContextMap`).
  *
- * Покрывает артефакты, которые собирает `сontexts.collector.js`
+ * Покрывает артефакты, которые собирает `contexts.collector.js`
  * из frontmatter `context:` по `.md`-файлам.
  */
 

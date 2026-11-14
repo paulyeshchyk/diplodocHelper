@@ -1,7 +1,7 @@
 // diplodoc-helper.generateContexts.js
 
 const { nls_ts, translate } = require('../nls_ts.js');
-const { runGeneration } = require('../plugins/contexts/сontexts');
+const { runGeneration } = require('../plugins/contexts/contexts');
 const path = require('path');
 let vscode = require('vscode');
 

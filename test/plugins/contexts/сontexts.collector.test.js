@@ -1,6 +1,6 @@
-const _ontexts_collector = require('../../../src/plugins/contexts/сontexts.collector');
+const _ontexts_collector = require('../../../src/plugins/contexts/contexts.collector');
 
-describe('сontexts.collector', () => {
+describe('contexts.collector', () => {
     test('walkMdFilesGetContexts should be defined', () => {
         expect(_ontexts_collector.walkMdFilesGetContexts).toBeDefined();
     });

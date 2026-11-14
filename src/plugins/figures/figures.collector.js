@@ -12,7 +12,7 @@ const SKIP_DIRS = new Set(['figures', 'contexts', 'helptags']);
  *
  * Асимметрии к другим коллекторам (см. 5a/5c):
  *   - ходит в `.` и `_` (skipHidden: false, skipUnderscore: false) —
- *     как `helptags` и `сontexts`;
+ *     как `helptags` и `contexts`;
  *   - `SKIP_DIRS` содержит только `figures`, `contexts`, `helptags` —
  *     `abbrs`, `terms`, `roadmap` **обходятся** (в них тоже бывают рисунки);
  *   - нет `skipFullPaths`: `figures/` исключается по basename, отдельного

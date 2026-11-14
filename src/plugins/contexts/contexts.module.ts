@@ -5,7 +5,7 @@ type Results = { success: string[]; failed: string[] };
 type GenFn = (docsRoot: string) => Results;
 
 async function loadFn(): Promise<GenFn> {
-  const mod = await import('./сontexts.js');
+  const mod = await import('./contexts.js');
   const m = mod as unknown as { runGeneration: GenFn; default?: { runGeneration: GenFn } };
   return m.runGeneration ?? m.default!.runGeneration;
 }

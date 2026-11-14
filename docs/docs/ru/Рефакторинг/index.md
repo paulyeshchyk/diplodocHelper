@@ -16,7 +16,7 @@ sectionIndex: ""
 | Трек                        | Что                                                                                                | Статус                    |
 | --------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------- |
 | Утилитарный слой (Wave 1–4) | `String_*`, `Url_*`, `Html_*`, `Fs_*`, `Link_*`, `InlineAnnotation_*`, `Frontmatter_*`             | ✅ `.ts`, frozen snapshots |
-| Track A                     | `Fs_Walk_Directory` → 6 коллекторов (`abbrs`, `terms`, `gosts`, `helptags`, `сontexts`, `figures`) | ✅                         |
+| Track A                     | `Fs_Walk_Directory` → 6 коллекторов (`abbrs`, `terms`, `gosts`, `helptags`, `contexts`, `figures`) | ✅                         |
 | Track B                     | `Url_Transform_Segment`, `_Reference`, `_Filename`, `String_Transliterate`                         | ✅                         |
 | Feature-map                 | FM-pre / FM-a / FM-b / FM-c / FM-d + `data-attrs` (Phase A/B/C)                                    | ✅                         |
 | collect-catalog             | `index.js` → `index.ts`, `_paths`, `_fields`                                                       | ✅                         |
@@ -169,7 +169,7 @@ src/commands/
 | `reindexer/*`                             | средняя   | `reindexer.directories`, `figures`, `footnotes`, `md` — 4 файла, связаны с `sections.core`                                       |
 | `figures/figures.js`, `figures.writer.js` | низкая    | `Html_Escape_Text`, `url/`                                                                                                       |
 | `breadcrumb/*`                            | низкая    | коллектор+инжектор, есть TS-обёртки (`Fs_Walk`, `Html_Classify_File`)                                                            |
-| `contexts/*`                              | средняя   | `сontexts.collector` (уже TS через `Fs_Walk`), `contexts.writer`, `context-search.client.js` (IIFE, как `feature-map.client.js`) |
+| `contexts/*`                              | средняя   | `contexts.collector` (уже TS через `Fs_Walk`), `contexts.writer`, `context-search.client.js` (IIFE, как `feature-map.client.js`) |
 | `helptags/*`                              | низкая    | коллектор уже TS, `helptags.writer` — 30 строк                                                                                   |
 | `helpMap/*`                               | низкая    | `helpmap.js` + `extractor` + `writer`                                                                                            |
 | `contentNavigator/*`                      | высокая   | 15+ файлов, browser-скрипты (`core-renderer.js`), специализированная сборка                                                      |

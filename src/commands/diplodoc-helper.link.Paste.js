@@ -39,6 +39,8 @@ async function ux_link_paste() {
             cursorContext.isHtml,
             hasSelection ? selectedText : null
         );
+        if (linkText === null)
+            return;
 
         // --- 3. Применяем правку и проверяем результат ---
         const applied = await editor.edit(editBuilder => {
@@ -396,13 +398,17 @@ function parseClipboardLink(clipboardText) {
     }
 }
 
+const { Link_Build_Path } = require('../plugins/utils/link/Link_Build_Path.ts');
+const { Link_Format_Markdown } = require('../plugins/utils/link/Link_Format_Markdown.ts');
+
+
 /**
  * Основная логика преобразования пути из буфера в Markdown/HTML-ссылку
  * @param {string} clipboardText
  * @param {string} sourceFilePath
  * @param {boolean} shouldRenderAsHtml
  * @param {string?} overrideLinkName
- * @returns {Promise<string>}
+ * @returns {Promise<string | null>}
  */
 async function ConvertDocumentPathToLink(clipboardText, sourceFilePath, shouldRenderAsHtml, overrideLinkName = null) {
     const data = parseClipboardLink(clipboardText);
@@ -410,63 +416,71 @@ async function ConvertDocumentPathToLink(clipboardText, sourceFilePath, shouldRe
         throw new Error(translate('plugin.link.paste.error.emptybuffer'));
     }
 
-    // overrideLinkName используется ТОЛЬКО как текст ссылки.
-    // Он НЕ должен влиять на выбор якоря.
     const linkName = overrideLinkName ?? data.sourceLinkName;
-
     const targetFilePath = data.sourceLinkPath;
-    const { isDirectory, isImage } = await getFileTypeInfo(targetFilePath);
-    const { addIndex, prefix } = getLinkOptions(targetFilePath, isDirectory);
 
-    // ---- ВЫЧИСЛЕНИЕ ПУТИ ----
-    let mdPath;
-    if (shouldRenderAsHtml) {
-        const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-        if (workspaceRoot) {
-            let relativeFromRoot = path.relative(workspaceRoot, targetFilePath);
-
-            const docsPrefix = 'docs' + path.sep;
-            if (relativeFromRoot.startsWith(docsPrefix)) {
-                relativeFromRoot = relativeFromRoot.slice(docsPrefix.length);
-            } else if (relativeFromRoot === 'docs') {
-                relativeFromRoot = '';
-            }
-
-            if (isDirectory) {
-                relativeFromRoot = path.join(relativeFromRoot, 'index.html');
-            } else if (targetFilePath.endsWith('.md')) {
-                relativeFromRoot = relativeFromRoot.replace(/\.md$/, '.html');
-            }
-            const segments = relativeFromRoot.split(path.sep);
-            const encodedSegments = segments.map(s => encodeURIComponent(s));
-            mdPath = encodedSegments.join('/');
-        } else {
-            mdPath = calculateRelativeMdPath(sourceFilePath, targetFilePath, addIndex);
-        }
-    } else {
-        mdPath = calculateRelativeMdPath(sourceFilePath, targetFilePath, addIndex);
+    // ─── Рабочий корень обязателен ───
+    const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+    if (!workspaceRoot) {
+        vscode.window.showWarningMessage(
+            translate('plugin.link.paste.error.outsideProject', targetFilePath),
+        );
+        return null;   // сигнал вызывающему: ничего не вставлять
     }
 
-    // Предлагаем выбор якоря для MD-документов или папок с index.md (не для изображений)
-    // Работает независимо от того, переопределён ли текст ссылки
+    const docsDirName = vscode.workspace.getConfiguration('diplodoc-helper').get('docsFolderName', 'docs');
+
+    // ─── Контракт: только внутри docs/ ───
+    try {
+        Link_Build_Path.assertInsideDocs(workspaceRoot, targetFilePath, docsDirName);
+    } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.warn(`[link.paste] ${msg}`);
+        vscode.window.showWarningMessage(
+            translate('plugin.link.paste.error.outsideProject', targetFilePath),
+        );
+        return null;
+    }
+
+    // ─── Определение типа цели ───
+    const ext = path.extname(targetFilePath).toLowerCase();
+    let isDirectory = false;
+    let isImage = false;
+    try {
+        const stat = await fs.stat(targetFilePath);
+        isDirectory = stat.isDirectory();
+        if (!isDirectory) isImage = ext !== '.md';
+    } catch {
+        if (!ext) isDirectory = true;
+    }
+
+    // ─── Вычисление пути ───
+    let mdPath;
+    if (shouldRenderAsHtml) {
+        mdPath = Link_Build_Path.buildAbsolute(workspaceRoot, targetFilePath, isDirectory, docsDirName);
+    } else {
+        mdPath = Link_Build_Path.buildRelative(sourceFilePath, targetFilePath, isDirectory);
+    }
+
+    // ─── Якорь (только для MD-документов) ───
     if (!isImage) {
         const targetMdFile = getTargetMdFile(targetFilePath, isDirectory);
         if (targetMdFile) {
             const anchors = await extractAnchorsFromMdFile(targetMdFile);
             if (anchors.length > 0) {
                 const selectedAnchor = await promptAnchorSelection(anchors);
-                if (selectedAnchor) {
-                    mdPath += `#${selectedAnchor}`;
-                }
+                if (selectedAnchor) mdPath += `#${selectedAnchor}`;
             }
         }
     }
 
+    // ─── Финальная сборка ───
     if (isImage) {
-        return shouldRenderAsHtml ? buildDocumentLink('!', linkName, mdPath, true) : buildImageLink(linkName, mdPath);
+        return shouldRenderAsHtml
+            ? Link_Format_Markdown.format(linkName, mdPath, true, true)
+            : buildImageLink(linkName, mdPath);
     }
-
-    return buildDocumentLink(prefix, linkName, mdPath, shouldRenderAsHtml);
+    return Link_Format_Markdown.format(linkName, mdPath, false, shouldRenderAsHtml);
 }
 
 // =============================================================================

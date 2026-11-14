@@ -32,15 +32,22 @@
         "lint": "echo ''",
         "validate": "npm run lint && npm run type-check",
         "generate-contrib": "node scripts/generate-contrib.js",
+        "test": "jest",
         "check": "npm run generate-contrib && npm run validate && npm run test",
-        "vscode:prepublish": "npm run check && cross-env NODE_ENV=production node build.js",
+        "vscode:prepublish": "cross-env NODE_ENV=production node build.js",
         "package": "node scripts/package.js",
-        "build": "npm run package",
+        "build": "npm run check && npm run package",
         "build:dev": "cross-env NODE_ENV=development node build.js",
         "release:patch": "node scripts/bump-version.js && npm run build",
         "release:minor": "node scripts/bump-minor.js && npm run build",
-        "test": "jest",
-        "posttest": "node scripts/open-coverage.js"
+        "posttest": "node scripts/open-coverage.js",
+        "watch": "node build.js --watch"
+    },
+    "diplodoc-helper.docsFolderName": {
+        "type": "string",
+        "default": "docs",
+        "description": "%extension.settings.docsFolderName.description%",
+        "order": 60
     },
     "contributes": {
         "commands": [

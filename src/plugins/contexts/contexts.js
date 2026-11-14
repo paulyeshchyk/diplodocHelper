@@ -4,7 +4,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const { walkMdFilesGetContexts } = require('./сontexts.collector');
+const { walkMdFilesGetContexts } = require('./contexts.collector');
 const {
     writeTermFiles,
     writeIndexMd,

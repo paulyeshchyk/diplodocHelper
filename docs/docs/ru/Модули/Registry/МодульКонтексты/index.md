@@ -150,8 +150,8 @@ flowchart TB
 
 | Файл                       | Ответственность                                                                                                    |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `сontexts.js`              | `runGeneration(docsRoot)`, `buildAllContexts`, `collapseTail` (обратите внимание: в имени файла кириллическая `с`) |
-| `сontexts.collector.js`    | `walkMdFilesGetContexts` (тоже кириллическая `с`)                                                                  |
+| `contexts.js`              | `runGeneration(docsRoot)`, `buildAllContexts`, `collapseTail` (обратите внимание: в имени файла кириллическая `с`) |
+| `contexts.collector.js`    | `walkMdFilesGetContexts` (тоже кириллическая `с`)                                                                  |
 | `contexts.extractor.js`    | `extractContextTagValue`, `getTitleFromMDMetadata`                                                                 |
 | `contexts.writer.js`       | `writeTermFiles`, `writeIndexMd`, `writeTocAndIndexYamlComplete`, `writeContextSearchScript`, `writeTailFile`      |
 | `contexts.template.js`     | шаблоны для `index.md`, `toc.yaml`, `index.yaml`                                                                   |

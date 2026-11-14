@@ -252,5 +252,7 @@
   "submenu.lint": "Lint",
   "submenu.other": "Other",
   "submenu.reindexier": "Reindex",
-  "submenu.terms": "Terms"
+  "submenu.terms": "Terms",
+  "plugin.link.paste.error.outsideProject": "Cannot link to file outside docs/: {0}",
+  "extension.settings.docsFolderName.description": "Folder with documentation (default: docs)"
 }

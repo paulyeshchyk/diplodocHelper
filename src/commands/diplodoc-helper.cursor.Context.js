@@ -19,50 +19,12 @@ const vscode = require('vscode');
  */
 function getCursorContext(editor) {
     const document = editor.document;
-    const position = editor.selection.active;
-    const currentLineNo = position.line;
-    const currentLineText = document.lineAt(currentLineNo).text;
-    const languageId = editor.document.languageId;
     return {
-        isHtml: (checkIsInsideHtml(document, position) || languageId === 'yaml'),
-        ...checkListContext(document, currentLineNo),
-        isTable: checkIsTable(currentLineText),
-        ...checkCustomBlockContext(document, currentLineNo),
+        isHtml: document.languageId === 'yaml',
+        ...checkListContext(document, editor.selection.active.line),
+        isTable: checkIsTable(document.lineAt(editor.selection.active.line).text),
+        ...checkCustomBlockContext(document, editor.selection.active.line),
     };
-}
-
-/**
- * 1. ПРОВЕРКА HTML
- * Ищет баланс открывающих и закрывающих тегов от начала документа (или ближайших 50 строк)
- * @param {vscode.TextDocument} document
- * @param {vscode.Position} position
- */
-function checkIsInsideHtml(document, position) {
-    const startLine = Math.max(0, position.line - 50);
-    const range = new vscode.Range(new vscode.Position(startLine, 0), position);
-    const textBefore = document.getText(range);
-
-    const cleanText = textBefore
-        .replace(/<([a-z1-6]+)[^>]*\/>/gi, '')
-        .replace(/<(br|hr|img|input|meta|link)[^>]*>/gi, '');
-
-    const stack = [];
-    const tagRegex = /<\/?[a-z1-6][^>]*>/gi;
-    let match;
-
-    while ((match = tagRegex.exec(cleanText)) !== null) {
-        const tag = match[0];
-        if (tag.startsWith('</')) {
-            stack.pop();
-        } else {
-            const tagNameMatch = /<([a-z1-6]+)/i.exec(tag);
-            if (tagNameMatch) {
-                stack.push(tagNameMatch[1].toLowerCase());
-            }
-        }
-    }
-
-    return stack.length > 0;
 }
 
 /**

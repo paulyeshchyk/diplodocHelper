@@ -7,7 +7,7 @@
 **Утилитарный слой** (Wave 1–4):  
 `String_*`, `Url_Transform_*` (4 шт.), `String_Transliterate_Cyrillic`, `Html_Escape_*` (2 шт.), `Html_Classify_File`, `Fs_Walk_Directory`, `Fs_Find_Module_Dirs`, `Link_Classify_External`, `InlineAnnotation_*` (3 шт.), `Path_ToPosix`, `Frontmatter_Split_Raw` — все с типизацией и frozen-snapshot'ами.
 
-**Track A** (`Fs_Walk → 6 коллекторов`): `abbrs`, `terms`, `gosts`, `helptags`, `сontexts`, `figures` — все коллекторы делегируют в `Fs_Walk_Directory`. Асимметрии `skipHidden`/`skipUnderscore`/`skipDirNames`/`skipFullPaths` зафиксированы таблицей в CONTRIBUTING.
+**Track A** (`Fs_Walk → 6 коллекторов`): `abbrs`, `terms`, `gosts`, `helptags`, `contexts`, `figures` — все коллекторы делегируют в `Fs_Walk_Directory`. Асимметрии `skipHidden`/`skipUnderscore`/`skipDirNames`/`skipFullPaths` зафиксированы таблицей в CONTRIBUTING.
 
 **Track B** (`Url_Transform_*`): базовый `String_Transliterate_Cyrillic` + 4 slugify (segment/reference/filename/path-segments). 4 frozen-snapshot'а защищают от переименования файлов/anchor'ов.
 
