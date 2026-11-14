@@ -486,6 +486,20 @@ if (require.main === module) {
 - `slugify_latin_alphanumeric('жизнь')` → `'zhizn'` (trailing `ь` съедается `_` + trim), но `'объект'` → `'ob_ekt'` (middle `ъ` → separator).
 - `Frontmatter_Split_Raw.split('---\n---\nbody')` → `null` (пустой frontmatter не матчится legacy-регексом).
 
+
+### 5.4. Канонический тег ≠ все допустимые теги.
+
+`ALIASES[formatKey]` — полный набор тегов, которые `detect` видит как активный триггер.
+`CANONICAL_TAG[formatKey]` — единственный тег, который `wrap` пишет.
+Асимметрия — осознанная: unwrap должен снимать **любой** алиас (legacy, ручной), wrap — **один** канонический (для консистентности новых файлов).
+
+При смене canonical (например, `tt → kbd`) старый тег остаётся в aliases минимум на одну major-версию, чтобы существующие файлы не ломались. 
+Удаление старого alias — отдельная breaking-волна с `CHANGELOG → Changed: breaking`.
+
+Признак ошибки: кто-то добавил `tt` в `ALIASES.mono` и забыл, что там уже есть `kbd` → `wrap` пишет `<kbd>`, unwrap снимает `<tt>` — работает. 
+Но если canonical и единственный alias совпадают, а legacy нет — файлы с ручным `<tt>` молча не детектятся. 
+Правило «alias ⊇ canonical, legacy ⊇ alias предыдущей версии» защищает от этого.
+
 ---
 
 ## 6. Feature-map: особый случай

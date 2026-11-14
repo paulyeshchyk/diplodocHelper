@@ -27,7 +27,11 @@ describe('Yaml_Detect_Format.isWrappedBy — сценарий A (selection вн�
   it('00.8.2#02 <i>x</i>, selection = x → italic активен', () => {
     expect(isItalic('<i>x</i>', 3, 4)).toBe(true);
   });
-  it('00.8.2#03 <tt>x</tt>, selection = x → mono активен', () => {
+  it('00.8.2#03 <kbd>x</kbd> → mono активен (canonical)', () => {
+    // <kbd> = 5 chars: open [0..5), x = [5..6), close [6..12)
+    expect(isMono('<kbd>x</kbd>', 5, 6)).toBe(true);
+  });
+  it('00.8.2#03b <tt>x</tt> → mono активен (legacy alias)', () => {
     expect(isMono('<tt>x</tt>', 4, 5)).toBe(true);
   });
   it('00.8.2#04 selection — префикс контента (не весь) → всё равно активен', () => {
@@ -135,6 +139,7 @@ describe('Yaml_Detect_Format frozen snapshot', () => {
   const cases: ReadonlyArray<readonly [string, number, number, string]> = [
     ['<b>x</b>', 3, 4, 'b:1/i:0/m:0'],
     ['<i>x</i>', 3, 4, 'b:0/i:1/m:0'],
+    ['<kbd>x</kbd>', 5, 6, 'b:0/i:0/m:1'],
     ['<tt>x</tt>', 4, 5, 'b:0/i:0/m:1'],
     ['<b><i>x</i></b>', 6, 7, 'b:1/i:1/m:0'],
     ['<b><i><tt>x</tt></i></b>', 10, 11, 'b:1/i:1/m:1'],

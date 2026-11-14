@@ -153,15 +153,13 @@ describe('yaml-inline E2E — basics', () => {
         if (s2.ok) expect(s2.newText).toBe('key: x');
     });
 
-    it('00.8.5#04 mono round-trip (shift 4 — <tt> длиннее)', () => {
-        // <tt> = 4 chars, <b>/<i> = 3
+    it('00.8.5#04 mono round-trip (shift 5 — <kbd> длиннее)', () => {
         const s1 = uxSimulate('key: x', 5, 6, 'mono');
         expect(s1.ok).toBe(true);
         if (!s1.ok) return;
-        expect(s1.newText).toBe('key: <tt>x</tt>');
-        expect(s1.newSelStartOff).toBe(9);   // 5 + 4
-        expect(s1.newSelEndOff).toBe(10);    // 6 + 4
-
+        expect(s1.newText).toBe('key: <kbd>x</kbd>');
+        expect(s1.newSelStartOff).toBe(10);   // 5 + 5
+        expect(s1.newSelEndOff).toBe(11);     // 6 + 5
         const s2 = uxSimulate(s1.newText, s1.newSelStartOff, s1.newSelEndOff, 'mono');
         expect(s2.ok).toBe(true);
         if (s2.ok) expect(s2.newText).toBe('key: x');
@@ -317,7 +315,7 @@ describe('yaml-inline E2E frozen snapshot', () => {
         // wrap: plain scalar
         ['key: abc', 5, 8, 'bold', 'key: <b>abc</b>', 'wrapped'],
         ['key: x', 5, 6, 'italic', 'key: <i>x</i>', 'wrapped'],
-        ['key: x', 5, 6, 'mono', 'key: <tt>x</tt>', 'wrapped'],
+        ['key: x', 5, 6, 'mono', 'key: <kbd>x</kbd>', 'wrapped'],
         // unwrap A: selection внутри контента
         // key: <b>abc</b>  →  x в [8, 11); open_b=5..8, close_b=11..15
         ['key: <b>abc</b>', 8, 11, 'bold', 'key: abc', 'unwrapped'],

@@ -106,4 +106,16 @@ describe('Sanitizer.sanitizeHtml', () => {
     expect(Sanitizer.sanitizeHtml('<a href="file:///etc/passwd">t</a>'))
       .toBe('<a>t</a>');
   });
-});
+
+  test('00.9.5#01 keeps <kbd> — canonical mono for YAML format', () => {
+    expect(Sanitizer.sanitizeHtml('<kbd>Enter</kbd>')).toBe('<kbd>Enter</kbd>');
+  });
+
+  test('00.9.5#02 strips attributes from <kbd> (only global whitelist)', () => {
+    expect(Sanitizer.sanitizeHtml('<kbd onclick="x">y</kbd>')).toBe('<kbd>y</kbd>');
+  });
+
+  test('00.9.5#03 stripTags removes <kbd> in identity fields', () => {
+    expect(Sanitizer.stripTags('<kbd>x</kbd>')).toBe('x');
+  });
+})

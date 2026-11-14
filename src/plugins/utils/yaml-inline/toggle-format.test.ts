@@ -24,13 +24,13 @@ describe('Yaml_Toggle_Format.wrap', () => {
     expect(r.newStart).toBe(9);
     expect(r.newEnd).toBe(14);
   });
-  it('00.8.3#03 mono — канонический тег <tt>', () => {
-    expect(Yaml_Toggle_Format.wrap('x', 0, 1, 'mono').text).toBe('<tt>x</tt>');
+  it('00.8.3#03 mono — канонический тег <kbd>', () => {
+    expect(Yaml_Toggle_Format.wrap('x', 0, 1, 'mono').text).toBe('<kbd>x</kbd>');
   });
-  it('00.8.3#04 canonicalTag — b/i/tt', () => {
+  it('00.8.3#04 canonicalTag — b/i/kbd', () => {
     expect(Yaml_Toggle_Format.canonicalTag('bold')).toBe('b');
     expect(Yaml_Toggle_Format.canonicalTag('italic')).toBe('i');
-    expect(Yaml_Toggle_Format.canonicalTag('mono')).toBe('tt');
+    expect(Yaml_Toggle_Format.canonicalTag('mono')).toBe('kbd');
   });
 });
 
@@ -133,6 +133,15 @@ describe('Yaml_Toggle_Format.toggle — wrap', () => {
     expect(step2.text).toBe('abc');
     expect(step2.action).toBe('unwrapped');
   });
+  it('00.8.3#42 <kbd> wrap → unwrap', () => {
+    const s1 = Yaml_Toggle_Format.toggle('x', 0, 1, 'mono');
+    expect(s1.text).toBe('<kbd>x</kbd>');
+    expect(s1.newStart).toBe(5);   // shift 5 (длина `<kbd>`)
+    expect(s1.newEnd).toBe(6);
+    const s2 = Yaml_Toggle_Format.toggle(s1.text, s1.newStart, s1.newEnd, 'mono');
+    expect(s2.text).toBe('x');
+    expect(s2.action).toBe('unwrapped');
+  });
 });
 
 describe('Yaml_Toggle_Format.toggle — noop', () => {
@@ -155,7 +164,7 @@ describe('Yaml_Toggle_Format frozen snapshot', () => {
   const cases: ReadonlyArray<readonly [string, number, number, 'bold' | 'italic' | 'mono', string, string]> = [
     ['abc', 0, 3, 'bold', 'wrapped', '<b>abc</b>'],
     ['x', 0, 1, 'italic', 'wrapped', '<i>x</i>'],
-    ['x', 0, 1, 'mono', 'wrapped', '<tt>x</tt>'],
+    ['x', 0, 1, 'mono', 'wrapped', '<kbd>x</kbd>'],
     ['<b>x</b>', 3, 4, 'bold', 'unwrapped', 'x'],
     ['<b>x</b>', 0, 8, 'bold', 'unwrapped', 'x'],
     ['<strong>x</strong>', 8, 9, 'bold', 'unwrapped', 'x'],

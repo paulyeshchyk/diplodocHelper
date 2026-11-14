@@ -13,7 +13,7 @@ import type {
 const CANONICAL_TAG: Readonly<Record<FormatKey, string>> = {
   bold: 'b',
   italic: 'i',
-  mono: 'tt',
+  mono: 'kbd',
 };
 
 export class Yaml_Toggle_Format {

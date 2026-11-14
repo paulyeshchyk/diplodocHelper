@@ -8,7 +8,7 @@ import type { FormatFlags, FormatKey } from './format-detect.types.ts';
 const ALIASES: Readonly<Record<FormatKey, ReadonlySet<string>>> = {
   bold: new Set(['b', 'strong']),
   italic: new Set(['i', 'em']),
-  mono: new Set(['tt', 'code']),
+  mono: new Set(['kbd', 'tt']),
 };
 
 export class Yaml_Detect_Format {
