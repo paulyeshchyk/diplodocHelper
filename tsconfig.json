@@ -23,7 +23,8 @@
         "src/plugins/utils/yaml-inline/tag-guard.js_",
         "src/plugins/utils/yaml-inline/key-line.js_",
         "src/plugins/utils/yaml-inline/index.test.js_",
-        "src/plugins/utils/yaml-inline/index.js_"
+        "src/plugins/utils/yaml-inline/index.js_",
+        "scripts/generate-contrib.js"
     ],
     "exclude": [
         "**/*breadcrumb.template.js",

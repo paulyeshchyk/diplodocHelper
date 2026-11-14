@@ -12,8 +12,8 @@ type ConfigFn = (configKey: string) => { targetLocale: string; configObj: unknow
 async function loadDeps(): Promise<{ reindexFigures: ReindexFiguresFn; getConfig: ConfigFn; CONFIG_KEY: string }> {
   const [figMod, cfgMod, constMod] = await Promise.all([
     import('./reindexer.figures.js'),
-    import('../manifest/config/diplodoc.config.js'),
-    import('../manifest/constants.js'),
+    import('../../config/diplodoc.config.js'),
+    import('../../contrib/constants.ts'),
   ]);
   const fig = figMod as unknown as { reindexFigures: ReindexFiguresFn; default?: { reindexFigures: ReindexFiguresFn } };
   const reindexFigures = fig.reindexFigures ?? fig.default!.reindexFigures;

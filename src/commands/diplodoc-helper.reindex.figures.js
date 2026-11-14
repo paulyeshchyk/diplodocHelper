@@ -3,8 +3,8 @@
 const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const { reindexFigures } = require('../plugins/reindexer/reindexer.figures.js');
-const { DiplodocConfigFromWorkspace } = require('../plugins/manifest/config/vscode.config.manager.js');
-const { CONFIG_KEY } = require('../plugins/manifest/constants.js');
+const { DiplodocConfigFromWorkspace } = require('../config/vscode.config.manager.js');
+const { CONFIG_KEY } = require('../contrib/constants.ts');
 
 /**
  * @param {{ fsPath: string }} uri

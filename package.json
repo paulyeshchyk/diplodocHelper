@@ -32,8 +32,8 @@
         "precompile": "npm run validate",
         "type-check": "tsc --noEmit",
         "validate": "npm run lint && npm run type-check",
-        "generate-manifest": "node scripts/generate-manifest.js",
-        "compile": "npm run generate-manifest && node build.js",
+        "generate-contrib": "node scripts/generate-contrib.js",
+        "compile": "node build.js",
         "build": "npm run compile",
         "build:prod": "cross-env NODE_ENV=production npm run compile",
         "build:dev": "cross-env NODE_ENV=development npm run compile",
@@ -53,20 +53,12 @@
     "contributes": {
         "commands": [
             {
-                "command": "diplodoc-helper.link.addAnchor",
-                "title": "%command.md.anchor.add%"
-            },
-            {
                 "command": "diplodoc-helper.createSection",
                 "title": "%command.md.section.create%"
             },
             {
                 "command": "diplodoc-helper.deleteSection",
                 "title": "%command.md.section.delete%"
-            },
-            {
-                "command": "diplodoc-helper.linter.links",
-                "title": "%command.linter.links.check%"
             },
             {
                 "command": "diplodoc-helper.renameSection",
@@ -77,56 +69,12 @@
                 "title": "%command.md.section.move%"
             },
             {
-                "command": "diplodoc-helper.reindexDirectories",
-                "title": "%command.fs.naming.update%"
-            },
-            {
-                "command": "diplodoc-helper.reindexFigures",
-                "title": "%command.md.link.rebuild%"
-            },
-            {
-                "command": "diplodoc-helper.copyLink",
-                "title": "%command.md.link.copy%"
+                "command": "diplodoc-helper.smart.delete",
+                "title": "%command.smart.delete%"
             },
             {
                 "command": "diplodoc-helper.file.delete",
                 "title": "%command.file.delete.wipe_references%"
-            },
-            {
-                "command": "diplodoc-helper.pasteLink",
-                "title": "%command.md.link.paste.fromClipboard%"
-            },
-            {
-                "command": "diplodoc-helper.pasteImageFromList",
-                "title": "%command.md.link.paste.fromList%"
-            },
-            {
-                "command": "diplodoc-helper.pasteImageFromClipboard",
-                "title": "%command.md.image.paste%"
-            },
-            {
-                "command": "diplodoc-helper.generateContexts",
-                "title": "%command.fe.context.generate%"
-            },
-            {
-                "command": "diplodoc-helper.wipeEmptyDirectories",
-                "title": "%command.fs.empty.wipe%"
-            },
-            {
-                "command": "diplodoc-helper.generateHelpMaps",
-                "title": "%command.fe.helptag.generate%"
-            },
-            {
-                "command": "diplodoc-helper.generateBreadcrumbs",
-                "title": "%command.html.breadcrumbs.generate%"
-            },
-            {
-                "command": "diplodoc-helper.helptag.Update",
-                "title": "%command.md.helptag.update%"
-            },
-            {
-                "command": "diplodoc-helper.helptag.Delete",
-                "title": "%command.md.helptag.delete%"
             },
             {
                 "command": "diplodoc-helper.context.Update",
@@ -137,52 +85,96 @@
                 "title": "%command.md.context.delete%"
             },
             {
-                "command": "diplodoc-helper.settings",
-                "title": "%command.settings%"
+                "command": "diplodoc-helper.helptag.Update",
+                "title": "%command.md.helptag.update%"
             },
             {
-                "command": "diplodoc-helper.smart.delete",
-                "title": "%command.smart.delete%"
+                "command": "diplodoc-helper.helptag.Delete",
+                "title": "%command.md.helptag.delete%"
             },
             {
-                "command": "diplodoc-helper.generateContextmap",
-                "title": "diplodoc-helper.generateContextmap"
+                "command": "diplodoc-helper.link.addAnchor",
+                "title": "%command.md.anchor.add%"
             },
             {
-                "command": "diplodoc-helper.footnote.add",
-                "title": "%command.md.footnote.add%"
+                "command": "diplodoc-helper.copyLink",
+                "title": "%command.md.link.copy%"
+            },
+            {
+                "command": "diplodoc-helper.pasteLink",
+                "title": "%command.md.link.paste.fromClipboard%"
+            },
+            {
+                "command": "diplodoc-helper.pasteImageFromClipboard",
+                "title": "%command.md.image.paste%"
+            },
+            {
+                "command": "diplodoc-helper.pasteImageFromList",
+                "title": "%command.md.link.paste.fromList%"
+            },
+            {
+                "command": "diplodoc-helper.reindexDirectories",
+                "title": "%command.fs.naming.update%"
+            },
+            {
+                "command": "diplodoc-helper.reindexFigures",
+                "title": "%command.md.link.rebuild%"
             },
             {
                 "command": "diplodoc-helper.reindexFootnotes",
                 "title": "%command.md.footnote.reindex%"
             },
             {
-                "command": "diplodoc-helper.generateAbbrs",
-                "title": "%command.fe.abbrs.generate%"
+                "command": "diplodoc-helper.generateContexts",
+                "title": "%command.fe.context.generate%"
+            },
+            {
+                "command": "diplodoc-helper.generateHelpMaps",
+                "title": "%command.fe.helptag.generate%"
+            },
+            {
+                "command": "diplodoc-helper.generateBreadcrumbs",
+                "title": "%command.html.breadcrumbs.generate%"
+            },
+            {
+                "command": "diplodoc-helper.generateContextmap",
+                "title": "diplodoc-helper.generateContextmap"
             },
             {
                 "command": "diplodoc-helper.abbr.Add",
                 "title": "%command.md.abbr.add%"
             },
             {
-                "command": "diplodoc-helper.linter.abbrs",
-                "title": "%command.linter.abbrs.check%"
+                "command": "diplodoc-helper.generateAbbrs",
+                "title": "%command.fe.abbrs.generate%"
             },
             {
-                "command": "diplodoc-helper.generateTerms",
-                "title": "%command.fe.terms.generate%"
+                "command": "diplodoc-helper.linter.abbrs",
+                "title": "%command.linter.abbrs.check%"
             },
             {
                 "command": "diplodoc-helper.term.Add",
                 "title": "%command.md.term.add%"
             },
             {
+                "command": "diplodoc-helper.generateTerms",
+                "title": "%command.fe.terms.generate%"
+            },
+            {
                 "command": "diplodoc-helper.linter.terms",
                 "title": "%command.linter.terms.check%"
             },
             {
-                "command": "diplodoc-helper.installScripts",
-                "title": "Установить скрипты сборки"
+                "command": "diplodoc-helper.footnote.add",
+                "title": "%command.md.footnote.add%"
+            },
+            {
+                "command": "diplodoc-helper.linter.links",
+                "title": "%command.linter.links.check%"
+            },
+            {
+                "command": "diplodoc-helper.wipeEmptyDirectories",
+                "title": "%command.fs.empty.wipe%"
             },
             {
                 "command": "diplodoc-helper.gost.Insert",
@@ -190,7 +182,15 @@
             },
             {
                 "command": "diplodoc-helper.gost.Add",
-                "title": "Добавить ГОСТ"
+                "title": "%command.md.gost.add%"
+            },
+            {
+                "command": "diplodoc-helper.installScripts",
+                "title": "%command.installScripts%"
+            },
+            {
+                "command": "diplodoc-helper.settings",
+                "title": "%command.settings%"
             },
             {
                 "command": "diplodoc-helper.yaml.format",
@@ -321,10 +321,6 @@
                     "group": "7.diplodoc.section@4"
                 },
                 {
-                    "command": "diplodoc-helper.settings",
-                    "group": "z99.diplodoc.section@5"
-                },
-                {
                     "command": "diplodoc-helper.footnote.add",
                     "when": "(editorLangId == markdown && editorHasSelection)",
                     "group": "7.diplodoc.section@5"
@@ -348,6 +344,10 @@
                     "command": "diplodoc-helper.yaml.format",
                     "when": "(editorLangId == yaml && editorHasSelection)",
                     "group": "7.diplodoc.section@9"
+                },
+                {
+                    "command": "diplodoc-helper.settings",
+                    "group": "z99.diplodoc.section@5"
                 }
             ],
             "diplodoc.other.explorer.context.menu": [

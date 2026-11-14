@@ -6,11 +6,11 @@ const fs = require('fs');
 const path = require('path');
 
 const { TocYamlFileLoad } = require('../utils/yaml.toc.file');
-const { DiplodocConfigFromJson } = require('../manifest/config/diplodoc.config');
+const { DiplodocConfigFromJson } = require('../../config/vscode.config.manager');
 const { collectMdFilesInOrder } = require('../utils/toc.order');
 
 /**
- * @import { DiplodocConfig } from '../manifest/config/diplodoc.config.model'
+ * @import { DiplodocConfig } from '../../contrib/diplodoc.config.model'
  */
 
 /** 

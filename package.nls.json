@@ -31,6 +31,8 @@
   "command.md.section.update": "Set new type and name",
   "command.md.term.add": "Term: insert / create",
   "command.settings": "Settings",
+  "command.installScripts": "Install build scripts",
+  "command.md.gost.add": "Add standard",
   "command.smart.delete": "Delete and wipe references",
   "crossref.few.files.message": "\n\nLinks will be deleted in {0} files:\n",
   "crossref.few.links.message": " ({0} links)",

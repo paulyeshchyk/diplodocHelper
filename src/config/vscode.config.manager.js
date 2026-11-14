@@ -1,12 +1,11 @@
 // DiplodocConfigManager.js
 
 const vscode = require('vscode');
-const { DiplodocConfigFromJson } = require('./diplodoc.config');
-const constants = require('../constants');
+const { DiplodocConfigFromJson } = require('./diplodoc.config.js');
+const { CONFIG_KEY } = require('../contrib/constants.ts');
 
-/** @import { DiplodocConfig } from './diplodoc.config.model' */
+/** @import { DiplodocConfig } from '../contrib/diplodoc.config.model.js' */
 
-const CONFIG_KEY = constants.CONFIG_KEY;
 
 /** @type {DiplodocConfig | null} */
 let instance = null;

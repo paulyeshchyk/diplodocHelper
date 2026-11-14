@@ -14,7 +14,8 @@
   "include": [
     "src/**/*",
     "src/extension.js",
-    "global.d.ts"
+    "global.d.ts",
+    "scripts/generate-contrib.js"
   ],
   "exclude": [
     "dist",

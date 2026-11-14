@@ -346,6 +346,27 @@ require('./render-modules').default.runRenderModules;  // TypeError
 `module.exports = { default: {...} }`. ts-jest иногда маскирует это
 через interop, но `require()` возвращает сырой `module.exports`.
 
+
+### При правке `*.types.ts` (или любого интерфейса с опциональными полями) — `npm run type-check` до `npm test`.
+
+Причина: `ts-jest` может пропустить `TS-ошибку` в коде теста, если она в `expect(...)`-цепочке (Jest оборачивает в any). 
+А `tsc --noEmit` ловит до рантайма. После `titleKey?` → `titleKey` стал `string | undefined` — `#04` упал бы и в `ts-jest`, 
+но сообщение было бы «TypeError: Cannot read properties of undefined (reading 'trim')», а не «TS18048». 
+Первое сообщение уводит в runtime, второе — в схему. `type-check` первым — всегда.
+
+### 2.10 Генератор манифеста — ручной, whitelisted merge, идемпотентный.
+
+- `npm run generate-contrib` — не вызывается из `compile` / `prepublish`. Запускается человеком после правки `src/contrib/*`.
+- **Whitelisted merge**: `{...existing.contributes, commands, submenus, menus, [keybindings]}`. 
+  Всё, чего нет в списке (`configuration`, `languages`, `themes`, `snippets`), сохраняется как было.
+- **Идемпотентность**: повторный запуск — `package.json` не изменился. Если у вас второй запуск даёт `diff` — регрессия в `buildContributes` 
+  или в самом скрипте (trailing newline, порядок ключей).
+- **Drift-guard**: `snapshot.test.ts` сравнивает `buildContributes()` с `pkg.contributes`. Если меняете `commands.ts/menus.ts` — сначала `generate-contrib`, 
+  потом `npm test`. Обратный порядок — временное падение `#02`, лечится тем же `generate-contrib`.
+- `--dry-run` — печатает `contributes`, не пишет. Для диагностики: «что было бы записано».
+- `hadTrailingNewline` — сохраняем. Без этого любой первый запуск даёт `trailing-newline-only` diff — шум в `git diff`, 
+  ложно-положительный ревью-сигнал.
+
 ---
 
 ## 3. Именование модулей
@@ -499,6 +520,19 @@ if (require.main === module) {
 Признак ошибки: кто-то добавил `tt` в `ALIASES.mono` и забыл, что там уже есть `kbd` → `wrap` пишет `<kbd>`, unwrap снимает `<tt>` — работает. 
 Но если canonical и единственный alias совпадают, а legacy нет — файлы с ручным `<tt>` молча не детектятся. 
 Правило «alias ⊇ canonical, legacy ⊇ alias предыдущей версии» защищает от этого.
+
+### 5.5. `SUBMENU` / `MENU` / `GROUP` — это реестры `id`, а не реестры использования.
+
+Константа живёт в реестре, если её id есть в `MENUS` / `menus`. 
+Если объявили и не использовали — константа не должна переезжать в новый код. Мёртвый id в реестре:
+
+- заставляет `00.10.4#02` падать (правильно — тест ловит расхождение);
+- вводит в заблуждение читателя («тут что-то должно быть»);
+- рискует «оживлением» по ошибке при копипасте.
+
+Признак мёртвой константы: `git grep` по значению находит только объявление в `constants.ts` и, возможно, 
+старый `package.json`. Если `git log -p` показывает, что она никогда не попадала в `package.json#contributes` — это баг старого кода, не фича. 
+Удалять.
 
 ---
 

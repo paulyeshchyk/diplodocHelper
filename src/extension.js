@@ -1,12 +1,10 @@
 // src/extension.js
 
 const vscode = require('vscode');
-const {
-    setupDiplodocConfigChangeWatcher,
-    DiplodocConfigSharedInstance,
-} = require('./plugins/manifest/config/vscode.config.manager');
+const { setupDiplodocConfigChangeWatcher, DiplodocConfigSharedInstance } = require('./config/vscode.config.manager.js');
 const { initNls } = require('./nls_loader');
-const { commandHandlers } = require('./commands'); // импортируем реестр
+const { buildAllHandlers } = require('./contrib/build.ts');
+const { COMMANDS, INTERNAL_HANDLERS, CONFIG_KEY } = require('./contrib/index.ts');
 const { ContextManager } = require('./ContextMenuManager');
 const { BrokenLinkCodeActionProvider } = require('./commands/vscode.linter.links.brokenLinkCodeActionProvider');
 const { parseClipboardLink } = require('./commands/diplodoc-helper.link.Paste');
@@ -25,11 +23,12 @@ function activate(context) {
     console.log(`Diplodoc Helper активирован (${context.extension.packageJSON.version})`);
 
     setupDiplodocConfigChangeWatcher();
-    require('./plugins/manifest/config/vscode.config.manager').DiplodocConfigSharedInstance();
+    require('./config/vscode.config.manager.js').DiplodocConfigSharedInstance();
     const locale = vscode.env.language;
     const rootPath = context.extensionPath;
     initNls(locale, rootPath);
 
+    const commandHandlers = buildAllHandlers(COMMANDS, INTERNAL_HANDLERS);
     // Регистрируем все команды из реестра
     const registeredCommands = [];
     for (const [commandName, handler] of Object.entries(commandHandlers)) {
