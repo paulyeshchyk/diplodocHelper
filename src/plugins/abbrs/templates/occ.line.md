@@ -1,1 +1,1 @@
-* [{{TITLE}}]({{URL}}) — {{LINKS}}
+* [{{TITLE}}]({{URL}}) {{LINKS}}

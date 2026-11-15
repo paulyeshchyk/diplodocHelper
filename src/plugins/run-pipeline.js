@@ -26,7 +26,11 @@ initLogger();
 
 const { runPipelineCli } = require('./cli/pipeline.cli.ts');
 
-runPipelineCli(args).catch(e => {
-  console.error(`❌ ${e.message || e}`);
-  process.exit(1);
-});
+runPipelineCli(args)
+  .then(() => {
+    console.log('\n✅ Готово!\n');
+  })
+  .catch(e => {
+    console.error(`\n❌ ${e.message || e}\n`);
+    process.exit(1);
+  });
