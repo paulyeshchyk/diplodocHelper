@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "1.61.0",
+    "version": "1.62.0",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },

@@ -47,6 +47,7 @@
   "displayName": "Diplodoc Helper",
   "extension.settings.contextPollingInterval.description": "Интервал polling'а контекста в миллисекундах",
   "extension.settings.defaultLanguage.description": "Язык интерфейса по умолчанию",
+  "extension.settings.docsFolderName.description": "Папка с документацией (по умолчанию: docs)",
   "extension.settings.figureCaptionPrefix.default": "Рисунок",
   "extension.settings.figureCaptionPrefix.description": "Префикс для подписей рисунков",
   "extension.settings.figureReferenceCaptionPrefix.default": "рис.({0})",
@@ -152,6 +153,7 @@
   "plugin.link.paste.anchor.select": "Выберите якорь или введите свой",
   "plugin.link.paste.error.critical": "\"Не удалось вставить ссылку: проверьте, что вы её скопировали.\"",
   "plugin.link.paste.error.emptybuffer": "В буфере нет данных для Diplodoc ссылки",
+  "plugin.link.paste.error.outsideProject": "Ссылка недоступна: файл вне папки docs/: {0}",
   "plugin.linter.abbrs.error.noDocsRoot": "Не найдена папка docs в проекте",
   "plugin.linter.abbrs.error.openFile": "Не удалось открыть файл: {0}",
   "plugin.linter.abbrs.info.clean": "Все сокращения определены в abbreviations.yaml",
@@ -224,6 +226,8 @@
   "plugin.term.codeAction.wrapWord": "Обернуть слово в термин",
   "plugin.yaml.format.activeHint": "{0} — активно, клик чтобы снять",
   "plugin.yaml.format.bold": "Жирный",
+  "plugin.yaml.format.closeButtonDescription": "Выйти из режима форматирования",
+  "plugin.yaml.format.closeButtonLabel": "Закрыть",
   "plugin.yaml.format.error.cannotFormat": "Форматирование недоступно: {0}",
   "plugin.yaml.format.error.editFailed": "Не удалось применить форматирование",
   "plugin.yaml.format.error.noEditor": "Нет активного редактора",
@@ -252,7 +256,5 @@
   "submenu.lint": "Очистка и проверки",
   "submenu.other": "Прочее",
   "submenu.reindexier": "Индексация",
-  "submenu.terms": "Термины",
-  "plugin.link.paste.error.outsideProject": "Ссылка недоступна: файл вне папки docs/: {0}",
-  "extension.settings.docsFolderName.description": "Папка с документацией (по умолчанию: docs)"
+  "submenu.terms": "Термины"
 }

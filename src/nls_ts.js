@@ -121,6 +121,8 @@ const nls_ts = {
                 bold: 'plugin.yaml.format.bold',
                 italic: 'plugin.yaml.format.italic',
                 mono: 'plugin.yaml.format.mono',
+                closeButtonLabel: 'plugin.yaml.format.closeButtonLabel',
+                closeButtonDescription: 'plugin.yaml.format.closeButtonDescription',
                 error: {
                     noEditor: "plugin.yaml.format.error.noEditor",
                     notYaml: "plugin.yaml.format.error.notYaml",
