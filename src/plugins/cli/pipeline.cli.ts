@@ -1,5 +1,7 @@
+// plugins/cli/pipeline.cli.ts
+
 import * as path from 'node:path';
-import { initLogger } from '../utils/logger/index.ts';
+import { initLogger, getLogger } from '../utils/logger/index.ts';
 import { createRegistry } from './modules.ts';
 import { findProjectRoot, resolveConfigPath } from './paths.ts';
 import { extractFlag, hasFlag } from './pipeline.cli.args.ts';
@@ -24,8 +26,6 @@ export async function runPipelineCli(argv: string[]): Promise<void> {
   const cliConfig = extractFlag(argv, '--config');
   const cliProjectRoot = extractFlag(argv, '--project-root');
 
-
-
   const projectRoot =
     cliProjectRoot ??
     (process.env.DOCS_PROJECT_ROOT
@@ -46,6 +46,9 @@ export async function runPipelineCli(argv: string[]): Promise<void> {
   const pipeline = loadPipeline(configPath);
   initLogger({ level: pipeline.common.logLevel });
 
+  // Свой scoped-логгер. initLogger выше гарантирует правильный level.
+  const log = getLogger().child({ module: 'pipeline.cli' });
+
   // legacy docs-build.js всегда запускал модули с cwd=projectRoot.
   // run-pipeline должен вести себя так же — иначе относительные пути
   // в `--jsonPath ./docs/…` / `--dataPath ./plugins/…` разрешатся
@@ -54,13 +57,13 @@ export async function runPipelineCli(argv: string[]): Promise<void> {
     process.chdir(projectRoot);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    console.warn(`[run-pipeline] не удалось chdir в ${projectRoot}: ${msg}`);
+    log.warn(`[run-pipeline] не удалось chdir в ${projectRoot}: ${msg}`);
   }
 
   if (hasFlag(argv, '--dry-run')) {
-    console.log(`[run-pipeline] config: ${pipeline.source === 'file' ? pipeline.path : '(default)'}`);
-    console.log(`[run-pipeline] stage: ${stageRaw}`);
-    console.log(`[run-pipeline] projectRoot: ${projectRoot}`);
+    log.info(`[run-pipeline] config: ${pipeline.source === 'file' ? pipeline.path : '(default)'}`);
+    log.info(`[run-pipeline] stage: ${stageRaw}`);
+    log.info(`[run-pipeline] projectRoot: ${projectRoot}`);
     return;
   }
 
@@ -70,9 +73,9 @@ export async function runPipelineCli(argv: string[]): Promise<void> {
     projectRoot,
   });
 
-  console.log(`\nИтог:`);
-  console.log(`  выполнено: ${result.executed.length}`);
-  console.log(`  пропущено: ${result.skipped.length}`);
-  console.log(`  ошибок:    ${result.failed.length}`);
+  log.info(`Итог:`);
+  log.info(`  выполнено: ${result.executed.length}`);
+  log.info(`  пропущено: ${result.skipped.length}`);
+  log.info(`  ошибок:    ${result.failed.length}`);
   if (!result.ok) process.exitCode = 1;
 }

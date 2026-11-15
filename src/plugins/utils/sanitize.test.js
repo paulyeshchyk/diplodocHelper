@@ -1,3 +1,4 @@
+const { describe, test, expect } = require('@jest/globals');
 const { Sanitizer } = require('./sanitize');
 
 describe('Sanitizer.stripTags', () => {

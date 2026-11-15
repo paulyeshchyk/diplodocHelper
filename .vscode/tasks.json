@@ -74,6 +74,20 @@
         "Check: Types",
         "Watch (for Debugging)"
       ]
+    },
+    {
+      "label": "Terminate All Tasks",
+      "type": "shell",
+      "command": "echo ${input:terminate}",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "terminate",
+      "type": "command",
+      "command": "workbench.action.tasks.terminate",
+      "args": "terminateAll"
     }
   ]
 }

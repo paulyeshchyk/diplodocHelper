@@ -84,7 +84,7 @@ function toExtendedPath(absPath) {
 async function generateFilesForLang(lang, langDir, figures) {
     try {
         if (figures.length === 0) {
-            console.warn(`[Figures] В "${lang}" не найдено ни одного рисунка.`);
+            // console.warn(`[Figures] В "${lang}" не найдено ни одного рисунка.`);
             return false;
         }
 
@@ -94,7 +94,7 @@ async function generateFilesForLang(lang, langDir, figures) {
         if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
         writeFigureList(outputDir, figures, lang);
-        console.log(`[Figures] ${lang}: собрано ${figures.length} → ${outputDir}`);
+        // console.log(`[Figures] ${lang}: собрано ${figures.length} → ${outputDir}`);
         return true;
     } catch (err) {
         console.error(`❌ [Figures] Ошибка для ${lang}:`, err);

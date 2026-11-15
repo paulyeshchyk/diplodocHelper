@@ -30,7 +30,7 @@ function loadGostDictionary(langDir, lang) {
     }
 
     if (!fs.existsSync(dictPath)) {
-        console.warn(`⚠️ [gosts] Файл словаря не найден по пути: ${dictPath}`);
+        // console.warn(`⚠️ [gosts] Файл словаря не найден по пути: ${dictPath}`);
         return [];
     }
 
@@ -52,7 +52,7 @@ function loadGostDictionary(langDir, lang) {
             };
         });
 
-        console.log(`[gosts] Загружено ${sanitized.length} записей из ${dictPath}`);
+        //console.log(`[gosts] Загружено ${sanitized.length} записей из ${dictPath}`);
         return sanitized;
 
     } catch (err) {

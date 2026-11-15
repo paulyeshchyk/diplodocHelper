@@ -136,10 +136,10 @@ function renumberFootnotesInHtml(html, offset) {
  * @param {{docsDir:string;outputDir:string}} opts
  */
 function renumberFootnotes({ docsDir, outputDir }) {
-    console.log('[footnotes] Сквозная нумерация сносок в HTML...');
+    // console.log('[footnotes] Сквозная нумерация сносок в HTML...');
 
     const htmlFiles = collectHtmlFilesInTocOrder(docsDir, outputDir);
-    console.log(`[footnotes] Файлов в очереди: ${htmlFiles.length}`);
+    // console.log(`[footnotes] Файлов в очереди: ${htmlFiles.length}`);
 
     let counter = 1;
     let changedFiles = 0;
@@ -166,7 +166,7 @@ function renumberFootnotes({ docsDir, outputDir }) {
         }
     }
 
-    console.log(`[footnotes] Готово. Всего сносок: ${totalFootnotes}, изменено файлов: ${changedFiles}`);
+    // console.log(`[footnotes] Готово. Всего сносок: ${totalFootnotes}, изменено файлов: ${changedFiles}`);
     return { success: true, total: totalFootnotes, changed: changedFiles };
 }
 

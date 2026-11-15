@@ -1,3 +1,5 @@
+// plugins/utils/logger/index.ts
+
 import * as path from 'node:path';
 import { Logger, ScopedLogger } from './Logger.ts';
 import type { LoggerConfig } from './LoggerConfig.ts';
@@ -40,6 +42,36 @@ export function initLogger(opts: InitLoggerOptions = {}): Logger {
   if (instance) instance.close();
   instance = new Logger(cfg, transport);
   return instance;
+}
+
+/**
+ * Возвращает `log()` — cached scoped-логгер для модуля.
+ *
+ * Кэш инвалидируется при:
+ *   - пере-инициализации глобального `Logger` (новый instance)
+ *   - изменении `opts.logLevel` (per-module override)
+ *
+ * Использование:
+ *   const log = moduleLogger('comments', opts)();
+ *   log.info('...');
+ */
+export function moduleLogger(moduleName: string, opts?: Record<string, unknown>): () => ScopedLogger {
+  const levelOverride = typeof opts?.logLevel === 'string' ? opts.logLevel : null;
+  let cached: ScopedLogger | null = null;
+  let cachedFor: Logger | null = null;
+  let cachedLevel: string | null = null;
+  return () => {
+    const current = getLogger();
+    if (cachedFor !== current || cachedLevel !== levelOverride) {
+      cached = current.child({
+        module: moduleName,
+        level: tryParseLevel(levelOverride) ?? undefined,
+      });
+      cachedFor = current;
+      cachedLevel = levelOverride;
+    }
+    return cached!;
+  };
 }
 
 export function getLogger(): Logger {

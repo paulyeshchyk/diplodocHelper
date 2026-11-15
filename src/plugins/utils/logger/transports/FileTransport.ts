@@ -1,3 +1,5 @@
+// plugins/utils/logger/transports/FileTransport.ts
+
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import type { LogRecord, Transport } from './Transport';

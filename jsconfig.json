@@ -15,7 +15,8 @@
     "src/**/*",
     "src/extension.js",
     "global.d.ts",
-    "scripts/generate-contrib.js"
+    "scripts/generate-contrib.js",
+    "scripts/copy-assets.js"
   ],
   "exclude": [
     "dist",

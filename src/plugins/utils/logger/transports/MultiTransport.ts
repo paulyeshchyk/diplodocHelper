@@ -1,3 +1,5 @@
+// plugins/utils/logger/transports/MultiTransport.ts
+
 import type { LogRecord, Transport } from './Transport';
 
 export class MultiTransport implements Transport {

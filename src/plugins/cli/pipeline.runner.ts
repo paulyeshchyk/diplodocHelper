@@ -1,3 +1,5 @@
+// plugins/cli/pipeline.runner.ts
+
 import { createLogger } from '../utils/logger/index.ts';
 import { isEntryEnabled, loadPluginConfig, mergeModuleOptions, resolveModuleConfigPath } from './pipeline.merge.ts';
 import type { ResolvedPipeline } from './pipeline.types.ts';
@@ -33,13 +35,13 @@ export async function runPipeline(
 
   for (const phase of stages) {
     const entries = pipeline.stages[phase];
-    log.info(`\n▶ [${phase}] ${entries.length} шагов`);
+    log.info(`\n--------\n▶ [Этап ${phase}]; всего шагов: ${entries.length}\n--------`);
 
     for (const entry of entries) {
       const moduleName = entry.module;
 
       if (!isEntryEnabled(entry)) {
-        log.info(`  ↷ ${moduleName}: disabled`);
+        log.info(`↷ ${moduleName}: disabled`);
         result.skipped.push(moduleName);
         continue;
       }
@@ -50,7 +52,7 @@ export async function runPipeline(
         if (pipeline.common.stopOnError) {
           throw new Error(`[pipeline] ${msg}`);
         }
-        log.error(`  ✗ ${moduleName}: ${msg}`);
+        log.error(`✗ ${moduleName}: ${msg}`);
         result.failed.push({ module: moduleName, error: msg });
         result.ok = false;
         continue;
@@ -61,9 +63,9 @@ export async function runPipeline(
       const mergedOpts = mergeModuleOptions(entry, pipeline.common, L3, def.args);
 
       try {
-        log.info(`  ▶ ${moduleName}`);
+        log.info(`▶ ${moduleName}`);
         await registry.run(moduleName, [], mergedOpts);
-        log.info(`  ✓ ${moduleName}`);
+        log.info(`✓ ${moduleName}`);
         result.executed.push(moduleName);
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);

@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+//plugins/run-pipeline.js
+
 'use strict';
 
 const { initLogger } = require('./utils/logger');

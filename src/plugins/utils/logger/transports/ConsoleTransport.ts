@@ -1,9 +1,27 @@
+// plugins/utils/logger/transports/ConsoleTransport.ts
+
 import type { LogRecord, Transport } from './Transport.ts';
+import type { LogLevel } from '../LogLevel.ts';
 
 const C = {
   reset: '\x1b[0m', gray: '\x1b[90m', red: '\x1b[31m',
   yellow: '\x1b[33m', cyan: '\x1b[36m', bold: '\x1b[1m',
 };
+
+/** Уровень → иконка. Все символы single-width в моноширинных терминалах. */
+const LEVEL_ICON: Record<LogLevel, string> = {
+  off: '',
+  debug:   '·',
+  info:    '●',
+  warning: '▲',
+  error:   '■',
+};
+
+/**
+ * Ширина колонки `[module]`. Подобрана под самый длинный модуль проекта:
+ * `[periodicTableHelpTag]` = 23 символа. +1 запас.
+ */
+const MODULE_WIDTH = 24;
 
 export class ConsoleTransport implements Transport {
   private readonly useColor: boolean;
@@ -12,11 +30,13 @@ export class ConsoleTransport implements Transport {
   }
 
   write(rec: LogRecord): void {
-    const tag = `[${rec.module}]`.padEnd(14);
-    const lvl = rec.level.toUpperCase().padEnd(5);
+    const icon = LEVEL_ICON[rec.level] ?? '·';
+    const moduleTag = `[${rec.module}]`;//.padEnd(MODULE_WIDTH);
+
     const head = this.useColor
-      ? `${C.cyan}${tag}${C.reset} ${this.color(rec.level, lvl)}`
-      : `${tag} ${lvl}`;
+      ? `${this.color(rec.level, icon)} ${C.cyan}${moduleTag}${C.reset}`
+      : `${moduleTag} ${icon}`;
+
     const line = `${head} ${rec.msg}`;
     const stream = rec.level === 'error' || rec.level === 'warning'
       ? process.stderr

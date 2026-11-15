@@ -15,21 +15,16 @@
         ]
     },
     "include": [
-        "src/**/*.js",
-        "src/**/*.ts",
+        "src/**/*",
         "global.d.ts",
-        "src/plugins/utils/yaml-inline/value-context.js_",
-        "src/plugins/utils/yaml-inline/utils.js_",
-        "src/plugins/utils/yaml-inline/tag-guard.js_",
-        "src/plugins/utils/yaml-inline/key-line.js_",
-        "src/plugins/utils/yaml-inline/index.test.js_",
-        "src/plugins/utils/yaml-inline/index.js_",
-        "scripts/generate-contrib.js"
+        "scripts/copy-assets.js"
     ],
     "exclude": [
-        "**/*breadcrumb.template.js",
-        "**/*.test.js",
-        "**/*.test.ts",
-        "**/contentNavigator/**"
+        "node_modules",
+        "dist",
+        "coverage",
+        "**/*.template.js",
+        "**/assets/**",
+        "**/*.test.ts"
     ]
 }

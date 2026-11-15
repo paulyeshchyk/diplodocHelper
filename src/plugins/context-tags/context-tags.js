@@ -54,7 +54,7 @@ function runGeneration(buildDir) {
         }
     });
 
-    console.log(`[ContextTags] Обработано ${results.success.length} файлов, ошибок ${results.failed.length}`);
+    // console.log(`[ContextTags] Обработано ${results.success.length} файлов, ошибок ${results.failed.length}`);
     return results;
 }
 

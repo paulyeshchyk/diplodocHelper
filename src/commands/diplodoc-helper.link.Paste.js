@@ -4,7 +4,6 @@ const { nls_ts, translate } = require('../nls_ts.js');
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs').promises;
-const { Url_Transform_Reference } = require('../plugins/utils/url/Url_Transform_Reference.ts');
 const { buildImageLink } = require('../plugins/utils/md.links.figure.js');
 const { getCursorContext, indentMultilinedText } = require('./diplodoc-helper.cursor.Context.js');
 
@@ -26,7 +25,7 @@ async function ux_link_paste() {
         const hasSelection = selectedText.length > 0;
         const insertPosition = selection.active;
         const sourceFilePath = doc.uri.fsPath;
-        const cursorContext = getCursorContext(editor); // <-- теперь до чтения буфера
+        const cursorContext = getCursorContext(editor);
 
         // --- 2. Асинхронные операции ---
         const clipboardText = await vscode.env.clipboard.readText();
@@ -140,100 +139,6 @@ function getTargetMdFile(targetFilePath, isDirectory) {
         return targetFilePath;
     }
     return null;
-}
-
-// =============================================================================
-// БЛОК ФУНКЦИЙ ДЛЯ РАБОТЫ СО ССЫЛКАМИ
-// =============================================================================
-
-/**
- * Вычисляет относительный путь с кодированием
- * @param {string} fromPath – путь к исходному файлу (директория, относительно которой строим путь)
- * @param {string} toPath – целевой путь (файл или папка)
- * @param {boolean} addIndex – нужно ли добавить index.md (для ссылок на папки)
- * @returns {string}
- */
-function calculateRelativeMdPath(fromPath, toPath, addIndex) {
-    let targetFile = toPath;
-
-    if (addIndex) {
-        if (!targetFile.endsWith('.md')) {
-            targetFile = path.join(targetFile, INDEX_MD);
-        }
-    }
-
-    let relPath = path.relative(path.dirname(fromPath), targetFile);
-    relPath = relPath.split(path.sep).join('/');
-
-    const encodedPath = relPath
-        .split('/')
-        .map(segment => encodeURIComponent(segment))
-        .join('/');
-
-    return encodedPath.startsWith('.') ? encodedPath : './' + encodedPath;
-}
-
-/**
- * Строит Markdown или HTML ссылку на документ в зависимости от контекста
- * @param {string} prefix – префикс (! для изображений, иначе пусто)
- * @param {string} sourceLinkName – текст ссылки
- * @param {string} mdPath – путь к целевому файлу
- * @param {boolean} asHtml – флаг, принуждающий строить HTML-ссылку
- * @returns {string}
- */
-function buildDocumentLink(prefix, sourceLinkName, mdPath, asHtml = false) {
-    if (asHtml) {
-        // Если это изображение внутри HTML тега, возвращаем тег <img>, иначе тег <a>
-        return prefix === '!'
-            ? `<img src="${mdPath}" alt="${sourceLinkName}">`
-            : `<a href="${mdPath}">${sourceLinkName}</a>`;
-    }
-    return `${prefix}[${sourceLinkName}](${mdPath})`;
-}
-
-// =============================================================================
-// БЛОК ФУНКЦИЙ ДЛЯ РАБОТЫ С ФАЙЛОВОЙ СИСТЕМОЙ
-// =============================================================================
-
-/**
- * Определяет тип целевого объекта (папка, изображение, обычный файл)
- * @param {string} targetFilePath – абсолютный путь
- * @returns {Promise<{isDirectory: boolean, isImage: boolean}>}
- */
-async function getFileTypeInfo(targetFilePath) {
-    let isDirectory = false;
-    let isImage = false;
-
-    const ext = path.extname(targetFilePath);
-
-    try {
-        const stat = await fs.stat(targetFilePath);
-        isDirectory = stat.isDirectory();
-        if (!isDirectory) {
-            isImage = ext !== 'md';
-        }
-    } catch {
-        if (!ext) {
-            isDirectory = true; // нет расширения — считаем папкой
-        }
-    }
-    return { isDirectory, isImage };
-}
-
-/**
- * Определяет, нужно ли добавлять index.md и какой префикс использовать
- * @param {string} targetFilePath
- * @param {boolean} isDirectory
- * @returns {{addIndex: boolean, prefix: string}}
- */
-function getLinkOptions(targetFilePath, isDirectory) {
-    if (isDirectory) {
-        return { addIndex: true, prefix: '' };
-    }
-    if (targetFilePath.endsWith('.md')) {
-        return { addIndex: false, prefix: '' };
-    }
-    return { addIndex: false, prefix: '!' };
 }
 
 // =============================================================================

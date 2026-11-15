@@ -3,6 +3,7 @@ title: Рефакторинг
 sectionType: Page
 pureTitle: Рефакторинг
 sectionIndex: ""
+helptag: ref
 ---
 
 # План модернизации расширений

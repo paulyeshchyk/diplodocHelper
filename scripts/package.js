@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const pkg = require('../package.json');
+const { copyAssets } = require('./copy-assets');
+
+copyAssets();
 
 const outDir = path.resolve(__dirname, '../build');
 if (!fs.existsSync(outDir)) {

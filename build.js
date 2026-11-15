@@ -1,5 +1,6 @@
 const esbuild = require('esbuild');
 const fs = require('fs');
+const { copyAssets } = require('./scripts/copy-assets');
 
 const isWatch = process.argv.includes('--watch');
 const isProduction = process.env.NODE_ENV === 'production' || process.argv.includes('--prod');
@@ -34,6 +35,7 @@ async function build() {
         } else {
             // @ts-ignore
             await esbuild.build(buildOptions);
+            copyAssets();
             const mode = isProduction ? 'PRODUCTION' : 'DEVELOPMENT';
             console.log(`Build completed (${mode})`);
             const size = (fs.statSync('dist/extension.js').size / 1024).toFixed(2);

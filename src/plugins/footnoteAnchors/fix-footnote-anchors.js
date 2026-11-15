@@ -74,7 +74,7 @@ function fixFootnoteAnchors(buildDir) {
         }
     }
 
-    console.log(`[FootnoteAnchors] Исправлено файлов: ${totalFixed}`);
+    // console.log(`[FootnoteAnchors] Исправлено файлов: ${totalFixed}`);
     return results;
 }
 

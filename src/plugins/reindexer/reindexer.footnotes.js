@@ -329,7 +329,7 @@ function reindexFootnotes(rootDir) {
         }
     }
 
-    console.log(`Готово. Сносок: ${totalRefs}, изменено файлов: ${changedFiles}`);
+    // console.log(`Готово. Сносок: ${totalRefs}, изменено файлов: ${changedFiles}`);
     return { success: true, total: totalRefs, changed: changedFiles };
 }
 

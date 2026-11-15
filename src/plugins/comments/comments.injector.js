@@ -1,23 +1,29 @@
+// plugins/comments/comments.injector.js
+
 // @ts-nocheck
 
 const fs = require('fs');
 const path = require('path');
 const { walk } = require('../utils/walk');
 const { isHtmlFile } = require('../utils/html.utils');
+const { moduleLogger } = require('../utils/logger/index.ts');
 const CONFIG = require('./comments.config');
 
 const CLIENT_MARKER = 'dl-comments-client';
 const STYLE_MARKER = 'dl-comments-style';
 const LANGS = new Set(['ru', 'en']);
 
-function buildClientBundle() {
+function buildClientBundle(log = moduleLogger('comments')()) {
   const dir = path.join(__dirname, 'client');
   if (!fs.existsSync(dir)) {
-    console.warn('[comments] client/ directory not found');
+    log.warn('client/ directory not found');
     return '';
   }
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.js')).sort();
-  if (!files.length) { console.warn('[comments] no .js files in client/'); return ''; }
+  if (!files.length) {
+    log.warn('no .js files in client/');
+    return '';
+  }
 
   const parts = [];
   for (const f of files) {
@@ -26,7 +32,6 @@ function buildClientBundle() {
     parts.push(content);
     parts.push('');
   }
-  // console.log(`[comments] client bundle: ${files.length} files (${files.join(', ')})`);
   return `(function () {\n'use strict';\n\n${parts.join('\n')}\n})();`;
 }
 
@@ -41,7 +46,6 @@ function buildTemplatesHtml() {
     const content = fs.readFileSync(path.join(dir, f), 'utf8').trim();
     parts.push(`<script type="text/template" id="dl-tpl-${name}">${content}</script>`);
   }
-  //console.log(`[comments] templates: ${files.length} (${files.join(', ')})`);
   return parts.join('\n') + '\n';
 }
 
@@ -51,7 +55,7 @@ function pickLang(buildDir, htmlPath) {
   return LANGS.has(first) ? first : 'ru';
 }
 
-function injectIntoHtml(html, lang) {
+function injectIntoHtml(html, lang, log = moduleLogger('comments')()) {
   const hasClient = html.includes(`id="${CLIENT_MARKER}"`);
   const hasTemplates = html.includes('id="dl-tpl-dialog"');
 
@@ -65,7 +69,7 @@ function injectIntoHtml(html, lang) {
   const cssPath = path.join(__dirname, 'comments.css');
   if (!fs.existsSync(cssPath)) return html;
   const css = fs.readFileSync(cssPath, 'utf8');
-  const client = buildClientBundle();
+  const client = buildClientBundle(log);
   if (!client) return html;
   const templatesHtml = buildTemplatesHtml();
 
@@ -85,27 +89,29 @@ function injectIntoHtml(html, lang) {
   return out;
 }
 
-function runGeneration(buildDir) {
+function runGeneration(buildDir, opts = {}) {
+  const log = moduleLogger('comments', opts)();
+
   const results = { success: [], failed: [] };
   if (!fs.existsSync(buildDir)) {
-    console.error(`❌ [comments] build dir not found: ${buildDir}`);
+    log.error(`build dir not found: ${buildDir}`);
     return results;
   }
   walk(buildDir, (p) => isHtmlFile(p), (htmlPath) => {
     try {
       const html = fs.readFileSync(htmlPath, 'utf8');
       const lang = pickLang(buildDir, htmlPath);
-      const next = injectIntoHtml(html, lang);
+      const next = injectIntoHtml(html, lang, log);
       if (next !== html) {
         fs.writeFileSync(htmlPath, next, 'utf8');
         results.success.push(htmlPath);
       }
     } catch (e) {
-      console.error(`❌ [comments] ${htmlPath}:`, e);
+      log.error(`${htmlPath}:`, e);
       results.failed.push(htmlPath);
     }
   });
-  console.log(`[comments] обработано HTML: ${results.success.length}, ошибок: ${results.failed.length}`);
+  log.debug(`обработано HTML: ${results.success.length}, ошибок: ${results.failed.length}`);
   return results;
 }
 

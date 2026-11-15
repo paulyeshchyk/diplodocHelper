@@ -3,9 +3,6 @@
     "node": ">=22",
     "npm": ">=11.5.1"
   },
-  "scripts": {
-    "test": "jest"
-  },
   "preset": "ts-jest",
   "dependencies": {
     "@diplodoc/cli": "^5.44.0",
@@ -39,5 +36,11 @@
   },
   "allowScripts": {
     "puppeteer@22.15.0": true
+  },
+  "scripts": {
+    "test": "jest",
+    "crossenv:setup": "cross-env NODE_OPTIONS=\"--disable-warning=DEP0128 --disable-warning=DEP0190 --disable-warning=MODULE_TYPELESS_PACKAGE_JSON\"",
+    "run-pipeline": "node ./plugins/run-pipeline.js --stage=all",
+    "docs:build": "npm run crossenv:setup -- npm run run-pipeline"
   }
 }

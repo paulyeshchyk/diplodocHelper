@@ -12,6 +12,7 @@
         "${workspaceFolder}/dist/**/*.js"
       ],
       "preLaunchTask": "Prepare Debug",
+      "postDebugTask": "Terminate All Tasks",
       "sourceMaps": true,
       "smartStep": true,
       "skipFiles": [

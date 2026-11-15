@@ -26,7 +26,7 @@ function runGeneration(docsRoot) {
             const usedCount = all.filter(a => a.rank > 0).length;
 
             if (all.length === 0) {
-                log.info(`[terms] ${lang}: ни словаря, ни разметки <abbr class="term"> — пропуск.`);
+                log.debug(`[terms] ${lang}: ни словаря, ни разметки <abbr class="term"> — пропуск.`);
                 continue;
             }
 
@@ -34,7 +34,7 @@ function runGeneration(docsRoot) {
             if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
             writeTermsIndex(outputDir, termMap, lang, TERM_CONFIG);
-            log.info(`[terms] ${lang}: ${definedCount} в словаре, ${orphanCount} вне словаря, ${usedCount} используется → ${outputDir}`);
+            log.debug(`[terms] ${lang}: ${definedCount} в словаре, ${orphanCount} вне словаря, ${usedCount} используется → ${outputDir}`);
             results.success.push(lang);
         } catch (err) {
             log.error(`❌ [terms] Ошибка для ${lang}:`, err);

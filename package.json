@@ -2,7 +2,7 @@
     "name": "diplodochelper",
     "displayName": "%displayName%",
     "description": "%description%",
-    "version": "1.63.0",
+    "version": "1.64.0",
     "repository": {
         "url": "https://github.com/paulyeshchyk/diplodocHelper"
     },
@@ -37,11 +37,12 @@
         "vscode:prepublish": "cross-env NODE_ENV=production node build.js",
         "package": "node scripts/package.js",
         "build": "npm run check && npm run package",
-        "build:dev": "cross-env NODE_ENV=development node build.js",
+        "build:dev": "npm run crossenv:setup node build.js",
         "release:patch": "node scripts/bump-version.js && npm run build",
         "release:minor": "node scripts/bump-minor.js && npm run build",
         "posttest": "node scripts/open-coverage.js",
-        "watch": "node build.js --watch"
+        "watch": "node build.js --watch",
+        "crossenv:setup": "cross-env NODE_ENV=development NODE_OPTIONS=\"--disable-warning=DEP0128 --disable-warning=DEP0190 --disable-warning=MODULE_TYPELESS_PACKAGE_JSON\""
     },
     "diplodoc-helper.docsFolderName": {
         "type": "string",

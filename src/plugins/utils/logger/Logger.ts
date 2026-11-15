@@ -1,3 +1,5 @@
+// plugins/utils/logger/Logger.ts
+
 import type { LogLevel } from './LogLevel.ts';
 import { isEnabled } from './LogLevel.ts';
 import type { LoggerConfig } from './LoggerConfig.ts';

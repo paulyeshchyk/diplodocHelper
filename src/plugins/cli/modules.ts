@@ -2,11 +2,14 @@ import { abbrTitlesModule } from '../abbrs/abbrs.injector.module.ts';
 import { abbrsModule } from '../abbrs/abbrs.module.ts';
 import { breadcrumbModule } from '../breadcrumb/breadcrumb.module.ts';
 import { commentsModule } from '../comments/comments.module.ts';
-import { footnoteListModule } from '../contentNavigator/footnoteList.module.ts';
-import { periodicStatModule } from '../contentNavigator/periodicStat.module.ts';
-import { periodicTableModule } from '../contentNavigator/periodicTable.module.ts';
-import { periodicTableContextModule } from '../contentNavigator/periodicTableContext.module.ts';
-import { periodicTableHelpTagModule } from '../contentNavigator/periodicTableHelpTag.module.ts';
+
+import { periodicStatModule } from '../reportPeriodicStat/periodicStat.module.ts';
+import { periodicTableModule } from '../reportPeriodicTable/periodicTable.module.ts';
+import { periodicTableContextModule } from '../reportPeriodicTableContext/periodicTableContext.module.ts';
+import { periodicTableHelpTagModule } from '../reportPeriodicTableHelpTag/periodicTableHelpTag.module.ts';
+
+import { footnoteListModule } from '../reportFootnoteList/footnoteList.module.ts';
+
 import { contexttagsModule } from '../context-tags/context-tags.module.ts';
 import { contextsModule } from '../contexts/contexts.module.ts';
 import { buildPageLegendModule } from '../docs-registry/build-page-legend/build-page-legend.module.ts';

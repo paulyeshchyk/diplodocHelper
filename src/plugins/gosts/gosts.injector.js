@@ -303,7 +303,7 @@ function injectGostsTable({ langDir, targetHtml, lang }) {
         fs.writeFileSync(targetHtml, html, 'utf8');
     }
 
-    console.log(`✓ Таблица ГОСТов внедрена: ${targetHtml} (${entries.length} записей)`);
+    // console.log(`✓ Таблица ГОСТов внедрена: ${targetHtml} (${entries.length} записей)`);
     return { success: true, count: entries.length };
 }
 

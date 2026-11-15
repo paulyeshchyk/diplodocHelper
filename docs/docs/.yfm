@@ -6,6 +6,9 @@ interface:
     gallery: true # Set to true (default) to enable the lightbox gallery, or false to disable it.
     favicon-src: _assets/images/diplodocus.ico
 
+author: "[paul.yestchick](mailto:paul.yestchick@gmail.com)"
+startDate: "01.04.2026"
+AppVersion: "1.4"
 docs-viewer:
     lang: "ru"
     langs: ["en", "ru"]

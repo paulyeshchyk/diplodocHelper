@@ -262,7 +262,327 @@ npx diplodoc-helper init-config --force
 
 ---
 
-## 12. Ссылки
+## 12. Конфигурации
+
+### 12.1 GULF_Help (local)
+
+```plugins.config.local.yaml
+# Файл <repo>/plugins.config.yaml (создастся init-config --only=plugins, потом дополняется вручную):
+# plugins.config.yaml — миграция с docs-build.js
+# См. docs/PIPELINE.md, REFACTORING.md §2.5.
+
+lang: ru
+
+common:
+  logLevel: off
+  stopOnError: true
+  dryRun: false
+
+stages:
+  pre:
+    - module: collectCatalog
+      enabled: false
+
+    - module: buildPageLegend
+      enabled: false
+      options: { rewrite: true, withInclude: true, ignore: 'sectionType,context,pureTitle,ID_Group,ID_Type,vars' }
+
+    - module: renderModules
+      enabled: false
+      options: { rewrite: true, withInclude: true }
+
+    - module: emitModulesTable
+      enabled: false
+      options: { anchor: naznachenie }
+
+    - module: emitFeatureMap
+      enabled: false
+      options: { out: ./docs/ru/Модули/FM/feature-map.md }
+
+    - module: reindexFigures
+    - module: reindexFootnotes
+    - module: helpMap
+    - module: contexts
+    - module: helptags
+    - module: periodicStat
+    - module: abbrs
+    - module: terms
+    - module: gosts
+    - module: createFigureContent
+
+    # opt-in
+    - module: roadMap
+      enabled: false
+      options: { dataPath: ./plugins/roadMap/roadmap-data.json, engine: mermaid }
+
+    # === opt-in: known-issues ×4 ===
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+        groupBy: module
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+        groupBy: severity
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+        groupBy: type
+
+    # === opt-in: registry matrix ×3 ===
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: matrix
+        rowField: families_arr
+        colField: capabilities_arr
+        cellLabelField: ident_plain
+        cellHrefField: id_href
+        omitEmpty: both
+        outputFile: ./docs/_generated/ru/registry-matrix-family-capability.md
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: matrix
+        rowField: families_arr
+        colField: layers_arr
+        cellLabelField: ident_plain
+        cellHrefField: id_href
+        omitEmpty: both
+        outputFile: ./docs/_generated/ru/registry-matrix-family-layer.md
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: matrix
+        rowField: capabilities_arr
+        colField: layers_arr
+        cellLabelField: ident_plain
+        cellHrefField: id_href
+        omitEmpty: both
+        outputFile: ./docs/_generated/ru/registry-matrix-layer-capability.md
+
+    # === opt-in: registry simple ===
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: simple
+        schema: modules
+        outputFile: ./docs/_generated/ru/registry-table.md
+
+  build:  
+    - module: diplodocBuild
+
+  post:
+    - module: featureMapInject
+      enabled: false
+    - module: footnoteAnchors
+    - module: abbrTitles
+    - module: termTitles
+    - module: footnoteNumbering
+    - module: footnoteList
+      options: { targetHtml: ./build/ru/Дополнительнаяинформация/Переченьсносок/index.html }
+    - module: gostsInject
+    - module: breadcrumb
+    - module: contexttags
+    - module: comments
+    - module: ganttFixScroll
+      enabled: false
+      options: { engine: mermaid }
+    - module: periodicTable
+      options: { langs: [ru, en] }
+    - module: periodicTableHelpTag
+      options: { langs: [ru, en] }
+    - module: periodicTableContext
+      options: { langs: [ru, en] }
+    - module: tocCleanMode
+      enabled: false
+```
+### 12.2 GULF_Help (ci)
+
+```plugins.config.ci.yaml
+
+# Файл <repo>/plugins.config.yaml (создастся init-config --only=plugins, потом дополняется вручную):
+# plugins.config.yaml — миграция с docs-build.js
+# См. docs/PIPELINE.md, REFACTORING.md §2.5.
+
+lang: ru
+
+common:
+  logLevel: off
+  stopOnError: true
+  dryRun: false
+
+stages:
+  pre:
+    - module: collectCatalog
+      enabled: false
+
+    - module: buildPageLegend
+      enabled: false
+      options: { rewrite: true, withInclude: true, ignore: 'sectionType,context,pureTitle,ID_Group,ID_Type,vars' }
+
+    - module: renderModules
+      enabled: false
+      options: { rewrite: true, withInclude: true }
+
+    - module: emitModulesTable
+      enabled: false
+      options: { anchor: naznachenie }
+
+    - module: emitFeatureMap
+      enabled: false
+      options: { out: ./docs/ru/Модули/FM/feature-map.md }
+
+    - module: reindexFigures
+    - module: reindexFootnotes
+    - module: helpMap
+    - module: contexts
+    - module: helptags
+    - module: periodicStat
+    - module: abbrs
+    - module: terms
+    - module: gosts
+    - module: createFigureContent
+
+    # opt-in
+    - module: roadMap
+      enabled: false
+      options: { dataPath: ./plugins/roadMap/roadmap-data.json, engine: mermaid }
+
+    # === opt-in: known-issues ×4 ===
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+        groupBy: module
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+        groupBy: severity
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
+        outputDir: ./docs/_generated/ru
+        tableType: extended
+        groupBy: type
+
+    # === opt-in: registry matrix ×3 ===
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: matrix
+        rowField: families_arr
+        colField: capabilities_arr
+        cellLabelField: ident_plain
+        cellHrefField: id_href
+        omitEmpty: both
+        outputFile: ./docs/_generated/ru/registry-matrix-family-capability.md
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: matrix
+        rowField: families_arr
+        colField: layers_arr
+        cellLabelField: ident_plain
+        cellHrefField: id_href
+        omitEmpty: both
+        outputFile: ./docs/_generated/ru/registry-matrix-family-layer.md
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: matrix
+        rowField: capabilities_arr
+        colField: layers_arr
+        cellLabelField: ident_plain
+        cellHrefField: id_href
+        omitEmpty: both
+        outputFile: ./docs/_generated/ru/registry-matrix-layer-capability.md
+
+    # === opt-in: registry simple ===
+    - module: jsonToMdTable
+      enabled: false
+      options:
+        jsonPath: ./docs/_generated/modules-table.ru.json
+        outputDir: ./docs/ru
+        tableType: simple
+        schema: modules
+        outputFile: ./docs/_generated/ru/registry-table.md
+
+  build:  
+    - module: diplodocBuild
+
+  post:
+    - module: featureMapInject
+      enabled: false
+    - module: footnoteAnchors
+    - module: abbrTitles
+    - module: termTitles
+    - module: footnoteNumbering
+    - module: footnoteList
+      options: { targetHtml: ./build/ru/Дополнительнаяинформация/Переченьсносок/index.html }
+    - module: gostsInject
+    - module: breadcrumb
+    - module: contexttags
+    - module: comments
+    - module: ganttFixScroll
+      enabled: false
+      options: { engine: mermaid }
+    - module: periodicTable
+      options: { langs: [ru, en] }
+    - module: periodicTableHelpTag
+      options: { langs: [ru, en] }
+    - module: periodicTableContext
+      options: { langs: [ru, en] }
+    - module: tocCleanMode
+      enabled: false
+
+```
+
+
+### 12.3 Diplodoc
+
+## 13. Ссылки
 
 - `REFACTORING.md` — план рефакторинга, Wave 1–6.
 - `CONTRIBUTING.md` (§11) — принципы pipeline-конфига.

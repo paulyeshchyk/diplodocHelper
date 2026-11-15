@@ -31,7 +31,7 @@ function writeHelpMap({ outputDir, entries, segregation }) {
     } else {
         const outputPath = path.join(absoluteOutputDir, outputFileName);
         fs.writeFileSync(outputPath, JSON.stringify(entries, null, 2), 'utf8');
-        console.log(`Общий файл сохранён: ${outputPath} (${entries.length} статей)`);
+        // console.log(`Общий файл сохранён: ${outputPath} (${entries.length} статей)`);
     }
 }
 

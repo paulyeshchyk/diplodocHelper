@@ -27,7 +27,7 @@ function runGeneration(buildDir) {
 
     const titleMap = walkHtmlFilesBuildTitleMap(buildDir);
 
-    console.log(`[Breadcrumb] Найдено ${titleMap.size} страниц. Вставка крошек...`);
+    // console.log(`[Breadcrumb] Найдено ${titleMap.size} страниц. Вставка крошек...`);
 
     walkHtmlFiles(buildDir, htmlPath => {
         const script = generateBreadcrumbScript(htmlPath, titleMap, config);

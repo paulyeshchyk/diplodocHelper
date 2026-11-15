@@ -1,24 +1,24 @@
 // @ts-nocheck
-const fs = require('fs');
-const path = require('path');
-const { loadTermDictionary } = require('./terms.dictionary');
-const { renderTemplate } = require('./terms.template.js');
-const TERM_CONFIG = require('./terms.config.js');
-const { getTermOutputUrl, getTermLanguages } = require('./terms.paths');
-const { InlineAnnotation_Mask } = require('../utils/inline-annotation/InlineAnnotation_Mask.ts');
-const { InlineAnnotation_Make_AnchorId } = require('../utils/inline-annotation/InlineAnnotation_Make_AnchorId.ts');
-const { Html_Escape_Text } = require('../utils/html/Html_Escape_Text.ts');
-const { Html_Escape_JsonString } = require('../utils/html/Html_Escape_JsonString.ts');
+const fs = require("fs");
+const path = require("path");
+const { loadTermDictionary } = require("./terms.dictionary");
+const { renderTemplate } = require("./terms.template.js");
+const TERM_CONFIG = require("./terms.config.js");
+const { getTermOutputUrl, getTermLanguages } = require("./terms.paths");
+const { InlineAnnotation_Mask } = require("../utils/inline-annotation/InlineAnnotation_Mask.ts");
+const { InlineAnnotation_Make_AnchorId } = require("../utils/inline-annotation/InlineAnnotation_Make_AnchorId.ts");
+const { Html_Escape_Text } = require("../utils/html/Html_Escape_Text.ts");
+const { Html_Escape_JsonString } = require("../utils/html/Html_Escape_JsonString.ts");
 
 const maskCodeBlocks = InlineAnnotation_Mask.maskCodeBlocks;
-const termAnchorId = (s) => InlineAnnotation_Make_AnchorId.makeAnchorId('term', s);
-const termOccurrenceId = (s, n) => InlineAnnotation_Make_AnchorId.makeOccurrenceId('term', s, n);
+const termAnchorId = (s) => InlineAnnotation_Make_AnchorId.makeAnchorId("term", s);
+const termOccurrenceId = (s, n) => InlineAnnotation_Make_AnchorId.makeOccurrenceId("term", s, n);
 const escapeHtml = Html_Escape_Text.escape;
 const jsonEscapeHtmlForDiplodoc = Html_Escape_JsonString.escape;
 
 function isInsideAnchor(html, matchIndex) {
   const before = html.substring(0, matchIndex);
-  return before.lastIndexOf('<a ') > before.lastIndexOf('</a>');
+  return before.lastIndexOf("<a ") > before.lastIndexOf("</a>");
 }
 
 /**
@@ -28,33 +28,31 @@ function isInsideAnchor(html, matchIndex) {
  * @returns {string} пустая строка, если атрибута нет
  */
 function extractDataTerm(attrs, jsonEscaped = false) {
-  const re = jsonEscaped
-    ? /\bdata-term\s*=\s*\\"([^\\"]*)\\"/i
-    : /\bdata-term\s*=\s*(?:"([^"]*)"|'([^']*)')/i;
+  const re = jsonEscaped ? /\bdata-term\s*=\s*\\"([^\\"]*)\\"/i : /\bdata-term\s*=\s*(?:"([^"]*)"|'([^']*)')/i;
   const m = attrs.match(re);
-  if (!m) return '';
+  if (!m) return "";
   const raw = m[1] !== undefined ? m[1] : m[2];
-  return (raw || '').trim();
+  return (raw || "").trim();
 }
 
 function renderTooltipHtml(p) {
-  let content = renderTemplate('tooltip.title.html', {
+  let content = renderTemplate("tooltip.title.html", {
     TERM: escapeHtml(p.term),
     DEFINITION: p.definition,
   });
   if (p.description) {
-    content += renderTemplate('tooltip.description.html', {
+    content += renderTemplate("tooltip.description.html", {
       DESCRIPTION: p.description,
     });
   }
   if (p.linkHref) {
-    content += renderTemplate('tooltip.link.html', {
+    content += renderTemplate("tooltip.link.html", {
       HREF: escapeHtml(p.linkHref),
-      TEXT: escapeHtml(p.linkText || ''),
+      TEXT: escapeHtml(p.linkText || ""),
     });
   }
 
-  return renderTemplate('tooltip.html', {
+  return renderTemplate("tooltip.html", {
     ATTRS: p.attrs,
     ID_ATTR: p.idAttr,
     ARIA_LABEL: escapeHtml(p.definition),
@@ -69,7 +67,7 @@ function renderTooltipForJson(p) {
 
 function injectTermTitlesIntoHtml(html, dictionary, lang) {
   const masked = maskCodeBlocks(html);
-  const linkText = lang === 'ru' ? 'см. Термины' : 'see Terms';
+  const linkText = lang === "ru" ? "см. Термины" : "see Terms";
   const outputUrl = getTermOutputUrl(lang);
 
   let replaced = 0;
@@ -79,132 +77,126 @@ function injectTermTitlesIntoHtml(html, dictionary, lang) {
   const occurrences = new Map();
 
   // ---- Ветка 1: raw HTML ----
-  let result = masked.masked.replace(
-    /<abbr(\b[^>]*\bclass\s*=\s*["'][^"']*\bterm\b[^"']*["'][^>]*)>([^<]+)<\/abbr>/gi,
-    (match, attrs, inner, offset, full) => {
-      const innerText = inner.trim();
-      if (!innerText) return match;
+  let result = masked.masked.replace(/<abbr(\b[^>]*\bclass\s*=\s*["'][^"']*\bterm\b[^"']*["'][^>]*)>([^<]+)<\/abbr>/gi, (match, attrs, inner, offset, full) => {
+    const innerText = inner.trim();
+    if (!innerText) return match;
 
-      const dataTerm = extractDataTerm(attrs, false);
-      const lookupTerm = dataTerm || innerText;
+    const dataTerm = extractDataTerm(attrs, false);
+    const lookupTerm = dataTerm || innerText;
 
-      const hasId = /\bid\s*=/.test(attrs);
-      const def = dictionary.get(lookupTerm);
+    const hasId = /\bid\s*=/.test(attrs);
+    const def = dictionary.get(lookupTerm);
 
-      // inline-override через title=: браузер сам покажет native tooltip
-      if (/\btitle\s*=/.test(attrs)) {
-        if (hasId) return match;
-        const n = (occurrences.get(lookupTerm) || 0) + 1;
-        occurrences.set(lookupTerm, n);
-        return `<abbr${attrs} id="${termOccurrenceId(lookupTerm, n)}">${inner}</abbr>`;
-      }
-
-      if (!def) {
-        unmatched++;
-        unmatchedSet.add(lookupTerm);
-        if (hasId) return match;
-        const n = (occurrences.get(lookupTerm) || 0) + 1;
-        occurrences.set(lookupTerm, n);
-        return `<abbr${attrs} id="${termOccurrenceId(lookupTerm, n)}">${inner}</abbr>`;
-      }
-
-      replaced++;
+    // inline-override через title=: браузер сам покажет native tooltip
+    if (/\btitle\s*=/.test(attrs)) {
+      if (hasId) return match;
       const n = (occurrences.get(lookupTerm) || 0) + 1;
       occurrences.set(lookupTerm, n);
-
-      const occId = termOccurrenceId(lookupTerm, n);
-      const idAttr = hasId ? '' : ` id="${occId}"`;
-      const anchor = termAnchorId(lookupTerm);
-      const href = `${outputUrl}#${anchor}`;
-      const skipLink = isInsideAnchor(full, offset);
-
-      return renderTooltipHtml({
-        term: lookupTerm,          // канонический термин — в tooltip title и в href
-        definition: def.definition,
-        description: def.description,
-        attrs,                     // сохраняем class, data-term, id — как есть
-        idAttr,
-        inner: innerText,          // видимый текст не меняем
-        linkHref: skipLink ? undefined : href,
-        linkText,
-      });
+      return `<abbr${attrs} id="${termOccurrenceId(lookupTerm, n)}">${inner}</abbr>`;
     }
-  );
+
+    if (!def) {
+      unmatched++;
+      unmatchedSet.add(lookupTerm);
+      if (hasId) return match;
+      const n = (occurrences.get(lookupTerm) || 0) + 1;
+      occurrences.set(lookupTerm, n);
+      return `<abbr${attrs} id="${termOccurrenceId(lookupTerm, n)}">${inner}</abbr>`;
+    }
+
+    replaced++;
+    const n = (occurrences.get(lookupTerm) || 0) + 1;
+    occurrences.set(lookupTerm, n);
+
+    const occId = termOccurrenceId(lookupTerm, n);
+    const idAttr = hasId ? "" : ` id="${occId}"`;
+    const anchor = termAnchorId(lookupTerm);
+    const href = `${outputUrl}#${anchor}`;
+    const skipLink = isInsideAnchor(full, offset);
+
+    return renderTooltipHtml({
+      term: lookupTerm, // канонический термин — в tooltip title и в href
+      definition: def.definition,
+      description: def.description,
+      attrs, // сохраняем class, data-term, id — как есть
+      idAttr,
+      inner: innerText, // видимый текст не меняем
+      linkHref: skipLink ? undefined : href,
+      linkText,
+    });
+  });
 
   // ---- Ветка 2: JSON-escaped HTML (&lt;abbr class=\"term\"&gt;…) ----
-  result = result.replace(
-    /&lt;abbr(\b[^&]*?\bclass=\\"[^\\"]*\bterm\b[^\\"]*\\"[^&]*?)&gt;([^&]+)&lt;\/abbr&gt;/gi,
-    (match, attrs, inner) => {
-      const innerText = inner.trim();
-      if (!innerText) return match;
+  result = result.replace(/&lt;abbr(\b[^&]*?\bclass=\\"[^\\"]*\bterm\b[^\\"]*\\"[^&]*?)&gt;([^&]+)&lt;\/abbr&gt;/gi, (match, attrs, inner) => {
+    const innerText = inner.trim();
+    if (!innerText) return match;
 
-      const dataTerm = extractDataTerm(attrs, true);
-      const lookupTerm = dataTerm || innerText;
+    const dataTerm = extractDataTerm(attrs, true);
+    const lookupTerm = dataTerm || innerText;
 
-      const hasId = /\bid\s*=/.test(attrs);
-      const def = dictionary.get(lookupTerm);
+    const hasId = /\bid\s*=/.test(attrs);
+    const def = dictionary.get(lookupTerm);
 
-      if (/\btitle\s*=/.test(attrs)) {
-        if (hasId) return match;
-        const n = (occurrences.get(lookupTerm) || 0) + 1;
-        occurrences.set(lookupTerm, n);
-        return `&lt;abbr${attrs} id=\\"${termOccurrenceId(lookupTerm, n)}\\"&gt;${inner}&lt;/abbr&gt;`;
-      }
-
-      if (!def) {
-        unmatched++;
-        unmatchedSet.add(lookupTerm);
-        if (hasId) return match;
-        const n = (occurrences.get(lookupTerm) || 0) + 1;
-        occurrences.set(lookupTerm, n);
-        return `&lt;abbr${attrs} id=\\"${termOccurrenceId(lookupTerm, n)}\\"&gt;${inner}&lt;/abbr&gt;`;
-      }
-
-      replaced++;
+    if (/\btitle\s*=/.test(attrs)) {
+      if (hasId) return match;
       const n = (occurrences.get(lookupTerm) || 0) + 1;
       occurrences.set(lookupTerm, n);
-
-      const occId = termOccurrenceId(lookupTerm, n);
-      const idAttr = hasId ? '' : ` id="${occId}"`;
-      const anchor = termAnchorId(lookupTerm);
-      const href = `${outputUrl}#${anchor}`;
-
-      const rawAttrs = attrs.replace(/\\"/g, '"');
-
-      return renderTooltipForJson({
-        term: lookupTerm,
-        definition: def.definition,
-        description: def.description,
-        attrs: rawAttrs,
-        idAttr,
-        inner: innerText,
-        linkHref: href,
-        linkText,
-      });
+      return `&lt;abbr${attrs} id=\\"${termOccurrenceId(lookupTerm, n)}\\"&gt;${inner}&lt;/abbr&gt;`;
     }
-  );
+
+    if (!def) {
+      unmatched++;
+      unmatchedSet.add(lookupTerm);
+      if (hasId) return match;
+      const n = (occurrences.get(lookupTerm) || 0) + 1;
+      occurrences.set(lookupTerm, n);
+      return `&lt;abbr${attrs} id=\\"${termOccurrenceId(lookupTerm, n)}\\"&gt;${inner}&lt;/abbr&gt;`;
+    }
+
+    replaced++;
+    const n = (occurrences.get(lookupTerm) || 0) + 1;
+    occurrences.set(lookupTerm, n);
+
+    const occId = termOccurrenceId(lookupTerm, n);
+    const idAttr = hasId ? "" : ` id="${occId}"`;
+    const anchor = termAnchorId(lookupTerm);
+    const href = `${outputUrl}#${anchor}`;
+
+    const rawAttrs = attrs.replace(/\\"/g, '"');
+
+    return renderTooltipForJson({
+      term: lookupTerm,
+      definition: def.definition,
+      description: def.description,
+      attrs: rawAttrs,
+      idAttr,
+      inner: innerText,
+      linkHref: href,
+      linkText,
+    });
+  });
 
   return { html: masked.unmask(result), replaced, unmatched, unmatchedSet };
 }
 
-const CLIENT_MARKER = 'dl-term-occ-client';
+const CLIENT_MARKER = "dl-term-occ-client";
 
 function injectTermsClientScript(html, lang) {
   if (html.includes(`id="${CLIENT_MARKER}"`)) return html;
-  const clientPath = path.join(__dirname, 'terms.client.js');
+  const clientPath = path.join(__dirname, "terms.client.js");
   if (!fs.existsSync(clientPath)) return html;
 
-  const client = fs.readFileSync(clientPath, 'utf8');
+  const client = fs.readFileSync(clientPath, "utf8");
 
   const cfgJson = JSON.stringify({
     visible: TERM_CONFIG.usageVisibleCount || 5,
-    more: lang === 'ru' ? 'ещё' : 'more',
-    collapse: lang === 'ru' ? 'свернуть' : 'collapse',
+    more: lang === "ru" ? "ещё" : "more",
+    collapse: lang === "ru" ? "свернуть" : "collapse",
   });
 
   const bundle = `<script id="${CLIENT_MARKER}">\nwindow.__DL_TERM_CFG__ = ${cfgJson};\n${client}\n</script>\n`;
 
-  if (html.includes('</body>')) return html.replace('</body>', `${bundle}</body>`);
+  if (html.includes("</body>")) return html.replace("</body>", `${bundle}</body>`);
   return html + bundle;
 }
 
@@ -218,7 +210,7 @@ function runGeneration({ buildDir, docsRoot }) {
 
     const dict = loadTermDictionary(langDocsDir, lang);
     if (dict.size === 0) {
-      console.log(`[termTitles] ${lang}: словарь пуст — пропуск.`);
+      // console.log(`[termTitles] ${lang}: словарь пуст — пропуск.`);
       continue;
     }
 
@@ -229,7 +221,7 @@ function runGeneration({ buildDir, docsRoot }) {
         for (const e of entries) {
           const full = path.join(dir, e.name);
           if (e.isDirectory()) walk(full);
-          else if (e.name.endsWith('.html')) htmlFiles.push(full);
+          else if (e.name.endsWith(".html")) htmlFiles.push(full);
         }
       })(langBuildDir);
 
@@ -239,37 +231,32 @@ function runGeneration({ buildDir, docsRoot }) {
       const allUnmatched = new Set();
 
       for (const file of htmlFiles) {
-        const html = fs.readFileSync(file, 'utf8');
+        const html = fs.readFileSync(file, "utf8");
         const res = injectTermTitlesIntoHtml(html, dict, lang);
         totalReplaced += res.replaced;
         totalUnmatched += res.unmatched;
         for (const u of res.unmatchedSet) allUnmatched.add(u);
 
         if (res.html !== html) {
-          fs.writeFileSync(file, res.html, 'utf8');
+          fs.writeFileSync(file, res.html, "utf8");
           filesChanged++;
         }
       }
 
       for (const file of htmlFiles) {
-        let html = fs.readFileSync(file, 'utf8');
+        let html = fs.readFileSync(file, "utf8");
         const next = injectTermsClientScript(html, lang);
         if (next !== html) {
-          fs.writeFileSync(file, next, 'utf8');
+          fs.writeFileSync(file, next, "utf8");
         }
       }
 
       if (totalUnmatched > 0) {
-        console.warn(
-          `[termTitles] ${lang}: ${totalUnmatched} <abbr class="term"> без определений ` +
-          `в словаре. Не найдены: ${Array.from(allUnmatched).join(', ')}`
-        );
+        console.warn(`[termTitles] ${lang}: ${totalUnmatched} <abbr class="term"> без определений ` + `в словаре. Не найдены: ${Array.from(allUnmatched).join(", ")}`);
       }
-      const unmatchedNote = totalUnmatched > 0 ? `; ${totalUnmatched} без определений` : '';
+      const unmatchedNote = totalUnmatched > 0 ? `; ${totalUnmatched} без определений` : "";
 
-      console.log(
-        `[termTitles] ${lang}: ${totalReplaced} <abbr class="term"> обогащено в ${filesChanged} файлах${unmatchedNote}`
-      );
+      // console.log(`[termTitles] ${lang}: ${totalReplaced} <abbr class="term"> обогащено в ${filesChanged} файлах${unmatchedNote}`);
       results.success.push(lang);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);

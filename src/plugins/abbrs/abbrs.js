@@ -26,7 +26,7 @@ function runGeneration(docsRoot) {
             const usedCount = all.filter(a => a.rank > 0).length;
 
             if (all.length === 0) {
-                log.info(`${lang}: ни словаря, ни разметки <abbr> — пропуск.`);
+                log.debug(`${lang}: ни словаря, ни разметки <abbr> — пропуск.`);
                 continue;
             }
 
@@ -34,7 +34,7 @@ function runGeneration(docsRoot) {
             if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
             writeAbbrsIndex(outputDir, abbrMap, lang, ABBR_CONFIG);
-            log.info(`${lang}: ${definedCount} в словаре, ${orphanCount} вне словаря, ${usedCount} используется → ${outputDir}`);
+            log.debug(`${lang}: ${definedCount} в словаре, ${orphanCount} вне словаря, ${usedCount} используется → ${outputDir}`);
             results.success.push(lang);
         } catch (err) {
             log.error(`Ошибка для ${lang}:`, err);
