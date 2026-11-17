@@ -166,7 +166,7 @@ fs.writeFileSync(outputPath, content, 'utf8');
 | `lib/paths.js`                     | `resolveOutputPath`, `ensureParentDir`                          |
 | `lib/generators/extended-table.js` | `generateExtendedTable`                                         |
 | `lib/generators/simple-table.js`   | `generateSimpleTable`                                           |
-| `lib/generators/grouped-table.js`  | `generateGroupedTable` (с `>`-merge и `{.cell-align-top-left}`) |
+| `lib/generators/grouped-table.js`  | `generateGroupedTable` (с `>`-merge и `{::{align="top-left"}}`) |
 | `lib/generators/treemap.js`        | `generateTreemap`, `wrapMermaid`                                |
 | `schemas/known-issues.schema.js`   | схема для `known-issues-summary.json`                           |
 
@@ -261,7 +261,7 @@ node ./plugins/json-to-md/json-to-md-table.js … \
 || _Всего для section.Rename: **2**_ <br><br> ::{align="top-left"} | > | > | > | > ||
 ```
 
-Символ `>` — официальный синтаксис Diplodoc для горизонтального объединения ячеек; `{.cell-align-top-left}` — выравнивание текста по левому краю.
+Символ `>` — официальный синтаксис Diplodoc для горизонтального объединения ячеек; `{::{align="top-left"}}` — выравнивание текста по левому краю.
 
 **Параметры группировки:**
 

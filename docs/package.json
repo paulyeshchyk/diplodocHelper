@@ -40,7 +40,7 @@
   "scripts": {
     "test": "jest",
     "crossenv:setup": "cross-env NODE_OPTIONS=\"--disable-warning=DEP0128 --disable-warning=DEP0190 --disable-warning=MODULE_TYPELESS_PACKAGE_JSON\"",
-    "run-pipeline": "node ./plugins/run-pipeline.js --stage=all",
+    "run-pipeline": "node ./plugins/run-pipeline.js --stage=all --config=plugins.config.local.yaml",
     "docs:build": "npm run crossenv:setup -- npm run run-pipeline"
   }
 }

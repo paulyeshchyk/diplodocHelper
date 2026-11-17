@@ -23,4 +23,14 @@
   "i18n-ally.localesPaths": [
     "src/i18n"
   ],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.jj": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/dist/**": true,
+    "**/__mocks__/**": true,
+  }
 }
