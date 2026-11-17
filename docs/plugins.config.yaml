@@ -41,24 +41,30 @@ stages:
         dataPath: ./plugins/roadMap/roadmap-data.json
         engine: mermaid
 
-    # === opt-in: known-issues ×4 ===
+    # === opt-in: known-issues complete ===
     - module: jsonToMdTable
       options:
         jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
         outputDir: ./docs/_generated/ru
         tableType: extended
+
+    # === opt-in: known-issues groupBy: module ===
     - module: jsonToMdTable
       options:
         jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
         outputDir: ./docs/_generated/ru
         tableType: extended
         groupBy: module
+
+    # === opt-in: known-issues groupBy: severity ===
     - module: jsonToMdTable
       options:
         jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
         outputDir: ./docs/_generated/ru
         tableType: extended
         groupBy: severity
+
+    # === opt-in: known-issues groupBy: type ===
     - module: jsonToMdTable
       options:
         jsonPath: ./docs/ru/Модули/Известныепроблемы/known-issues-summary.json
@@ -66,7 +72,7 @@ stages:
         tableType: extended
         groupBy: type
 
-    # === opt-in: registry matrix ×3 ===
+    # === opt-in: registry matrix; family-capability ===
     - module: jsonToMdTable
       options:
         jsonPath: ./docs/_generated/modules-table.ru.json
@@ -78,6 +84,8 @@ stages:
         cellHrefField: id_href
         omitEmpty: both
         outputFile: ./docs/_generated/ru/registry-matrix-family-capability.md
+
+    # === opt-in: registry matrix; family-layer ===
     - module: jsonToMdTable
       options:
         jsonPath: ./docs/_generated/modules-table.ru.json
@@ -89,6 +97,8 @@ stages:
         cellHrefField: id_href
         omitEmpty: both
         outputFile: ./docs/_generated/ru/registry-matrix-family-layer.md
+
+    # === opt-in: registry matrix; family: layer-capability ===
     - module: jsonToMdTable
       options:
         jsonPath: ./docs/_generated/modules-table.ru.json
