@@ -57,6 +57,10 @@ const nls_ts = {
                 move: 'command.md.section.move',
                 update: 'command.md.section.update',
             },
+            content: {
+                move: 'command.md.content.move',
+                duplicate: 'command.md.content.duplicate'
+            },
             anchor: {
                 add: 'command.md.anchor.add',
             },

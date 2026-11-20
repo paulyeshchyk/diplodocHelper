@@ -1,5 +1,6 @@
 // src/contrib/config/menus.ts
 
+import type { MenuSpec } from '../types.ts';
 import {
     GROUP,
     GROUP_ORDER,
@@ -9,7 +10,6 @@ import {
     WHEN,
     buildGroup,
 } from './constants.ts';
-import type { MenuSpec } from '../types.ts';
 
 export const MENUS: ReadonlyArray<MenuSpec> = [
     // ========================================================================
@@ -161,6 +161,25 @@ export const MENUS: ReadonlyArray<MenuSpec> = [
         id: SUBMENU.EDITOR,
         label: '%submenu.diplodoc%',
         items: [
+            {
+                command: 'diplodoc-helper.moveContent',
+                when: WHEN.EDITOR_TEXT_FOCUS_AND_EXTNAME_MD_AND_HAS_SELECTION,
+                group: buildGroup({
+                    order: GROUP_ORDER.CONTENT,
+                    group: GROUP.DIPLODOC_SECTION,
+                    itemOrder: 1,
+                })
+            },
+            {
+                command: 'diplodoc-helper.duplicateContent',
+                when: WHEN.EDITOR_TEXT_FOCUS_AND_EXTNAME_MD_AND_HAS_SELECTION,
+                group: buildGroup({
+                    order: GROUP_ORDER.CONTENT,
+                    group: GROUP.DIPLODOC_SECTION,
+                    itemOrder: 2,
+                }),
+            },
+
             // ─── zone '' : вставки в .md ───
             {
                 command: 'diplodoc-helper.pasteImageFromClipboard',

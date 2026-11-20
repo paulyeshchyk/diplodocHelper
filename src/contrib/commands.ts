@@ -32,6 +32,16 @@ const lazyVscode = (
 };
 
 export const COMMANDS: ReadonlyArray<CommandSpec> = [
+    {
+        id: 'diplodoc-helper.moveContent',
+        titleKey: 'command.md.content.move',
+        handler: lazy(() => require('../commands/diplodoc-helper.content.Move').ux_content_move),
+    },
+    {
+        id: 'diplodoc-helper.duplicateContent',
+        titleKey: 'command.md.content.duplicate',
+        handler: lazy(() => require('../commands/diplodoc-helper.content.Duplicate').ux_content_duplicate),
+    },
     // --- section / file ---
     {
         id: 'diplodoc-helper.createSection',
@@ -243,4 +253,5 @@ export const COMMANDS: ReadonlyArray<CommandSpec> = [
         titleKey: 'command.md.format',
         handler: lazy(() => require('../commands/diplodoc-helper.yaml.format.js').ux_yaml_format_selection),
     },
+
 ];

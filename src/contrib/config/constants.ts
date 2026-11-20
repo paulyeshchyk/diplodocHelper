@@ -32,6 +32,8 @@ export const WHEN = {
     EDITOR_TEXT_FOCUS_READONLY_AND_CAN_PASTE:
         'editorTextFocus && !editorReadonly && (diplodoc-helper:canPasteMarkdownLink || resourceFilename =~ /^(gosts|abbreviations)\\.yaml$/)',
 
+    EDITOR_TEXT_FOCUS_AND_EXTNAME_MD_AND_HAS_SELECTION: '(editorTextFocus && editorHasSelection && resourceExtname == .md)',
+
     // editor: focus + .md
     EDITOR_TEXT_FOCUS_AND_EXTNAME_MD: '(editorTextFocus && resourceExtname == .md)',
 
@@ -76,10 +78,11 @@ export const GROUP_ORDER = {
     HELPTAG: 4,
     GENERATORS: 5,
     FILES: 6,
-    NAVIGATION: 7,
-    MENU: 8,
-    BREADCRUMBS: 9,
-    DEBUG: 10,
+    CONTENT: 7,
+    NAVIGATION: 8,
+    MENU: 9,
+    BREADCRUMBS: 10,
+    DEBUG: 11,
     SETTINGS: 99,
 } as const satisfies Record<string, number>;
 

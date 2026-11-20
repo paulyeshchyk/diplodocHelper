@@ -2,8 +2,8 @@
 
 import { describe, expect, it } from '@jest/globals';
 import { COMMANDS } from '../commands.ts';
-import { MENUS } from './menus.ts';
 import { SUBMENU } from './constants.ts';
+import { MENUS } from './menus.ts';
 
 const commandIds = new Set(COMMANDS.map(c => c.id));
 
@@ -83,15 +83,15 @@ describe('MENUS frozen snapshot (счётчики)', () => {
         expect(counts).toEqual({
             'editor/context': 1,
             'explorer/context': 1,
-            'diplodoc.explorer.context.menu': 9,                // было 10 → минус DEBUG, минус BREADCRUMBS
-            'diplodoc.editor.context.menu': 8,                  // без изменений
+            'diplodoc.explorer.context.menu': 9,
+            'diplodoc.editor.context.menu': 10,
             'diplodoc.context.explorer.context.menu': 3,
             'diplodoc.helptag.explorer.context.menu': 3,
-            'diplodoc.lint.explorer.context.menu': 2,           // было 4 → linter.abbrs/terms ушли в ABBR/TERMS
+            'diplodoc.lint.explorer.context.menu': 2,
             'diplodoc.reindexier.explorer.context.menu': 3,
-            'diplodoc.abbrs.explorer.context.menu': 2,          // было 1 → + linter.abbrs
-            'diplodoc.terms.explorer.context.menu': 2,          // было 1 → + linter.terms
-            'diplodoc.other.explorer.context.menu': 4,          // было 4, состав другой (breadcrumbs, contextmap вместо abbr/terms)
+            'diplodoc.abbrs.explorer.context.menu': 2,
+            'diplodoc.terms.explorer.context.menu': 2,
+            'diplodoc.other.explorer.context.menu': 4,
         });
     });
 });

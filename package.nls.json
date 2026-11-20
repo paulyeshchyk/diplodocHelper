@@ -1,4 +1,6 @@
 {
+  "command.md.content.move": "переместить",
+  "command.md.content.duplicate": "Duplicate content",
   "command.fe.abbrs.generate": "Abbreviations: build/refresh list",
   "command.fe.context.generate": "Generate contexts page",
   "command.fe.helptag.generate": "Generate help map",

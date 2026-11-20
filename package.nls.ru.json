@@ -1,4 +1,6 @@
 {
+  "command.md.content.move": "переместить",
+  "command.md.content.duplicate": "Дублировать",
   "command.fe.abbrs.generate": "Сокращения: собрать/обновить список",
   "command.fe.context.generate": "Создать страницу контекстов",
   "command.fe.helptag.generate": "Создать карту ключей(helptag)",

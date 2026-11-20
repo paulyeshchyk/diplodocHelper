@@ -69,7 +69,7 @@ function splitMdPathQueryHash(rawPath) {
  * @param {string} content
  * @param {string} currentFilePath
  * @param {{(a1:string) : string | null | undefined}} transformTarget
- * @param {string} stubText
+ * @param {string?} stubText
  */
 function updateLinksInContent(content, currentFilePath, transformTarget, stubText) {
     const links = parseMarkdownLinks(content);
