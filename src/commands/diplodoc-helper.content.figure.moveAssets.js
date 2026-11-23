@@ -12,6 +12,7 @@ const { decodeLinkPath, encodePathSegments } = require('./diplodoc-helper.links.
 const { isExternalLink } = require('../plugins/shared/parser/md/mdLinks');
 const { findFiles } = require('./diplodoc-helper.files');
 const { getLanguageRoot } = require('../plugins/utils/path.directory.js');
+const { collectMovedAnchorIds } = require('./diplodoc-helper.content.anchors');
 
 /**
  * Проверяет, что файл изображения напрямую связан с исходным MD-файлом
@@ -262,6 +263,7 @@ async function moveFigureAssets(fragment, sourceFilePath, targetFilePath, option
  * @param {string} dirPath
  * @param {string} stopDir
  */
+// @ts-ignore
 function cleanupEmptySubdirs(dirPath, stopDir) {
   return;
 
@@ -337,15 +339,18 @@ async function rollbackMovedAssets(assetResult) {
 }
 
 /**
- * Адаптирует относительные ссылки в фрагменте с учётом pathRemap перенесённых картинок.
  * @param {string} fragment
  * @param {string} sourceFilePath
  * @param {string} targetFilePath
- * @param {Map<string, string>} pathRemap
+ * @param {Map<string, string>} pathRemap  oldAbs → newAbs (картинки)
  */
 function adaptFragmentWithRemap(fragment, sourceFilePath, targetFilePath, pathRemap) {
   const sourceDir = path.dirname(sourceFilePath);
   const targetDir = path.dirname(targetFilePath);
+  const sourceResolved = path.resolve(sourceFilePath);
+  const targetResolved = path.resolve(targetFilePath);
+  const movedAnchors = collectMovedAnchorIds(fragment);
+
   const links = parseMarkdownLinks(fragment);
   if (links.length === 0) return { content: fragment, adaptedCount: 0 };
 
@@ -357,6 +362,8 @@ function adaptFragmentWithRemap(fragment, sourceFilePath, targetFilePath, pathRe
     result += fragment.slice(last, link.index);
 
     if (isExternalLink(link)) {
+      // isExternalLink считает "#foo" и "/abs" внешними —
+      // чистый "#anchor" не трогаем
       result += link.full;
       last = link.index + link.full.length;
       continue;
@@ -364,27 +371,57 @@ function adaptFragmentWithRemap(fragment, sourceFilePath, targetFilePath, pathRe
 
     const { pathPart, query, hash } = splitMdPathQueryHash(link.rawPath);
     const decoded = decodeLinkPath(pathPart);
-    if (!decoded || decoded.startsWith('#')) {
+    const anchor = hash.startsWith('#') ? hash.slice(1) : hash;
+
+    // --- главный фикс: якорь уезжает вместе с фрагментом ---
+    if (anchor && movedAnchors.has(anchor)) {
+      // @ts-ignore
+      const oldAbs = decoded
+        ? path.resolve(sourceDir, decoded)
+        : sourceResolved;
+
+      // ссылка на source (./index.md#fig-…, index.md#fig-…, пустой path + hash)
+      // или на тот же файл, что source
+      const pointsToSource =
+        !decoded ||
+        decoded === '' ||
+        path.resolve(sourceDir, decoded) === sourceResolved;
+
+      if (pointsToSource) {
+        // локальная ссылка в target: сохраняем стиль ./index.md#… если target — index.md
+        const localPath = sameDocPathFor(targetFilePath);
+        const newFull = formatLink(link, localPath, query, hash);
+        if (newFull !== link.full) adaptedCount++;
+        result += newFull;
+        last = link.index + link.full.length;
+        continue;
+      }
+    }
+
+    if (!decoded) {
       result += link.full;
       last = link.index + link.full.length;
       continue;
     }
 
     const oldAbs = path.resolve(sourceDir, decoded);
-    const mappedAbs = pathRemap.has(oldAbs) ? pathRemap.get(oldAbs) : oldAbs;
-    if (!mappedAbs) {
-      result += link.full;
-      last = link.index + link.full.length;
-      continue;
-    }
+    const newAbs = pathRemap.has(oldAbs) ? pathRemap.get(oldAbs) : oldAbs;
 
-    let newRel = path.relative(targetDir, mappedAbs).split(path.sep).join('/');
+    // Картинка/файл переехали в target → relative от target
+    // Обычная ссылка на другой документ → relative от target к oldAbs/newAbs
+    // @ts-ignore
+    let newRel = path.relative(targetDir, newAbs).split(path.sep).join('/');
     if (!newRel.startsWith('.') && !path.isAbsolute(newRel)) {
       newRel = './' + newRel;
     }
-    const encoded = encodePathSegments(newRel);
-    const prefix = link.isImage ? '!' : '';
-    const newFull = `${prefix}[${link.text}](${encoded}${query}${hash})`;
+
+    // Ссылка на сам target после relative даст '' или '.' — нормализуем
+    // @ts-ignore
+    if (path.resolve(newAbs) === targetResolved) {
+      newRel = sameDocPathFor(targetFilePath);
+    }
+
+    const newFull = formatLink(link, newRel, query, hash);
     if (newFull !== link.full) adaptedCount++;
     result += newFull;
     last = link.index + link.full.length;
@@ -392,6 +429,41 @@ function adaptFragmentWithRemap(fragment, sourceFilePath, targetFilePath, pathRe
 
   result += fragment.slice(last);
   return { content: result, adaptedCount };
+}
+
+/**
+ * Путь «на этот же документ» в стиле проекта.
+ * @param {string} filePath
+ */
+function sameDocPathFor(filePath) {
+  const base = path.basename(filePath);
+  // В ваших текстах same-doc figure-ссылки пишут как ./index.md#…
+  if (base.toLowerCase() === 'index.md') return './index.md';
+  return './' + base;
+}
+
+/**
+ * @param {{ full?: string; isImage: any; text: any; rawPath?: string; index?: number; }} link
+ * @param {string} pathPart
+ * @param {string} query
+ * @param {string} hash
+ */
+function formatLink(link, pathPart, query, hash) {
+  const encoded = pathPart
+    .split('/')
+    .map(seg => {
+      // не энкодить снова уже закодированное и не трогать '.' / '..'
+      if (seg === '.' || seg === '..' || seg === '') return seg;
+      try {
+        // если уже percent-encoded — decode+encode идемпотентно
+        return encodeURIComponent(decodeURIComponent(seg));
+      } catch {
+        return encodeURIComponent(seg);
+      }
+    })
+    .join('/');
+  const prefix = link.isImage ? '!' : '';
+  return `${prefix}[${link.text}](${encoded}${query}${hash})`;
 }
 
 /**

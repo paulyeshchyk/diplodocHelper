@@ -24,6 +24,7 @@
     "src/i18n"
   ],
   "files.exclude": {
+    "**/*.d.ts": true,
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
@@ -32,5 +33,17 @@
     "**/Thumbs.db": true,
     "**/dist/**": true,
     "**/__mocks__/**": true,
-  }
+  },
+  "invisibleCleaner.fileExtensions": [
+    ".cls",
+    ".trigger",
+    ".js",
+    ".ts",
+    ".html",
+    ".css",
+    ".txt",
+    ".md",
+    ".py",
+    ".java"
+  ]
 }
